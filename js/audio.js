@@ -225,6 +225,69 @@ class SoundEngine {
     osc.start(t);
     osc.stop(t + 0.42);
   }
+
+  setMuted(muted) {
+    this.muted = !!muted;
+    return this.muted;
+  }
+
+  playPortal() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    
+    // Cosmic portal whoosh & warp shimmer
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc1.type = "sine";
+    osc2.type = "triangle";
+
+    osc1.frequency.setValueAtTime(320, t);
+    osc1.frequency.exponentialRampToValueAtTime(1240, t + 0.22);
+    osc1.frequency.exponentialRampToValueAtTime(440, t + 0.45);
+
+    osc2.frequency.setValueAtTime(640, t);
+    osc2.frequency.exponentialRampToValueAtTime(2480, t + 0.22);
+    osc2.frequency.exponentialRampToValueAtTime(880, t + 0.45);
+
+    gain.gain.setValueAtTime(0.01, t);
+    gain.gain.linearRampToValueAtTime(0.22, t + 0.15);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.48);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc1.start(t);
+    osc2.start(t);
+    osc1.stop(t + 0.5);
+    osc2.stop(t + 0.5);
+  }
+
+  playOrb() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1318.51, t); // E6
+    osc.frequency.exponentialRampToValueAtTime(2637.02, t + 0.18); // E7
+    gain.gain.setValueAtTime(0.18, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.36);
+  }
 }
 
 const Sound = new SoundEngine();

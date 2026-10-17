@@ -277,7 +277,7 @@ class GameEngine {
     if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = lvl.c;
     if (this.dom.levelTag) this.dom.levelTag.textContent = lvl.t;
     if (this.dom.missionDesc) this.dom.missionDesc.textContent = lvl.d;
-    if (this.dom.missionBadge) this.dom.missionBadge.textContent = `${String(idx + 1).padStart(2, "0")} / 10`;
+    if (this.dom.missionBadge) this.dom.missionBadge.textContent = `${String(idx + 1).padStart(2, "0")} / ${LEVELS.length}`;
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     
     this.setFeedback("Plane deine Befehlsfolge und drücke auf „Plan abspielen“.", "normal");
@@ -297,13 +297,16 @@ class GameEngine {
       y: lvl.s[1],
       dir: lvl.s[2],
       isOpen: false,
+      openGates: new Set(),
+      collectedOrbs: new Set(),
       isWin: false,
       isFail: false
     };
     if (this.renderer) {
       this.renderer.setKomaInitialState(this.state.x, this.state.y, this.state.dir);
-      this.renderer.setGateOpen(false);
-      this.renderer.setSwitchActive(false);
+      this.renderer.setGateOpen("all", false);
+      this.renderer.setSwitchActive("all", false);
+      this.renderer.resetOrbs();
     }
   }
 
@@ -497,14 +500,26 @@ class GameEngine {
 
       const isOutOfBounds = nx < 0 || ny < 0 || nx >= lvl.w || ny >= lvl.h;
       const isWall = hasCoord(lvl.walls, nx, ny);
-      const isBlockedGate = hasCoord(lvl.gate, nx, ny) && !this.state.isOpen;
+      
+      // Check gate collision
+      const allGates = lvl.gates || lvl.gate || [];
+      const gateOnTile = allGates.find(g => g[0] === nx && g[1] === ny);
+      let isBlockedGate = false;
+      if (gateOnTile) {
+        const gateColor = gateOnTile[2] || "magenta";
+        const isColorOpen = this.state.openGates.has(gateColor) || (allGates.length === 1 && this.state.isOpen);
+        if (!isColorOpen) {
+          isBlockedGate = true;
+        }
+      }
 
       if (isOutOfBounds || isWall || isBlockedGate) {
         this.state.isFail = true;
         this.isPlaying = false;
         this.renderer.animateBump();
         Sound.playBump();
-        this.setFeedback("Plopp! Da ist ein Hindernis. KOMA bleibt stehen – passe deinen Plan an.", "bad");
+        const reason = isBlockedGate ? "Das Tor ist noch verschlossen!" : "Da ist ein Hindernis.";
+        this.setFeedback(`Plopp! ${reason} KOMA bleibt stehen – passe deinen Plan an.`, "bad");
         this.renderQueue();
         return;
       }
@@ -513,17 +528,69 @@ class GameEngine {
       this.state.y = ny;
       this.renderer.animateMove(nx, ny);
       Sound.playStep();
+
+      // Check if stepped on a Portal
+      if (lvl.portals && lvl.portals.length === 2) {
+        const [p1, p2] = lvl.portals;
+        if (nx === p1[0] && ny === p1[1]) {
+          this.state.x = p2[0];
+          this.state.y = p2[1];
+          setTimeout(() => {
+            this.renderer.animateTeleport(p2[0], p2[1]);
+            Sound.playPortal();
+            this.setFeedback("🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
+          }, 180);
+        } else if (nx === p2[0] && ny === p2[1]) {
+          this.state.x = p1[0];
+          this.state.y = p1[1];
+          setTimeout(() => {
+            this.renderer.animateTeleport(p1[0], p1[1]);
+            Sound.playPortal();
+            this.setFeedback("🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
+          }, 180);
+        }
+      }
+
+      // Check if stepped on a Spirit Orb
+      if (lvl.orbs && lvl.orbs.length > 0) {
+        const orbKey = `${this.state.x},${this.state.y}`;
+        const hasOrb = lvl.orbs.some(o => o[0] === this.state.x && o[1] === this.state.y);
+        if (hasOrb && !this.state.collectedOrbs.has(orbKey)) {
+          this.state.collectedOrbs.add(orbKey);
+          Sound.playOrb();
+          this.renderer.collectOrb(this.state.x, this.state.y);
+          this.setFeedback(`🌸 Geisterlicht eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
+        }
+      }
     }
 
     // 4. Action
     if (cmd === "A") {
-      if (hasCoord(lvl.sw, this.state.x, this.state.y)) {
-        this.state.isOpen = true;
-        this.renderer.setGateOpen(true);
-        this.renderer.setSwitchActive(true);
+      const allSws = lvl.sw || [];
+      const swOnTile = allSws.find(s => s[0] === this.state.x && s[1] === this.state.y);
+      if (swOnTile) {
+        const swColor = swOnTile[2] || "cyan";
+        this.state.isOpen = true; // backwards compatibility
+        this.state.openGates.add(swColor);
+        
+        // Also if level has only 1 gate and colors differ, open that gate
+        const allGates = lvl.gates || lvl.gate || [];
+        if (allGates.length === 1) {
+          const soleColor = allGates[0][2] || "magenta";
+          this.state.openGates.add(soleColor);
+        }
+
+        this.renderer.setGateOpen(swColor, true);
+        if (allGates.length === 1) {
+          this.renderer.setGateOpen("all", true);
+        }
+        this.renderer.setSwitchActive(swColor, true);
+
         Sound.playSwitch();
         Sound.playGateOpen();
-        this.setFeedback("✦ Schalter aktiviert! Das Tor des Schreins öffnet sich.", "good");
+        const colorNames = { cyan: "Türkis", magenta: "Violett", gold: "Gold", green: "Smaragd" };
+        const colorName = colorNames[swColor] || swColor;
+        this.setFeedback(`✦ ${colorName}-Schalter aktiviert! Das zugehörige Tor öffnet sich.`, "good");
       } else {
         Sound.playBump();
         this.setFeedback("Hier gibt es keinen Schalter zum Aktivieren.", "normal");
@@ -532,6 +599,11 @@ class GameEngine {
 
     // Check Victory
     if (this.state.x === lvl.g[0] && this.state.y === lvl.g[1]) {
+      if (lvl.orbs && this.state.collectedOrbs.size < lvl.orbs.length) {
+        this.setFeedback(`⛩️ Ziel noch versiegelt! Sammle noch ${lvl.orbs.length - this.state.collectedOrbs.size} Geisterlicht(er).`, "bad");
+        Sound.playBump();
+        return;
+      }
       this.state.isWin = true;
       this.isPlaying = false;
       this.completedLevels.add(this.currentLevelIdx);

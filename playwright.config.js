@@ -2,7 +2,7 @@ const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 30000,
+  timeout: 60000,
   webServer: {
     command: 'npx vite --port 5173',
     port: 5173,

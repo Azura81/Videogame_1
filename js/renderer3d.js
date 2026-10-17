@@ -4,6 +4,53 @@
  * Sakura trees, water with koi, cyber Torii gates, and animated KOMA robot.
  */
 
+const COLOR_PALETTE = {
+  cyan: {
+    hex: 0x00f5ff,
+    closedHex: 0x00c4cc,
+    neon: 0x00f5ff,
+    barrier: 0x00f5ff,
+    pad: 0x00f5d4,
+    lightClosed: 0x00f5ff,
+    lightActive: 0xffffff,
+    sparkColor: 0x00f5ff,
+    name: "Cyan"
+  },
+  magenta: {
+    hex: 0xdf6eff,
+    closedHex: 0x9d4edd,
+    neon: 0xdf6eff,
+    barrier: 0xdf6eff,
+    pad: 0xdf6eff,
+    lightClosed: 0xdf6eff,
+    lightActive: 0xffffff,
+    sparkColor: 0xdf6eff,
+    name: "Magenta"
+  },
+  gold: {
+    hex: 0xffb703,
+    closedHex: 0xfb8500,
+    neon: 0xffb703,
+    barrier: 0xffb703,
+    pad: 0xffb703,
+    lightClosed: 0xffb703,
+    lightActive: 0xffffff,
+    sparkColor: 0xffb703,
+    name: "Gold"
+  },
+  green: {
+    hex: 0x06d6a0,
+    closedHex: 0x059669,
+    neon: 0x06d6a0,
+    barrier: 0x06d6a0,
+    pad: 0x06d6a0,
+    lightClosed: 0x06d6a0,
+    lightActive: 0xffffff,
+    sparkColor: 0x06d6a0,
+    name: "Smaragd"
+  }
+};
+
 class GardenRenderer {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
@@ -29,6 +76,8 @@ class GardenRenderer {
     this.koiFish = [];
     this.sakuraParticles = null;
     this.toriiGateObjects = [];
+    this.portalMeshes = [];
+    this.orbMeshes = [];
     
     // Lighting
     this.ambientLight = null;
@@ -630,7 +679,8 @@ class GardenRenderer {
     return treeGroup;
   }
 
-  buildToriiGate() {
+  buildToriiGate(colorKey = "magenta") {
+    const palette = COLOR_PALETTE[colorKey] || COLOR_PALETTE.magenta;
     const gateGroup = new THREE.Group();
     
     const lacquerMat = new THREE.MeshStandardMaterial({
@@ -639,9 +689,9 @@ class GardenRenderer {
       roughness: 0.3
     });
     
-    const purpleNeonMat = new THREE.MeshStandardMaterial({
-      color: 0xdf6eff,
-      emissive: 0xbd42ff,
+    const neonMat = new THREE.MeshStandardMaterial({
+      color: palette.neon,
+      emissive: palette.neon,
       emissiveIntensity: 1.8,
       roughness: 0.2
     });
@@ -660,11 +710,11 @@ class GardenRenderer {
     
     // Vertical Neon Stripes
     const stripeGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.4, 8);
-    const sLeft = new THREE.Mesh(stripeGeo, purpleNeonMat);
+    const sLeft = new THREE.Mesh(stripeGeo, neonMat);
     sLeft.position.set(-0.42, 0.8, 0.09);
     gateGroup.add(sLeft);
     
-    const sRight = new THREE.Mesh(stripeGeo, purpleNeonMat);
+    const sRight = new THREE.Mesh(stripeGeo, neonMat);
     sRight.position.set(0.42, 0.8, 0.09);
     gateGroup.add(sRight);
     
@@ -683,14 +733,14 @@ class GardenRenderer {
     
     // Center Sacred Tablet
     const tabGeo = new THREE.BoxGeometry(0.18, 0.22, 0.08);
-    const tab = new THREE.Mesh(tabGeo, purpleNeonMat);
+    const tab = new THREE.Mesh(tabGeo, neonMat);
     tab.position.set(0, 1.42, 0.04);
     gateGroup.add(tab);
     
     // Energy Barrier Screen (Closed State)
     const barrierGeo = new THREE.PlaneGeometry(0.72, 1.35);
     const barrierMat = new THREE.MeshBasicMaterial({
-      color: 0xdf6eff,
+      color: palette.barrier,
       transparent: true,
       opacity: 0.55,
       side: THREE.DoubleSide
@@ -700,21 +750,24 @@ class GardenRenderer {
     gateGroup.add(barrier);
     
     // Gate Point Light
-    const gateLight = new THREE.PointLight(0xdf6eff, 1.5, 3.2);
+    const gateLight = new THREE.PointLight(palette.lightClosed, 1.5, 3.2);
     gateLight.position.set(0, 1.1, 0.1);
     gateGroup.add(gateLight);
     
     gateGroup.userData = {
+      color: colorKey,
+      colors: palette,
       barrier: barrier,
       light: gateLight,
-      neonMats: [purpleNeonMat, barrierMat],
+      neonMats: [neonMat, barrierMat],
       isOpen: false
     };
     
     return gateGroup;
   }
 
-  buildSwitchPad() {
+  buildSwitchPad(colorKey = "cyan") {
+    const palette = COLOR_PALETTE[colorKey] || COLOR_PALETTE.cyan;
     const swGroup = new THREE.Group();
     
     // Raised Stone Pad Base
@@ -728,11 +781,11 @@ class GardenRenderer {
     base.receiveShadow = true;
     swGroup.add(base);
     
-    // Glowing Cyan Circular Core
+    // Glowing Circular Core with matching color
     const padGeo = new THREE.CylinderGeometry(0.32, 0.35, 0.06, 24);
     const padMat = new THREE.MeshStandardMaterial({
-      color: 0x00f5d4,
-      emissive: 0x00f5d4,
+      color: palette.pad,
+      emissive: palette.pad,
       emissiveIntensity: 1.2,
       roughness: 0.2
     });
@@ -749,17 +802,85 @@ class GardenRenderer {
     swGroup.add(ring);
     
     // Switch Light
-    const swLight = new THREE.PointLight(0x00f5d4, 1.4, 2.5);
+    const swLight = new THREE.PointLight(palette.pad, 1.4, 2.5);
     swLight.position.set(0, 0.4, 0);
     swGroup.add(swLight);
     
     swGroup.userData = {
+      color: colorKey,
+      colors: palette,
       padMat: padMat,
       swLight: swLight,
       isActive: false
     };
     
     return swGroup;
+  }
+
+  buildPortal(colorKey = "cyan") {
+    const palette = COLOR_PALETTE[colorKey] || COLOR_PALETTE.cyan;
+    const portalGroup = new THREE.Group();
+    
+    const baseGeo = new THREE.CylinderGeometry(0.44, 0.46, 0.08, 32);
+    const baseMat = new THREE.MeshStandardMaterial({ color: 0x15222e, roughness: 0.4 });
+    const base = new THREE.Mesh(baseGeo, baseMat);
+    base.position.y = 0.04;
+    portalGroup.add(base);
+    
+    const discGeo = new THREE.CircleGeometry(0.38, 32);
+    const discMat = new THREE.MeshBasicMaterial({
+      color: palette.hex,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.82
+    });
+    const disc = new THREE.Mesh(discGeo, discMat);
+    disc.rotation.x = -Math.PI / 2;
+    disc.position.y = 0.085;
+    portalGroup.add(disc);
+
+    const ringGeo = new THREE.TorusGeometry(0.34, 0.025, 8, 32);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = 0.09;
+    portalGroup.add(ring);
+
+    const pLight = new THREE.PointLight(palette.hex, 1.8, 2.8);
+    pLight.position.set(0, 0.45, 0);
+    portalGroup.add(pLight);
+
+    portalGroup.userData = { ring, disc, light: pLight };
+    return portalGroup;
+  }
+
+  buildSpiritOrb() {
+    const orbGroup = new THREE.Group();
+    
+    const orbGeo = new THREE.SphereGeometry(0.2, 16, 16);
+    const orbMat = new THREE.MeshStandardMaterial({
+      color: 0xff70a6,
+      emissive: 0xff70a6,
+      emissiveIntensity: 1.6,
+      roughness: 0.2
+    });
+    const orb = new THREE.Mesh(orbGeo, orbMat);
+    orb.position.y = 0.65;
+    orbGroup.add(orb);
+
+    const haloGeo = new THREE.TorusGeometry(0.28, 0.018, 8, 24);
+    const haloMat = new THREE.MeshBasicMaterial({ color: 0xffd1dc });
+    const halo = new THREE.Mesh(haloGeo, haloMat);
+    halo.rotation.x = Math.PI / 3;
+    halo.position.y = 0.65;
+    orbGroup.add(halo);
+
+    const light = new THREE.PointLight(0xff70a6, 1.8, 3.0);
+    light.position.set(0, 0.65, 0);
+    orbGroup.add(light);
+
+    orbGroup.userData = { orb, halo, light, isCollected: false };
+    return orbGroup;
   }
 
   buildGoalBeacon() {
@@ -875,6 +996,8 @@ class GardenRenderer {
     this.gateMeshes = [];
     this.switchMeshes = [];
     this.toriiGateObjects = [];
+    this.portalMeshes = [];
+    this.orbMeshes = [];
     this.goalMesh = null;
     
     // Setup surroundings again
@@ -885,8 +1008,10 @@ class GardenRenderer {
     const offsetZ = (this.gridHeight - 1) / 2;
     
     const isWall = (x, y) => (levelData.walls || []).some(w => w[0] === x && w[1] === y);
-    const isGate = (x, y) => (levelData.gate || []).some(g => g[0] === x && g[1] === y);
-    const isSwitch = (x, y) => (levelData.sw || []).some(s => s[0] === x && s[1] === y);
+    const getGateDef = (x, y) => (levelData.gates || levelData.gate || []).find(g => g[0] === x && g[1] === y);
+    const getSwitchDef = (x, y) => (levelData.sw || []).find(s => s[0] === x && s[1] === y);
+    const isPortal = (x, y) => (levelData.portals || []).some(p => p[0] === x && p[1] === y);
+    const isOrb = (x, y) => (levelData.orbs || []).some(o => o[0] === x && o[1] === y);
     const isGoal = (x, y) => levelData.g[0] === x && levelData.g[1] === y;
     
     const tileGeo = new THREE.BoxGeometry(0.94, 0.45, 0.94);
@@ -929,21 +1054,41 @@ class GardenRenderer {
           this.decorGroup.add(tree);
         }
         
-        // Gate -> Cyber-Torii Gate
-        if (isGate(x, y)) {
-          const torii = this.buildToriiGate();
+        // Gate -> Cyber-Torii Gate (with color)
+        const gateDef = getGateDef(x, y);
+        if (gateDef) {
+          const gateColor = gateDef[2] || "magenta";
+          const torii = this.buildToriiGate(gateColor);
           torii.position.set(posX, 0.45, posZ);
           this.decorGroup.add(torii);
           this.toriiGateObjects.push(torii);
-          this.gateMeshes.push({ x: x, y: y, obj: torii });
+          this.gateMeshes.push({ x: x, y: y, color: gateColor, obj: torii });
         }
         
-        // Switch -> Raised Cyber Switch Pad
-        if (isSwitch(x, y)) {
-          const swPad = this.buildSwitchPad();
+        // Switch -> Raised Cyber Switch Pad (with color)
+        const swDef = getSwitchDef(x, y);
+        if (swDef) {
+          const swColor = swDef[2] || "cyan";
+          const swPad = this.buildSwitchPad(swColor);
           swPad.position.set(posX, 0.45, posZ);
           this.decorGroup.add(swPad);
-          this.switchMeshes.push({ x: x, y: y, obj: swPad });
+          this.switchMeshes.push({ x: x, y: y, color: swColor, obj: swPad });
+        }
+
+        // Portal -> Kitsune Teleporter
+        if (isPortal(x, y)) {
+          const portal = this.buildPortal();
+          portal.position.set(posX, 0.45, posZ);
+          this.decorGroup.add(portal);
+          this.portalMeshes.push({ x: x, y: y, obj: portal });
+        }
+
+        // Orb -> Spirit Lotus Orb
+        if (isOrb(x, y)) {
+          const orb = this.buildSpiritOrb();
+          orb.position.set(posX, 0.45, posZ);
+          this.decorGroup.add(orb);
+          this.orbMeshes.push({ x: x, y: y, obj: orb });
         }
         
         // Goal -> Golden Shrine Beacon
@@ -1106,30 +1251,134 @@ class GardenRenderer {
     }
   }
 
-  setGateOpen(isOpen) {
+  spawnPortalSparks(worldX, worldZ, colorHex = 0x00f5ff) {
+    const count = 22;
+    for (let i = 0; i < count; i++) {
+      const sparkGeo = new THREE.SphereGeometry(0.04, 6, 6);
+      const sparkMat = new THREE.MeshBasicMaterial({ color: colorHex });
+      const spark = new THREE.Mesh(sparkGeo, sparkMat);
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 0.15 + Math.random() * 0.25;
+      spark.position.set(worldX + Math.cos(angle) * radius, 0.5, worldZ + Math.sin(angle) * radius);
+      this.effectsGroup.add(spark);
+
+      const vy = Math.random() * 0.05 + 0.04;
+      this.dynamicEffects.push({
+        mesh: spark,
+        startTime: performance.now(),
+        duration: 500 + Math.random() * 200,
+        update: (p) => {
+          spark.position.y += vy;
+          spark.rotation.y += 0.1;
+          spark.scale.setScalar(Math.max(0, 1 - p));
+        }
+      });
+    }
+  }
+
+  spawnOrbSparks(worldX, worldZ) {
+    const count = 24;
+    for (let i = 0; i < count; i++) {
+      const sparkGeo = new THREE.SphereGeometry(0.035, 6, 6);
+      const sparkMat = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? 0xff70a6 : 0xffbe0b
+      });
+      const spark = new THREE.Mesh(sparkGeo, sparkMat);
+      spark.position.set(worldX + (Math.random() - 0.5) * 0.4, 0.65 + Math.random() * 0.3, worldZ + (Math.random() - 0.5) * 0.4);
+      this.effectsGroup.add(spark);
+
+      const vx = (Math.random() - 0.5) * 0.05;
+      const vy = Math.random() * 0.05 + 0.03;
+      const vz = (Math.random() - 0.5) * 0.05;
+
+      this.dynamicEffects.push({
+        mesh: spark,
+        startTime: performance.now(),
+        duration: 600 + Math.random() * 200,
+        update: (p) => {
+          spark.position.x += vx;
+          spark.position.y += vy;
+          spark.position.z += vz;
+          spark.scale.setScalar(Math.max(0, 1 - p));
+        }
+      });
+    }
+  }
+
+  animateTeleport(destGridX, destGridY) {
+    const worldX = (destGridX - (this.gridWidth - 1) / 2) * this.tileSize;
+    const worldZ = (destGridY - (this.gridHeight - 1) / 2) * this.tileSize;
+    
+    this.spawnPortalSparks(this.komaGroup.position.x, this.komaGroup.position.z, 0x00f5ff);
+    
+    this.komaState.targetPos.set(worldX, 0.58, worldZ);
+    this.komaGroup.position.copy(this.komaState.targetPos);
+    
+    this.spawnPortalSparks(worldX, worldZ, 0xdf6eff);
+  }
+
+  collectOrb(x, y) {
+    const orbItem = this.orbMeshes.find(o => o.x === x && o.y === y);
+    if (orbItem && orbItem.obj.visible) {
+      orbItem.obj.visible = false;
+      this.spawnOrbSparks(orbItem.obj.position.x, orbItem.obj.position.z);
+    }
+  }
+
+  resetOrbs() {
+    this.orbMeshes.forEach(o => {
+      o.obj.visible = true;
+    });
+  }
+
+  setGateOpen(targetColorOrOpen, maybeIsOpen) {
+    let targetColor = null;
+    let isOpen = true;
+    if (typeof targetColorOrOpen === "boolean") {
+      isOpen = targetColorOrOpen;
+    } else if (typeof targetColorOrOpen === "string") {
+      targetColor = targetColorOrOpen;
+      isOpen = maybeIsOpen !== undefined ? maybeIsOpen : true;
+    }
+
     this.toriiGateObjects.forEach(gate => {
-      gate.userData.isOpen = isOpen;
-      if (gate.userData.barrier) {
-        gate.userData.barrier.visible = !isOpen;
-      }
-      if (gate.userData.light) {
-        gate.userData.light.color.setHex(isOpen ? 0x00f5ff : 0xdf6eff);
-        gate.userData.light.intensity = isOpen ? 0.8 : 1.6;
-      }
-      if (isOpen) {
-        this.spawnGateSparks(gate.position.x, gate.position.z);
+      if (!targetColor || targetColor === "all" || gate.userData.color === targetColor) {
+        gate.userData.isOpen = isOpen;
+        if (gate.userData.barrier) {
+          gate.userData.barrier.visible = !isOpen;
+        }
+        if (gate.userData.light) {
+          const activeHex = (gate.userData.colors && gate.userData.colors.lightActive) || 0xffffff;
+          const closedHex = (gate.userData.colors && gate.userData.colors.lightClosed) || 0xdf6eff;
+          gate.userData.light.color.setHex(isOpen ? activeHex : closedHex);
+          gate.userData.light.intensity = isOpen ? 0.8 : 1.6;
+        }
+        if (isOpen) {
+          this.spawnGateSparks(gate.position.x, gate.position.z);
+        }
       }
     });
   }
 
-  setSwitchActive(isActive) {
+  setSwitchActive(colorOrActive, maybeActive) {
+    let targetColor = null;
+    let isActive = true;
+    if (typeof colorOrActive === "boolean") {
+      isActive = colorOrActive;
+    } else if (typeof colorOrActive === "string") {
+      targetColor = colorOrActive;
+      isActive = maybeActive !== undefined ? maybeActive : true;
+    }
+
     this.switchMeshes.forEach(sw => {
-      sw.obj.userData.isActive = isActive;
-      if (sw.obj.userData.padMat) {
-        sw.obj.userData.padMat.emissiveIntensity = isActive ? 2.5 : 1.2;
-      }
-      if (sw.obj.userData.swLight) {
-        sw.obj.userData.swLight.intensity = isActive ? 2.8 : 1.4;
+      if (!targetColor || targetColor === "all" || sw.color === targetColor) {
+        sw.obj.userData.isActive = isActive;
+        if (sw.obj.userData.padMat) {
+          sw.obj.userData.padMat.emissiveIntensity = isActive ? 2.5 : 1.2;
+        }
+        if (sw.obj.userData.swLight) {
+          sw.obj.userData.swLight.intensity = isActive ? 2.8 : 1.4;
+        }
       }
     });
   }
@@ -1249,6 +1498,34 @@ class GardenRenderer {
         gData.light.intensity = 1.6 + Math.sin(time * 4) * 0.4;
       }
     }
+    
+    // 5b. Kitsune Portal Animations
+    this.portalMeshes.forEach(p => {
+      const u = p.obj.userData;
+      if (u.ring) u.ring.rotation.z += delta * 2.2;
+      if (u.disc) u.disc.material.opacity = 0.72 + Math.sin(time * 4) * 0.22;
+      if (u.light) u.light.intensity = 1.6 + Math.sin(time * 3) * 0.4;
+    });
+
+    // 5c. Spirit Lotus Orb Animations
+    this.orbMeshes.forEach((o, idx) => {
+      if (o.obj.visible) {
+        const u = o.obj.userData;
+        const bob = Math.sin(time * 3 + idx * 1.5) * 0.08;
+        if (u.orb) {
+          u.orb.position.y = 0.65 + bob;
+          u.orb.rotation.y += delta * 1.8;
+        }
+        if (u.halo) {
+          u.halo.position.y = 0.65 + bob;
+          u.halo.rotation.z += delta * 2.5;
+        }
+        if (u.light) {
+          u.light.position.y = 0.65 + bob;
+          u.light.intensity = 1.6 + Math.sin(time * 4 + idx) * 0.4;
+        }
+      }
+    });
     
     // 6. Koi Fish Swimming Motion
     this.koiFish.forEach(koi => {

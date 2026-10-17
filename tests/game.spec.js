@@ -2,8 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('KOMA: Spirit Delivery - Game Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/');
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
   });
 
   test('Page loads with title, 3D WebGL canvas, and full camera credits', async ({ page }) => {
@@ -112,4 +111,63 @@ test.describe('KOMA: Spirit Delivery - Game Tests', () => {
     await expect(winModal).toHaveClass(/active/, { timeout: 8000 });
     await expect(page.locator('#modalWinStars')).toContainText(/3 Sterne/);
   });
+
+  test('Campaign contains all 50 levels in level drawer and mission badge', async ({ page }) => {
+    await expect(page.locator('#missionBadge')).toHaveText('01 / 50');
+    
+    // Open level drawer
+    await page.locator('#btnLevelSelect').click();
+    await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
+    
+    // Check 50 level buttons are present
+    const pills = page.locator('.level-pill-btn');
+    await expect(pills).toHaveCount(50);
+    
+    // Check level 50 title is present
+    await expect(page.locator('.level-pill-btn').nth(49)).toContainText('Die Legende von KOMA');
+  });
+
+  test('Level 11 (Dual-Tore) can be loaded and solved with Cyan & Magenta gates', async ({ page }) => {
+    // Open drawer and select Level 11
+    await page.locator('#btnLevelSelect').click();
+    const pill = page.locator('.level-pill-btn').nth(10); // Level 11 is index 10
+    await pill.scrollIntoViewIfNeeded();
+    await pill.click();
+    
+    await expect(page.locator('#levelTitle')).toHaveText('Zwei Lichter');
+    await expect(page.locator('#missionBadge')).toHaveText('11 / 50');
+    
+    // Solution for Level 11: F, A, R, F, F, A, L, F, L, F, R, F, R, F, F
+    const cmds = ["F", "A", "R", "F", "F", "A", "L", "F", "L", "F", "R", "F", "R", "F", "F"];
+    for (const cmd of cmds) {
+      await page.locator(`button[data-cmd="${cmd}"]`).click();
+    }
+    
+    await page.locator('#btnPlay').click();
+    
+    const winModal = page.locator('#modalWin');
+    await expect(winModal).toHaveClass(/active/, { timeout: 20000 });
+    await expect(page.locator('#modalWinStars')).toContainText(/3 Sterne/);
+  });
+
+  test('Level 19 (Kitsune Portal) teleports KOMA to the other side', async ({ page }) => {
+    // Open drawer and select Level 19
+    await page.locator('#btnLevelSelect').click();
+    await page.locator('.level-pill-btn').nth(18).click(); // Level 19 is index 18
+    
+    await expect(page.locator('#levelTitle')).toHaveText('Das Portal des Fuchses');
+    await expect(page.locator('#missionBadge')).toHaveText('19 / 50');
+    
+    // Solution: F, F, F, F (teleports through portal)
+    for (let i = 0; i < 4; i++) {
+      await page.locator('button[data-cmd="F"]').click();
+    }
+    
+    await page.locator('#btnPlay').click();
+    
+    const winModal = page.locator('#modalWin');
+    await expect(winModal).toHaveClass(/active/, { timeout: 10000 });
+    await expect(page.locator('#modalWinStars')).toContainText(/3 Sterne/);
+  });
 });
+
