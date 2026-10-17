@@ -715,3 +715,123 @@ html, body {
     padding: 14px;
   }
 }
+
+/* Camera Actions Group in Top Nav */
+.camera-actions-group {
+  display: flex;
+  gap: 6px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--panel-border);
+}
+
+.camera-actions-group .icon-btn {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  font-size: 15px;
+}
+
+.camera-actions-group .icon-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--cyan);
+}
+
+/* Camera Credit Card in Mission Footer */
+.camera-credit-card {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(14, 28, 48, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.camera-credit-card .cam-icon {
+  font-size: 13px;
+}
+
+.camera-credit-card .cam-count {
+  color: var(--cyan);
+  letter-spacing: 0.5px;
+}
+
+.camera-credit-card .cam-stars {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+
+/* Win Modal Stars & Rating */
+.win-stars-container {
+  margin: 14px 0 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stars-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.win-star {
+  font-size: 38px;
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.win-star.filled {
+  color: var(--gold);
+  text-shadow: 0 0 16px var(--gold-glow), 0 0 30px rgba(255, 183, 3, 0.4);
+  animation: star-bounce 0.5s ease;
+}
+
+.win-star.empty {
+  opacity: 0.28;
+  filter: grayscale(1);
+}
+
+@keyframes star-bounce {
+  0% { transform: scale(0.3) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.25) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.stars-caption {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.4px;
+}
+
+.win-credits-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Pill stars in level drawer */
+.pill-stars {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+.pill-stars.zero {
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+

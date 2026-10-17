@@ -64,6 +64,22 @@ class GardenRenderer {
     this.clock = new THREE.Clock();
     this.isInitialized = false;
     
+    // Camera Orbit State & Swivel Controls
+    this.defaultOrbit = {
+      azimuth: -Math.PI * 0.75,
+      elevation: 0.68,
+      distance: 43.7
+    };
+    this.orbit = {
+      azimuth: this.defaultOrbit.azimuth,
+      elevation: this.defaultOrbit.elevation,
+      distance: this.defaultOrbit.distance,
+      targetAzimuth: this.defaultOrbit.azimuth,
+      targetElevation: this.defaultOrbit.elevation
+    };
+    this.onSwivelCallback = null;
+    this.dynamicEffects = [];
+    
     this.init();
   }
 
@@ -122,7 +138,8 @@ class GardenRenderer {
     // 9. Build KOMA 3D Model
     this.buildKomaModel();
     
-    // 10. Event Listeners
+    // 10. Camera Orbit Controls & Resize Listeners
+    this.setupCameraControls();
     window.addEventListener("resize", () => this.onResize());
     
     // 11. Start Render Loop
@@ -130,11 +147,69 @@ class GardenRenderer {
     this.animate();
   }
 
+  setupCameraControls() {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let dragDistance = 0;
+    let creditDeductedThisDrag = false;
+
+    const onPointerDown = (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      dragDistance = 0;
+      creditDeductedThisDrag = false;
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      startX = e.clientX;
+      startY = e.clientY;
+
+      dragDistance += Math.hypot(dx, dy);
+
+      this.orbit.targetAzimuth -= dx * 0.007;
+      this.orbit.targetElevation = Math.max(0.2, Math.min(1.2, this.orbit.targetElevation - dy * 0.005));
+
+      if (dragDistance > 18 && !creditDeductedThisDrag) {
+        creditDeductedThisDrag = true;
+        if (typeof this.onSwivelCallback === "function") {
+          this.onSwivelCallback();
+        }
+      }
+    };
+
+    const onPointerUp = () => {
+      isDragging = false;
+    };
+
+    this.container.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+  }
+
   updateCameraPosition() {
-    // True isometric viewing vector
-    const dist = 24;
-    this.camera.position.set(-dist, dist * 1.15, -dist);
+    const x = this.orbit.distance * Math.cos(this.orbit.elevation) * Math.sin(this.orbit.azimuth);
+    const y = this.orbit.distance * Math.sin(this.orbit.elevation);
+    const z = this.orbit.distance * Math.cos(this.orbit.elevation) * Math.cos(this.orbit.azimuth);
+    this.camera.position.set(x, y, z);
     this.camera.lookAt(0, 0, 0);
+  }
+
+  rotateCameraBy(deltaRad) {
+    this.orbit.targetAzimuth += deltaRad;
+    if (typeof this.onSwivelCallback === "function") {
+      this.onSwivelCallback();
+    }
+  }
+
+  resetCameraView() {
+    this.orbit.targetAzimuth = this.defaultOrbit.azimuth;
+    this.orbit.targetElevation = this.defaultOrbit.elevation;
   }
 
   onResize() {
@@ -977,6 +1052,60 @@ class GardenRenderer {
     this.komaState.bumpStartTime = performance.now();
   }
 
+  spawnStepDust(worldX, worldZ) {
+    const ringGeo = new THREE.RingGeometry(0.08, 0.28, 16);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x98b5d5,
+      transparent: true,
+      opacity: 0.65,
+      side: THREE.DoubleSide
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(worldX, 0.46, worldZ);
+    this.effectsGroup.add(ring);
+
+    this.dynamicEffects.push({
+      mesh: ring,
+      startTime: performance.now(),
+      duration: 350,
+      update: (p) => {
+        const s = 1 + p * 1.6;
+        ring.scale.set(s, s, 1);
+        ring.material.opacity = 0.65 * (1 - p);
+      }
+    });
+  }
+
+  spawnGateSparks(worldX, worldZ) {
+    const count = 20;
+    for (let i = 0; i < count; i++) {
+      const sparkGeo = new THREE.SphereGeometry(0.035, 6, 6);
+      const sparkMat = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? 0xdf6eff : 0x00f5ff
+      });
+      const spark = new THREE.Mesh(sparkGeo, sparkMat);
+      spark.position.set(worldX + (Math.random() - 0.5) * 0.7, 0.7 + Math.random() * 0.4, worldZ + (Math.random() - 0.5) * 0.7);
+      this.effectsGroup.add(spark);
+
+      const vx = (Math.random() - 0.5) * 0.04;
+      const vy = Math.random() * 0.04 + 0.03;
+      const vz = (Math.random() - 0.5) * 0.04;
+
+      this.dynamicEffects.push({
+        mesh: spark,
+        startTime: performance.now(),
+        duration: 550 + Math.random() * 200,
+        update: (p) => {
+          spark.position.x += vx;
+          spark.position.y += vy;
+          spark.position.z += vz;
+          spark.scale.setScalar(Math.max(0, 1 - p));
+        }
+      });
+    }
+  }
+
   setGateOpen(isOpen) {
     this.toriiGateObjects.forEach(gate => {
       gate.userData.isOpen = isOpen;
@@ -986,6 +1115,9 @@ class GardenRenderer {
       if (gate.userData.light) {
         gate.userData.light.color.setHex(isOpen ? 0x00f5ff : 0xdf6eff);
         gate.userData.light.intensity = isOpen ? 0.8 : 1.6;
+      }
+      if (isOpen) {
+        this.spawnGateSparks(gate.position.x, gate.position.z);
       }
     });
   }
@@ -1013,6 +1145,24 @@ class GardenRenderer {
     const time = this.clock.getElapsedTime();
     const now = performance.now();
     
+    // Smooth camera orbit interpolation
+    this.orbit.azimuth += (this.orbit.targetAzimuth - this.orbit.azimuth) * 0.1;
+    this.orbit.elevation += (this.orbit.targetElevation - this.orbit.elevation) * 0.1;
+    this.updateCameraPosition();
+
+    // Dynamic effects (step dust, gate sparks)
+    for (let i = this.dynamicEffects.length - 1; i >= 0; i--) {
+      const eff = this.dynamicEffects[i];
+      const p = Math.min((now - eff.startTime) / eff.duration, 1);
+      eff.update(p);
+      if (p >= 1) {
+        this.effectsGroup.remove(eff.mesh);
+        if (eff.mesh.geometry) eff.mesh.geometry.dispose();
+        if (eff.mesh.material) eff.mesh.material.dispose();
+        this.dynamicEffects.splice(i, 1);
+      }
+    }
+    
     // 1. KOMA Movement Interpolation
     if (this.komaState.isMoving) {
       const elapsed = now - this.komaState.moveStartTime;
@@ -1030,6 +1180,7 @@ class GardenRenderer {
       if (progress >= 1) {
         this.komaState.isMoving = false;
         this.komaGroup.position.copy(this.komaState.targetPos);
+        this.spawnStepDust(this.komaState.targetPos.x, this.komaState.targetPos.z);
       }
     } else if (this.komaState.isCelebrating) {
       // Joyful victory spin & hop

@@ -22,6 +22,11 @@
         </div>
       </div>
       <div class="top-actions">
+        <div class="camera-actions-group">
+          <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" aria-label="Kamera links drehen">↺</button>
+          <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" aria-label="Kamera zurücksetzen">🎥</button>
+          <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" aria-label="Kamera rechts drehen">↻</button>
+        </div>
         <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">🔊</button>
         <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">?</button>
         <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">☰</button>
@@ -47,6 +52,11 @@
 
           <div class="mission-footer">
             <span class="mission-badge" id="missionBadge">01 / 10</span>
+            <div class="camera-credit-card" title="Kamera-Credits (Jeder Schwenk kostet 1 Credit)">
+              <span class="cam-icon">📷</span>
+              <span class="cam-count" id="creditBadge">6 / 6</span>
+              <span class="cam-stars" id="creditStars">⭐⭐⭐</span>
+            </div>
             <div class="koma-status-badge">
               <span class="status-dot"></span>
               <span>Bereit</span>
@@ -136,6 +146,8 @@
         <div class="modal-emblem">🌸✨📦</div>
         <h2 class="modal-title" id="modalWinTitle">Lieferung erfolgreich!</h2>
         <p class="modal-desc" id="modalWinText">KOMA hat das Paket sicher abgeliefert.</p>
+        <div id="modalWinStars" class="win-stars-container"></div>
+        <div id="modalWinCredits" class="win-credits-sub"></div>
         <div class="modal-btn-row">
           <button class="play-btn" id="btnNextLevel">Nächstes Level →</button>
           <button class="sec-btn" id="btnReplayLevel">Noch einmal ansehen</button>
@@ -150,14 +162,23 @@
           <h2 class="modal-title" style="margin: 0;">Spielanleitung</h2>
           <button class="icon-btn" id="btnCloseHelp">✕</button>
         </div>
-        <p class="modal-desc" style="margin-bottom: 16px;">
+        <p class="modal-desc" style="margin-bottom: 14px;">
           Hilf dem kleinen Lieferroboter <strong>KOMA</strong>, Pakete durch den magischen Schreingarten auszuliefern!
         </p>
-        <ul style="color: var(--text-muted); font-size: 13.5px; line-height: 1.7; padding-left: 20px; margin-bottom: 20px;">
+        <ul style="color: var(--text-muted); font-size: 13px; line-height: 1.7; padding-left: 20px; margin-bottom: 16px;">
           <li><strong>↑ Vorwärts:</strong> KOMA geht 1 Feld in Blickrichtung.</li>
           <li><strong>↶ / ↷ Drehen:</strong> Ändert KOMA's Blickrichtung um 90 Grad.</li>
-          <li><strong>✦ Aktion:</strong> Aktiviert leuchtende Schalter, um verschlossene Tore zu öffnen.</li>
-          <li><strong>Tastatur-Kürzel:</strong> Pfeiltasten / W, A, S, D für Richtungen, E für Aktion, Leertaste für Start.</li>
+          <li><strong>✦ Aktion:</strong> Aktiviert leuchtende Schalter, um Tore zu öffnen.</li>
+          <li><strong>📷 Kamera-Credits & Sterne:</strong>
+            <ul style="padding-left: 16px; margin-top: 4px;">
+              <li>Maus-Drag oder ↺ / ↻ schwenkt die 3D-Kamera.</li>
+              <li>Jeder Schwenk kostet <strong>1 Credit</strong>.</li>
+              <li>Volle Credits = <strong>⭐⭐⭐ 3 Sterne</strong>.</li>
+              <li>Mindestens halbe Credits = <strong>⭐⭐ 2 Sterne</strong>.</li>
+              <li>0 Credits übrig = <strong>0 Sterne</strong> (Level kann trotzdem abgeschlossen werden!).</li>
+            </ul>
+          </li>
+          <li><strong>Tastatur:</strong> Pfeiltasten / W, A, S, D, E für Aktionen, Q / Y für Kamera, Leertaste für Start.</li>
         </ul>
         <button class="play-btn" onclick="document.getElementById('modalHelp').classList.remove('active')">Verstanden!</button>
       </div>

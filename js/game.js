@@ -21,6 +21,11 @@ class GameEngine {
       isFail: false
     };
     
+    // Camera Credits & Star Rating System
+    this.maxCameraCredits = 6;
+    this.cameraCredits = 6;
+    this.levelStars = {};
+    
     // Save completed levels
     this.completedLevels = new Set();
     this.loadProgress();
@@ -32,6 +37,8 @@ class GameEngine {
       levelTag: document.getElementById("levelTag"),
       missionDesc: document.getElementById("missionDesc"),
       missionBadge: document.getElementById("missionBadge"),
+      creditBadge: document.getElementById("creditBadge"),
+      creditStars: document.getElementById("creditStars"),
       queueContainer: document.getElementById("queueContainer"),
       queueCount: document.getElementById("queueCount"),
       feedbackText: document.getElementById("feedbackText"),
@@ -44,9 +51,14 @@ class GameEngine {
       levelDrawer: document.getElementById("levelDrawer"),
       levelList: document.getElementById("levelList"),
       btnLevelSelect: document.getElementById("btnLevelSelect"),
+      btnCamRotateLeft: document.getElementById("btnCamRotateLeft"),
+      btnCamRotateRight: document.getElementById("btnCamRotateRight"),
+      btnCamReset: document.getElementById("btnCamReset"),
       modalWin: document.getElementById("modalWin"),
       modalWinTitle: document.getElementById("modalWinTitle"),
       modalWinText: document.getElementById("modalWinText"),
+      modalWinStars: document.getElementById("modalWinStars"),
+      modalWinCredits: document.getElementById("modalWinCredits"),
       btnNextLevel: document.getElementById("btnNextLevel"),
       btnReplayLevel: document.getElementById("btnReplayLevel"),
       btnSoundToggle: document.getElementById("btnSoundToggle"),
@@ -69,6 +81,11 @@ class GameEngine {
   init() {
     // 1. Initialize 3D Garden Renderer
     this.renderer = new GardenRenderer("webgl-container");
+    
+    // Listen to 3D Camera Swivels
+    this.renderer.onSwivelCallback = () => {
+      this.useCameraCredit();
+    };
     
     // 2. Setup Events
     this.bindEvents();
@@ -134,6 +151,24 @@ class GameEngine {
       });
     }
 
+    // Camera Swivel / Rotate Controls
+    if (this.dom.btnCamRotateLeft) {
+      this.dom.btnCamRotateLeft.addEventListener("click", () => {
+        this.renderer.rotateCameraBy(Math.PI / 4);
+      });
+    }
+    if (this.dom.btnCamRotateRight) {
+      this.dom.btnCamRotateRight.addEventListener("click", () => {
+        this.renderer.rotateCameraBy(-Math.PI / 4);
+      });
+    }
+    if (this.dom.btnCamReset) {
+      this.dom.btnCamReset.addEventListener("click", () => {
+        this.renderer.resetCameraView();
+        Sound.playClick();
+      });
+    }
+
     // Keyboard Shortcuts
     document.addEventListener("keydown", e => {
       if (this.dom.modalHelp && this.dom.modalHelp.classList.contains("active")) {
@@ -155,12 +190,18 @@ class GameEngine {
       const k = e.key.toUpperCase();
       if (k === "ARROWUP" || k === "W" || k === "F") {
         this.addCommand("F");
-      } else if (k === "ARROWLEFT" || k === "A" && e.altKey || k === "L") {
+      } else if (k === "ARROWLEFT" || (k === "A" && e.altKey) || k === "L") {
         this.addCommand("L");
       } else if (k === "ARROWRIGHT" || k === "D" || k === "R") {
         this.addCommand("R");
       } else if (k === "E" || k === "A") {
         this.addCommand("A");
+      } else if (k === "Q") {
+        this.renderer.rotateCameraBy(Math.PI / 4);
+      } else if (k === "Y" || k === "Z") {
+        this.renderer.rotateCameraBy(-Math.PI / 4);
+      } else if (k === "C") {
+        this.renderer.resetCameraView();
       } else if (k === " " || k === "ENTER") {
         e.preventDefault();
         this.play();
@@ -178,13 +219,48 @@ class GameEngine {
       if (saved) {
         JSON.parse(saved).forEach(idx => this.completedLevels.add(idx));
       }
+      const stars = localStorage.getItem("koma_level_stars");
+      if (stars) {
+        this.levelStars = JSON.parse(stars);
+      }
     } catch (e) {}
   }
 
   saveProgress() {
     try {
       localStorage.setItem("koma_completed_levels", JSON.stringify(Array.from(this.completedLevels)));
+      localStorage.setItem("koma_level_stars", JSON.stringify(this.levelStars));
     } catch (e) {}
+  }
+
+  calculateStars(credits, maxCredits) {
+    if (credits === maxCredits) return 3;
+    if (credits >= Math.ceil(maxCredits / 2)) return 2;
+    if (credits > 0) return 1;
+    return 0;
+  }
+
+  useCameraCredit() {
+    if (this.cameraCredits > 0) {
+      this.cameraCredits--;
+      Sound.playCameraSwivel();
+      this.renderCameraCredits();
+      if (this.cameraCredits === 0) {
+        this.setFeedback("Kamera-Credits aufgebraucht (0 Sterne möglich – Level kann trotzdem abgeschlossen werden).", "bad");
+      } else {
+        this.setFeedback(`Kamera geschwenkt (-1 Credit, noch ${this.cameraCredits} übrig).`, "normal");
+      }
+    }
+  }
+
+  renderCameraCredits() {
+    if (this.dom.creditBadge) {
+      this.dom.creditBadge.textContent = `${this.cameraCredits} / ${this.maxCameraCredits}`;
+    }
+    if (this.dom.creditStars) {
+      const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
+      this.dom.creditStars.textContent = stars > 0 ? "⭐".repeat(stars) : "–";
+    }
   }
 
   loadLevel(idx) {
@@ -211,9 +287,10 @@ class GameEngine {
     
     this.renderQueue();
     this.renderLevelDrawer();
+    this.renderCameraCredits();
   }
 
-  resetState() {
+  resetKomaPosition() {
     const lvl = this.getCurrentLevel();
     this.state = {
       x: lvl.s[0],
@@ -227,6 +304,17 @@ class GameEngine {
       this.renderer.setKomaInitialState(this.state.x, this.state.y, this.state.dir);
       this.renderer.setGateOpen(false);
       this.renderer.setSwitchActive(false);
+    }
+  }
+
+  resetState(resetCredits = true) {
+    this.resetKomaPosition();
+    if (resetCredits) {
+      this.cameraCredits = this.maxCameraCredits;
+      this.renderCameraCredits();
+      if (this.renderer) {
+        this.renderer.resetCameraView();
+      }
     }
   }
 
@@ -318,9 +406,17 @@ class GameEngine {
         "level-pill-btn" +
         (idx === this.currentLevelIdx ? " active" : "") +
         (this.completedLevels.has(idx) ? " done" : "");
+      
+      const stars = this.levelStars[idx];
+      let starMarkup = "";
+      if (stars !== undefined) {
+        starMarkup = stars > 0 ? `<span class="pill-stars">${"⭐".repeat(stars)}</span>` : `<span class="pill-stars zero">0⭐</span>`;
+      }
+
       btn.innerHTML = `
         <span class="pill-number">${idx + 1}</span>
         <span class="pill-title">${lvl.n}</span>
+        ${starMarkup}
         ${this.completedLevels.has(idx) ? '<span class="pill-check">✓</span>' : ""}
       `;
       btn.onclick = () => {
@@ -345,7 +441,7 @@ class GameEngine {
       return;
     }
 
-    this.resetState();
+    this.resetKomaPosition();
     this.currentStep = 0;
     this.isPlaying = true;
     this.setFeedback("Los geht's! KOMA führt deinen Plan aus …", "normal");
@@ -439,6 +535,12 @@ class GameEngine {
       this.state.isWin = true;
       this.isPlaying = false;
       this.completedLevels.add(this.currentLevelIdx);
+      
+      // Calculate star rating based on user formula:
+      // Volle Credit Zahl -> 3 Sterne, Hälfte -> 2 Sterne, 0 Credits -> 0 Sterne (Level trotzdem abgeschlossen)
+      const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
+      this.levelStars[this.currentLevelIdx] = Math.max(this.levelStars[this.currentLevelIdx] || 0, stars);
+      
       this.saveProgress();
       this.renderLevelDrawer();
       this.renderQueue();
@@ -458,6 +560,30 @@ class GameEngine {
           this.dom.modalWinText.textContent = `KOMA hat das Paket in ${this.currentStep} Befehl${
             this.currentStep === 1 ? "" : "en"
           } sicher abgeliefert.`;
+        }
+        if (this.dom.modalWinStars) {
+          let starHtml = "";
+          for (let i = 1; i <= 3; i++) {
+            starHtml += `<span class="win-star ${i <= stars ? "filled" : "empty"}">${i <= stars ? "⭐" : "☆"}</span>`;
+          }
+          let starLabel = "";
+          if (stars === 3) starLabel = "3 Sterne · Volle Kamera-Credits erhalten (Perfekt!)";
+          else if (stars === 2) starLabel = "2 Sterne · Mindestens halbe Credits erhalten (Sehr gut!)";
+          else if (stars === 1) starLabel = "1 Stern · Wenig Credits übrig (Gut!)";
+          else starLabel = "0 Sterne · Alle Kamera-Credits aufgebraucht (Erfolgreich geliefert)";
+          
+          this.dom.modalWinStars.innerHTML = `
+            <div class="stars-row">${starHtml}</div>
+            <div class="stars-caption">${starLabel}</div>
+          `;
+          
+          // Play star chimes
+          for (let i = 0; i < stars; i++) {
+            setTimeout(() => Sound.playStarChime(i), (i + 1) * 220);
+          }
+        }
+        if (this.dom.modalWinCredits) {
+          this.dom.modalWinCredits.textContent = `Übrige Kamera-Credits: ${this.cameraCredits} / ${this.maxCameraCredits}`;
         }
         if (this.dom.btnNextLevel) {
           this.dom.btnNextLevel.textContent =
