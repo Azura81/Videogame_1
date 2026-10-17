@@ -76,7 +76,9 @@ class GardenRenderer {
     this.scene.fog = new THREE.FogExp2(0x0a1424, 0.015);
     
     // 2. Camera: Isometric Orthographic
-    const aspect = this.container.clientWidth / this.container.clientHeight;
+    const w = this.container.clientWidth || window.innerWidth || 800;
+    const h = this.container.clientHeight || window.innerHeight || 600;
+    const aspect = w / h;
     const frustumSize = 10;
     this.camera = new THREE.OrthographicCamera(
       (-frustumSize * aspect) / 2,
@@ -92,7 +94,7 @@ class GardenRenderer {
     
     // 3. Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this.renderer.setSize(w, h);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -131,14 +133,14 @@ class GardenRenderer {
   updateCameraPosition() {
     // True isometric viewing vector
     const dist = 24;
-    this.camera.position.set(dist, dist * 1.05, dist);
+    this.camera.position.set(-dist, dist * 1.15, -dist);
     this.camera.lookAt(0, 0, 0);
   }
 
   onResize() {
     if (!this.container || !this.renderer || !this.camera) return;
-    const w = this.container.clientWidth;
-    const h = this.container.clientHeight;
+    const w = this.container.clientWidth || window.innerWidth || 800;
+    const h = this.container.clientHeight || window.innerHeight || 600;
     const aspect = w / h;
     
     // Dynamically adjust frustum to fit current grid dimensions
@@ -424,7 +426,8 @@ class GardenRenderer {
     this.komaGroup.add(visor);
     
     // 3. Glowing Cyan Eyes
-    const eyeGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.035, 0.04, 8, 8) : new THREE.CylinderGeometry(0.04, 0.04, 0.09, 12);
+    const eyeGeo = new THREE.SphereGeometry(0.045, 12, 12);
+    eyeGeo.scale(0.8, 1.3, 0.6);
     
     const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
     leftEye.position.set(-0.09, 0.45, 0.32);
