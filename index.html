@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KOMA: Spirit Delivery — Cyberpunk Japanese Garden Puzzle</title>
+  <meta name="description" content="KOMA: Spirit Delivery – Steuere den kleinen Lieferroboter KOMA durch einen magischen nächtlichen Schreingarten in isometrischem 3D.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-viewport">
+    <!-- 3D WebGL Canvas Layer -->
+    <div id="webgl-container" aria-label="3D Spielwelt"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="brand-icon">⛩️</div>
+        <div>
+          <div class="brand-title">KOMA</div>
+          <div class="brand-sub">SPIRIT DELIVERY · コマ</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">🔊</button>
+        <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">?</button>
+        <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">☰</button>
+      </div>
+    </header>
+
+    <!-- Main Game HUD Overlay -->
+    <main class="ui-overlay">
+      <!-- Left Glass Card: Level & Mission -->
+      <section class="panel-left">
+        <div class="glass-card">
+          <div class="card-header">
+            <div>
+              <div class="chapter-kicker" id="chapterTitle">Kapitel 01 · Laternenviertel</div>
+              <h1 class="level-title" id="levelTitle">Die erste Lieferung</h1>
+            </div>
+            <span class="tag-badge" id="levelTag">Tutorial</span>
+          </div>
+
+          <p class="mission-desc" id="missionDesc">
+            Fahre zuerst geradeaus durch die Gasse und biege dann nach Süden zum Paket ab. Mit sechs Befehlen kommst du ans Ziel.
+          </p>
+
+          <div class="mission-footer">
+            <span class="mission-badge" id="missionBadge">01 / 10</span>
+            <div class="koma-status-badge">
+              <span class="status-dot"></span>
+              <span>Bereit</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Glass Card: Command Deck & Plan Queue -->
+      <aside class="panel-right">
+        <div class="glass-card">
+          <div class="panel-title">
+            <span>Befehle</span>
+          </div>
+
+          <div class="commands-grid">
+            <button class="cmd-btn" data-cmd="F" title="Vorwärts bewegen (W / Pfeiltaste Hoch)">
+              <span class="cmd-icon">↑</span>
+              <span>Vorwärts</span>
+            </button>
+            <button class="cmd-btn" data-cmd="L" title="90° nach links drehen (A / Pfeiltaste Links)">
+              <span class="cmd-icon">↶</span>
+              <span>Links</span>
+            </button>
+            <button class="cmd-btn" data-cmd="R" title="90° nach rechts drehen (D / Pfeiltaste Rechts)">
+              <span class="cmd-icon">↷</span>
+              <span>Rechts</span>
+            </button>
+            <button class="cmd-btn" data-cmd="A" title="Aktion / Schalter aktivieren (E / Taste A)">
+              <span class="cmd-icon">✦</span>
+              <span>Aktion</span>
+            </button>
+          </div>
+
+          <div class="panel-title">
+            <span>Befehlsfolge</span>
+            <span id="queueCount">0 / 8</span>
+          </div>
+
+          <div class="queue-box" id="queueContainer">
+            <div class="empty-queue-hint">Dein Plan erscheint hier …</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="sec-btn" id="btnReset" title="KOMA zurück an den Start setzen">
+              <span>⟲</span>
+              <span>Zurücksetzen</span>
+            </button>
+            <button class="sec-btn" id="btnUndo" title="Letzten Befehl entfernen">
+              <span>↶</span>
+              <span>Rückgängig</span>
+            </button>
+            <button class="sec-btn" id="btnClear" title="Ganzen Plan löschen">
+              <span>✕</span>
+              <span>Löschen</span>
+            </button>
+          </div>
+
+          <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)">
+            <span>▶</span>
+            <span>Plan abspielen</span>
+          </button>
+
+          <div class="progress-container">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+
+          <div class="feedback-box" id="feedbackText" role="status">
+            Plane deine Befehlsfolge und drücke auf „Plan abspielen“.
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Fly-out Level Selector Drawer -->
+    <nav class="level-drawer" id="levelDrawer" aria-label="Levelauswahl">
+      <div class="drawer-header">
+        <h2 class="drawer-title">Levelauswahl</h2>
+        <button class="icon-btn" onclick="document.getElementById('levelDrawer').classList.remove('open')">✕</button>
+      </div>
+      <div class="drawer-list" id="levelList"></div>
+    </nav>
+
+    <!-- Victory Celebration Modal -->
+    <div class="modal-backdrop" id="modalWin" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-emblem">🌸✨📦</div>
+        <h2 class="modal-title" id="modalWinTitle">Lieferung erfolgreich!</h2>
+        <p class="modal-desc" id="modalWinText">KOMA hat das Paket sicher abgeliefert.</p>
+        <div class="modal-btn-row">
+          <button class="play-btn" id="btnNextLevel">Nächstes Level →</button>
+          <button class="sec-btn" id="btnReplayLevel">Noch einmal ansehen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help & Tutorial Modal -->
+    <div class="modal-backdrop" id="modalHelp" role="dialog" aria-modal="true">
+      <div class="modal-card" style="text-align: left; max-width: 480px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 class="modal-title" style="margin: 0;">Spielanleitung</h2>
+          <button class="icon-btn" id="btnCloseHelp">✕</button>
+        </div>
+        <p class="modal-desc" style="margin-bottom: 16px;">
+          Hilf dem kleinen Lieferroboter <strong>KOMA</strong>, Pakete durch den magischen Schreingarten auszuliefern!
+        </p>
+        <ul style="color: var(--text-muted); font-size: 13.5px; line-height: 1.7; padding-left: 20px; margin-bottom: 20px;">
+          <li><strong>↑ Vorwärts:</strong> KOMA geht 1 Feld in Blickrichtung.</li>
+          <li><strong>↶ / ↷ Drehen:</strong> Ändert KOMA's Blickrichtung um 90 Grad.</li>
+          <li><strong>✦ Aktion:</strong> Aktiviert leuchtende Schalter, um verschlossene Tore zu öffnen.</li>
+          <li><strong>Tastatur-Kürzel:</strong> Pfeiltasten / W, A, S, D für Richtungen, E für Aktion, Leertaste für Start.</li>
+        </ul>
+        <button class="play-btn" onclick="document.getElementById('modalHelp').classList.remove('active')">Verstanden!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/three.min.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/renderer3d.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
