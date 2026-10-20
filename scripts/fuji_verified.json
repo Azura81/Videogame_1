@@ -1,0 +1,2238 @@
+[
+  {
+    "n": "Der erste Bergwind",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Windb\u00f6en",
+    "d": "Willkommen am schneebedeckten Fu\u00df des Fuji! Eine sanfte Windb\u00f6e tr\u00e4gt KOMA mit. Nutze den Windsto\u00df, aktiviere den Schrein-Schalter und erreiche das Ziel.",
+    "w": 5,
+    "h": 5,
+    "s": [
+      0,
+      3,
+      "E"
+    ],
+    "g": [
+      3,
+      1
+    ],
+    "winds": [
+      [
+        1,
+        3,
+        "E"
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        2,
+        "cyan"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "fence_h",
+      "3,0": "pine",
+      "4,0": "wall_h",
+      "0,1": "fence_v",
+      "4,1": "fence_v",
+      "0,2": "wall_v",
+      "1,2": "pine",
+      "4,2": "wall_v",
+      "4,3": "fence_v",
+      "0,4": "wall_h",
+      "1,4": "fence_h",
+      "2,4": "wall_h",
+      "3,4": "fence_h",
+      "4,4": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "solution": [
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 8
+  },
+  {
+    "n": "Die gefrorene Schlucht",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Schlucht-Sprung",
+    "d": "Ein eisiger Abgrund trennt die Terrassen. Der Aufwind katapultiert KOMA \u00fcber die Schlucht zum Bergkristall. Entsiegle das Tor, um den Berggarten zu betreten.",
+    "w": 6,
+    "h": 6,
+    "s": [
+      1,
+      4,
+      "N"
+    ],
+    "g": [
+      4,
+      4
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ]
+    ],
+    "sw": [
+      [
+        4,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        4,
+        3,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        3,
+        "N"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,1": "fence_v",
+      "5,1": "fence_v",
+      "2,2": "wall_v",
+      "3,2": "wall_v",
+      "2,3": "wall_v",
+      "3,3": "wall_v",
+      "2,4": "pine",
+      "3,4": "wall_h",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F"
+    ],
+    "limit": 12
+  },
+  {
+    "n": "Das eisige Kitsune-Portal",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Portal-Beschleunigung",
+    "d": "Das Kitsune-Portal steht mitten im Windkanal! Die Windtr\u00e4gheit schleudert KOMA direkt beim Austritt weiter. Sammle beide Lichter und finde den Weg zum Hof.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      0,
+      2,
+      "E"
+    ],
+    "g": [
+      3,
+      6
+    ],
+    "portals": [
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        5,
+        4
+      ],
+      [
+        1,
+        5
+      ]
+    ],
+    "sw": [
+      [
+        5,
+        5,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        5,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        2,
+        "E"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "wall_h",
+      "3,2": "pine",
+      "4,2": "fence_h",
+      "1,3": "fence_v",
+      "2,3": "wall_h",
+      "6,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "4,6": "wall_h",
+      "5,6": "wall_h",
+      "6,6": "wall_h"
+    },
+    "grass": [
+      [
+        5,
+        3
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "R",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 17
+  },
+  {
+    "n": "Schneeverwehte Pfade",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Wind-Umleitung",
+    "d": "Dichter Schneefall verweht die Stufen. Nutze die abw\u00e4rtsgerichtete Windb\u00f6e, um den Schalter im Tal zu erreichen, und umrunde die Schlucht zum Schrein.",
+    "w": 6,
+    "h": 5,
+    "s": [
+      0,
+      1,
+      "E"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "sw": [
+      [
+        2,
+        3,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        4,
+        1,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        1,
+        "E"
+      ],
+      [
+        3,
+        1,
+        "S"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        5,
+        4
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,2": "fence_v",
+      "1,2": "wall_h",
+      "2,2": "pine",
+      "5,2": "wall_h",
+      "0,3": "fence_v",
+      "0,4": "wall_h",
+      "1,4": "fence_h",
+      "5,4": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "R",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 18
+  },
+  {
+    "n": "Kreuzende B\u00f6en",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Kreuzwinde",
+    "d": "Auf dem Bergsattel kreuzen sich t\u00fcckische Winde. Sammle beide Geisterkristalle, indem du den Ost- und S\u00fcdwinden gezielt folgst.",
+    "w": 6,
+    "h": 6,
+    "s": [
+      0,
+      2,
+      "E"
+    ],
+    "g": [
+      5,
+      4
+    ],
+    "orbs": [
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        4
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        2,
+        "E"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ],
+      [
+        3,
+        4,
+        "W"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "fence_h",
+      "2,0": "house",
+      "3,0": "pine",
+      "4,0": "fence_h",
+      "5,0": "wall_h",
+      "1,1": "pine",
+      "5,1": "fence_v",
+      "2,3": "pine",
+      "5,3": "fence_v",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 21
+  },
+  {
+    "n": "Aufstieg zur 8. Station",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Terrassen-Labyrinth",
+    "d": "Die achte Station vor dem Gipfel verlangt h\u00f6chste Meisterschaft: Kitsune-Portale, Doppeltore und Aufwinde m\u00fcssen in perfekter Harmonie gemeistert werden.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      0,
+      6,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "portals": [
+      [
+        2,
+        4
+      ],
+      [
+        5,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        2
+      ]
+    ],
+    "sw": [
+      [
+        3,
+        6,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        2,
+        2,
+        "cyan"
+      ],
+      [
+        6,
+        1,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        6,
+        "E"
+      ],
+      [
+        2,
+        3,
+        "N"
+      ],
+      [
+        5,
+        3,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "fence_h",
+      "7,0": "wall_h",
+      "1,1": "fence_h",
+      "3,1": "wall_h",
+      "4,1": "pine",
+      "3,3": "pine",
+      "4,3": "pine",
+      "1,4": "wall_h",
+      "3,4": "fence_v",
+      "4,4": "wall_h",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 23
+  },
+  {
+    "n": "Wirbelsturm der vier Winde",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Wind-Strudel",
+    "d": "Ein kreisender Wirbelsturm tobt \u00fcber dem Hochplateau! Nutze die Str\u00f6mung, um die \u00e4u\u00dferen Schreine zu erreichen, ohne im Windstrudel gefangen zu bleiben.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      1,
+      5,
+      "N"
+    ],
+    "g": [
+      3,
+      6
+    ],
+    "orbs": [
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        5,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        2,
+        "E"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ],
+      [
+        4,
+        4,
+        "W"
+      ],
+      [
+        2,
+        4,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "wall_h",
+      "2,1": "fence_v",
+      "4,1": "fence_v",
+      "3,3": "pine",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F"
+    ],
+    "limit": 27
+  },
+  {
+    "n": "Gegenstrom im Eiskanal",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Dual-Tore & Windkanal",
+    "d": "Zwei versiegelte Tore und rei\u00dfende Windkan\u00e4le fordern pr\u00e4zises Timing. Aktiviere beide W\u00e4chterschalter und \u00fcberwinde die Windstr\u00f6me.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        2,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        5,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
+      ],
+      [
+        4,
+        1,
+        "W"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "fence_h",
+      "7,0": "wall_h",
+      "1,2": "pine",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "pine",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "pine",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 29
+  },
+  {
+    "n": "Das verborgene Eistor",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Zwei Tore im Eis",
+    "d": "Zwei uralte Tore versperren den Hauptweg. Nutze die Windb\u00f6en im Tal, um den Cyan-Schalter zu bet\u00e4tigen, das Magma-Tor zu entsiegeln und den Schrein zu \u00f6ffnen.",
+    "w": 7,
+    "h": 6,
+    "s": [
+      0,
+      4,
+      "N"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "orbs": [
+      [
+        3,
+        4
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "magenta"
+      ],
+      [
+        5,
+        4,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        5,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        4,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "6,0": "wall_h",
+      "4,1": "wall_v",
+      "6,1": "fence_v",
+      "1,2": "pine",
+      "6,2": "fence_v",
+      "0,3": "fence_v",
+      "1,3": "fence_h",
+      "2,3": "wall_h",
+      "4,3": "wall_h",
+      "6,3": "fence_h",
+      "6,4": "fence_v",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h",
+      "6,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "solution": [
+      "R",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 31
+  },
+  {
+    "n": "Der Geist des Fuji (\u5bcc\u58eb\u306e\u795e)",
+    "c": "Kapitel 06 \u00b7 Der Heilige Berg Fuji (\u5bcc\u58eb\u5c71)",
+    "t": "Meisterpr\u00fcfung",
+    "d": "Der heilige Gipfel des Fuji liegt vor dir. Finde alle drei kaiserlichen Relikte, entsiegle die Doppeltore des Berggottes und erbringe die finale Geisterlieferung!",
+    "w": 8,
+    "h": 8,
+    "s": [
+      3,
+      7,
+      "N"
+    ],
+    "g": [
+      4,
+      1
+    ],
+    "portals": [
+      [
+        1,
+        4
+      ],
+      [
+        6,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        6,
+        "cyan"
+      ],
+      [
+        6,
+        6,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "W"
+      ],
+      [
+        4,
+        6,
+        "E"
+      ],
+      [
+        4,
+        4,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "torii",
+      "6,0": "pine",
+      "7,0": "wall_h",
+      "1,1": "pine",
+      "2,1": "wall_h",
+      "3,1": "wall_v",
+      "5,1": "wall_v",
+      "6,1": "pine",
+      "3,3": "pine",
+      "4,3": "pine",
+      "2,5": "pine",
+      "3,5": "fence_h",
+      "4,5": "fence_h",
+      "5,5": "pine",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "5,7": "wall_h",
+      "6,7": "fence_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        7
+      ]
+    ],
+    "solution": [
+      "F",
+      "L",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 29
+  }
+]

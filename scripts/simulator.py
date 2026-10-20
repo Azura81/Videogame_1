@@ -50,6 +50,40 @@ def simulate(lvl, solution):
             if (x, y) in [tuple(o) for o in orbs]:
                 collected_orbs.add((x, y))
                 
+            # Wind tile check (pushes KOMA in direction wdir)
+            winds = lvl.get("winds") or []
+            wind_pushes = 0
+            while wind_pushes < 10:
+                wind_match = [w for w in winds if w[0] == x and w[1] == y]
+                if not wind_match:
+                    break
+                wdir = wind_match[0][2]
+                wdx, wdy = DELTA[wdir]
+                wx, wy = x + wdx, y + wdy
+                # Check bounds
+                if wx < 0 or wy < 0 or wx >= lvl["w"] or wy >= lvl["h"]:
+                    break
+                # Check walls
+                if (wx, wy) in walls:
+                    break
+                # Check gates
+                gate_match_w = [g for g in all_gates if g[0] == wx and g[1] == wy]
+                if gate_match_w:
+                    color = gate_match_w[0][2] if len(gate_match_w[0]) > 2 else "magenta"
+                    if color not in open_gates and not (len(all_gates) == 1 and len(open_gates) > 0):
+                        break
+                # Apply wind push
+                x, y = wx, wy
+                wind_pushes += 1
+                if (x, y) in [tuple(o) for o in orbs]:
+                    collected_orbs.add((x, y))
+                if len(portals) == 2:
+                    p1, p2 = tuple(portals[0]), tuple(portals[1])
+                    if (x, y) == p1:
+                        x, y = p2
+                    elif (x, y) == p2:
+                        x, y = p1
+                
         elif cmd == "A":
             sw_match = [s for s in all_sws if s[0] == x and s[1] == y]
             if not sw_match:

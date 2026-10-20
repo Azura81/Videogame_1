@@ -224,15 +224,21 @@ lvl11 = {
     "s": [1, 4, "N"],
     "g": [4, 1],
     "sw": [[1, 3, "cyan"], [3, 3, "magenta"]],
-    "gates": [[2, 2, "cyan"], [4, 2, "magenta"]],
+    "gates": [[2, 2, "cyan"], [3, 2, "cyan"], [3, 1, "magenta"]],
     "walls": create_walls(6, 6, [
-        [1, 4], [1, 3], [2, 3], [3, 3], [3, 2], [2, 2], [2, 1], [3, 1], [4, 1], [4, 2]
+        [1, 4], [1, 3], [2, 3], [3, 3], [3, 2], [2, 2], [2, 1], [3, 1], [4, 1]
     ]),
     "limit": 18,
     "solution": ["F", "A", "R", "F", "F", "A", "L", "F", "L", "F", "R", "F", "R", "F", "F"]
 }
 campaign.append(lvl11)
 
+lvl12_open = [
+    [0, 1], [1, 1], [2, 1],
+    [2, 2], [2, 3],
+    [3, 3], [4, 3],
+    [4, 2], [4, 1], [5, 1]
+]
 lvl12 = {
     "n": "Gegensätze",
     "c": "Kapitel 03 · Neon-Kyoto",
@@ -242,14 +248,10 @@ lvl12 = {
     "s": [0, 1, "E"],
     "g": [5, 1],
     "sw": [[2, 1, "cyan"], [2, 3, "magenta"]],
-    "gates": [[4, 1, "cyan"], [4, 3, "magenta"]],
-    "walls": create_walls(6, 6, [
-        [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1],
-        [2, 2], [4, 2],
-        [2, 3], [3, 3], [4, 3]
-    ]),
-    "limit": 17,
-    "solution": ["F", "F", "A", "R", "F", "F", "A", "L", "F", "F", "L", "F", "F", "R", "F"]
+    "gates": [[2, 2, "cyan"], [4, 1, "magenta"]],
+    "walls": create_walls(6, 6, lvl12_open),
+    "limit": 18,
+    "solution": ["F", "F", "R", "A", "F", "F", "L", "A", "F", "F", "L", "F", "F", "R", "F"]
 }
 campaign.append(lvl12)
 
@@ -273,6 +275,10 @@ lvl13 = {
 }
 campaign.append(lvl13)
 
+lvl14_open = [
+    [3, 5], [3, 4], [3, 3], [3, 2], [3, 1],
+    [1, 3], [2, 3], [4, 3], [5, 3]
+]
 lvl14 = {
     "n": "Spiegelgarten",
     "c": "Kapitel 03 · Neon-Kyoto",
@@ -280,16 +286,12 @@ lvl14 = {
     "d": "Ein symmetrischer Garten mit Flügeln im Osten und Westen. Sammle beide Freigaben ein.",
     "w": 6, "h": 6,
     "s": [3, 5, "N"],
-    "g": [5, 1],
+    "g": [3, 1],
     "sw": [[1, 3, "cyan"], [5, 3, "magenta"]],
-    "gates": [[2, 1, "cyan"], [4, 1, "magenta"]],
-    "walls": create_walls(6, 6, [
-        [3, 5], [3, 4], [3, 3], [3, 2], [3, 1],
-        [1, 3], [2, 3], [4, 3], [5, 3],
-        [2, 1], [4, 1], [5, 1]
-    ]),
-    "limit": 26,
-    "solution": ["F", "F", "L", "F", "F", "A", "R", "R", "F", "F", "F", "F", "A", "L", "L", "F", "F", "R", "F", "F", "R", "F", "F"]
+    "gates": [[4, 3, "cyan"], [3, 2, "magenta"]],
+    "walls": create_walls(6, 6, lvl14_open),
+    "limit": 24,
+    "solution": ["F", "F", "L", "F", "F", "L", "L", "A", "F", "F", "F", "F", "L", "L", "A", "F", "F", "R", "F", "F"]
 }
 campaign.append(lvl14)
 
@@ -536,6 +538,10 @@ campaign.append(lvl24)
 # From Portal 2 at (5, 5, facing E):
 # L, F, F -> (5, 3), L, F -> (4, 3) sw Cyan, A (opens (5, 1))
 # R, R, F -> (5, 3), L, F, F -> (5, 1 gate), R, F -> (6, 1) Goal
+lvl25_open = [
+    [1, 6], [1, 5], [1, 4], [1, 3], [2, 3],
+    [5, 5], [5, 4], [5, 3], [4, 3], [5, 2], [5, 1], [6, 1]
+]
 lvl25 = {
     "n": "Kitsunes Irrgarten",
     "c": "Kapitel 04 · Kitsune-Garten",
@@ -546,23 +552,19 @@ lvl25 = {
     "g": [6, 1],
     "sw": [[4, 3, "cyan"]],
     "gates": [[5, 1, "cyan"]],
-    "portals": [[3, 3], [5, 5]],
-    "walls": create_walls(7, 7, [
-        [1, 6], [1, 5], [1, 4], [1, 3], [2, 3], [3, 3],
-        [5, 5], [5, 4], [5, 3], [4, 3], [5, 2], [5, 1], [6, 1]
-    ]),
+    "portals": [[2, 3], [5, 5]],
+    "walls": create_walls(7, 7, lvl25_open),
     "limit": 22,
-    "solution": ["F", "F", "F", "R", "F", "F", "L", "F", "F", "L", "F", "A", "R", "R", "F", "L", "F", "F", "R", "F"]
+    "solution": ["F", "F", "F", "R", "F", "L", "F", "F", "L", "F", "L", "L", "A", "F", "L", "F", "F", "R", "F"]
 }
 campaign.append(lvl25)
 
-# Level 26: Sprung ins Torii (Kapitel 04 Finale)
-# Start: [0, 3, "E"]
-# F, F -> (2, 3) sw Cyan, A (opens (4, 1))
-# L, F, F -> (2, 1) sw Magenta, A (opens (4, 5))
-# R, R, F, F, F, F -> (2, 5) Portal 1 -> teleports to (4, 1 gate) -> wait!
-# If teleports to (4, 3) Portal 2 (facing S):
-# F, F -> (4, 5 gate), L, F, F -> (6, 5) Goal
+lvl26_open = [
+    [0, 3], [1, 3], [2, 3],
+    [2, 2], [2, 1],
+    [2, 4], [2, 5],
+    [4, 3], [4, 4], [4, 5], [5, 5], [6, 5]
+]
 lvl26 = {
     "n": "Sprung ins Torii",
     "c": "Kapitel 04 · Kitsune-Garten",
@@ -572,16 +574,11 @@ lvl26 = {
     "s": [0, 3, "E"],
     "g": [6, 5],
     "sw": [[2, 3, "cyan"], [2, 1, "magenta"]],
-    "gates": [[4, 5, "cyan"]], # opens gate to goal
+    "gates": [[4, 4, "magenta"], [5, 5, "cyan"]],
     "portals": [[2, 5], [4, 3]],
-    "walls": create_walls(7, 7, [
-        [0, 3], [1, 3], [2, 3],
-        [2, 2], [2, 1],
-        [2, 4], [2, 5],
-        [4, 3], [4, 4], [4, 5], [5, 5], [6, 5]
-    ]),
+    "walls": create_walls(7, 7, lvl26_open),
     "limit": 22,
-    "solution": ["F", "F", "A", "L", "F", "F", "A", "R", "R", "F", "F", "F", "F", "F", "F", "L", "F", "F"]
+    "solution": ["F", "F", "L", "A", "F", "F", "L", "L", "A", "F", "F", "F", "F", "F", "F", "L", "F", "F"]
 }
 campaign.append(lvl26)
 
@@ -1217,6 +1214,12 @@ campaign.append(lvl49)
 # L, F, F -> (6, 1) Magenta sw, A (opens (4, 1))
 # L, F, F -> (4, 1 gate) Orb 2, F, F -> (2, 1) Gold sw, A (opens (2, 3))
 # L, F, F -> (2, 3 gate), F, F -> (2, 5) Goal
+lvl50_open = [
+    [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [4, 7],
+    [6, 3], [6, 2], [6, 1],
+    [5, 1], [4, 1], [3, 1], [2, 1],
+    [2, 2], [2, 3], [2, 4]
+]
 lvl50 = {
     "n": "Die Legende von KOMA",
     "c": "Kapitel 07 · Palast der Kami",
@@ -1224,19 +1227,14 @@ lvl50 = {
     "d": "Das große Finale von KOMA: Spirit Delivery! Alle Schreinelemente vereinen sich im Palast der Götter.",
     "w": 8, "h": 8,
     "s": [0, 6, "E"],
-    "g": [2, 5],
+    "g": [2, 4],
     "sw": [[2, 6, "cyan"], [6, 1, "magenta"], [2, 1, "gold"]],
     "gates": [[4, 6, "cyan"], [4, 1, "magenta"], [2, 3, "gold"]],
     "orbs": [[4, 6], [4, 1]],
     "portals": [[4, 7], [6, 3]],
-    "walls": create_walls(8, 8, [
-        [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [4, 7],
-        [6, 3], [6, 2], [6, 1],
-        [5, 1], [4, 1], [3, 1], [2, 1],
-        [2, 2], [2, 3], [2, 4], [2, 5]
-    ]),
-    "limit": 30,
-    "solution": ["F", "F", "A", "F", "F", "R", "F", "L", "L", "F", "F", "A", "L", "F", "F", "F", "F", "A", "L", "F", "F", "F", "F"]
+    "walls": create_walls(8, 8, lvl50_open),
+    "limit": 26,
+    "solution": ["F", "F", "A", "F", "F", "R", "F", "L", "L", "F", "F", "L", "A", "F", "F", "F", "F", "L", "A", "F", "F", "F"]
 }
 campaign.append(lvl50)
 
@@ -1254,14 +1252,52 @@ for idx, lvl in enumerate(campaign):
 
 if all_passed:
     print("\n🎉 ALL 50 LEVELS SUCCESSFULLY VALIDATED AND VERIFIED!")
+
+    # Enrich with Japanese Garden 3D Aesthetics
+    for idx, lvl in enumerate(campaign):
+        w, h = lvl["w"], lvl["h"]
+        walls = set(tuple(p) for p in lvl.get("walls", []))
+        gates = set(tuple(g[:2]) for g in (lvl.get("gates") or lvl.get("gate") or []))
+        sws = set(tuple(s[:2]) for s in lvl.get("sw", []))
+        portals = set(tuple(p) for p in lvl.get("portals", []))
+        goal = tuple(lvl["g"])
+        start = tuple(lvl["s"][:2])
+
+        obstacles = {}
+        for (wx, wy) in sorted(walls):
+            key = f"{wx},{wy}"
+            has_h = (wx - 1, wy) in walls or (wx + 1, wy) in walls
+            has_v = (wx, wy - 1) in walls or (wx, wy + 1) in walls
+            seed = (wx * 11 + wy * 17 + idx * 7) % 100
+
+            if (wx + wy * 3) % 13 == 0 and w >= 6 and 0 < wx < w - 1 and 0 < wy < h - 1:
+                obstacles[key] = "house"
+            elif (wx * 3 + wy * 5) % 17 == 0 and w >= 6 and 0 < wx < w - 1 and 0 < wy < h - 1:
+                obstacles[key] = "pavilion"
+            elif (has_h or has_v) and seed < 45:
+                obstacles[key] = "fence_h" if has_h else "fence_v"
+            elif (has_h or has_v) and seed < 75:
+                obstacles[key] = "wall_h" if has_h else "wall_v"
+            elif seed < 88:
+                obstacles[key] = "pine"
+            else:
+                obstacles[key] = "sakura"
+        lvl["obstacles"] = obstacles
+
+        grass_tiles = []
+        walkable = [(x, y) for y in range(h) for x in range(w) if (x, y) not in walls]
+        for (x, y) in walkable:
+            if (x, y) not in gates and (x, y) not in sws and (x, y) not in portals and (x, y) != goal and (x, y) != start:
+                if (x * 7 + y * 13 + idx * 5) % 4 == 0:
+                    grass_tiles.append([x, y])
+        lvl["grass"] = grass_tiles
     
     # Generate js/levels.js
-    # Strip solutions out of the production game file, or keep them if desired
-    # We can keep them or output standard level structure
     output_js = """/**
  * KOMA: Spirit Delivery - 50 Level Campaign
- * Automatically generated and 100% verified for solvability.
- * Includes Colored Torii Gates, Kitsune Portals, and Spirit Lotus Orbs.
+ * Fully verified for puzzle depth and zero gate/portal bypasses.
+ * Features Japanese Garden aesthetics: Machiya houses, Pavilions,
+ * Bamboo fences, Stone walls, Sculpted pines, Sakura blossoms, and Moss meadows.
  */
 const LEVELS = """ + json.dumps(campaign, indent=2, ensure_ascii=False) + """;
 """

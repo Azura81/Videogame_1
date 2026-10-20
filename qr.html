@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOMA auf dem Smartphone spielen · QR-Code</title>
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+    :root {
+      --bg: #070c14;
+      --card-bg: rgba(14, 25, 45, 0.88);
+      --border: rgba(0, 245, 255, 0.3);
+      --cyan: #00f5ff;
+      --gold: #ffb703;
+      --sakura: #ff85b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 50% 20%, #12213d 0%, #070c14 75%);
+      color: #f1f5f9;
+      font-family: 'Outfit', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .qr-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 245, 255, 0.18);
+      border-radius: 24px;
+      padding: 36px 32px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .koma-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 245, 255, 0.12);
+      border: 1px solid rgba(0, 245, 255, 0.35);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.desc {
+      color: #94a3b8;
+      font-size: 14.5px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .qr-frame {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 18px;
+      display: inline-block;
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
+      margin-bottom: 20px;
+    }
+    .qr-img {
+      width: 220px;
+      height: 220px;
+      display: block;
+      image-rendering: pixelated;
+    }
+    .url-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(0, 245, 255, 0.4);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 14px;
+      color: var(--cyan);
+      margin-bottom: 24px;
+      word-break: break-all;
+    }
+    .instructions {
+      text-align: left;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    .instructions ol {
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin-bottom: 6px;
+    }
+    .instructions strong {
+      color: #fff;
+    }
+    .btn-game {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: opacity 0.2s;
+    }
+    .btn-game:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-card">
+    <div class="koma-badge">⛩️ KOMA SPIRIT DELIVERY</div>
+    <h1>Auf dem Handy öffnen</h1>
+    <p class="desc">Scanne den QR-Code einfach mit deiner Kamera-App, um das Spiel direkt auf deinem Smartphone zu starten.</p>
+
+    <div class="qr-frame">
+      <img src="qrcode.png" alt="QR-Code zum Spiel" class="qr-img">
+    </div>
+
+    <div class="url-box">
+      http://192.168.1.60:5173/
+    </div>
+
+    <div class="instructions">
+      <ol>
+        <li>Vergewissere dich, dass dein Handy im <strong>selben WLAN</strong> wie dieser Mac ist.</li>
+        <li>Öffne die <strong>Kamera-App</strong> auf deinem iPhone oder Android und richte sie auf den QR-Code.</li>
+        <li>Tippe auf den erscheinenden gelben Link.</li>
+        <li><strong>Als App speichern (PWA):</strong>
+          <br>• iOS: Im Safari auf <em>Teilen</em> (Viereck mit Pfeil) → <em>„Zum Home-Bildschirm“</em>.
+          <br>• Android: In Chrome auf das Drei-Punkte-Menü → <em>„App installieren“</em>.
+        </li>
+      </ol>
+    </div>
+
+    <a href="/" class="btn-game">← Zurück zum Spiel am Desktop</a>
+  </div>
+</body>
+</html>

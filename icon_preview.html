@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOMA: Spirit Delivery – Custom Japanese Icon Set Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070d18;
+      --card-bg: rgba(16, 29, 50, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover-border: rgba(0, 245, 255, 0.4);
+      --cyan: #00f5ff;
+      --cyan-glow: rgba(0, 245, 255, 0.45);
+      --gold: #ffd13b;
+      --gold-glow: rgba(255, 209, 59, 0.5);
+      --sakura: #ff85b8;
+      --sakura-glow: rgba(255, 133, 184, 0.45);
+      --oni-red: #ff4757;
+      --purple: #a855f7;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 245, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(255, 133, 184, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 209, 59, 0.04) 0%, transparent 60%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 40px 24px 80px 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .badge-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(255, 209, 59, 0.12);
+      border: 1px solid rgba(255, 209, 59, 0.35);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.lead {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 40px 0 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+
+    .section-title span.jp {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 14px;
+      color: var(--cyan);
+      opacity: 0.8;
+      letter-spacing: 2px;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .icon-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--card-hover-border);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 245, 255, 0.15);
+    }
+
+    .icon-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent, var(--cyan));
+      opacity: 0.6;
+    }
+
+    .icon-preview-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: rgba(8, 15, 28, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 18px 12px;
+    }
+
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .icon-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent, var(--cyan));
+      filter: drop-shadow(0 0 8px var(--glow, var(--cyan-glow)));
+      transition: transform 0.2s ease;
+    }
+
+    .icon-display:hover {
+      transform: scale(1.15);
+    }
+
+    .icon-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .icon-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icon-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .icon-jp {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--accent, var(--cyan));
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .icon-replace {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .icon-replace code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #cbd5e1;
+      font-family: monospace;
+    }
+
+    .icon-desc {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    /* Comparison Banner */
+    .comparison-banner {
+      background: linear-gradient(135deg, rgba(255, 209, 59, 0.12), rgba(0, 245, 255, 0.1));
+      border: 1px solid rgba(255, 209, 59, 0.35);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .comparison-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .comparison-side {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .comp-pill {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .comp-pill.old {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .comp-pill.new {
+      background: rgba(0, 245, 255, 0.2);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+    }
+
+    .emoji-sample {
+      font-size: 26px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .svg-sample {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .svg-icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge-kicker">⛩️ KOMA Design System</div>
+      <h1>Maßgeschneidertes Japanisches Icon-Set</h1>
+      <p class="lead">
+        Handgefertigte SVG-Vektorgrafiken als Ersatz für Standard-Emojis. Gestochen scharf auf Retina/4K, mit sanftem Schrein-Leuchten und nativer CSS-Farbanpassung.
+      </p>
+    </header>
+
+    <!-- Comparison Banner -->
+    <div class="comparison-banner">
+      <div class="comparison-row">
+        <div class="comparison-side">
+          <span class="comp-pill old">Bisher (Apple Emojis)</span>
+          <div class="emoji-sample">⭐ 📷 👘 🎵 🔊 ✦ ↑</div>
+        </div>
+        <div style="font-size: 22px; color: var(--gold); font-weight: 800;">➔</div>
+        <div class="comparison-side">
+          <span class="comp-pill new">Neu (KOMA Zen-SVGs)</span>
+          <div class="svg-sample">
+            <!-- Star Sample -->
+            <svg class="svg-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" style="color: var(--gold); filter: drop-shadow(0 0 8px var(--gold-glow));">
+              <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="currentColor"/>
+              <polygon points="12,5 13.8,9.5 18.5,10.2 15,13.8 15.8,18.5 12,16.2 8.2,18.5 9,13.8 5.5,10.2 10.2,9.5" fill="#fff" opacity="0.45"/>
+            </svg>
+            <!-- Camera Sample -->
+            <svg class="svg-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan); filter: drop-shadow(0 0 8px var(--cyan-glow));">
+              <path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/>
+              <circle cx="12" cy="13" r="4.2" stroke-width="1.8"/>
+              <circle cx="12" cy="13" r="1.5" fill="currentColor"/>
+              <circle cx="18" cy="8.5" r="0.8" fill="currentColor"/>
+            </svg>
+            <!-- Kimono Sample -->
+            <svg class="svg-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--sakura); filter: drop-shadow(0 0 8px var(--sakura-glow));">
+              <path d="M12 2L6 6v3l3-1v12h6V8l3 1V6l-6-4z"/>
+              <path d="M9 5l3 4 3-4"/>
+              <path d="M9 12h6"/>
+              <path d="M10 14h4"/>
+            </svg>
+            <!-- Music Sample -->
+            <svg class="svg-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan); filter: drop-shadow(0 0 8px var(--cyan-glow));">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/>
+              <circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/>
+            </svg>
+            <!-- Sound Sample -->
+            <svg class="svg-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan); filter: drop-shadow(0 0 8px var(--cyan-glow));">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.3"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <!-- Magatama Sample -->
+            <svg class="svg-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" style="color: var(--cyan); filter: drop-shadow(0 0 8px var(--cyan-glow));">
+              <path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="currentColor"/>
+              <circle cx="10" cy="8.5" r="2" fill="#081220"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 1: Sterne & Belohnungen -->
+    <div class="section-title">
+      <span>1. Sterne & Belohnungen</span>
+      <span class="jp">星と報酬</span>
+    </div>
+
+    <div class="icon-grid">
+      <!-- 1. Star Filled -->
+      <div class="icon-card" style="--accent: var(--gold); --glow: var(--gold-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="currentColor"/>
+                <polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.4"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="currentColor"/>
+                <polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.4"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">16px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Origami-Stern (Gefüllt)</div>
+            <div class="icon-jp">星</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>⭐</code></div>
+          <div class="icon-desc">Facettierter japanischer Shinto-Stern mit innerer Lichtspiegelung und warmem Goldglanz.</div>
+        </div>
+      </div>
+
+      <!-- 2. Star Empty -->
+      <div class="icon-card" style="--accent: #64748b; --glow: transparent;">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+                <polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2"/>
+              </svg>
+            </div>
+            <span class="preview-label">16px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Origami-Stern (Leer)</div>
+            <div class="icon-jp">星(空)</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>☆</code></div>
+          <div class="icon-desc">Präzise Schiefer-Kontur für noch nicht erreichte Sterne im Sieges-Modal.</div>
+        </div>
+      </div>
+
+      <!-- 3. Wardrobe / Kimono -->
+      <div class="icon-card" style="--accent: var(--sakura); --glow: var(--sakura-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/>
+                <path d="M9.5 5.5l2.5 3.5 2.5-3.5"/>
+                <path d="M9.5 13h5"/>
+                <path d="M10.5 15.5h3"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/>
+                <path d="M9.5 5.5l2.5 3.5 2.5-3.5"/>
+                <path d="M9.5 13h5"/>
+                <path d="M10.5 15.5h3"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/>
+                <path d="M9.5 5.5l2.5 3.5 2.5-3.5"/>
+              </svg>
+            </div>
+            <span class="preview-label">18px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Schrein-Garderobe (Kimono)</div>
+            <div class="icon-jp">着物</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>👘</code></div>
+          <div class="icon-desc">Traditioneller Haori-Schnitt mit Obi-Gürtel und Schrein-Kragen für das Skins-Menü.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: Kamera & Ansicht -->
+    <div class="section-title">
+      <span>2. Kamera & Sichtfeld</span>
+      <span class="jp">写真機と視点</span>
+    </div>
+
+    <div class="icon-grid">
+      <!-- 4. Camera -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/>
+                <circle cx="12" cy="13" r="4.2" stroke-width="1.8"/>
+                <circle cx="12" cy="13" r="1.5" fill="currentColor"/>
+                <circle cx="18" cy="8.5" r="0.8" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/>
+                <circle cx="12" cy="13" r="4.2"/>
+                <circle cx="12" cy="13" r="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Kamera-Credits</div>
+            <div class="icon-jp">写真機</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>📷</code></div>
+          <div class="icon-desc">Cyber-Shinto Fotoapparat mit Linse und Apertur-Glanz für die Credit-Anzeige.</div>
+        </div>
+      </div>
+
+      <!-- 5. Camera Center Reset -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <line x1="12" y1="3" x2="12" y2="7"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+                <line x1="3" y1="12" x2="7" y2="12"/>
+                <line x1="17" y1="12" x2="21" y2="12"/>
+                <circle cx="12" cy="12" r="2.5" fill="currentColor" fill-opacity="0.5"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <line x1="12" y1="3" x2="12" y2="7"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+                <line x1="3" y1="12" x2="7" y2="12"/>
+                <line x1="17" y1="12" x2="21" y2="12"/>
+                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Kamera Zentrieren</div>
+            <div class="icon-jp">照準</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🎥</code></div>
+          <div class="icon-desc">Fadenkreuz-Sucher zum präzisen Rückstellen der 3D-Gartenkamera.</div>
+        </div>
+      </div>
+
+      <!-- 6. Camera Swivel Left & Right -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <!-- Rotate Left -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
+                <path d="M2 3v6h6"/>
+              </svg>
+            </div>
+            <span class="preview-label">Links ↺</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <!-- Rotate Right -->
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 1 1-2.6-6.4L22 9"/>
+                <path d="M22 3v6h-6"/>
+              </svg>
+            </div>
+            <span class="preview-label">Rechts ↻</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Kamera Schwenken</div>
+            <div class="icon-jp">回転</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>↺</code> / <code>↻</code></div>
+          <div class="icon-desc">Elegante 45°-Orbit-Schwenkbögen mit Pfeilspitzen.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: Audio, Menü & Hilfe -->
+    <div class="section-title">
+      <span>3. Audio, Menü & Schrein-Hilfe</span>
+      <span class="jp">音と案内</span>
+    </div>
+
+    <div class="icon-grid">
+      <!-- 7. Music Notes -->
+      <div class="icon-card" style="--accent: var(--sakura); --glow: var(--sakura-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/>
+                <circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/>
+              </svg>
+            </div>
+            <span class="preview-label">An 🎵</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display" style="color: #64748b; filter: none;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="16" r="3"/>
+                <line x1="2" y1="2" x2="22" y2="22" stroke-width="2.2" stroke="var(--oni-red)"/>
+              </svg>
+            </div>
+            <span class="preview-label">Stumm 🔇</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Schrein-Musik (BGM)</div>
+            <div class="icon-jp">雅楽</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🎵</code> / <code>🔇</code></div>
+          <div class="icon-desc">Kagura-Notenpaar mit schrägem Schrein-Balken und roter Stummschalt-Diagonale.</div>
+        </div>
+      </div>
+
+      <!-- 8. Sound SFX -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+                <path d="M19 5a9.5 9.5 0 0 1 0 14"/>
+              </svg>
+            </div>
+            <span class="preview-label">An 🔊</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display" style="color: #64748b; filter: none;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <line x1="23" y1="9" x2="17" y2="15"/>
+                <line x1="17" y1="9" x2="23" y2="15"/>
+              </svg>
+            </div>
+            <span class="preview-label">Stumm 🔇</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Soundeffekte (SFX)</div>
+            <div class="icon-jp">効果音</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🔊</code> / <code>🔇</code></div>
+          <div class="icon-desc">Modernes Lautsprecher-Chassis mit konzentrischen Schallwellen.</div>
+        </div>
+      </div>
+
+      <!-- 9. Help / Omamori -->
+      <div class="icon-card" style="--accent: var(--gold); --glow: var(--gold-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <circle cx="12" cy="17" r="0.75" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <circle cx="12" cy="17" r="0.75" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Hilfe & Anleitung</div>
+            <div class="icon-jp">案内</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>?</code></div>
+          <div class="icon-desc">Sanfter Schrein-Fragezeichen-Siegelkreis für die Spielanleitung.</div>
+        </div>
+      </div>
+
+      <!-- 10. Menu / Torii Drawer -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="6" y1="12" x2="18" y2="12"/>
+                <line x1="4" y1="18" x2="20" y2="18"/>
+              </svg>
+            </div>
+            <span class="preview-label">44px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="6" y1="12" x2="18" y2="12"/>
+                <line x1="4" y1="18" x2="20" y2="18"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Level-Auswahl (Menü)</div>
+            <div class="icon-jp">目録</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>☰</code></div>
+          <div class="icon-desc">Dreistufige Torii-Balken zur Aktivierung der 50-Level-Schublade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 4: Gameplay Befehle & Symbole -->
+    <div class="section-title">
+      <span>4. Roboter-Befehle & Schrein-Objekte</span>
+      <span class="jp">指示と霊術</span>
+    </div>
+
+    <div class="icon-grid">
+      <!-- 11. Command Forward -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"/>
+                <polyline points="5 12 12 5 19 12"/>
+              </svg>
+            </div>
+            <span class="preview-label">40px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"/>
+                <polyline points="5 12 12 5 19 12"/>
+              </svg>
+            </div>
+            <span class="preview-label">22px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Befehl: Vorwärts</div>
+            <div class="icon-jp">前進</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>↑</code></div>
+          <div class="icon-desc">Kühner dynamischer Vorwärtspfeil für KOMAs Schritte.</div>
+        </div>
+      </div>
+
+      <!-- 12. Command Turn Left & Right -->
+      <div class="icon-card" style="--accent: var(--cyan); --glow: var(--cyan-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 14L4 9l5-5"/>
+                <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+              </svg>
+            </div>
+            <span class="preview-label">Links ↶</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 14l5-5-5-5"/>
+                <path d="M4 20v-7a4 4 0 0 1 4-4h12"/>
+              </svg>
+            </div>
+            <span class="preview-label">Rechts ↷</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Befehl: Drehen</div>
+            <div class="icon-jp">転向</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>↶</code> / <code>↷</code></div>
+          <div class="icon-desc">Präzise 90°-Drehpfeile im modernen HUD-Look.</div>
+        </div>
+      </div>
+
+      <!-- 13. Action / Magatama -->
+      <div class="icon-card" style="--accent: var(--gold); --glow: var(--gold-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="currentColor"/>
+                <circle cx="10" cy="8.5" r="2" fill="#070d18"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="currentColor"/>
+                <circle cx="10" cy="8.5" r="2" fill="#070d18"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Befehl: Magatama-Aktion</div>
+            <div class="icon-jp">勾玉</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>✦</code></div>
+          <div class="icon-desc">Traditionelles heiliges Magatama-Amulett zur Aktivierung leuchtender Schreinschalter.</div>
+        </div>
+      </div>
+
+      <!-- 14. Kitsune Portal -->
+      <div class="icon-card" style="--accent: var(--sakura); --glow: var(--sakura-glow);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M12 2a10 10 0 0 1 10 10 8 8 0 0 1-8 8 6 6 0 0 1-6-6 4 4 0 0 1 4-4 2 2 0 0 1 2 2"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M12 2a10 10 0 0 1 10 10 8 8 0 0 1-8 8 6 6 0 0 1-6-6 4 4 0 0 1 4-4 2 2 0 0 1 2 2"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Kitsune-Portal</div>
+            <div class="icon-jp">霊渦</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🌀</code></div>
+          <div class="icon-desc">Mystischer Geisterwirbel für die Teleport-Portale in den Schreingärten.</div>
+        </div>
+      </div>
+
+      <!-- 15. Torii Gate -->
+      <div class="icon-card" style="--accent: var(--oni-red); --glow: rgba(255, 71, 87, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Upper Kasagi Beam -->
+                <path d="M2 5c6-1.5 14-1.5 20 0"/>
+                <!-- Shimaki Beam -->
+                <line x1="4" y1="8" x2="20" y2="8"/>
+                <!-- Central Gakuzuka Strut -->
+                <line x1="12" y1="5.5" x2="12" y2="8"/>
+                <!-- Pillars -->
+                <line x1="7" y1="8" x2="6" y2="21"/>
+                <line x1="17" y1="8" x2="18" y2="21"/>
+                <!-- Nuki Tie Beam -->
+                <line x1="4" y1="12" x2="20" y2="12"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 5c6-1.5 14-1.5 20 0"/>
+                <line x1="4" y1="8" x2="20" y2="8"/>
+                <line x1="7" y1="8" x2="6" y2="21"/>
+                <line x1="17" y1="8" x2="18" y2="21"/>
+                <line x1="4" y1="12" x2="20" y2="12"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Schrein-Torii</div>
+            <div class="icon-jp">鳥居</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>⛩️</code></div>
+          <div class="icon-desc">Authentisches Torii-Tor-Symbol für Barrieren und Schrein-Titel.</div>
+        </div>
+      </div>
+    <!-- Group 5: Kami-Skins Embleme (Garderobe) -->
+    <div class="section-title">
+      <span>5. Die 6 japanischen Kami-Skin Embleme (Garderobe)</span>
+      <span class="jp">神衣と紋章</span>
+    </div>
+
+    <div class="icon-grid">
+      <!-- Skin 1: Shiro Usagi -->
+      <div class="icon-card" style="--accent: #00f5ff; --glow: rgba(0, 245, 255, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 9.5V3.5a2 2 0 0 1 4 0V9.5"/>
+                <path d="M14 9.5V4.5a1.8 1.8 0 0 1 3.5.5V9.5"/>
+                <rect x="4" y="9.5" width="16" height="11.5" rx="5.5" fill="currentColor" fill-opacity="0.15"/>
+                <path d="M7 14.5h10" stroke-width="2.2" stroke="currentColor"/>
+                <circle cx="9.5" cy="14.5" r="1" fill="#fff"/>
+                <circle cx="14.5" cy="14.5" r="1" fill="#fff"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 9.5V3.5a2 2 0 0 1 4 0V9.5"/>
+                <path d="M14 9.5V4.5a1.8 1.8 0 0 1 3.5.5V9.5"/>
+                <rect x="4" y="9.5" width="16" height="11.5" rx="5.5" fill="currentColor" fill-opacity="0.15"/>
+                <path d="M7 14.5h10" stroke-width="2.2" stroke="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Shiro Usagi</div>
+            <div class="icon-jp">白兎</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🐇</code> (0 ⭐)</div>
+          <div class="icon-desc">Shinto-Porzellan-Häschen mit KOMAs typischem gekippten Ohr und Cyan-Visor.</div>
+        </div>
+      </div>
+
+      <!-- Skin 2: Sakura Kitsune -->
+      <div class="icon-card" style="--accent: #ff85b8; --glow: rgba(255, 133, 184, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 11L7 3l4 6"/>
+                <path d="M19.5 11L17 3l-4 6"/>
+                <path d="M5 11c0 5 7 10 7 10s7-5 7-10" fill="currentColor" fill-opacity="0.15"/>
+                <path d="M8 12.5c1-.8 2.5-.8 3.5 0"/>
+                <path d="M12.5 12.5c1-.8 2.5-.8 3.5 0"/>
+                <circle cx="12" cy="7.5" r="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 11L7 3l4 6"/>
+                <path d="M19.5 11L17 3l-4 6"/>
+                <path d="M5 11c0 5 7 10 7 10s7-5 7-10"/>
+                <circle cx="12" cy="7.5" r="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Sakura Kitsune</div>
+            <div class="icon-jp">桜狐</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🌸</code> (15 ⭐)</div>
+          <div class="icon-desc">Geisterhafte Kitsune-Fuchsmaske mit Kirschblüten-Stirnpunkt und Mandelaugen.</div>
+        </div>
+      </div>
+
+      <!-- Skin 3: Neo Tokyo 2099 -->
+      <div class="icon-card" style="--accent: #df6eff; --glow: rgba(223, 110, 255, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="6" y1="9" x2="4" y2="3"/>
+                <rect x="2.5" y="1.5" width="3" height="3" fill="currentColor"/>
+                <line x1="18" y1="9" x2="20" y2="3"/>
+                <rect x="18.5" y="1.5" width="3" height="3" fill="currentColor"/>
+                <rect x="4" y="9" width="16" height="12" rx="3" fill="currentColor" fill-opacity="0.2"/>
+                <rect x="6" y="12" width="12" height="4" rx="1.5" fill="currentColor"/>
+                <line x1="8" y1="14" x2="16" y2="14" stroke="#070e1a" stroke-width="1.5"/>
+                <circle cx="12" cy="18.5" r="1" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="6" y1="9" x2="4" y2="3"/>
+                <line x1="18" y1="9" x2="20" y2="3"/>
+                <rect x="4" y="9" width="16" height="12" rx="3"/>
+                <rect x="6" y="12" width="12" height="4" rx="1.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Neo Tokyo 2099</div>
+            <div class="icon-jp">電脳</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>⚡</code> (35 ⭐)</div>
+          <div class="icon-desc">Cyber-Kurierhelm mit Dual-Empfangsantennen und glühendem HUD-Visier.</div>
+        </div>
+      </div>
+
+      <!-- Skin 4: Akuma Oni -->
+      <div class="icon-card" style="--accent: #ff4757; --glow: rgba(255, 71, 87, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 10C6 7 4 4.5 3 3c2.5 1 5 3.5 6 7"/>
+                <path d="M17 10C18 7 20 4.5 21 3c-2.5 1-5 3.5-6 7"/>
+                <path d="M6 10c0 6 6 11 6 11s6-5 6-11" fill="currentColor" fill-opacity="0.2"/>
+                <path d="M7.5 12l3 1.5"/>
+                <path d="M16.5 12l-3 1.5"/>
+                <circle cx="9" cy="14.5" r="1.3" fill="currentColor"/>
+                <circle cx="15" cy="14.5" r="1.3" fill="currentColor"/>
+                <path d="M10 18l1-2 1 2"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 10C6 7 4 4.5 3 3c2.5 1 5 3.5 6 7"/>
+                <path d="M17 10C18 7 20 4.5 21 3c-2.5 1-5 3.5-6 7"/>
+                <path d="M6 10c0 6 6 11 6 11s6-5 6-11"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Akuma Oni</div>
+            <div class="icon-jp">鬼神</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>👺</code> (65 ⭐)</div>
+          <div class="icon-desc">Traditionelle Zinnober-Oni-Maske mit geschwungenen Hörnern und Fangzähnen.</div>
+        </div>
+      </div>
+
+      <!-- Skin 5: Tsukuyomi Shinobi -->
+      <div class="icon-card" style="--accent: #a855f7; --glow: rgba(168, 85, 247, 0.45);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2a5.5 5.5 0 1 0 0 9 4.2 4.2 0 0 1 0-9z" fill="currentColor"/>
+                <path d="M4 11c0-4 3.5-7 8-7s8 3 8 7v6c0 2-2 4-8 4s-8-2-8-4v-6z" fill="currentColor" fill-opacity="0.2"/>
+                <path d="M7 13.5h10" stroke-width="2.5" stroke="#070e1a"/>
+                <circle cx="9.5" cy="13.5" r="1" fill="currentColor"/>
+                <circle cx="14.5" cy="13.5" r="1" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2a5.5 5.5 0 1 0 0 9 4.2 4.2 0 0 1 0-9z" fill="currentColor"/>
+                <path d="M4 11c0-4 3.5-7 8-7s8 3 8 7v6c0 2-2 4-8 4s-8-2-8-4v-6z"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Tsukuyomi Shinobi</div>
+            <div class="icon-jp">月読</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>🌙</code> (100 ⭐)</div>
+          <div class="icon-desc">Mondschatten-Ninja-Kapuze mit ikonischer silber-violetter Stirn-Mondsichel.</div>
+        </div>
+      </div>
+
+      <!-- Skin 6: Gold Kami -->
+      <div class="icon-card" style="--accent: #ffd13b; --glow: rgba(255, 209, 59, 0.5);">
+        <div class="icon-preview-row">
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 5c5-1.5 13-1.5 18 0"/>
+                <line x1="5" y1="7.5" x2="19" y2="7.5"/>
+                <circle cx="6" cy="4" r="1.2" fill="currentColor"/>
+                <circle cx="12" cy="2.5" r="1.5" fill="currentColor"/>
+                <circle cx="18" cy="4" r="1.2" fill="currentColor"/>
+                <path d="M9 10V6.5a1.5 1.5 0 0 1 3 0V10"/>
+                <path d="M12 10V6.5a1.5 1.5 0 0 1 3 0V10"/>
+                <circle cx="12" cy="15" r="6" fill="currentColor" fill-opacity="0.25"/>
+                <circle cx="10" cy="14.5" r="1.2" fill="#00f5d4"/>
+                <circle cx="14" cy="14.5" r="1.2" fill="#00f5d4"/>
+                <path d="M11 17.5c.6.5 1.4.5 2 0"/>
+              </svg>
+            </div>
+            <span class="preview-label">42px</span>
+          </div>
+          <div class="preview-box">
+            <div class="icon-display">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 5c5-1.5 13-1.5 18 0"/>
+                <line x1="5" y1="7.5" x2="19" y2="7.5"/>
+                <circle cx="12" cy="15" r="6" fill="currentColor" fill-opacity="0.25"/>
+              </svg>
+            </div>
+            <span class="preview-label">24px</span>
+          </div>
+        </div>
+        <div class="icon-info">
+          <div class="icon-header">
+            <div class="icon-name">Gold Kami</div>
+            <div class="icon-jp">黄金神</div>
+          </div>
+          <div class="icon-replace">Ersetzt: <code>👑</code> (135 ⭐)</div>
+          <div class="icon-desc">Himmlische Torii-Krone mit 3 Magatama-Lichtjuwelen und Smaragdaugen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

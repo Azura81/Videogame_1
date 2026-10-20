@@ -1,0 +1,39 @@
+{
+  "name": "KOMA: Spirit Delivery",
+  "short_name": "KOMA",
+  "description": "Hilf dem kleinen Geister-Kurier KOMA bei der Zustellung heiliger Schrein-Pakete in einer zauberhaften 3D-Shinto-Welt.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070c14",
+  "theme_color": "#070c14",
+  "orientation": "any",
+  "lang": "de",
+  "categories": ["games", "puzzle", "casual"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

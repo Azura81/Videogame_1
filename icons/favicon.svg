@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f1f38"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </radialGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#00f5ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <!-- Torii Ring -->
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#ffd700" stroke-width="2.5" opacity="0.45" filter="url(#glow)"/>
+  <!-- Torii Beam -->
+  <path d="M28 32 C48 28 80 28 100 32" stroke="#e63946" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <line x1="36" y1="38" x2="92" y2="38" stroke="#e63946" stroke-width="4"/>
+  <line x1="44" y1="38" x2="44" y2="100" stroke="#e63946" stroke-width="4.5"/>
+  <line x1="84" y1="38" x2="84" y2="100" stroke="#e63946" stroke-width="4.5"/>
+  <!-- KOMA Rabbit Ear -->
+  <g transform="translate(50, 48) rotate(-16)">
+    <path d="M0 0 L-6 -22 C-6 -28 6 -28 6 -22 Z" fill="#f8fafc"/>
+    <circle cx="0" cy="-22" r="3" fill="#00f5ff" filter="url(#glow)"/>
+  </g>
+  <!-- KOMA Body -->
+  <circle cx="64" cy="74" r="28" fill="#f8fafc" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.5))"/>
+  <!-- Visor -->
+  <ellipse cx="64" cy="75" rx="19" ry="13" fill="#070c14"/>
+  <!-- Glowing Eyes -->
+  <ellipse cx="56" cy="75" rx="3.5" ry="5.5" fill="#00f5ff" filter="url(#glow)"/>
+  <ellipse cx="72" cy="75" rx="3.5" ry="5.5" fill="#00f5ff" filter="url(#glow)"/>
+  <!-- Sakura Petal -->
+  <path d="M96 46 C104 42 108 52 102 58 C96 62 90 56 96 46 Z" fill="#ff85b8" opacity="0.85"/>
+  <!-- Firefly Mote -->
+  <circle cx="34" cy="88" r="3" fill="#ffd700" filter="url(#glow)"/>
+</svg>

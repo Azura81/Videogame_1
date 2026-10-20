@@ -2,9 +2,21 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>KOMA: Spirit Delivery — Cyberpunk Japanese Garden Puzzle</title>
   <meta name="description" content="KOMA: Spirit Delivery – Steuere den kleinen Lieferroboter KOMA durch einen magischen nächtlichen Schreingarten in isometrischem 3D.">
+  
+  <!-- Progressive Web App (PWA) & Mobile Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#070c14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KOMA">
+  
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,8 +24,27 @@
     <!-- 3D WebGL Canvas Layer -->
     <div id="webgl-container" aria-label="3D Spielwelt"></div>
 
+    <!-- PWA Offline & Network Status Toast -->
+    <div id="pwaNetworkBanner" class="pwa-toast hidden" role="status" aria-live="polite">
+      <span class="pwa-toast-icon">⛩️</span>
+      <span id="pwaNetworkText">Offline-Modus aktiv · Bereit zum Spielen</span>
+    </div>
+
     <!-- Top Navigation Bar -->
     <header class="top-nav">
+      <!-- Dedicated Mobile Hub Launcher Button (visible on mobile < 900px) -->
+      <button id="btnMobileHub" class="mobile-hub-btn" title="Schrein-Menü, Garderobe & Levelauswahl öffnen" aria-label="Menü öffnen">
+        <span class="hub-btn-icon">⛩️</span>
+        <span class="hub-btn-text">Menü</span>
+      </button>
+
+      <!-- Dedicated Mobile Level Status Pill (visible on mobile < 900px) -->
+      <div class="mobile-level-pill" id="mobileLevelPill">
+        <span class="mobile-lvl-title" id="mobileLvlTitle">Level 01</span>
+        <span class="mobile-lvl-dot">·</span>
+        <span class="mobile-lvl-credits" id="mobileLvlCredits">6/6 🎥</span>
+      </div>
+
       <div class="brand-badge">
         <div class="brand-icon">⛩️</div>
         <div>
@@ -22,14 +53,64 @@
         </div>
       </div>
       <div class="top-actions">
+        <button id="btnInstallPwa" class="icon-btn pwa-install-btn hidden" title="KOMA als App installieren" aria-label="App installieren">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="sr-only">📲</span>
+        </button>
         <div class="camera-actions-group">
-          <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" aria-label="Kamera links drehen">↺</button>
-          <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" aria-label="Kamera zurücksetzen">🎥</button>
-          <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" aria-label="Kamera rechts drehen">↻</button>
+          <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" aria-label="Kamera links drehen">
+            <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/><path d="M2 3v6h6"/></svg>
+            <span class="sr-only">↺</span>
+          </button>
+          <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" aria-label="Kamera zurücksetzen">
+            <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>
+            <span class="sr-only">🎥</span>
+          </button>
+          <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" aria-label="Kamera rechts drehen">
+            <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L22 9"/><path d="M22 3v6h-6"/></svg>
+            <span class="sr-only">↻</span>
+          </button>
         </div>
-        <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">🔊</button>
-        <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">?</button>
-        <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">☰</button>
+        <div class="stars-counter-badge" id="headerStarsBadge" title="Insgesamt gesammelte Sterne für KOMA-Skins">
+          <span class="star-icon">
+            <svg class="svg-icon star-icon-svg filled" width="15" height="15" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
+          </span>
+          <span id="headerTotalStars">0</span>
+          <span class="star-max">/ 180</span>
+        </div>
+        <button id="btnSkins" class="icon-btn" title="Schrein-Garderobe & KOMA-Skins" aria-label="KOMA Skins öffnen">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
+          <span class="sr-only">👘</span>
+        </button>
+        <button id="btnTrophies" class="icon-btn" title="Schrein-Erfolge & Trophäen" aria-label="Erfolge öffnen">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
+          <span class="sr-only">🏆</span>
+        </button>
+        <button id="btnMusicToggle" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Hintergrundmusik umschalten">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
+          <span class="sr-only">🎵</span>
+        </button>
+        <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
+          <span class="sr-only">🔊</span>
+        </button>
+        <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/></svg>
+          <span class="sr-only">?</span>
+        </button>
+        <button id="btnDailyTrial" class="daily-header-btn" title="Tägliche Schreinprüfung (Hardcore · 0 Kameraschwenker)" aria-label="Tägliche Prüfung">
+          <span class="flame-icon">🔥</span>
+          <span class="daily-streak-count" id="headerDailyStreak">0</span>
+          <span class="daily-label">Tages-Prüfung</span>
+        </button>
+        <button id="btnHeaderFuji" class="fuji-header-btn" title="Zu Kapitel 6: Berg Fuji (Level 51–60)" aria-label="Berg Fuji Level 51">
+          <span>🏔️</span>
+          <span>Berg Fuji</span>
+        </button>
+        <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          <span class="sr-only">☰</span>
+        </button>
       </div>
     </header>
 
@@ -53,7 +134,9 @@
           <div class="mission-footer">
             <span class="mission-badge" id="missionBadge">01 / 50</span>
             <div class="camera-credit-card" title="Kamera-Credits (Jeder Schwenk kostet 1 Credit)">
-              <span class="cam-icon">📷</span>
+              <span class="cam-icon">
+                <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/><circle cx="12" cy="13" r="4.2"/><circle cx="12" cy="13" r="1.5" fill="currentColor"/></svg>
+              </span>
               <span class="cam-count" id="creditBadge">6 / 6</span>
               <span class="cam-stars" id="creditStars">⭐⭐⭐</span>
             </div>
@@ -74,19 +157,31 @@
 
           <div class="commands-grid">
             <button class="cmd-btn" data-cmd="F" title="Vorwärts bewegen (W / Pfeiltaste Hoch)">
-              <span class="cmd-icon">↑</span>
+              <span class="cmd-icon">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                <span class="sr-only">↑</span>
+              </span>
               <span>Vorwärts</span>
             </button>
             <button class="cmd-btn" data-cmd="L" title="90° nach links drehen (A / Pfeiltaste Links)">
-              <span class="cmd-icon">↶</span>
+              <span class="cmd-icon">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+                <span class="sr-only">↶</span>
+              </span>
               <span>Links</span>
             </button>
             <button class="cmd-btn" data-cmd="R" title="90° nach rechts drehen (D / Pfeiltaste Rechts)">
-              <span class="cmd-icon">↷</span>
+              <span class="cmd-icon">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
+                <span class="sr-only">↷</span>
+              </span>
               <span>Rechts</span>
             </button>
             <button class="cmd-btn" data-cmd="A" title="Aktion / Schalter aktivieren (E / Taste A)">
-              <span class="cmd-icon">✦</span>
+              <span class="cmd-icon">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="currentColor"/><circle cx="10" cy="8.5" r="2.2" fill="#070d18"/></svg>
+                <span class="sr-only">✦</span>
+              </span>
               <span>Aktion</span>
             </button>
           </div>
@@ -120,6 +215,11 @@
             <span>Plan abspielen</span>
           </button>
 
+          <div class="mobile-exec-bar" id="mobileExecBar">
+            <span class="mobile-exec-icon">🌸</span>
+            <span class="mobile-exec-text">KOMA liefert aus …</span>
+          </div>
+
           <div class="progress-container">
             <div class="progress-bar-fill" id="progressBar"></div>
           </div>
@@ -137,6 +237,25 @@
         <h2 class="drawer-title">Levelauswahl</h2>
         <button class="icon-btn" onclick="document.getElementById('levelDrawer').classList.remove('open')">✕</button>
       </div>
+      <div class="drawer-fuji-shortcut">
+        <button class="fuji-jump-btn" id="btnJumpFujiDrawer">
+          <span class="fuji-btn-icon">🏔️</span>
+          <div class="fuji-btn-text">
+            <strong>Kapitel 6: Der Heilige Berg Fuji</strong>
+            <span>Level 51–60 · Schneelandschaft & Windböen</span>
+          </div>
+          <span class="fuji-btn-arrow">→</span>
+        </button>
+      </div>
+      <div class="drawer-chapter-tabs" id="drawerChapterTabs">
+        <button class="drawer-tab active" data-chapter="all">Alle (60)</button>
+        <button class="drawer-tab" data-chapter="1">Kap. 1</button>
+        <button class="drawer-tab" data-chapter="2">Kap. 2</button>
+        <button class="drawer-tab" data-chapter="3">Kap. 3</button>
+        <button class="drawer-tab" data-chapter="4">Kap. 4</button>
+        <button class="drawer-tab" data-chapter="5">Kap. 5</button>
+        <button class="drawer-tab fuji-tab" data-chapter="6">Kap. 6 🏔️</button>
+      </div>
       <div class="drawer-list" id="levelList"></div>
     </nav>
 
@@ -148,9 +267,222 @@
         <p class="modal-desc" id="modalWinText">KOMA hat das Paket sicher abgeliefert.</p>
         <div id="modalWinStars" class="win-stars-container"></div>
         <div id="modalWinCredits" class="win-credits-sub"></div>
+        <div id="modalWinSkinNotice" class="win-skin-notice" style="display: none;"></div>
         <div class="modal-btn-row">
           <button class="play-btn" id="btnNextLevel">Nächstes Level →</button>
-          <button class="sec-btn" id="btnReplayLevel">Noch einmal ansehen</button>
+          <button class="sec-btn hub-shortcut-btn" id="btnWinOpenHub" title="Zum Schrein-Hub (Skins & Level)">
+            <span>⛩️</span>
+            <span>Schrein-Hub</span>
+          </button>
+          <button class="sec-btn" id="btnReplayLevel">Noch einmal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Shrine Hub (Dedicated Post-Level & Interactive Menu for Phones) -->
+    <div class="modal-backdrop mobile-hub-backdrop" id="modalMobileHub" role="dialog" aria-modal="true">
+      <div class="mobile-hub-card">
+        <!-- Hub Header -->
+        <div class="mobile-hub-header">
+          <div class="mobile-hub-title-group">
+            <span class="mobile-hub-emblem">⛩️</span>
+            <div>
+              <h2 class="mobile-hub-heading">KOMA Schrein-Hub</h2>
+              <span class="mobile-hub-sub">Garderobe · 60 Level · Erfolge</span>
+            </div>
+          </div>
+          <div class="mobile-hub-stars" id="mobileHubStarsPill" title="Gesammelte Sterne für Kami-Skins">
+            <span class="star-icon">⭐</span>
+            <strong id="mobileHubTotalStars">0</strong>
+            <span class="stars-max">/ 180</span>
+          </div>
+          <button class="icon-btn mobile-hub-close-btn" id="btnCloseMobileHub" aria-label="Schrein-Hub schließen">✕</button>
+        </div>
+
+        <!-- Optional Win Banner inside Hub (when opened after victory) -->
+        <div class="mobile-hub-win-banner" id="mobileHubWinBanner" style="display: none;">
+          <div class="hub-win-header">
+            <span class="hub-win-emblem">🌸✨📦</span>
+            <div class="hub-win-title" id="mobileHubWinTitle">Lieferung erfolgreich!</div>
+          </div>
+          <div class="hub-win-stars" id="mobileHubWinStars"></div>
+          <div class="hub-win-actions">
+            <button class="play-btn" id="btnMobileHubNextLevel">Nächstes Level ▶</button>
+            <button class="sec-btn" id="btnMobileHubReplayLevel">Nochmal ↺</button>
+          </div>
+        </div>
+
+        <!-- Daily Shrine Banner in Mobile Hub -->
+        <div class="mobile-daily-banner" id="mobileDailyBanner">
+          <div class="mobile-daily-left">
+            <span class="mobile-daily-flame">🔥</span>
+            <div>
+              <div class="mobile-daily-title">Tägliche Schreinprüfung</div>
+              <div class="mobile-daily-sub" id="mobileDailySub">0 Kameraschwenker · Streak: 0</div>
+            </div>
+          </div>
+          <button class="mobile-daily-btn" id="btnMobileOpenDaily">Prüfen ▶</button>
+        </div>
+
+        <!-- Touch Navigation Tabs -->
+        <div class="mobile-hub-tabs" role="tablist">
+          <button class="mobile-hub-tab active" data-tab="skins" id="tabBtnSkins" role="tab" aria-selected="true">
+            <span class="tab-icon">👘</span>
+            <span class="tab-label">Garderobe</span>
+          </button>
+          <button class="mobile-hub-tab" data-tab="levels" id="tabBtnLevels" role="tab" aria-selected="false">
+            <span class="tab-icon">🗺️</span>
+            <span class="tab-label">60 Level</span>
+          </button>
+          <button class="mobile-hub-tab" data-tab="trophies" id="tabBtnTrophies" role="tab" aria-selected="false">
+            <span class="tab-icon">🏆</span>
+            <span class="tab-label">Erfolge</span>
+          </button>
+          <button class="mobile-hub-tab" data-tab="settings" id="tabBtnSettings" role="tab" aria-selected="false">
+            <span class="tab-icon">⚙️</span>
+            <span class="tab-label">Optionen</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Garderobe (Kami-Skins) -->
+        <div class="mobile-hub-panel active" id="hubPanelSkins" role="tabpanel">
+          <p class="mobile-hub-desc">
+            Wähle dein Kami-Design. Schließe Level mit vollen Credits ab, um seltene mythische Formen freizuschalten!
+          </p>
+          <div class="mobile-skins-grid" id="mobileSkinsGrid">
+            <!-- Dynamically populated from KOMA_SKINS -->
+          </div>
+        </div>
+
+        <!-- Tab 2: Level-Wahl (60 Level in 6 Kapiteln) -->
+        <div class="mobile-hub-panel" id="hubPanelLevels" role="tabpanel">
+          <div class="mobile-chapter-pills" id="mobileChapterPills">
+            <button class="chapter-pill active" data-chapter="1">Kap. 1</button>
+            <button class="chapter-pill" data-chapter="2">Kap. 2</button>
+            <button class="chapter-pill" data-chapter="3">Kap. 3</button>
+            <button class="chapter-pill" data-chapter="4">Kap. 4</button>
+            <button class="chapter-pill" data-chapter="5">Kap. 5</button>
+            <button class="chapter-pill" data-chapter="6">Kap. 6 🏔️</button>
+          </div>
+          <div class="mobile-levels-grid" id="mobileLevelsGrid">
+            <!-- Dynamically populated 10 levels for current chapter -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Erfolge & Schrein-Trophäen (Achievements) -->
+        <div class="mobile-hub-panel" id="hubPanelTrophies" role="tabpanel">
+          <div class="mobile-trophies-summary">
+            <span class="trophy-summary-icon">🏆</span>
+            <div>
+              <div class="trophy-summary-title">Heilige Schrein-Siegel</div>
+              <div class="trophy-summary-sub"><span id="mobileTrophiesCount">0</span> von 6 Errungenschaften gemeistert</div>
+            </div>
+          </div>
+          <div class="mobile-trophies-list" id="mobileTrophiesList">
+            <!-- Dynamically populated from ACHIEVEMENTS -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Optionen & Zen-Tipps -->
+        <div class="mobile-hub-panel" id="hubPanelSettings" role="tabpanel">
+          <div class="mobile-settings-list">
+            <div class="mobile-setting-item">
+              <div class="setting-item-left">
+                <span class="setting-item-icon">🎵</span>
+                <div>
+                  <div class="setting-item-title">Hintergrundmusik (BGM)</div>
+                  <div class="setting-item-sub">Koto- & Shamisen-Melodien</div>
+                </div>
+              </div>
+              <button class="mobile-hub-toggle" id="btnMobileMusicToggle">Musik starten</button>
+            </div>
+            <div class="mobile-setting-item">
+              <div class="setting-item-left">
+                <span class="setting-item-icon">🔊</span>
+                <div>
+                  <div class="setting-item-title">Sound-Effekte (SFX)</div>
+                  <div class="setting-item-sub">Schritte, Windböen, Torii-Glocken</div>
+                </div>
+              </div>
+              <button class="mobile-hub-toggle active" id="btnMobileSoundToggle">SFX An</button>
+            </div>
+            <div class="mobile-setting-item">
+              <div class="setting-item-left">
+                <span class="setting-item-icon">📳</span>
+                <div>
+                  <div class="setting-item-title">Mobile Haptik (Vibration)</div>
+                  <div class="setting-item-sub">Taktiles Feedback bei Schritten & Wind</div>
+                </div>
+              </div>
+              <button class="mobile-hub-toggle active" id="btnMobileHapticToggle">Haptik An</button>
+            </div>
+          </div>
+
+          <div class="mobile-zen-card">
+            <div class="zen-card-title">🌸 Tipps für 3-Sterne-Meister:</div>
+            <div class="zen-card-text">
+              • Halte alle <strong>Kamera-Credits</strong> zurück, um die volle 3-Sterne-Wertung zu erhalten.<br>
+              • Plane vorab den Weg durch Tore und aktiviere Schalter mit <strong>✦ Aktion</strong>.<br>
+              • Auf dem <strong>Berg Fuji</strong> tragen dich Windböen (💨) automatisch in Pfeilrichtung weiter!
+            </div>
+          </div>
+
+          <button class="play-btn mobile-hub-resume-btn" id="btnMobileResume">
+            <span>⛩️</span>
+            <span>Zurück zum Spiel</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shrine Wardrobe Modal (KOMA Skins) -->
+    <div class="modal-backdrop" id="modalSkins" role="dialog" aria-modal="true">
+      <div class="modal-card modal-skins-card">
+        <div class="modal-header-row">
+          <div class="modal-header-left">
+            <div class="modal-kicker">⛩️ Schrein-Garderobe</div>
+            <h2 class="modal-title" style="margin: 0;">KOMA Kami-Skins</h2>
+          </div>
+          <div class="modal-header-right">
+            <div class="modal-stars-pill">
+              <span class="star-icon">⭐</span>
+              <strong id="modalTotalStars">0</strong>
+              <span class="modal-stars-max">/ 180</span>
+            </div>
+            <button class="icon-btn" id="btnCloseSkins" aria-label="Garderobe schließen">✕</button>
+          </div>
+        </div>
+        <p class="modal-desc" style="text-align: left; margin: 10px 0 18px 0;">
+          Schließe die 60 Level mit möglichst vielen Kamera-Credits ab, um Sterne zu sammeln und mystische japanische Kami-Designs freizuschalten.
+        </p>
+        <div class="skins-grid" id="skinsGrid">
+          <!-- Dynamically populated from KOMA_SKINS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Shrine Trophies Modal (Desktop) -->
+    <div class="modal-backdrop" id="modalTrophies" role="dialog" aria-modal="true">
+      <div class="modal-card modal-trophies-card">
+        <div class="modal-header-row">
+          <div class="modal-header-left">
+            <div class="modal-kicker">⛩️ Schrein-Trophäen</div>
+            <h2 class="modal-title" style="margin: 0;">Heilige Siegel & Erfolge</h2>
+          </div>
+          <div class="modal-header-right">
+            <div class="trophies-counter-pill">
+              <span class="trophy-icon">🏆</span>
+              <strong id="modalTrophiesCount">0</strong>
+              <span class="trophies-max">/ 6 gemeistert</span>
+            </div>
+            <button class="icon-btn" id="btnCloseTrophies" aria-label="Erfolge schließen">✕</button>
+          </div>
+        </div>
+        <p class="modal-desc" style="text-align: left; margin: 10px 0 16px 0;">
+          Erlange heilige Schrein-Siegel durch meisterhaftes Navigieren, Windreiten auf dem Berg Fuji und Sammeln aller Kami-Skins.
+        </p>
+        <div class="trophies-list" id="modalTrophiesList">
+          <!-- Dynamically populated from ACHIEVEMENTS -->
         </div>
       </div>
     </div>
@@ -178,17 +510,95 @@
               <li>0 Credits übrig = <strong>0 Sterne</strong> (Level kann trotzdem abgeschlossen werden!).</li>
             </ul>
           </li>
+          <li><strong>👘 Schrein-Garderobe:</strong> Schalte mit Sternen neue japanische Skins frei!</li>
           <li><strong>Tastatur:</strong> Pfeiltasten / W, A, S, D, E für Aktionen, Q / Y für Kamera, Leertaste für Start.</li>
         </ul>
+
+        <div style="margin: 14px 0 16px 0; padding: 12px 14px; background: rgba(0, 245, 255, 0.08); border: 1px solid rgba(0, 245, 255, 0.25); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-weight: 700; font-size: 13px; color: var(--cyan);">📱 Auf dem Smartphone spielen</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Scanne den QR-Code oder öffne die WLAN-URL.</div>
+          </div>
+          <a href="qr.html" target="_blank" style="background: var(--cyan); color: #070c14; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; text-decoration: none; white-space: nowrap; box-shadow: 0 0 10px var(--cyan-glow);">QR-Code ↗</a>
+        </div>
+
         <button class="play-btn" onclick="document.getElementById('modalHelp').classList.remove('active')">Verstanden!</button>
+      </div>
+    </div>
+
+    <!-- Daily Shrine Trial Modal -->
+    <div class="modal-backdrop" id="modalDailyTrial" role="dialog" aria-modal="true">
+      <div class="modal-card modal-daily-card">
+        <div class="modal-header-row">
+          <div class="modal-header-left">
+            <div class="modal-kicker">⛩️ Tägliche Schreinprüfung</div>
+            <h2 class="modal-title" id="dailyModalTitle">Tages-Herausforderung</h2>
+          </div>
+          <div class="modal-header-right">
+            <button class="icon-btn" id="btnCloseDailyTrial" aria-label="Schließen">✕</button>
+          </div>
+        </div>
+
+        <!-- Date & Streak Hero Banner -->
+        <div class="daily-streak-hero">
+          <div class="daily-streak-flame">🔥</div>
+          <div class="daily-streak-details">
+            <div class="daily-streak-value" id="dailyStreakValue">0 Tage Streak</div>
+            <div class="daily-streak-sub" id="dailyStreakSub">Rekord: 0 Tage · Meistere die tägliche Prüfung</div>
+          </div>
+          <div class="daily-status-tag" id="dailyStatusTag">Heute noch offen</div>
+        </div>
+
+        <!-- 7-Day Weekly Stamp Card -->
+        <div class="daily-week-card">
+          <div class="daily-week-title">📅 Wochen-Stempelkarte</div>
+          <div class="daily-week-grid" id="dailyWeekGrid">
+            <!-- Rendered dynamically by DailyTrialManager -->
+          </div>
+        </div>
+
+        <!-- Rules & Modifiers -->
+        <div class="daily-rules-card">
+          <div class="daily-rule-item">
+            <span class="rule-icon">🚫</span>
+            <div>
+              <strong>0 Kameraschwenker:</strong>
+              <span>Blickwinkel fest fixiert. Du musst die gesamte Route aus der Schrein-Perspektive vorausplanen!</span>
+            </div>
+          </div>
+          <div class="daily-rule-item">
+            <span class="rule-icon">⚡</span>
+            <div>
+              <strong>Hardcore-Prüfung:</strong>
+              <span>Täglich wechselnde Schrein-Layouts mit Windböen, Toren, Portalen und Relikten.</span>
+            </div>
+          </div>
+          <div class="daily-rule-item">
+            <span class="rule-icon">🎁</span>
+            <div>
+              <strong>Tages-Streak:</strong>
+              <span>Ein Sieg heute erhöht deine Flammen-Streak um +1 Tag.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="daily-actions">
+          <button class="play-btn daily-start-btn" id="btnStartDailyTrial">
+            <span>⛩️</span>
+            <span id="btnStartDailyLabel">Prüfung antreten ▶</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="js/three.min.js"></script>
+  <script src="js/icons.js"></script>
   <script src="js/levels.js"></script>
+  <script src="js/skins.js"></script>
   <script src="js/audio.js"></script>
+  <script src="js/daily.js"></script>
   <script src="js/renderer3d.js"></script>
   <script src="js/game.js"></script>
 </body>

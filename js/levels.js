@@ -1,7 +1,9 @@
 /**
- * KOMA: Spirit Delivery - 50 Level Campaign
- * Automatically generated and 100% verified for solvability.
- * Includes Colored Torii Gates, Kitsune Portals, and Spirit Lotus Orbs.
+ * KOMA: Spirit Delivery - 60 Level Campaign
+ * Fully verified for puzzle depth and zero gate/portal bypasses.
+ * Features Japanese Garden & Mount Fuji aesthetics: Machiya houses, Pavilions,
+ * Bamboo fences, Stone walls, Sculpted pines, Sakura blossoms, Moss meadows,
+ * and the Sacred Mount Fuji with snow caps and wind gusts!
  */
 const LEVELS = [
   {
@@ -46,6 +48,30 @@ const LEVELS = [
       "F",
       "R",
       "F"
+    ],
+    "obstacles": {
+      "1,1": "fence_v",
+      "1,2": "wall_v",
+      "3,2": "wall_v",
+      "3,3": "pine"
+    },
+    "grass": [
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        4,
+        4
+      ]
     ]
   },
   {
@@ -88,6 +114,33 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "2,1": "wall_v",
+      "2,2": "wall_v",
+      "2,3": "pine"
+    },
+    "grass": [
+      [
+        1,
+        0
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        1,
+        4
+      ]
     ]
   },
   {
@@ -246,7 +299,39 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "wall_h",
+      "0,3": "wall_h",
+      "0,4": "pine",
+      "0,5": "sakura",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,2": "wall_h",
+      "1,3": "pine",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "wall_h",
+      "2,3": "pine",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "3,5": "fence_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "sakura",
+      "4,3": "house",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "pine",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,5": "wall_h"
+    },
+    "grass": []
   },
   {
     "n": "Der kleine Umweg",
@@ -401,7 +486,38 @@ const LEVELS = [
       "L",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_v",
+      "0,1": "fence_v",
+      "0,2": "wall_v",
+      "0,3": "wall_v",
+      "0,4": "sakura",
+      "0,5": "fence_v",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "pine",
+      "2,3": "sakura",
+      "2,4": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "wall_h",
+      "3,2": "sakura",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "sakura",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "5,0": "pine",
+      "5,1": "sakura",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "wall_h"
+    },
+    "grass": []
   },
   {
     "n": "Zwei Schritte voraus",
@@ -557,6 +673,42 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,5": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,2": "wall_h",
+      "1,3": "sakura",
+      "1,5": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "wall_h",
+      "2,2": "pine",
+      "2,3": "fence_h",
+      "2,5": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "sakura",
+      "3,3": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,5": "wall_h",
+      "5,0": "pine",
+      "5,1": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "fence_v",
+      "5,4": "wall_v",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        4,
+        4
+      ]
     ]
   },
   {
@@ -710,6 +862,41 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,2": "wall_h",
+      "0,3": "pine",
+      "0,4": "fence_h",
+      "1,0": "wall_h",
+      "1,2": "pine",
+      "1,3": "sakura",
+      "1,4": "house",
+      "2,0": "wall_h",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,1": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "wall_h",
+      "5,5": "pine"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ]
     ]
   },
   {
@@ -864,6 +1051,45 @@ const LEVELS = [
       "F",
       "L",
       "F"
+    ],
+    "obstacles": {
+      "0,3": "sakura",
+      "0,4": "fence_h",
+      "0,5": "fence_h",
+      "1,1": "wall_h",
+      "1,3": "fence_h",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "2,1": "pine",
+      "2,2": "sakura",
+      "2,3": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "wall_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,1": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "wall_h",
+      "5,4": "wall_h",
+      "5,5": "pine"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        0,
+        2
+      ]
     ]
   },
   {
@@ -1015,6 +1241,40 @@ const LEVELS = [
       "F",
       "R",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,5": "fence_h",
+      "1,0": "wall_h",
+      "1,2": "sakura",
+      "1,3": "fence_h",
+      "1,5": "wall_h",
+      "2,0": "wall_h",
+      "2,2": "fence_h",
+      "2,3": "fence_h",
+      "2,5": "wall_h",
+      "3,0": "pine",
+      "3,1": "sakura",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "4,0": "sakura",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "pine",
+      "5,0": "fence_h",
+      "5,1": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "wall_h",
+      "5,4": "wall_h",
+      "5,5": "sakura"
+    },
+    "grass": [
+      [
+        3,
+        4
+      ]
     ]
   },
   {
@@ -1163,6 +1423,43 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "wall_h",
+      "0,2": "sakura",
+      "0,3": "fence_h",
+      "0,4": "fence_h",
+      "1,0": "wall_h",
+      "1,1": "pine",
+      "1,2": "fence_h",
+      "1,3": "fence_h",
+      "1,4": "house",
+      "2,0": "pine",
+      "2,1": "sakura",
+      "2,2": "fence_h",
+      "2,3": "fence_h",
+      "2,4": "wall_h",
+      "3,0": "sakura",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "wall_h",
+      "4,0": "fence_h",
+      "5,0": "fence_h",
+      "5,3": "wall_v",
+      "5,4": "pine",
+      "5,5": "sakura"
+    },
+    "grass": [
+      [
+        5,
+        1
+      ],
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -1309,6 +1606,46 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "sakura",
+      "0,5": "wall_h",
+      "1,0": "wall_h",
+      "1,4": "house",
+      "1,5": "wall_h",
+      "2,0": "pine",
+      "2,2": "fence_h",
+      "2,3": "fence_h",
+      "2,4": "wall_h",
+      "2,5": "wall_h",
+      "3,0": "sakura",
+      "3,2": "fence_h",
+      "3,3": "wall_h",
+      "3,4": "wall_h",
+      "3,5": "pine",
+      "4,0": "fence_h",
+      "5,0": "fence_h",
+      "5,1": "fence_v",
+      "5,2": "wall_v",
+      "5,3": "wall_v",
+      "5,4": "pine",
+      "5,5": "fence_v"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        3
+      ]
     ]
   },
   {
@@ -1346,8 +1683,13 @@ const LEVELS = [
         "cyan"
       ],
       [
-        4,
+        3,
         2,
+        "cyan"
+      ],
+      [
+        3,
+        1,
         "magenta"
       ]
     ],
@@ -1394,6 +1736,10 @@ const LEVELS = [
       ],
       [
         1,
+        2
+      ],
+      [
+        4,
         2
       ],
       [
@@ -1474,7 +1820,37 @@ const LEVELS = [
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "fence_h",
+      "0,3": "fence_v",
+      "0,4": "fence_v",
+      "0,5": "wall_h",
+      "1,0": "pine",
+      "1,1": "sakura",
+      "1,2": "fence_h",
+      "1,5": "wall_h",
+      "2,0": "sakura",
+      "2,4": "wall_h",
+      "2,5": "pine",
+      "3,0": "fence_h",
+      "3,4": "wall_h",
+      "3,5": "sakura",
+      "4,0": "fence_h",
+      "4,2": "wall_h",
+      "4,3": "house",
+      "4,4": "pine",
+      "4,5": "sakura",
+      "5,0": "fence_h",
+      "5,1": "fence_v",
+      "5,2": "wall_h",
+      "5,3": "pine",
+      "5,4": "sakura",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Gegensätze",
@@ -1506,13 +1882,13 @@ const LEVELS = [
     ],
     "gates": [
       [
-        4,
-        1,
+        2,
+        2,
         "cyan"
       ],
       [
         4,
-        3,
+        1,
         "magenta"
       ]
     ],
@@ -1542,6 +1918,10 @@ const LEVELS = [
         0
       ],
       [
+        3,
+        1
+      ],
+      [
         0,
         2
       ],
@@ -1618,16 +1998,16 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 17,
+    "limit": 18,
     "solution": [
       "F",
       "F",
-      "A",
       "R",
-      "F",
-      "F",
       "A",
+      "F",
+      "F",
       "L",
+      "A",
       "F",
       "F",
       "L",
@@ -1635,7 +2015,36 @@ const LEVELS = [
       "F",
       "R",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,2": "fence_h",
+      "0,3": "fence_h",
+      "0,4": "wall_h",
+      "0,5": "wall_h",
+      "1,0": "sakura",
+      "1,2": "fence_h",
+      "1,3": "fence_h",
+      "1,4": "house",
+      "1,5": "wall_h",
+      "2,0": "sakura",
+      "2,4": "wall_h",
+      "2,5": "pine",
+      "3,0": "fence_h",
+      "3,1": "fence_v",
+      "3,2": "fence_v",
+      "3,4": "pine",
+      "3,5": "sakura",
+      "4,0": "fence_h",
+      "4,4": "sakura",
+      "4,5": "fence_h",
+      "5,0": "fence_h",
+      "5,2": "wall_v",
+      "5,3": "pine",
+      "5,4": "fence_h",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Der Schleichweg",
@@ -1795,7 +2204,35 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,1": "fence_v",
+      "0,2": "fence_v",
+      "0,3": "fence_v",
+      "0,4": "wall_v",
+      "0,5": "wall_v",
+      "1,0": "sakura",
+      "2,0": "fence_h",
+      "2,2": "fence_v",
+      "2,3": "wall_v",
+      "2,4": "wall_v",
+      "2,5": "sakura",
+      "3,0": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,3": "house",
+      "4,4": "sakura",
+      "4,5": "fence_h",
+      "5,0": "fence_h",
+      "5,1": "wall_h",
+      "5,2": "wall_h",
+      "5,3": "sakura",
+      "5,4": "fence_h",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Spiegelgarten",
@@ -1810,7 +2247,7 @@ const LEVELS = [
       "N"
     ],
     "g": [
-      5,
+      3,
       1
     ],
     "sw": [
@@ -1827,13 +2264,13 @@ const LEVELS = [
     ],
     "gates": [
       [
-        2,
-        1,
+        4,
+        3,
         "cyan"
       ],
       [
-        4,
-        1,
+        3,
+        2,
         "magenta"
       ]
     ],
@@ -1868,6 +2305,18 @@ const LEVELS = [
       ],
       [
         1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
         1
       ],
       [
@@ -1935,32 +2384,59 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 26,
+    "limit": 24,
     "solution": [
       "F",
       "F",
       "L",
       "F",
       "F",
-      "A",
-      "R",
-      "R",
-      "F",
-      "F",
-      "F",
-      "F",
-      "A",
       "L",
       "L",
+      "A",
       "F",
       "F",
-      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
       "F",
       "F",
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "sakura",
+      "0,1": "fence_h",
+      "0,2": "fence_h",
+      "0,3": "fence_v",
+      "0,4": "wall_h",
+      "0,5": "pine",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,2": "fence_h",
+      "1,4": "house",
+      "1,5": "pine",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "2,2": "wall_h",
+      "2,4": "pine",
+      "2,5": "sakura",
+      "3,0": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,4": "fence_h",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "wall_h",
+      "5,2": "pine",
+      "5,4": "fence_h",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Kreuzende Pfade",
@@ -2129,7 +2605,36 @@ const LEVELS = [
       "F",
       "L",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "sakura",
+      "0,1": "fence_h",
+      "0,3": "wall_h",
+      "0,4": "wall_h",
+      "0,5": "pine",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,3": "wall_h",
+      "1,4": "house",
+      "1,5": "sakura",
+      "2,3": "wall_h",
+      "2,4": "sakura",
+      "2,5": "fence_h",
+      "3,0": "fence_h",
+      "3,1": "wall_h",
+      "3,3": "pine",
+      "3,4": "sakura",
+      "3,5": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "wall_h",
+      "5,2": "pine",
+      "5,3": "fence_v",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Laternenparade",
@@ -2273,6 +2778,45 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_v",
+      "0,2": "fence_h",
+      "0,3": "wall_v",
+      "0,4": "wall_v",
+      "0,5": "sakura",
+      "1,0": "fence_h",
+      "1,2": "wall_h",
+      "2,0": "fence_h",
+      "2,2": "wall_h",
+      "2,4": "sakura",
+      "3,0": "fence_h",
+      "3,2": "wall_h",
+      "3,4": "fence_h",
+      "4,0": "wall_h",
+      "4,2": "pine",
+      "4,4": "fence_h",
+      "5,0": "wall_h",
+      "5,4": "fence_h"
+    },
+    "grass": [
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ]
     ]
   },
   {
@@ -2477,6 +3021,49 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_v",
+      "0,2": "wall_h",
+      "0,3": "wall_v",
+      "0,4": "pine",
+      "0,5": "sakura",
+      "0,6": "fence_v",
+      "1,0": "fence_h",
+      "1,2": "wall_h",
+      "2,0": "fence_h",
+      "2,2": "wall_h",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "2,6": "fence_h",
+      "3,0": "wall_h",
+      "3,2": "pine",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,2": "sakura",
+      "4,4": "fence_h",
+      "4,5": "fence_h",
+      "4,6": "wall_h",
+      "5,0": "wall_h",
+      "5,4": "fence_h",
+      "5,5": "wall_h",
+      "5,6": "wall_h",
+      "6,0": "pine",
+      "6,1": "sakura",
+      "6,2": "fence_v",
+      "6,3": "fence_v",
+      "6,4": "wall_h",
+      "6,5": "wall_h",
+      "6,6": "pine"
+    },
+    "grass": [
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -2675,6 +3262,53 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,4": "pine",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,2": "pine",
+      "1,4": "house",
+      "1,6": "fence_h",
+      "2,0": "fence_h",
+      "2,6": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "wall_v",
+      "3,2": "pine",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "4,6": "wall_h",
+      "5,0": "wall_h",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "wall_h",
+      "5,6": "pine",
+      "6,0": "pine",
+      "6,2": "fence_h",
+      "6,3": "fence_h",
+      "6,4": "wall_h",
+      "6,5": "wall_h",
+      "6,6": "pine"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        5
+      ]
     ]
   },
   {
@@ -2827,7 +3461,39 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,3": "pine",
+      "0,4": "sakura",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,3": "sakura",
+      "1,4": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "wall_h",
+      "2,3": "sakura",
+      "2,4": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "sakura",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "5,0": "pine",
+      "5,1": "sakura",
+      "5,3": "fence_h",
+      "5,4": "wall_h",
+      "6,0": "sakura",
+      "6,1": "fence_h",
+      "6,3": "fence_h",
+      "6,4": "wall_h"
+    },
+    "grass": []
   },
   {
     "n": "Über die Mauer",
@@ -2985,7 +3651,40 @@ const LEVELS = [
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,2": "wall_v",
+      "0,3": "pine",
+      "0,4": "fence_v",
+      "0,5": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,5": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "wall_h",
+      "2,2": "sakura",
+      "2,3": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,1": "fence_h",
+      "5,2": "fence_v",
+      "5,3": "fence_v",
+      "5,4": "wall_v",
+      "5,5": "wall_h"
+    },
+    "grass": []
   },
   {
     "n": "Schritt ins Blaue",
@@ -3150,6 +3849,40 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_v",
+      "0,1": "wall_v",
+      "0,2": "wall_v",
+      "0,3": "sakura",
+      "0,4": "fence_v",
+      "0,5": "fence_v",
+      "2,1": "pine",
+      "2,2": "sakura",
+      "2,3": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "wall_h",
+      "3,1": "sakura",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,1": "fence_h",
+      "5,3": "wall_h",
+      "5,4": "wall_h",
+      "5,5": "pine"
+    },
+    "grass": [
+      [
+        1,
+        1
+      ]
     ]
   },
   {
@@ -3308,6 +4041,39 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "wall_h",
+      "0,2": "pine",
+      "0,3": "sakura",
+      "0,5": "fence_h",
+      "1,0": "wall_h",
+      "1,1": "pine",
+      "1,2": "sakura",
+      "1,3": "fence_h",
+      "1,5": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "pine",
+      "2,5": "wall_h",
+      "3,0": "pine",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "wall_h",
+      "3,5": "wall_h",
+      "4,0": "sakura",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "pine",
+      "5,0": "fence_h",
+      "5,5": "pine"
+    },
+    "grass": [
+      [
+        1,
+        4
+      ]
     ]
   },
   {
@@ -3516,6 +4282,51 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "wall_v",
+      "0,2": "sakura",
+      "0,3": "fence_v",
+      "0,4": "fence_h",
+      "0,5": "fence_v",
+      "0,6": "wall_h",
+      "1,0": "wall_h",
+      "1,4": "house",
+      "1,6": "wall_h",
+      "2,0": "pine",
+      "2,2": "fence_h",
+      "2,3": "fence_v",
+      "2,4": "fence_h",
+      "2,6": "pine",
+      "3,0": "pine",
+      "3,2": "fence_h",
+      "3,6": "sakura",
+      "4,0": "sakura",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "pine",
+      "4,6": "fence_h",
+      "5,0": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "wall_h",
+      "5,4": "pine",
+      "5,5": "sakura",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,1": "fence_v",
+      "6,2": "wall_h",
+      "6,3": "wall_h",
+      "6,4": "sakura",
+      "6,5": "fence_h",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        3,
+        5
+      ]
     ]
   },
   {
@@ -3735,6 +4546,51 @@ const LEVELS = [
       "F",
       "L",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "sakura",
+      "0,6": "wall_h",
+      "1,0": "wall_h",
+      "1,1": "sakura",
+      "1,2": "fence_h",
+      "1,4": "house",
+      "1,5": "wall_h",
+      "1,6": "wall_h",
+      "2,0": "pine",
+      "2,1": "fence_h",
+      "2,2": "fence_h",
+      "2,4": "wall_h",
+      "2,5": "wall_h",
+      "2,6": "pine",
+      "3,0": "sakura",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,4": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "sakura",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "sakura",
+      "4,6": "fence_h",
+      "5,0": "fence_h",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,1": "fence_v",
+      "6,2": "wall_v",
+      "6,3": "pine",
+      "6,4": "sakura",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        5,
+        2
+      ]
     ]
   },
   {
@@ -3769,7 +4625,7 @@ const LEVELS = [
     ],
     "portals": [
       [
-        3,
+        2,
         3
       ],
       [
@@ -3855,6 +4711,10 @@ const LEVELS = [
         3
       ],
       [
+        3,
+        3
+      ],
+      [
         6,
         3
       ],
@@ -3930,21 +4790,65 @@ const LEVELS = [
       "F",
       "R",
       "F",
-      "F",
       "L",
       "F",
       "F",
       "L",
       "F",
+      "L",
+      "L",
       "A",
-      "R",
-      "R",
       "F",
       "L",
       "F",
       "F",
       "R",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "fence_h",
+      "0,3": "fence_v",
+      "0,4": "fence_v",
+      "0,5": "wall_v",
+      "0,6": "wall_v",
+      "1,0": "pine",
+      "1,1": "sakura",
+      "1,2": "fence_h",
+      "2,0": "sakura",
+      "2,1": "fence_h",
+      "2,2": "fence_h",
+      "2,4": "wall_h",
+      "2,5": "pine",
+      "2,6": "sakura",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,3": "wall_v",
+      "3,4": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,4": "pine",
+      "4,5": "sakura",
+      "4,6": "fence_h",
+      "5,0": "fence_h",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,2": "wall_v",
+      "6,3": "pine",
+      "6,4": "fence_v",
+      "6,5": "fence_v",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -3978,6 +4882,11 @@ const LEVELS = [
     "gates": [
       [
         4,
+        4,
+        "magenta"
+      ],
+      [
+        5,
         5,
         "cyan"
       ]
@@ -4146,13 +5055,13 @@ const LEVELS = [
     "solution": [
       "F",
       "F",
-      "A",
       "L",
-      "F",
-      "F",
       "A",
-      "R",
-      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
       "F",
       "F",
       "F",
@@ -4162,7 +5071,47 @@ const LEVELS = [
       "L",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,1": "sakura",
+      "0,2": "fence_h",
+      "0,4": "fence_h",
+      "0,5": "wall_h",
+      "0,6": "pine",
+      "1,0": "pine",
+      "1,1": "fence_h",
+      "1,2": "fence_h",
+      "1,4": "house",
+      "1,5": "wall_h",
+      "1,6": "sakura",
+      "2,0": "sakura",
+      "2,6": "sakura",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,3": "wall_v",
+      "3,4": "pine",
+      "3,5": "pavilion",
+      "3,6": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,6": "fence_h",
+      "5,0": "fence_h",
+      "5,1": "wall_h",
+      "5,2": "wall_h",
+      "5,3": "pine",
+      "5,4": "sakura",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,1": "wall_h",
+      "6,2": "pine",
+      "6,3": "sakura",
+      "6,4": "fence_h",
+      "6,6": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Das verlorene Licht",
@@ -4274,13 +5223,36 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,1": "sakura",
+      "0,3": "fence_h",
+      "0,4": "wall_h",
+      "1,0": "sakura",
+      "1,1": "fence_h",
+      "1,3": "fence_h",
+      "1,4": "wall_h",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "2,3": "wall_h",
+      "2,4": "wall_h",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,3": "wall_h",
+      "3,4": "pine",
+      "4,0": "fence_h",
+      "4,1": "fence_h",
+      "4,3": "pine",
+      "4,4": "sakura"
+    },
+    "grass": []
   },
   {
     "n": "Zwei Opfergaben",
     "c": "Kapitel 05 · Bambuswald",
     "t": "Zwei Lichter",
-    "d": "Zwei Lotosblüten leuchten links und rechts im Bambusdickicht. Sammle beide ein.",
+    "d": "Ein plötzlicher Bergwindstoß im Bambuswald trägt KOMA nach Norden! Sammle beide Opfergaben links und rechts.",
     "w": 5,
     "h": 5,
     "s": [
@@ -4368,15 +5340,14 @@ const LEVELS = [
         4
       ]
     ],
-    "limit": 16,
+    "limit": 15,
     "solution": [
-      "F",
       "F",
       "L",
       "F",
       "F",
-      "R",
-      "R",
+      "L",
+      "L",
       "F",
       "F",
       "F",
@@ -4384,6 +5355,45 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "sakura",
+      "0,1": "fence_h",
+      "0,3": "fence_h",
+      "0,4": "wall_h",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,3": "wall_h",
+      "1,4": "wall_h",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,3": "wall_h",
+      "3,4": "sakura",
+      "4,3": "pine",
+      "4,4": "fence_h"
+    },
+    "grass": [
+      [
+        4,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        3,
+        "N"
+      ]
     ]
   },
   {
@@ -4544,7 +5554,37 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "sakura",
+      "0,1": "fence_v",
+      "0,2": "fence_v",
+      "0,3": "wall_v",
+      "0,4": "wall_v",
+      "0,5": "pine",
+      "1,0": "fence_h",
+      "2,0": "fence_h",
+      "2,2": "wall_h",
+      "2,3": "wall_h",
+      "2,4": "pine",
+      "2,5": "fence_h",
+      "3,0": "fence_h",
+      "3,2": "wall_h",
+      "3,3": "pine",
+      "3,4": "sakura",
+      "3,5": "fence_h",
+      "4,0": "fence_h",
+      "4,2": "wall_h",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,2": "pine",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Glühwürmchen-Garten",
@@ -4707,6 +5747,48 @@ const LEVELS = [
       "F",
       "L",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,5": "sakura",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,3": "wall_h",
+      "1,4": "house",
+      "1,5": "sakura",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "2,3": "pine",
+      "2,4": "sakura",
+      "2,5": "fence_h",
+      "3,0": "fence_h",
+      "3,1": "wall_h",
+      "3,3": "pine",
+      "3,4": "fence_h",
+      "3,5": "fence_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "pine",
+      "5,2": "sakura",
+      "5,3": "fence_v",
+      "5,5": "fence_h"
+    },
+    "grass": [
+      [
+        3,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        3
+      ]
     ]
   },
   {
@@ -4897,6 +5979,58 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_v",
+      "0,2": "fence_v",
+      "0,3": "wall_v",
+      "0,4": "pine",
+      "0,5": "sakura",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,6": "fence_h",
+      "2,0": "fence_h",
+      "2,2": "wall_h",
+      "2,3": "pine",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "2,6": "fence_h",
+      "3,0": "fence_h",
+      "3,2": "pine",
+      "3,3": "sakura",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,2": "sakura",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,5": "fence_h",
+      "4,6": "wall_h",
+      "5,0": "wall_h",
+      "5,6": "wall_h",
+      "6,0": "pine",
+      "6,1": "sakura",
+      "6,2": "fence_v",
+      "6,3": "fence_v",
+      "6,4": "fence_v",
+      "6,5": "wall_v",
+      "6,6": "pine"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        5,
+        3
+      ]
     ]
   },
   {
@@ -5105,6 +6239,57 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_v",
+      "0,2": "wall_v",
+      "0,3": "wall_v",
+      "0,4": "pine",
+      "0,5": "fence_v",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,6": "fence_h",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "wall_h",
+      "2,3": "sakura",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "2,6": "fence_h",
+      "3,0": "wall_h",
+      "3,1": "wall_h",
+      "3,2": "pine",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "sakura",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "4,6": "wall_h",
+      "5,0": "wall_h",
+      "5,6": "wall_h",
+      "6,0": "pine",
+      "6,1": "fence_v",
+      "6,2": "fence_v",
+      "6,3": "fence_v",
+      "6,4": "wall_v",
+      "6,5": "wall_v",
+      "6,6": "pine"
+    },
+    "grass": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        2
+      ]
     ]
   },
   {
@@ -5328,6 +6513,60 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "wall_h",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,2": "wall_h",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "1,6": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "wall_h",
+      "2,2": "pine",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "2,6": "wall_h",
+      "3,0": "wall_h",
+      "3,1": "wall_h",
+      "3,2": "sakura",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "4,6": "wall_h",
+      "5,0": "pine",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "wall_h",
+      "5,5": "wall_h",
+      "5,6": "pine",
+      "6,0": "sakura",
+      "6,2": "fence_h",
+      "6,3": "fence_h",
+      "6,4": "wall_h",
+      "6,5": "pine",
+      "6,6": "sakura"
+    },
+    "grass": [
+      [
+        5,
+        1
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        0,
+        4
+      ]
     ]
   },
   {
@@ -5538,6 +6777,54 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,2": "wall_h",
+      "0,3": "pine",
+      "0,4": "sakura",
+      "0,5": "fence_h",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,2": "pine",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "1,6": "fence_h",
+      "2,0": "wall_h",
+      "2,1": "wall_h",
+      "2,2": "pine",
+      "2,4": "fence_h",
+      "2,5": "fence_h",
+      "2,6": "wall_h",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "sakura",
+      "3,6": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "4,6": "pine",
+      "5,0": "pine",
+      "5,4": "wall_h",
+      "5,5": "wall_h",
+      "5,6": "sakura",
+      "6,0": "sakura",
+      "6,1": "fence_v",
+      "6,2": "fence_v",
+      "6,3": "wall_v",
+      "6,4": "wall_h",
+      "6,5": "pine",
+      "6,6": "sakura"
+    },
+    "grass": [
+      [
+        4,
+        3
+      ]
     ]
   },
   {
@@ -5698,13 +6985,45 @@ const LEVELS = [
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_v",
+      "0,2": "wall_v",
+      "0,3": "sakura",
+      "0,4": "fence_v",
+      "0,5": "fence_v",
+      "1,0": "wall_h",
+      "2,0": "wall_h",
+      "2,2": "sakura",
+      "2,3": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "wall_h",
+      "3,0": "wall_h",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "wall_h",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,1": "fence_h",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "wall_h",
+      "5,5": "pine"
+    },
+    "grass": []
   },
   {
     "n": "Triade der Geister",
     "c": "Kapitel 06 · Himmelsbrücke",
     "t": "Dreifach-Tor",
-    "d": "Drei aufeinanderfolgende Tore in Türkis, Violett und Gold versperren die heilige Brücke.",
+    "d": "Zwischen den Laternen pfeift eine Windböe nach Osten. Plane deinen Weg genau, um die drei Geisterschalter zu aktivieren.",
     "w": 7,
     "h": 7,
     "s": [
@@ -5904,24 +7223,76 @@ const LEVELS = [
         6
       ]
     ],
-    "limit": 18,
+    "limit": 17,
     "solution": [
       "F",
       "F",
-      "A",
       "R",
-      "F",
-      "F",
-      "F",
       "A",
       "F",
       "F",
       "A",
+      "F",
+      "F",
       "L",
+      "A",
       "F",
       "F",
       "R",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "wall_h",
+      "0,2": "pine",
+      "0,6": "wall_h",
+      "1,0": "wall_h",
+      "1,1": "wall_h",
+      "1,2": "sakura",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "1,6": "wall_h",
+      "2,0": "wall_h",
+      "2,1": "pine",
+      "2,2": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "wall_h",
+      "2,6": "wall_h",
+      "3,0": "pine",
+      "3,1": "sakura",
+      "3,2": "fence_h",
+      "3,4": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "pine",
+      "4,0": "sakura",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "4,6": "sakura",
+      "5,0": "fence_h",
+      "5,4": "wall_h",
+      "5,5": "pine",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,2": "wall_v",
+      "6,3": "wall_v",
+      "6,4": "pine",
+      "6,5": "sakura",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        5,
+        2
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        3,
+        "E"
+      ]
     ]
   },
   {
@@ -6126,6 +7497,53 @@ const LEVELS = [
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "wall_v",
+      "0,2": "pine",
+      "0,3": "fence_v",
+      "0,4": "fence_v",
+      "0,5": "fence_v",
+      "0,6": "wall_v",
+      "1,0": "wall_h",
+      "1,2": "sakura",
+      "2,0": "wall_h",
+      "2,2": "fence_h",
+      "2,4": "fence_h",
+      "2,5": "wall_h",
+      "2,6": "pine",
+      "3,0": "pine",
+      "3,2": "fence_h",
+      "3,4": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "pine",
+      "4,0": "sakura",
+      "4,2": "fence_h",
+      "4,4": "wall_h",
+      "4,5": "pine",
+      "4,6": "sakura",
+      "5,0": "fence_h",
+      "5,4": "pine",
+      "5,5": "sakura",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,1": "fence_v",
+      "6,2": "wall_v",
+      "6,3": "wall_v",
+      "6,4": "pine",
+      "6,5": "fence_h",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        5,
+        1
+      ],
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -6343,6 +7761,65 @@ const LEVELS = [
       "F",
       "L",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "sakura",
+      "0,3": "fence_v",
+      "0,4": "fence_v",
+      "0,5": "fence_v",
+      "0,6": "wall_h",
+      "1,0": "wall_h",
+      "1,6": "wall_h",
+      "2,0": "pine",
+      "2,2": "fence_v",
+      "2,3": "fence_v",
+      "2,4": "wall_h",
+      "2,5": "wall_h",
+      "2,6": "pine",
+      "3,0": "sakura",
+      "3,4": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "sakura",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "wall_h",
+      "4,5": "sakura",
+      "4,6": "fence_h",
+      "5,0": "fence_h",
+      "5,1": "fence_h",
+      "5,2": "wall_h",
+      "5,6": "fence_h",
+      "6,0": "fence_h",
+      "6,1": "fence_h",
+      "6,2": "wall_h",
+      "6,3": "pine",
+      "6,4": "sakura",
+      "6,6": "fence_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        5,
+        4
+      ]
     ]
   },
   {
@@ -6621,7 +8098,60 @@ const LEVELS = [
       "F",
       "R",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "pine",
+      "0,2": "fence_h",
+      "0,3": "fence_h",
+      "0,4": "fence_h",
+      "0,5": "wall_v",
+      "0,6": "wall_v",
+      "0,7": "pine",
+      "1,0": "pine",
+      "1,1": "sakura",
+      "1,2": "fence_h",
+      "1,3": "fence_h",
+      "1,4": "house",
+      "2,0": "sakura",
+      "2,1": "fence_h",
+      "2,2": "fence_h",
+      "2,3": "fence_h",
+      "2,4": "wall_h",
+      "2,6": "sakura",
+      "2,7": "fence_h",
+      "3,0": "sakura",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,6": "fence_h",
+      "3,7": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "pine",
+      "4,5": "sakura",
+      "4,6": "fence_h",
+      "4,7": "fence_h",
+      "5,0": "fence_h",
+      "5,4": "sakura",
+      "5,5": "fence_h",
+      "5,6": "fence_h",
+      "5,7": "fence_h",
+      "6,0": "fence_h",
+      "6,2": "wall_v",
+      "6,3": "pine",
+      "6,4": "fence_h",
+      "6,5": "fence_h",
+      "6,6": "fence_h",
+      "6,7": "wall_h",
+      "7,0": "fence_h",
+      "7,3": "sakura",
+      "7,4": "fence_h",
+      "7,5": "fence_h",
+      "7,6": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": []
   },
   {
     "n": "Prüfung der Elemente",
@@ -6844,6 +8374,53 @@ const LEVELS = [
       "F",
       "L",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "0,1": "sakura",
+      "0,2": "fence_h",
+      "0,3": "fence_h",
+      "0,5": "wall_h",
+      "1,0": "pine",
+      "1,1": "fence_h",
+      "1,2": "fence_h",
+      "1,3": "fence_h",
+      "1,5": "wall_h",
+      "2,2": "fence_h",
+      "2,3": "wall_h",
+      "2,5": "pine",
+      "3,1": "fence_h",
+      "3,2": "fence_h",
+      "3,3": "wall_h",
+      "3,5": "sakura",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,3": "house",
+      "4,5": "fence_h",
+      "5,1": "wall_h",
+      "5,2": "wall_h",
+      "5,3": "pine",
+      "5,4": "sakura",
+      "5,5": "fence_h",
+      "6,3": "sakura",
+      "6,4": "fence_h",
+      "6,5": "fence_h",
+      "7,0": "wall_v",
+      "7,1": "wall_v",
+      "7,2": "pine",
+      "7,3": "fence_h",
+      "7,4": "fence_h",
+      "7,5": "fence_h"
+    },
+    "grass": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        4
+      ]
     ]
   },
   {
@@ -7093,6 +8670,63 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,1": "sakura",
+      "0,2": "fence_h",
+      "0,3": "fence_h",
+      "0,4": "wall_v",
+      "0,5": "wall_v",
+      "0,6": "pine",
+      "1,0": "sakura",
+      "1,1": "fence_h",
+      "1,2": "fence_h",
+      "1,3": "fence_h",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "2,2": "fence_h",
+      "2,3": "wall_h",
+      "2,5": "pine",
+      "2,6": "fence_h",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,5": "pavilion",
+      "3,6": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,3": "house",
+      "4,4": "sakura",
+      "4,5": "fence_h",
+      "4,6": "fence_h",
+      "5,3": "pine",
+      "5,4": "fence_h",
+      "5,5": "fence_h",
+      "5,6": "fence_h",
+      "6,1": "wall_v",
+      "6,2": "pine",
+      "6,3": "sakura",
+      "6,4": "fence_h",
+      "6,5": "fence_h",
+      "6,6": "wall_h",
+      "7,3": "fence_h",
+      "7,4": "fence_h",
+      "7,5": "fence_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        5,
+        1
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -7336,6 +8970,67 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "pine",
+      "0,1": "fence_h",
+      "0,2": "fence_h",
+      "0,3": "fence_h",
+      "0,4": "wall_h",
+      "0,5": "wall_h",
+      "1,0": "sakura",
+      "1,1": "fence_h",
+      "1,2": "fence_h",
+      "1,3": "wall_h",
+      "1,4": "house",
+      "1,5": "pine",
+      "2,0": "fence_h",
+      "2,1": "fence_h",
+      "2,2": "fence_h",
+      "2,3": "wall_h",
+      "3,0": "fence_h",
+      "3,1": "fence_h",
+      "3,2": "wall_h",
+      "3,3": "wall_h",
+      "3,5": "pavilion",
+      "3,6": "fence_h",
+      "4,1": "pavilion",
+      "4,5": "fence_h",
+      "4,6": "fence_h",
+      "5,1": "wall_h",
+      "5,3": "sakura",
+      "5,4": "fence_h",
+      "5,5": "fence_h",
+      "5,6": "fence_h",
+      "6,3": "fence_h",
+      "6,4": "fence_h",
+      "6,5": "fence_h",
+      "6,6": "wall_h",
+      "7,0": "wall_v",
+      "7,1": "pine",
+      "7,2": "sakura",
+      "7,3": "fence_h",
+      "7,4": "fence_h",
+      "7,5": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        2,
+        5
+      ]
     ]
   },
   {
@@ -7496,13 +9191,45 @@ const LEVELS = [
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "sakura",
+      "0,1": "fence_v",
+      "0,2": "fence_v",
+      "0,3": "wall_v",
+      "0,4": "wall_v",
+      "0,5": "pine",
+      "1,0": "fence_h",
+      "2,0": "fence_h",
+      "2,2": "wall_h",
+      "2,3": "wall_h",
+      "2,4": "pine",
+      "2,5": "fence_h",
+      "3,0": "fence_h",
+      "3,2": "wall_h",
+      "3,3": "pine",
+      "3,4": "sakura",
+      "3,5": "fence_h",
+      "4,0": "fence_h",
+      "4,1": "pavilion",
+      "4,2": "wall_h",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "wall_h",
+      "5,2": "pine",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Quad-Siegel",
     "c": "Kapitel 07 · Palast der Kami",
     "t": "Vier Farben",
-    "d": "Vier Schreintore: Türkis, Violett, Gold und Smaragdgrün im ehrwürdigen Kreisgang.",
+    "d": "Vier Schalter, vier Siegel – und ein mächtiger Aufwind im Innenhof, der deinen Plan beschleunigt oder durchkreuzt!",
     "w": 7,
     "h": 6,
     "s": [
@@ -7676,28 +9403,76 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 26,
+    "limit": 22,
     "solution": [
       "F",
       "F",
       "A",
       "F",
       "F",
-      "A",
       "L",
-      "F",
-      "F",
       "A",
+      "F",
+      "F",
       "L",
-      "F",
-      "F",
       "A",
+      "F",
+      "F",
       "R",
+      "A",
       "F",
       "F",
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "fence_h",
+      "0,3": "wall_h",
+      "0,5": "pine",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,2": "wall_h",
+      "1,3": "wall_h",
+      "1,5": "sakura",
+      "2,3": "wall_h",
+      "2,5": "fence_h",
+      "3,1": "wall_h",
+      "3,3": "pine",
+      "3,5": "fence_h",
+      "4,1": "pavilion",
+      "4,5": "fence_h",
+      "5,0": "wall_h",
+      "5,1": "wall_h",
+      "5,2": "sakura",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "fence_h",
+      "6,0": "wall_h",
+      "6,1": "pine",
+      "6,2": "fence_h",
+      "6,3": "fence_h",
+      "6,4": "fence_h",
+      "6,5": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        3,
+        "N"
+      ]
     ]
   },
   {
@@ -7974,6 +9749,73 @@ const LEVELS = [
       "R",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "fence_h",
+      "0,3": "wall_h",
+      "0,4": "pine",
+      "0,5": "sakura",
+      "0,6": "fence_v",
+      "0,7": "fence_v",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,2": "wall_h",
+      "1,3": "wall_h",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "wall_h",
+      "2,3": "pine",
+      "2,5": "fence_h",
+      "2,6": "fence_h",
+      "2,7": "wall_h",
+      "3,0": "fence_h",
+      "3,1": "wall_h",
+      "3,2": "pine",
+      "3,3": "sakura",
+      "3,5": "pavilion",
+      "3,6": "fence_h",
+      "3,7": "wall_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "pine",
+      "4,3": "house",
+      "4,4": "fence_v",
+      "4,5": "fence_h",
+      "4,6": "wall_h",
+      "4,7": "wall_h",
+      "5,0": "wall_h",
+      "5,1": "pine",
+      "5,3": "fence_h",
+      "5,5": "wall_h",
+      "5,6": "wall_h",
+      "5,7": "pine",
+      "6,0": "wall_h",
+      "6,1": "sakura",
+      "6,3": "fence_h",
+      "6,5": "wall_h",
+      "6,6": "pine",
+      "6,7": "sakura",
+      "7,0": "pine",
+      "7,1": "fence_h",
+      "7,5": "wall_h",
+      "7,6": "pine",
+      "7,7": "fence_h"
+    },
+    "grass": [
+      [
+        6,
+        2
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        1,
+        5
+      ]
     ]
   },
   {
@@ -8253,6 +10095,74 @@ const LEVELS = [
       "L",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "wall_h",
+      "0,3": "wall_h",
+      "0,5": "fence_h",
+      "0,6": "fence_h",
+      "0,7": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "fence_h",
+      "1,2": "wall_h",
+      "1,3": "pine",
+      "1,5": "fence_h",
+      "1,6": "fence_h",
+      "1,7": "wall_h",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "wall_h",
+      "2,3": "sakura",
+      "2,5": "fence_h",
+      "2,6": "fence_h",
+      "2,7": "wall_h",
+      "3,0": "wall_h",
+      "3,1": "wall_h",
+      "3,2": "pine",
+      "3,3": "sakura",
+      "3,5": "pavilion",
+      "3,6": "wall_h",
+      "3,7": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "sakura",
+      "4,3": "house",
+      "4,7": "pine",
+      "5,1": "pine",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "fence_h",
+      "5,5": "wall_h",
+      "5,6": "wall_h",
+      "5,7": "sakura",
+      "6,3": "fence_h",
+      "6,4": "wall_h",
+      "6,5": "wall_h",
+      "6,6": "pine",
+      "6,7": "fence_h",
+      "7,0": "sakura",
+      "7,1": "fence_v",
+      "7,2": "fence_v",
+      "7,3": "fence_h",
+      "7,4": "wall_h",
+      "7,5": "pine",
+      "7,6": "sakura",
+      "7,7": "fence_h"
+    },
+    "grass": [
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        1,
+        4
+      ]
     ]
   },
   {
@@ -8531,7 +10441,58 @@ const LEVELS = [
       "F",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "fence_h",
+      "0,2": "wall_h",
+      "0,3": "wall_h",
+      "0,4": "sakura",
+      "0,5": "fence_v",
+      "0,6": "fence_v",
+      "0,7": "fence_v",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,2": "wall_h",
+      "1,3": "pine",
+      "1,4": "house",
+      "2,0": "fence_h",
+      "2,1": "wall_h",
+      "2,2": "pine",
+      "2,3": "sakura",
+      "2,4": "fence_h",
+      "2,6": "wall_h",
+      "2,7": "wall_h",
+      "3,0": "wall_h",
+      "3,1": "wall_h",
+      "3,2": "sakura",
+      "3,6": "wall_h",
+      "3,7": "wall_h",
+      "4,0": "wall_h",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "fence_h",
+      "4,5": "wall_h",
+      "4,6": "wall_h",
+      "4,7": "pine",
+      "5,0": "pine",
+      "5,4": "wall_h",
+      "5,5": "wall_h",
+      "5,6": "pine",
+      "5,7": "sakura",
+      "6,0": "sakura",
+      "6,2": "fence_v",
+      "6,3": "fence_v",
+      "6,4": "wall_h",
+      "6,5": "wall_h",
+      "6,6": "sakura",
+      "6,7": "fence_h",
+      "7,0": "sakura",
+      "7,5": "pine",
+      "7,6": "fence_h",
+      "7,7": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Tempel der Ewigkeit",
@@ -8783,7 +10744,52 @@ const LEVELS = [
       "L",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,2": "wall_h",
+      "0,3": "pine",
+      "0,4": "sakura",
+      "0,6": "fence_h",
+      "1,0": "fence_h",
+      "1,1": "wall_h",
+      "1,2": "wall_h",
+      "1,3": "sakura",
+      "1,4": "house",
+      "1,6": "fence_h",
+      "2,0": "wall_h",
+      "2,4": "fence_h",
+      "2,6": "wall_h",
+      "3,0": "wall_h",
+      "3,2": "sakura",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,6": "wall_h",
+      "4,0": "wall_h",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "fence_h",
+      "4,6": "pine",
+      "5,0": "pine",
+      "5,2": "fence_h",
+      "5,3": "fence_h",
+      "5,4": "wall_h",
+      "5,5": "wall_h",
+      "5,6": "pine",
+      "6,0": "sakura",
+      "6,4": "wall_h",
+      "6,5": "pine",
+      "6,6": "sakura",
+      "7,0": "fence_h",
+      "7,1": "fence_v",
+      "7,2": "fence_v",
+      "7,3": "wall_v",
+      "7,4": "wall_h",
+      "7,5": "sakura",
+      "7,6": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Das letzte Orakel",
@@ -9068,7 +11074,59 @@ const LEVELS = [
       "R",
       "F",
       "F"
-    ]
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,2": "wall_h",
+      "0,3": "pine",
+      "0,4": "fence_h",
+      "0,5": "fence_v",
+      "0,6": "fence_v",
+      "0,7": "wall_v",
+      "1,0": "wall_h",
+      "1,1": "wall_h",
+      "1,2": "pine",
+      "1,3": "sakura",
+      "1,4": "house",
+      "2,0": "wall_h",
+      "2,1": "pine",
+      "2,2": "sakura",
+      "2,3": "fence_h",
+      "2,4": "fence_h",
+      "2,6": "wall_h",
+      "2,7": "pine",
+      "3,0": "wall_h",
+      "3,1": "pine",
+      "3,2": "fence_h",
+      "3,6": "wall_h",
+      "3,7": "sakura",
+      "4,0": "pine",
+      "4,1": "pavilion",
+      "4,2": "fence_h",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "4,6": "pine",
+      "4,7": "sakura",
+      "5,0": "sakura",
+      "5,4": "wall_h",
+      "5,5": "pine",
+      "5,6": "sakura",
+      "5,7": "fence_h",
+      "6,0": "fence_h",
+      "6,2": "fence_v",
+      "6,3": "wall_v",
+      "6,4": "wall_h",
+      "6,5": "pine",
+      "6,6": "fence_h",
+      "6,7": "fence_h",
+      "7,0": "fence_h",
+      "7,4": "pine",
+      "7,5": "sakura",
+      "7,6": "fence_h",
+      "7,7": "fence_h"
+    },
+    "grass": []
   },
   {
     "n": "Die Legende von KOMA",
@@ -9084,7 +11142,7 @@ const LEVELS = [
     ],
     "g": [
       2,
-      5
+      4
     ],
     "sw": [
       [
@@ -9270,6 +11328,10 @@ const LEVELS = [
         5
       ],
       [
+        2,
+        5
+      ],
+      [
         3,
         5
       ],
@@ -9330,7 +11392,7 @@ const LEVELS = [
         7
       ]
     ],
-    "limit": 30,
+    "limit": 26,
     "solution": [
       "F",
       "F",
@@ -9343,18 +11405,2309 @@ const LEVELS = [
       "L",
       "F",
       "F",
-      "A",
       "L",
-      "F",
-      "F",
-      "F",
-      "F",
       "A",
-      "L",
       "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "A",
       "F",
       "F",
       "F"
+    ],
+    "obstacles": {
+      "0,0": "fence_h",
+      "0,1": "wall_h",
+      "0,2": "pine",
+      "0,3": "sakura",
+      "0,4": "fence_h",
+      "0,5": "fence_h",
+      "0,7": "wall_h",
+      "1,0": "wall_h",
+      "1,1": "wall_h",
+      "1,2": "sakura",
+      "1,3": "fence_h",
+      "1,4": "house",
+      "1,5": "fence_h",
+      "1,7": "wall_h",
+      "2,0": "wall_h",
+      "2,5": "wall_h",
+      "2,7": "pine",
+      "3,0": "pine",
+      "3,2": "fence_h",
+      "3,3": "fence_h",
+      "3,4": "fence_h",
+      "3,5": "pavilion",
+      "3,7": "sakura",
+      "4,0": "pine",
+      "4,2": "fence_h",
+      "4,3": "house",
+      "4,4": "wall_h",
+      "4,5": "wall_h",
+      "5,0": "sakura",
+      "5,2": "fence_h",
+      "5,3": "wall_h",
+      "5,4": "wall_h",
+      "5,5": "pine",
+      "5,6": "fence_h",
+      "5,7": "fence_h",
+      "6,0": "fence_h",
+      "6,4": "pine",
+      "6,5": "sakura",
+      "6,6": "fence_h",
+      "6,7": "fence_h",
+      "7,0": "fence_h",
+      "7,1": "fence_v",
+      "7,2": "wall_v",
+      "7,3": "wall_v",
+      "7,4": "sakura",
+      "7,5": "fence_h",
+      "7,6": "fence_h",
+      "7,7": "fence_h"
+    },
+    "grass": [
+      [
+        3,
+        6
+      ]
     ]
+  },
+  {
+    "n": "Der erste Bergwind",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Windböen",
+    "d": "Willkommen am schneebedeckten Fuß des Fuji! Eine sanfte Windböe trägt KOMA mit. Nutze den Windstoß, aktiviere den Schrein-Schalter und erreiche das Ziel.",
+    "w": 5,
+    "h": 5,
+    "s": [
+      0,
+      3,
+      "E"
+    ],
+    "g": [
+      3,
+      1
+    ],
+    "winds": [
+      [
+        1,
+        3,
+        "E"
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        2,
+        "cyan"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "fence_h",
+      "3,0": "pine",
+      "4,0": "wall_h",
+      "0,1": "fence_v",
+      "4,1": "fence_v",
+      "0,2": "wall_v",
+      "1,2": "pine",
+      "4,2": "wall_v",
+      "4,3": "fence_v",
+      "0,4": "wall_h",
+      "1,4": "fence_h",
+      "2,4": "wall_h",
+      "3,4": "fence_h",
+      "4,4": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "solution": [
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 8
+  },
+  {
+    "n": "Die gefrorene Schlucht",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Schlucht-Sprung",
+    "d": "Ein eisiger Abgrund trennt die Terrassen. Der Aufwind katapultiert KOMA über die Schlucht zum Bergkristall. Entsiegle das Tor, um den Berggarten zu betreten.",
+    "w": 6,
+    "h": 6,
+    "s": [
+      1,
+      4,
+      "N"
+    ],
+    "g": [
+      4,
+      4
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ]
+    ],
+    "sw": [
+      [
+        4,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        4,
+        3,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        3,
+        "N"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,1": "fence_v",
+      "5,1": "fence_v",
+      "2,2": "wall_v",
+      "3,2": "wall_v",
+      "2,3": "wall_v",
+      "3,3": "wall_v",
+      "2,4": "pine",
+      "3,4": "wall_h",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F"
+    ],
+    "limit": 12
+  },
+  {
+    "n": "Das eisige Kitsune-Portal",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Portal-Beschleunigung",
+    "d": "Das Kitsune-Portal steht mitten im Windkanal! Die Windträgheit schleudert KOMA direkt beim Austritt weiter. Sammle beide Lichter und finde den Weg zum Hof.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      0,
+      2,
+      "E"
+    ],
+    "g": [
+      3,
+      6
+    ],
+    "portals": [
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        5,
+        4
+      ],
+      [
+        1,
+        5
+      ]
+    ],
+    "sw": [
+      [
+        5,
+        5,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        5,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        2,
+        "E"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "wall_h",
+      "3,2": "pine",
+      "4,2": "fence_h",
+      "1,3": "fence_v",
+      "2,3": "wall_h",
+      "6,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "4,6": "wall_h",
+      "5,6": "wall_h",
+      "6,6": "wall_h"
+    },
+    "grass": [
+      [
+        5,
+        3
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "R",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 17
+  },
+  {
+    "n": "Schneeverwehte Pfade",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Wind-Umleitung",
+    "d": "Dichter Schneefall verweht die Stufen. Nutze die abwärtsgerichtete Windböe, um den Schalter im Tal zu erreichen, und umrunde die Schlucht zum Schrein.",
+    "w": 6,
+    "h": 5,
+    "s": [
+      0,
+      1,
+      "E"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "sw": [
+      [
+        2,
+        3,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        4,
+        1,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        1,
+        "E"
+      ],
+      [
+        3,
+        1,
+        "S"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        5,
+        4
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,2": "fence_v",
+      "1,2": "wall_h",
+      "2,2": "pine",
+      "5,2": "wall_h",
+      "0,3": "fence_v",
+      "0,4": "wall_h",
+      "1,4": "fence_h",
+      "5,4": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "R",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 18
+  },
+  {
+    "n": "Kreuzende Böen",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Kreuzwinde",
+    "d": "Auf dem Bergsattel kreuzen sich tückische Winde. Sammle beide Geisterkristalle, indem du den Ost- und Südwinden gezielt folgst.",
+    "w": 6,
+    "h": 6,
+    "s": [
+      0,
+      2,
+      "E"
+    ],
+    "g": [
+      5,
+      4
+    ],
+    "orbs": [
+      [
+        3,
+        1
+      ],
+      [
+        1,
+        4
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        2,
+        "E"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ],
+      [
+        3,
+        4,
+        "W"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "fence_h",
+      "2,0": "house",
+      "3,0": "pine",
+      "4,0": "fence_h",
+      "5,0": "wall_h",
+      "1,1": "pine",
+      "5,1": "fence_v",
+      "2,3": "pine",
+      "5,3": "fence_v",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 21
+  },
+  {
+    "n": "Aufstieg zur 8. Station",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Terrassen-Labyrinth",
+    "d": "Die achte Station vor dem Gipfel verlangt höchste Meisterschaft: Kitsune-Portale, Doppeltore und Aufwinde müssen in perfekter Harmonie gemeistert werden.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      0,
+      6,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "portals": [
+      [
+        2,
+        4
+      ],
+      [
+        5,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        2
+      ]
+    ],
+    "sw": [
+      [
+        3,
+        6,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        2,
+        2,
+        "cyan"
+      ],
+      [
+        6,
+        1,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        6,
+        "E"
+      ],
+      [
+        2,
+        3,
+        "N"
+      ],
+      [
+        5,
+        3,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "fence_h",
+      "7,0": "wall_h",
+      "1,1": "fence_h",
+      "3,1": "wall_h",
+      "4,1": "pine",
+      "3,3": "pine",
+      "4,3": "pine",
+      "1,4": "wall_h",
+      "3,4": "fence_v",
+      "4,4": "wall_h",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 23
+  },
+  {
+    "n": "Wirbelsturm der vier Winde",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Wind-Strudel",
+    "d": "Ein kreisender Wirbelsturm tobt über dem Hochplateau! Nutze die Strömung, um die äußeren Schreine zu erreichen, ohne im Windstrudel gefangen zu bleiben.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      1,
+      5,
+      "N"
+    ],
+    "g": [
+      3,
+      6
+    ],
+    "orbs": [
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        5,
+        "cyan"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        2,
+        "E"
+      ],
+      [
+        4,
+        2,
+        "S"
+      ],
+      [
+        4,
+        4,
+        "W"
+      ],
+      [
+        2,
+        4,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "wall_h",
+      "2,1": "fence_v",
+      "4,1": "fence_v",
+      "3,3": "pine",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F"
+    ],
+    "limit": 27
+  },
+  {
+    "n": "Gegenstrom im Eiskanal",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Dual-Tore & Windkanal",
+    "d": "Zwei versiegelte Tore und reißende Windkanäle fordern präzises Timing. Aktiviere beide Wächterschalter und überwinde die Windströme.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        2,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        5,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
+      ],
+      [
+        4,
+        1,
+        "W"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "fence_h",
+      "7,0": "wall_h",
+      "1,2": "pine",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "pine",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "pine",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 29
+  },
+  {
+    "n": "Das verborgene Eistor",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Zwei Tore im Eis",
+    "d": "Zwei uralte Tore versperren den Hauptweg. Nutze die Windböen im Tal, um den Cyan-Schalter zu betätigen, das Magma-Tor zu entsiegeln und den Schrein zu öffnen.",
+    "w": 7,
+    "h": 6,
+    "s": [
+      0,
+      4,
+      "N"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "orbs": [
+      [
+        3,
+        4
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        1,
+        "magenta"
+      ],
+      [
+        5,
+        4,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        5,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        4,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "6,0": "wall_h",
+      "4,1": "wall_v",
+      "6,1": "fence_v",
+      "1,2": "pine",
+      "6,2": "fence_v",
+      "0,3": "fence_v",
+      "1,3": "fence_h",
+      "2,3": "wall_h",
+      "4,3": "wall_h",
+      "6,3": "fence_h",
+      "6,4": "fence_v",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "wall_h",
+      "6,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "solution": [
+      "R",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F"
+    ],
+    "limit": 31
+  },
+  {
+    "n": "Der Geist des Fuji (富士の神)",
+    "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
+    "t": "Meisterprüfung",
+    "d": "Der heilige Gipfel des Fuji liegt vor dir. Finde alle drei kaiserlichen Relikte, entsiegle die Doppeltore des Berggottes und erbringe die finale Geisterlieferung!",
+    "w": 8,
+    "h": 8,
+    "s": [
+      3,
+      7,
+      "N"
+    ],
+    "g": [
+      4,
+      1
+    ],
+    "portals": [
+      [
+        1,
+        4
+      ],
+      [
+        6,
+        4
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        6,
+        "cyan"
+      ],
+      [
+        6,
+        6,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "W"
+      ],
+      [
+        4,
+        6,
+        "E"
+      ],
+      [
+        4,
+        4,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "pine",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "torii",
+      "6,0": "pine",
+      "7,0": "wall_h",
+      "1,1": "pine",
+      "2,1": "wall_h",
+      "3,1": "wall_v",
+      "5,1": "wall_v",
+      "6,1": "pine",
+      "3,3": "pine",
+      "4,3": "pine",
+      "2,5": "pine",
+      "3,5": "fence_h",
+      "4,5": "fence_h",
+      "5,5": "pine",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "5,7": "wall_h",
+      "6,7": "fence_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        7
+      ]
+    ],
+    "solution": [
+      "F",
+      "L",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "limit": 29
   }
 ];

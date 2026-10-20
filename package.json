@@ -4,7 +4,7 @@
   "description": "KOMA: Spirit Delivery — 3D Cyberpunk Japanese Garden Casual Puzzle Game",
   "main": "index.html",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "test": "playwright test"
