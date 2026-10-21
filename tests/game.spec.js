@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('KOMA: Spirit Delivery - Game Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
   });
 
   test('Page loads with title, 3D WebGL canvas, and full camera credits', async ({ page }) => {

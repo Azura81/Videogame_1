@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('Verify Mount Fuji visibility, winter aesthetics, and chapter navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('http://localhost:5173');
+  await page.goto('/');
 
   // Verify the new header shortcut to Mount Fuji exists and is visible
   const headerFujiBtn = page.locator('#btnHeaderFuji');

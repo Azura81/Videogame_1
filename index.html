@@ -103,6 +103,11 @@
           <span class="daily-streak-count" id="headerDailyStreak">0</span>
           <span class="daily-label">Tages-Prüfung</span>
         </button>
+        <button id="btnTowerMode" class="tower-header-btn" title="Turm der 100 Prüfungen (Endlos-Roguelike-Modus)" aria-label="Turm der 100 Prüfungen">
+          <span class="tower-icon">⛩️</span>
+          <span class="tower-badge-stat" id="headerTowerBest">Ebene 1</span>
+          <span class="tower-label">Turm</span>
+        </button>
         <button id="btnHeaderFuji" class="fuji-header-btn" title="Zu Kapitel 6: Berg Fuji (Level 51–60)" aria-label="Berg Fuji Level 51">
           <span>🏔️</span>
           <span>Berg Fuji</span>
@@ -119,6 +124,22 @@
       <!-- Left Glass Card: Level & Mission -->
       <section class="panel-left">
         <div class="glass-card">
+          <!-- Dedicated Tower Mode HUD Banner (active during Tower of 100 Trials) -->
+          <div class="tower-hud-card" id="towerHudBar" style="display: none;">
+            <div class="tower-hud-left">
+              <span class="tower-hud-pill" id="towerHudFloor">⛩️ Ebene 1</span>
+              <div class="tower-hud-lanterns" id="towerHudLanterns" title="3 Spirit-Laternen (Leben)">
+                <span class="tower-lantern lit">🏮</span>
+                <span class="tower-lantern lit">🏮</span>
+                <span class="tower-lantern lit">🏮</span>
+              </div>
+            </div>
+            <div class="tower-hud-right">
+              <span class="tower-hud-amulet" id="towerHudAmulet" style="display: none;" title="Kitsune-Schutzamulett aktiv">🌸 Amulett</span>
+              <span class="tower-hud-score" id="towerHudScore">0 Pkt.</span>
+            </div>
+          </div>
+
           <div class="card-header">
             <div>
               <div class="chapter-kicker" id="chapterTitle">Kapitel 01 · Laternenviertel</div>
@@ -322,6 +343,18 @@
             </div>
           </div>
           <button class="mobile-daily-btn" id="btnMobileOpenDaily">Prüfen ▶</button>
+        </div>
+
+        <!-- Mobile Tower Mode Banner -->
+        <div class="mobile-tower-banner" id="mobileTowerBanner">
+          <div class="mobile-tower-left">
+            <span class="mobile-tower-icon">⛩️</span>
+            <div>
+              <div class="mobile-tower-title">Turm der 100 Prüfungen</div>
+              <div class="mobile-tower-sub">Endlos-Modus · Rekord: <strong id="mobileTowerBest">Ebene 1</strong></div>
+            </div>
+          </div>
+          <button class="mobile-tower-btn" id="btnMobileOpenTower">Besteigen ▶</button>
         </div>
 
         <!-- Touch Navigation Tabs -->
@@ -592,6 +625,109 @@
     </div>
   </div>
 
+  <!-- Modal: Turm der 100 Prüfungen (Intro & Run Start) -->
+  <div class="modal-backdrop" id="modalTowerIntro" role="dialog" aria-modal="true" aria-labelledby="towerIntroTitle">
+    <div class="modal-card modal-tower-card">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-kicker">Endlos-Roguelike · 百人鳥居</span>
+          <h2 class="modal-title" id="towerIntroTitle">Turm der 100 Prüfungen</h2>
+        </div>
+        <button class="modal-close-btn" id="btnCloseTowerIntro" aria-label="Schließen">×</button>
+      </div>
+
+      <div class="modal-body-scroll">
+        <!-- Tower Best Stats Hero -->
+        <div class="tower-stats-hero">
+          <div class="tower-stat-item">
+            <span class="tower-stat-label">Persönlicher Rekord</span>
+            <div class="tower-stat-val" id="towerHeroBestFloor">Ebene 1</div>
+          </div>
+          <div class="tower-stat-divider"></div>
+          <div class="tower-stat-item">
+            <span class="tower-stat-label">Bester Score</span>
+            <div class="tower-stat-val" id="towerHeroBestScore">0 Pkt.</div>
+          </div>
+        </div>
+
+        <!-- Rules & Modifiers -->
+        <div class="tower-rules-list">
+          <div class="tower-rule-box">
+            <span class="tower-rule-icon">🏮</span>
+            <div class="tower-rule-text">
+              <strong>3 Spirit-Laternen (Leben):</strong>
+              <span>Jeder Fehler (Kollision, geschlossenes Tor, verpasstes Relikt) löscht 1 Laterne. Bei 0 Laternen stürzt KOMA ab!</span>
+            </div>
+          </div>
+          <div class="tower-rule-box">
+            <span class="tower-rule-icon">⛩️</span>
+            <div class="tower-rule-text">
+              <strong>100 Aufsteigende Etagen:</strong>
+              <span>Jede Ebene steigert sich prozedural in Größe und Komplexität mit Schaltern, Portalen und Windböen.</span>
+            </div>
+          </div>
+          <div class="tower-rule-box">
+            <span class="tower-rule-icon">🌸</span>
+            <div class="tower-rule-text">
+              <strong>Altar der Segnungen (alle 5 Etagen):</strong>
+              <span>Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tower-actions-row">
+          <button class="play-btn tower-start-btn" id="btnStartTowerRun">
+            <span>⛩️</span>
+            <span>Aufstieg beginnen ▶</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Altar der Segnungen (Gaben-Auswahl alle 5 Etagen) -->
+  <div class="modal-backdrop" id="modalTowerAltar" role="dialog" aria-modal="true" aria-labelledby="towerAltarTitle">
+    <div class="modal-card modal-altar-card">
+      <div class="altar-header">
+        <span class="modal-kicker">⛩️ Große Schrein-Pforte gemeistert!</span>
+        <h2 class="modal-title" id="towerAltarTitle">Altar der Segnungen</h2>
+        <p class="altar-desc">Wähle eine heilige Gabe der Kitsune-Göttin für deinen weiteren Aufstieg:</p>
+      </div>
+
+      <div class="altar-blessings-grid" id="towerAltarChoices">
+        <!-- Dynamically injected 3 blessing cards -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Turm-Sturz (Game Over) -->
+  <div class="modal-backdrop" id="modalTowerGameOver" role="dialog" aria-modal="true" aria-labelledby="towerGameOverTitle">
+    <div class="modal-card modal-tower-gameover-card">
+      <div class="gameover-emblem">🏮</div>
+      <h2 class="modal-title" id="towerGameOverTitle">Alle Laternen erloschen!</h2>
+      <p class="modal-desc" id="towerGameOverDesc">KOMA konnte die Balance im Turm der 100 Prüfungen nicht mehr halten.</p>
+
+      <div class="gameover-summary-box">
+        <div class="summary-line">
+          <span>Erreichte Ebene:</span>
+          <strong id="towerResultFloor">Ebene 7</strong>
+        </div>
+        <div class="summary-line">
+          <span>Erzielte Punkte:</span>
+          <strong id="towerResultScore">1.850 Pkt.</strong>
+        </div>
+        <div class="tower-record-badge" id="towerResultRecord" style="display: none;">
+          🎉 NEUER PERSÖNLICHER REKORD!
+        </div>
+      </div>
+
+      <div class="modal-btn-row">
+        <button class="primary-btn" id="btnTowerRetry">Erneut versuchen 🔄</button>
+        <button class="secondary-btn" id="btnTowerExitToCampaign">Zur Kampagne ⛩️</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="js/three.min.js"></script>
   <script src="js/icons.js"></script>
@@ -599,6 +735,7 @@
   <script src="js/skins.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/daily.js"></script>
+  <script src="js/tower.js"></script>
   <script src="js/renderer3d.js"></script>
   <script src="js/game.js"></script>
 </body>

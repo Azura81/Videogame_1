@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Daily Shrine Trial & Streak System', () => {
   test('Daily button, modal, 0 camera credits, and streak completion', async ({ page }) => {
-    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#webgl-container');
 
     // 1. Verify Header Daily Button

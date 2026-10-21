@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('SoundEngine: Ice World soundtrack and dynamic track switching', async ({ page }) => {
-  await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#webgl-container');
 
   // Verify initial state

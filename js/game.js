@@ -179,10 +179,29 @@ class GameEngine {
       btnCloseDailyTrial: document.getElementById("btnCloseDailyTrial"),
       btnStartDailyTrial: document.getElementById("btnStartDailyTrial"),
       btnMobileOpenDaily: document.getElementById("btnMobileOpenDaily"),
-      headerDailyStreak: document.getElementById("headerDailyStreak")
+      headerDailyStreak: document.getElementById("headerDailyStreak"),
+      btnTowerMode: document.getElementById("btnTowerMode"),
+      btnMobileOpenTower: document.getElementById("btnMobileOpenTower"),
+      modalTowerIntro: document.getElementById("modalTowerIntro"),
+      btnCloseTowerIntro: document.getElementById("btnCloseTowerIntro"),
+      btnStartTowerRun: document.getElementById("btnStartTowerRun"),
+      modalTowerAltar: document.getElementById("modalTowerAltar"),
+      towerAltarChoices: document.getElementById("towerAltarChoices"),
+      modalTowerGameOver: document.getElementById("modalTowerGameOver"),
+      btnTowerRetry: document.getElementById("btnTowerRetry"),
+      btnTowerExitToCampaign: document.getElementById("btnTowerExitToCampaign"),
+      towerHudBar: document.getElementById("towerHudBar"),
+      headerTowerBest: document.getElementById("headerTowerBest"),
+      mobileTowerBest: document.getElementById("mobileTowerBest"),
+      towerHeroBestFloor: document.getElementById("towerHeroBestFloor"),
+      towerHeroBestScore: document.getElementById("towerHeroBestScore"),
+      towerResultFloor: document.getElementById("towerResultFloor"),
+      towerResultScore: document.getElementById("towerResultScore"),
+      towerResultRecord: document.getElementById("towerResultRecord")
     };
 
     this.isDailyTrial = false;
+    this.isTowerMode = false;
     this.activeMobileChapter = 1;
     this.activeMobileTab = "skins";
     this.activeDrawerChapter = "all";
@@ -262,9 +281,17 @@ class GameEngine {
     if (typeof DailyTrial !== "undefined" && typeof DailyTrial.updateUI === "function") {
       DailyTrial.updateUI();
     }
+
+    // 9. Update Tower of 100 Trials UI
+    if (typeof TowerTrial !== "undefined" && typeof TowerTrial.updateUI === "function") {
+      TowerTrial.updateUI();
+    }
   }
 
   getCurrentLevel() {
+    if (this.isTowerMode && typeof TowerTrial !== "undefined") {
+      return TowerTrial.getCurrentLevel();
+    }
     if (this.isDailyTrial && typeof DailyTrial !== "undefined") {
       return DailyTrial.getTodayLevel();
     }
@@ -353,6 +380,73 @@ class GameEngine {
         this.triggerHaptic(30);
         if (this.dom.modalDailyTrial) this.dom.modalDailyTrial.classList.remove("active");
         this.loadDailyTrial();
+      });
+    }
+
+    // Tower of 100 Trials Modals & Handlers
+    const openTowerModal = () => {
+      this.triggerHaptic(20);
+      if (typeof TowerTrial !== "undefined") {
+        TowerTrial.updateUI();
+        if (this.dom.towerHeroBestFloor) {
+          this.dom.towerHeroBestFloor.textContent = `Ebene ${TowerTrial.getBestFloor() || 1}`;
+        }
+        if (this.dom.towerHeroBestScore) {
+          this.dom.towerHeroBestScore.textContent = `${TowerTrial.getBestScore().toLocaleString("de-DE")} Pkt.`;
+        }
+      }
+      if (this.dom.modalTowerIntro) {
+        this.dom.modalTowerIntro.classList.add("active");
+      }
+    };
+
+    if (this.dom.btnTowerMode) {
+      this.dom.btnTowerMode.addEventListener("click", openTowerModal);
+    }
+    if (this.dom.btnMobileOpenTower) {
+      this.dom.btnMobileOpenTower.addEventListener("click", () => {
+        if (this.dom.modalMobileHub) this.dom.modalMobileHub.classList.remove("active");
+        openTowerModal();
+      });
+    }
+    if (this.dom.btnCloseTowerIntro) {
+      this.dom.btnCloseTowerIntro.addEventListener("click", () => {
+        this.triggerHaptic(10);
+        if (this.dom.modalTowerIntro) this.dom.modalTowerIntro.classList.remove("active");
+      });
+    }
+    if (this.dom.modalTowerIntro) {
+      this.dom.modalTowerIntro.addEventListener("click", (e) => {
+        if (e.target === this.dom.modalTowerIntro) {
+          this.dom.modalTowerIntro.classList.remove("active");
+        }
+      });
+    }
+    if (this.dom.btnStartTowerRun) {
+      this.dom.btnStartTowerRun.addEventListener("click", () => {
+        this.triggerHaptic(30);
+        if (this.dom.modalTowerIntro) this.dom.modalTowerIntro.classList.remove("active");
+        if (typeof TowerTrial !== "undefined") {
+          const firstLvl = TowerTrial.startNewRun();
+          this.loadTowerFloor(firstLvl);
+        }
+      });
+    }
+    if (this.dom.btnTowerRetry) {
+      this.dom.btnTowerRetry.addEventListener("click", () => {
+        this.triggerHaptic(30);
+        if (this.dom.modalTowerGameOver) this.dom.modalTowerGameOver.classList.remove("active");
+        if (typeof TowerTrial !== "undefined") {
+          const firstLvl = TowerTrial.startNewRun();
+          this.loadTowerFloor(firstLvl);
+        }
+      });
+    }
+    if (this.dom.btnTowerExitToCampaign) {
+      this.dom.btnTowerExitToCampaign.addEventListener("click", () => {
+        this.triggerHaptic(12);
+        if (this.dom.modalTowerGameOver) this.dom.modalTowerGameOver.classList.remove("active");
+        this.loadLevel(0);
       });
     }
 
@@ -1248,9 +1342,111 @@ class GameEngine {
     this.renderCameraCredits();
   }
 
+  loadTowerFloor(towerLevel = null) {
+    if (this.isPlaying) return;
+    this.isTowerMode = true;
+    this.isDailyTrial = false;
+
+    const lvl = towerLevel || (typeof TowerTrial !== "undefined" ? TowerTrial.getCurrentLevel() : null);
+    if (!lvl) return;
+
+    this.currentLevelIdx = -2;
+    this.queue = [];
+    this.currentStep = 0;
+
+    this.maxCameraCredits = lvl.maxCredits || 4;
+    this.cameraCredits = this.maxCameraCredits;
+    if (this.renderer) {
+      this.renderer.swivelDisabled = false;
+    }
+
+    if (typeof document !== "undefined") {
+      document.body.classList.remove("is-daily-trial");
+      document.body.classList.add("is-tower-mode");
+    }
+
+    this.resetState();
+
+    if (this.dom.levelTitle) this.dom.levelTitle.textContent = lvl.n;
+    if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = lvl.c;
+    if (this.dom.levelTag) this.dom.levelTag.textContent = lvl.t;
+    if (this.dom.missionDesc) this.dom.missionDesc.textContent = lvl.d;
+    if (this.dom.missionBadge) this.dom.missionBadge.textContent = `⛩️ EBENE ${lvl.towerFloor}`;
+    if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
+    if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = `Turm · E${lvl.towerFloor}`;
+    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = `${this.cameraCredits}/${this.maxCameraCredits} 🎥`;
+
+    this.setFeedback(`⛩️ Turm-Ebene ${lvl.towerFloor} geladen! Plane den Weg zum heiligen Schrein-Torii.`, "normal");
+
+    this.renderer.loadLevel(lvl);
+
+    const isFuji = (lvl.theme === "fuji");
+    if (typeof Sound !== "undefined" && typeof Sound.setTrack === "function") {
+      Sound.setTrack(isFuji ? "ice" : "default");
+    }
+
+    if (typeof TowerTrial !== "undefined") {
+      TowerTrial.updateUI();
+    }
+
+    this.renderQueue();
+    this.renderLevelDrawer();
+    this.renderCameraCredits();
+  }
+
+  showTowerAltar(choices, floor) {
+    if (!this.dom.modalTowerAltar || !this.dom.towerAltarChoices) return;
+    this.dom.towerAltarChoices.innerHTML = "";
+
+    choices.forEach(choice => {
+      const card = document.createElement("div");
+      card.className = "blessing-card";
+      card.innerHTML = `
+        <div class="blessing-icon">${choice.icon}</div>
+        <div class="blessing-name">${choice.name}</div>
+        <div class="blessing-desc">${choice.desc}</div>
+        <div class="blessing-select-btn">Gabe empfangen 🌸</div>
+      `;
+      card.addEventListener("click", () => {
+        this.triggerHaptic([30, 40, 60]);
+        this.dom.modalTowerAltar.classList.remove("active");
+        if (typeof TowerTrial !== "undefined") {
+          TowerTrial.chooseBlessing(choice.id);
+        }
+        if (typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
+          Sound.playStarChime(2);
+        }
+        this.setFeedback(`🌸 Gabe gewählt: ${choice.name}! Aufstieg zur nächsten Ebene...`, "good");
+        setTimeout(() => {
+          this.loadTowerFloor();
+        }, 600);
+      });
+      this.dom.towerAltarChoices.appendChild(card);
+    });
+
+    this.dom.modalTowerAltar.classList.add("active");
+  }
+
+  showTowerGameOver(failRes) {
+    if (this.dom.towerResultFloor) {
+      this.dom.towerResultFloor.textContent = `Ebene ${failRes.floor}`;
+    }
+    if (this.dom.towerResultScore) {
+      this.dom.towerResultScore.textContent = `${failRes.score.toLocaleString("de-DE")} Pkt.`;
+    }
+    if (this.dom.towerResultRecord) {
+      this.dom.towerResultRecord.style.display = failRes.isRecord ? "block" : "none";
+    }
+    if (this.dom.modalTowerGameOver) {
+      this.dom.modalTowerGameOver.classList.add("active");
+    }
+  }
+
   loadLevel(idx) {
     if (this.isPlaying) return;
     this.isDailyTrial = false;
+    this.isTowerMode = false;
+    if (this.dom.towerHudBar) this.dom.towerHudBar.style.display = "none";
     this.maxCameraCredits = 6;
     this.cameraCredits = 6;
     if (this.renderer) {
@@ -1258,6 +1454,7 @@ class GameEngine {
     }
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-daily-trial");
+      document.body.classList.remove("is-tower-mode");
     }
     this.currentLevelIdx = idx;
     this.queue = [];
@@ -1525,6 +1722,22 @@ class GameEngine {
       }
       this.renderQueue();
       if (!this.state.isWin && !this.state.isFail) {
+        if (this.isTowerMode && typeof TowerTrial !== "undefined") {
+          const failRes = TowerTrial.handleFail();
+          if (failRes.gameOver) {
+            this.setFeedback(`💥 Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
+            Sound.playBump();
+            this.triggerHaptic([50, 60, 80]);
+            setTimeout(() => this.showTowerGameOver(failRes), 500);
+            return;
+          } else {
+            Sound.playBump();
+            this.triggerHaptic([35, 40]);
+            this.reset(false);
+            this.setFeedback(failRes.message, failRes.absorbed ? "normal" : "bad");
+            return;
+          }
+        }
         this.setFeedback("Plan beendet. KOMA hat das Ziel noch nicht erreicht – passe deinen Plan an.", "bad");
         Sound.playBump();
       }
@@ -1628,6 +1841,20 @@ class GameEngine {
         this.renderer.animateBump();
         Sound.playBump();
         this.triggerHaptic([45, 30, 50]);
+
+        if (this.isTowerMode && typeof TowerTrial !== "undefined") {
+          const failRes = TowerTrial.handleFail();
+          if (failRes.gameOver) {
+            this.setFeedback(`💥 Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
+            setTimeout(() => this.showTowerGameOver(failRes), 550);
+            return;
+          } else {
+            this.reset(false);
+            this.setFeedback(failRes.message, failRes.absorbed ? "normal" : "bad");
+            return;
+          }
+        }
+
         const reason = isBlockedGate ? "Das Tor ist noch verschlossen!" : "Da ist ein Hindernis.";
         this.setFeedback(`Plopp! ${reason} KOMA bleibt stehen – passe deinen Plan an.`, "bad");
         this.renderQueue();
@@ -1790,6 +2017,31 @@ class GameEngine {
       this.isPlaying = false;
       if (typeof document !== "undefined") {
         document.body.classList.remove("is-executing");
+      }
+
+      if (this.isTowerMode) {
+        const res = (typeof TowerTrial !== "undefined")
+          ? TowerTrial.handleFloorClear(this.currentStep)
+          : { type: "next_floor", floor: 2, score: 200, isNewBestFloor: false };
+
+        this.renderer.animateWin();
+        Sound.playWin();
+        this.triggerHaptic([40, 50, 40, 50, 80, 80, 120]);
+
+        if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
+
+        if (res.type === "altar") {
+          this.setFeedback(`⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT! Altar der Segnungen öffnet sich...`, "good");
+          setTimeout(() => {
+            this.showTowerAltar(res.choices, res.floor);
+          }, 700);
+        } else {
+          this.setFeedback(`⛩️ EBENE ${res.floor - 1} GEMEISTERT! (+${res.score} Pkt.) Aufstieg zu Ebene ${res.floor}...`, "good");
+          setTimeout(() => {
+            this.loadTowerFloor();
+          }, 850);
+        }
+        return;
       }
 
       if (this.isDailyTrial) {

@@ -516,9 +516,17 @@
     }
   }
 
-  // Global Singleton instance
+  // Global Singleton instance & solver utilities
   window.DailyTrial = new DailyTrialManager();
   window.generateDailyLevel = generateDailyLevel;
   window.solveLevel = solveLevel;
+  window.KomaSolver = {
+    solveLevel,
+    buildOuterWalls,
+    mulberry32,
+    DELTA,
+    TURN_LEFT,
+    TURN_RIGHT
+  };
 
 })();
