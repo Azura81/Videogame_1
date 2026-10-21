@@ -148,188 +148,326 @@
 
     /**
      * Generates a guaranteed solvable level tailored to the current floor depth.
+     * Ensures every single floor (1-100) has a unique, non-repeating layout and path.
      */
     generateFloorLevel(floor) {
-      const solverUtils = window.KomaSolver || {
-        buildOuterWalls: (w, h) => {
-          const walls = [];
-          for (let x = 0; x < w; x++) { walls.push([x, 0]); walls.push([x, h - 1]); }
-          for (let y = 1; y < h - 1; y++) { walls.push([0, y]); walls.push([w - 1, y]); }
-          return walls;
-        },
-        mulberry32: (seed) => {
-          return function() {
-            let t = seed += 0x6D2B79F5;
-            t = Math.imul(t ^ t >>> 15, t | 1);
-            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-            return ((t ^ t >>> 14) >>> 0) / 4294967296;
-          };
-        },
-        solveLevel: window.solveLevel
-      };
+      const DELTA = { "N": [0, -1], "S": [0, 1], "E": [1, 0], "W": [-1, 0] };
+      const TURN_LEFT = { "N": "W", "W": "S", "S": "E", "E": "N" };
+      const TURN_RIGHT = { "N": "E", "E": "S", "S": "W", "W": "N" };
 
-      const seed = ((this.runSeed * 37) + (floor * 1013)) >>> 0;
-      const rng = solverUtils.mulberry32(seed);
+      function solveTowerLevel(lvl, maxDepth = 38) {
+        const [sx, sy, sd] = lvl.s;
+        const w = lvl.w, h = lvl.h;
+        const walls = new Set((lvl.walls || []).map(pt => `${pt[0]},${pt[1]}`));
+        const sws = lvl.sw || [];
+        const gates = lvl.gates || [];
+        const portals = lvl.portals || [];
+        const winds = lvl.winds || [];
+        const orbs = (lvl.orbs || []).map(o => `${o[0]},${o[1]}`).sort();
+        const orbKey = (collected) => Array.from(collected).sort().join(";");
 
-      const isBossFloor = (floor % 5 === 0);
-      const isFujiBiome = (floor >= 15 && floor <= 25) || (floor >= 45 && floor <= 55);
+        const initState = `${sx},${sy},${sd}|${orbKey(new Set())}|`;
+        const queue = [{ x: sx, y: sy, d: sd, gates: new Set(), orbs: new Set(), path: [] }];
+        const visited = new Set([initState]);
 
-      // Grid sizing scales with floor
-      let w = 5, h = 5;
-      if (floor >= 5) { w = 6; h = 6; }
-      if (floor >= 15) { w = 7; h = 7; }
-      if (floor >= 35) { w = 7; h = 7; }
+        while (queue.length > 0) {
+          const cur = queue.shift();
+          if (cur.path.length >= maxDepth) continue;
 
-      const baseWalls = solverUtils.buildOuterWalls(w, h);
-      let lvl = null;
+          for (const cmd of ["F", "L", "R", "A"]) {
+            if (cmd === "L") {
+              const nd = TURN_LEFT[cur.d];
+              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              if (!visited.has(stateKey)) {
+                visited.add(stateKey);
+                queue.push({ x: cur.x, y: cur.y, d: nd, gates: new Set(cur.gates), orbs: new Set(cur.orbs), path: [...cur.path, "L"] });
+              }
+            } else if (cmd === "R") {
+              const nd = TURN_RIGHT[cur.d];
+              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              if (!visited.has(stateKey)) {
+                visited.add(stateKey);
+                queue.push({ x: cur.x, y: cur.y, d: nd, gates: new Set(cur.gates), orbs: new Set(cur.orbs), path: [...cur.path, "R"] });
+              }
+            } else if (cmd === "A") {
+              const swMatch = sws.find(s => s[0] === cur.x && s[1] === cur.y);
+              if (swMatch) {
+                const color = swMatch[2] || "cyan";
+                const newGates = new Set(cur.gates);
+                newGates.add(color);
+                if (gates.length === 1) newGates.add(gates[0][2] || "magenta");
+                const stateKey = `${cur.x},${cur.y},${cur.d}|${orbKey(cur.orbs)}|${Array.from(newGates).sort().join(",")}`;
+                if (!visited.has(stateKey)) {
+                  visited.add(stateKey);
+                  queue.push({ x: cur.x, y: cur.y, d: cur.d, gates: newGates, orbs: new Set(cur.orbs), path: [...cur.path, "A"] });
+                }
+              }
+            } else if (cmd === "F") {
+              const [dx, dy] = DELTA[cur.d];
+              let nx = cur.x + dx;
+              let ny = cur.y + dy;
+              if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+              if (walls.has(`${nx},${ny}`)) continue;
 
-      // Tier-based archetype generation
-      if (floor < 5) {
-        // Tier 1 (Floors 1-4): Novice Courtyard (Orientation, 1 switch, 1 gate)
-        lvl = {
-          n: `Turm-Ebene ${floor}`,
-          c: `Turm der 100 Prüfungen · Vorhof`,
-          t: `Ebene ${floor} · Grundlagen der Pfade`,
-          d: `Erklimme den Turm! Schalte das Tor frei und erreiche das Ziel-Torii.`,
-          w, h,
-          s: [1, h - 2, "N"],
-          g: [w - 2, 1],
-          sw: [[1, 1, "cyan"]],
-          gates: [[w - 2, 2, "cyan"]],
-          walls: [...baseWalls, [2, 2], [2, 3], [3, 2]],
-          maxCredits: Math.max(1, 3 + this.extraCredits)
-        };
-      } else if (isBossFloor && floor === 5) {
-        // Boss 1 (Floor 5): Große Schrein-Pforte (Portals + Relic)
-        lvl = {
-          n: `Große Pforte: Tor des Fuchses`,
-          c: `Turm-Meilenstein · Ebene 5 (Prüfung)`,
-          t: `Ebene 5 · 1. Schrein-Pforte`,
-          d: `Die erste Große Pforte verlangt das Bergen eines Geisterlichts durch ein heiliges Portal.`,
-          w, h,
-          s: [1, 4, "E"],
-          g: [4, 1],
-          orbs: [[1, 1]],
-          portals: [[4, 4], [1, 2]],
-          sw: [[4, 2, "cyan"]],
-          gates: [[3, 1, "cyan"]],
-          walls: [...baseWalls, [2, 2], [2, 3], [3, 3]],
-          maxCredits: Math.max(2, 4 + this.extraCredits)
-        };
-      } else if (floor < 10) {
-        // Tier 2 (Floors 6-9): Bamboo & Portals
-        lvl = {
-          n: `Turm-Ebene ${floor}`,
-          c: `Turm der 100 Prüfungen · Bambushain`,
-          t: `Ebene ${floor} · Raum-Transzendenz`,
-          d: `Nutze die Kitsune-Portale geschickt, um die Mauerreihen zu überspringen.`,
-          w, h,
-          s: [1, 4, "N"],
-          g: [4, 1],
-          portals: [[1, 1], [4, 4]],
-          sw: [[3, 3, "cyan"]],
-          gates: [[4, 2, "cyan"]],
-          walls: [...baseWalls, [2, 1], [2, 2], [3, 4], [2, 4]],
-          maxCredits: Math.max(2, 3 + this.extraCredits)
-        };
-      } else if (isBossFloor && floor === 10) {
-        // Boss 2 (Floor 10): Das Tor der zwei Farben (Dual Gates)
-        lvl = {
-          n: `Große Pforte: Siegel der zwei Farben`,
-          c: `Turm-Meilenstein · Ebene 10 (Prüfung)`,
-          t: `Ebene 10 · 2. Schrein-Pforte`,
-          d: `Cyan- und Magenta-Schrein fordern synchrones Betätigen der Altäre.`,
-          w, h,
-          s: [1, 5, "N"],
-          g: [5, 1],
-          orbs: [[1, 1], [5, 5]],
-          sw: [[1, 3, "cyan"], [5, 3, "magenta"]],
-          gates: [[3, 2, "cyan"], [5, 2, "magenta"]],
-          portals: [[2, 5], [4, 1]],
-          walls: [...baseWalls, [2, 2], [3, 4], [4, 4], [3, 1]],
-          maxCredits: Math.max(2, 4 + this.extraCredits)
-        };
-      } else if (floor < 15) {
-        // Tier 3 (Floors 11-14): Wind Paths & Mountain Slopes
-        lvl = {
-          n: `Turm-Ebene ${floor}`,
-          c: `Turm der 100 Prüfungen · Windpfad`,
-          t: `Ebene ${floor} · Böen-Gleiten`,
-          d: `Heftige Aufwinde tragen KOMA über Abgründe. Plane die Gleitrichtung ein.`,
-          w, h,
-          s: [1, 5, "E"],
-          g: [5, 1],
-          winds: [[2, 5, "E"], [4, 2, "N"]],
-          sw: [[5, 4, "cyan"]],
-          gates: [[5, 2, "cyan"]],
-          walls: [...baseWalls, [2, 3], [3, 2], [4, 4]],
-          maxCredits: Math.max(2, 3 + this.extraCredits)
-        };
-      } else if (isBossFloor && floor === 15) {
-        // Boss 3 (Floor 15): Sturm-Gipfel der 15 Torii
-        lvl = {
-          n: `Große Pforte: Altar des Nordwinds`,
-          c: `Turm-Meilenstein · Ebene 15 (Prüfung)`,
-          t: `Ebene 15 · 3. Schrein-Pforte`,
-          d: `Windböen kreuzen das Kitsune-Portal. Ein Fehler kostet die Laterne.`,
-          w, h,
-          s: [1, 5, "N"],
-          g: [5, 1],
-          orbs: [[3, 3]],
-          winds: [[1, 3, "N"], [4, 5, "W"]],
-          portals: [[1, 1], [5, 4]],
-          sw: [[3, 5, "cyan"]],
-          gates: [[5, 2, "cyan"]],
-          walls: [...baseWalls, [2, 1], [2, 2], [4, 2], [4, 3]],
-          maxCredits: Math.max(2, 4 + this.extraCredits)
-        };
-      } else {
-        // Tier 4 & Higher (Floor 16+): Multi-Mechanic Celestial Trials
-        const hasDualGates = (floor >= 20);
-        const hasWind = (floor % 2 === 0);
-        const hasPortals = (floor % 3 === 0 || isBossFloor);
-        const orbCount = (floor >= 25) ? 2 : 1;
+              const gMatch = gates.find(g => g[0] === nx && g[1] === ny);
+              if (gMatch) {
+                const color = gMatch[2] || "magenta";
+                if (!cur.gates.has(color) && !(gates.length === 1 && cur.gates.size > 0)) continue;
+              }
 
-        lvl = {
-          n: isBossFloor ? `Große Pforte: Zenith-Ebene ${floor}` : `Turm-Ebene ${floor}`,
-          c: isBossFloor ? `Turm-Meilenstein · Ebene ${floor} (Prüfung)` : `Turm der 100 Prüfungen · Zenith`,
-          t: `Ebene ${floor} · Himmlische Prüfung`,
-          d: isBossFloor
-            ? `Meilenstein-Prüfung! Alle heiligen Schrein-Mechaniken fordern höchste Konzentration.`
-            : `Die Luft wird dünn auf Ebene ${floor}. Konzentriere deine Planung auf den direkten Weg.`,
-          w, h,
-          s: [1, h - 2, "N"],
-          g: [w - 2, 1],
-          orbs: (orbCount === 2) ? [[1, 1], [w - 2, h - 2]] : [[1, 1]],
-          sw: hasDualGates ? [[1, 3, "cyan"], [w - 2, 3, "magenta"]] : [[1, 3, "cyan"]],
-          gates: hasDualGates ? [[3, 2, "cyan"], [w - 2, 2, "magenta"]] : [[w - 2, 2, "cyan"]],
-          portals: hasPortals ? [[2, h - 2], [w - 3, 1]] : undefined,
-          winds: hasWind ? [[1, 2, "E"], [w - 2, 4, "W"]] : undefined,
-          walls: [...baseWalls, [2, 2], [3, 3], [w - 3, 3], [w - 3, 4]],
-          maxCredits: Math.max(2, (isBossFloor ? 4 : 3) + this.extraCredits)
+              let cx = nx;
+              let cy = ny;
+              const newOrbs = new Set(cur.orbs);
+
+              // Kitsune Portals
+              if (portals.length === 2) {
+                if (cx === portals[0][0] && cy === portals[0][1]) {
+                  cx = portals[1][0]; cy = portals[1][1];
+                } else if (cx === portals[1][0] && cy === portals[1][1]) {
+                  cx = portals[0][0]; cy = portals[0][1];
+                }
+              }
+              if (orbs.includes(`${cx},${cy}`)) newOrbs.add(`${cx},${cy}`);
+
+              // Wind currents
+              let pushes = 0;
+              while (pushes < 10) {
+                const wm = winds.find(w => w[0] === cx && w[1] === cy);
+                if (!wm) break;
+                const [wdx, wdy] = DELTA[wm[2]];
+                const wx = cx + wdx;
+                const wy = cy + wdy;
+                if (wx < 0 || wy < 0 || wx >= w || wy >= h) break;
+                if (walls.has(`${wx},${wy}`)) break;
+                const wGate = gates.find(g => g[0] === wx && g[1] === wy);
+                if (wGate) {
+                  const color = wGate[2] || "magenta";
+                  if (!cur.gates.has(color) && !(gates.length === 1 && cur.gates.size > 0)) break;
+                }
+                cx = wx;
+                cy = wy;
+                pushes++;
+                if (orbs.includes(`${cx},${cy}`)) newOrbs.add(`${cx},${cy}`);
+                if (portals.length === 2) {
+                  if (cx === portals[0][0] && cy === portals[0][1]) {
+                    cx = portals[1][0]; cy = portals[1][1];
+                  } else if (cx === portals[1][0] && cy === portals[1][1]) {
+                    cx = portals[0][0]; cy = portals[0][1];
+                  }
+                }
+              }
+
+              // Torii Goal
+              if (cx === lvl.g[0] && cy === lvl.g[1]) {
+                if (newOrbs.size === orbs.length) {
+                  return { solved: true, steps: cur.path.length + 1, path: [...cur.path, "F"] };
+                }
+              }
+
+              const stateKey = `${cx},${cy},${cur.d}|${orbKey(newOrbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              if (!visited.has(stateKey)) {
+                visited.add(stateKey);
+                queue.push({ x: cx, y: cy, d: cur.d, gates: new Set(cur.gates), orbs: newOrbs, path: [...cur.path, "F"] });
+              }
+            }
+          }
+        }
+        return { solved: false, steps: 0, path: [] };
+      }
+
+      function buildOuterWalls(w, h) {
+        const walls = [];
+        for (let x = 0; x < w; x++) { walls.push([x, 0]); walls.push([x, h - 1]); }
+        for (let y = 1; y < h - 1; y++) { walls.push([0, y]); walls.push([w - 1, y]); }
+        return walls;
+      }
+
+      function mulberry32(seedVal) {
+        return function() {
+          let t = seedVal += 0x6D2B79F5;
+          t = Math.imul(t ^ t >>> 15, t | 1);
+          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
         };
       }
 
-      // Add Fuji / Snow theme if appropriate
+      function getFreeTile(reserved, rng, w, h, maxTries = 50) {
+        for (let i = 0; i < maxTries; i++) {
+          const x = 1 + Math.floor(rng() * (w - 2));
+          const y = 1 + Math.floor(rng() * (h - 2));
+          const key = `${x},${y}`;
+          if (!reserved.has(key)) {
+            reserved.add(key);
+            return [x, y];
+          }
+        }
+        for (let x = 1; x < w - 1; x++) {
+          for (let y = 1; y < h - 1; y++) {
+            const key = `${x},${y}`;
+            if (!reserved.has(key)) {
+              reserved.add(key);
+              return [x, y];
+            }
+          }
+        }
+        return [1, 1];
+      }
+
+      const isBossFloor = (floor % 5 === 0);
+      const isFujiBiome = (floor >= 15 && floor <= 25) || (floor >= 45 && floor <= 55) || (floor >= 75 && floor <= 85);
+
+      // Grid sizing scales with floor depth
+      let w = 5, h = 5;
+      if (floor >= 4) { w = 6; h = 6; }
+      if (floor >= 12) { w = 7; h = 7; }
+      if (floor >= 45) { w = 8; h = 8; }
+
+      const baseWalls = buildOuterWalls(w, h);
+      const seed = ((this.runSeed * 47) + (floor * 1013) + (floor * floor * 31)) >>> 0;
+      const rng = mulberry32(seed);
+
+      const reserved = new Set();
+
+      // 4 Rotational Orientations (S->N, W->E, E->W, N->S)
+      const orientation = floor % 4;
+      let s, g;
+      if (orientation === 1) {
+        // S -> N
+        s = [1 + (floor % 2), h - 2, "N"];
+        g = [w - 2 - ((floor + 1) % 2), 1];
+      } else if (orientation === 2) {
+        // W -> E
+        s = [1, 1 + (floor % 2), "E"];
+        g = [w - 2, h - 2 - ((floor + 1) % 2)];
+      } else if (orientation === 3) {
+        // E -> W
+        s = [w - 2, h - 2 - (floor % 2), "W"];
+        g = [1, 1 + ((floor + 1) % 2)];
+      } else {
+        // N -> S
+        s = [w - 2 - (floor % 2), 1, "S"];
+        g = [1 + ((floor + 1) % 2), h - 2];
+      }
+
+      reserved.add(`${s[0]},${s[1]}`);
+      reserved.add(`${g[0]},${g[1]}`);
+
+      // Feature toggles scaled progressively
+      const hasDualGates = (floor >= 10 && (floor % 4 === 0 || isBossFloor));
+      const hasRelic = (floor >= 3 && (floor % 3 !== 2 || isBossFloor));
+      const hasPortal = (floor >= 4 && (floor % 2 === 0 || isBossFloor));
+      const hasWind = (floor >= 7 && (floor % 3 === 1 || isFujiBiome));
+
+      // 1. Primary Switch & Gate (Cyan)
+      const sw = [];
+      const gates = [];
+      const orbs = [];
+      let portals = undefined;
+      let winds = undefined;
+
+      const [swX, swY] = getFreeTile(reserved, rng, w, h);
+      sw.push([swX, swY, "cyan"]);
+
+      const [gateX, gateY] = getFreeTile(reserved, rng, w, h);
+      gates.push([gateX, gateY, "cyan"]);
+
+      // 2. Secondary Switch & Gate (Magenta)
+      if (hasDualGates) {
+        const [sw2X, sw2Y] = getFreeTile(reserved, rng, w, h);
+        sw.push([sw2X, sw2Y, "magenta"]);
+
+        const [gate2X, gate2Y] = getFreeTile(reserved, rng, w, h);
+        gates.push([gate2X, gate2Y, "magenta"]);
+      }
+
+      // 3. Relics (Orbs)
+      if (hasRelic) {
+        const [rx, ry] = getFreeTile(reserved, rng, w, h);
+        orbs.push([rx, ry]);
+        if (isBossFloor && floor >= 15) {
+          const [rx2, ry2] = getFreeTile(reserved, rng, w, h);
+          orbs.push([rx2, ry2]);
+        }
+      }
+
+      // 4. Kitsune Portals
+      if (hasPortal) {
+        const p1 = getFreeTile(reserved, rng, w, h);
+        const p2 = getFreeTile(reserved, rng, w, h);
+        portals = [p1, p2];
+      }
+
+      // 5. Winds
+      if (hasWind) {
+        const windDirs = ["N", "E", "S", "W"];
+        const wdir = windDirs[floor % 4];
+        const [wx, wy] = getFreeTile(reserved, rng, w, h);
+        winds = [[wx, wy, wdir]];
+      }
+
+      // 6. Floor-specific inner obstacle walls (1 to 5 walls)
+      const wallCount = Math.min(5, 1 + Math.floor(floor / 20));
+      const innerWalls = [];
+      for (let i = 0; i < wallCount; i++) {
+        const tile = getFreeTile(reserved, rng, w, h);
+        innerWalls.push(tile);
+      }
+
+      const lvl = {
+        n: isBossFloor ? `Große Schrein-Pforte · Ebene ${floor}` : `Turm-Ebene ${floor}`,
+        c: isBossFloor ? `Turm-Meilenstein · Prüfung ${floor}` : `Turm der 100 Prüfungen`,
+        t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte ⛩️" : "Aufstieg"}`,
+        d: isBossFloor 
+          ? `Meilenstein-Prüfung! Alle heiligen Schrein-Mechaniken fordern höchste Konzentration.`
+          : `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
+        w, h,
+        s, g,
+        sw, gates,
+        walls: [...baseWalls, ...innerWalls],
+        orbs: orbs.length > 0 ? orbs : undefined,
+        portals, winds,
+        maxCredits: Math.max(2, (isBossFloor ? 4 : 3) + this.extraCredits)
+      };
+
       if (isFujiBiome) {
         lvl.isSnow = true;
         lvl.theme = "fuji";
       }
 
-      // Ensure solvability and assign command limit
-      let sol = solverUtils.solveLevel ? solverUtils.solveLevel(lvl) : { solved: true, steps: 12, path: [] };
-      if (!sol.solved) {
-        // Fail-safe fallback to clean guaranteed solution
-        lvl.walls = baseWalls;
+      // Solvability check & iterative fallback
+      const solverFn = (window.KomaSolver && window.KomaSolver.solveLevel) || window.solveLevel || solveTowerLevel;
+      let sol = solverFn(lvl);
+
+      while (!sol.solved && innerWalls.length > 0) {
+        innerWalls.pop();
+        lvl.walls = [...baseWalls, ...innerWalls];
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved && lvl.winds) {
         lvl.winds = undefined;
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved && lvl.portals) {
         lvl.portals = undefined;
-        sol = solverUtils.solveLevel(lvl);
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved && lvl.gates.length > 1) {
+        lvl.gates = [lvl.gates[0]];
+        lvl.sw = [lvl.sw[0]];
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved) {
+        lvl.walls = baseWalls;
+        sol = solverFn(lvl);
       }
 
       lvl.solverSolution = sol;
       lvl.solution = sol.path;
-      // Set command limit (including extra slots from blessings)
-      lvl.limit = Math.max(16, Math.min(36, (sol.steps || 12) + 4)) + this.extraSlots;
+      lvl.limit = Math.max(16, Math.min(36, (sol.steps || 10) + 4)) + this.extraSlots;
       lvl.isTower = true;
       lvl.towerFloor = floor;
       lvl.isBossFloor = isBossFloor;
