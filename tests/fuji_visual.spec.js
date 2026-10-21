@@ -4,12 +4,18 @@ test('Verify Mount Fuji visibility, winter aesthetics, and chapter navigation', 
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/');
 
-  // Verify the new header shortcut to Mount Fuji exists and is visible
-  const headerFujiBtn = page.locator('#btnHeaderFuji');
-  await expect(headerFujiBtn).toBeVisible();
+  // Verify that the old header Fuji button is completely removed
+  await expect(page.locator('#btnHeaderFuji')).toHaveCount(0);
 
-  // Click header Fuji button to jump directly to Level 51
-  await headerFujiBtn.click();
+  // Open Home Screen and verify Mount Fuji mode card exists
+  await page.evaluate(() => {
+    if (window.gameInstance) window.gameInstance.showHomeScreen();
+  });
+  const homeFujiBtn = page.locator('#btnHomeModeFuji');
+  await expect(homeFujiBtn).toBeVisible();
+
+  // Click Mount Fuji mode card on Home Screen to jump directly to Level 51
+  await homeFujiBtn.click();
   await page.waitForTimeout(1000);
 
   // Verify level title and chapter

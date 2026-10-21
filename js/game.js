@@ -9,6 +9,7 @@ const ACHIEVEMENTS = [
     name: "Kamera-Mönch",
     jpName: "不動心",
     icon: "🧘",
+    iconKey: "monk",
     desc: "Schließe 10 Level mit vollen 3 Sternen ab (ohne Kameradrehung).",
     goal: 10,
     getProgress: (game) => game.stats.threeStarCount || 0
@@ -18,6 +19,7 @@ const ACHIEVEMENTS = [
     name: "Geisterfreund",
     jpName: "霊友",
     icon: "🦊",
+    iconKey: "fox",
     desc: "Sammle insgesamt 50 Geisterlichter (Orbs) in den Schreingärten.",
     goal: 50,
     getProgress: (game) => game.stats.orbsCollected || 0
@@ -27,6 +29,7 @@ const ACHIEVEMENTS = [
     name: "Herr des Windes",
     jpName: "風神の息",
     icon: "💨",
+    iconKey: "wind",
     desc: "Lass dich 25 Mal von einer heiligen Bergwindböe tragen.",
     goal: 25,
     getProgress: (game) => game.stats.windGusts || 0
@@ -36,6 +39,7 @@ const ACHIEVEMENTS = [
     name: "Fuji-Besteiger",
     jpName: "富士登頂",
     icon: "🏔️",
+    iconKey: "fuji",
     desc: "Erklimme alle 10 Stationen des Heiligen Berges Fuji (Kapitel 6).",
     goal: 10,
     getProgress: (game) => {
@@ -51,6 +55,7 @@ const ACHIEVEMENTS = [
     name: "Zen-Meister",
     jpName: "皆伝",
     icon: "🌸",
+    iconKey: "sakura",
     desc: "Schalte alle 6 heiligen Kami-Skins in der Schrein-Garderobe frei.",
     goal: 6,
     getProgress: (game) => {
@@ -64,6 +69,7 @@ const ACHIEVEMENTS = [
     name: "Minimalist",
     jpName: "最小限",
     icon: "⚡",
+    iconKey: "lightning",
     desc: "Löse 5 Level mit der perfekten Mindestanzahl an Befehlen.",
     goal: 5,
     getProgress: (game) => game.stats.minimalWins || 0
@@ -170,7 +176,33 @@ class GameEngine {
       mobileLvlTitle: document.getElementById("mobileLvlTitle"),
       mobileLvlCredits: document.getElementById("mobileLvlCredits"),
       btnWinOpenHub: document.getElementById("btnWinOpenHub"),
-      btnHeaderFuji: document.getElementById("btnHeaderFuji"),
+      btnHome: document.getElementById("btnHome"),
+      homeScreen: document.getElementById("homeScreen"),
+      btnHomeClose: document.getElementById("btnHomeClose"),
+      btnHomeAudioMusic: document.getElementById("btnHomeAudioMusic"),
+      btnHomeAudioSound: document.getElementById("btnHomeAudioSound"),
+      btnHomeHelp: document.getElementById("btnHomeHelp"),
+      btnHomeOpenWardrobe: document.getElementById("btnHomeOpenWardrobe"),
+      homeSkinIcon: document.getElementById("homeSkinIcon"),
+      homeSkinName: document.getElementById("homeSkinName"),
+      homeSkinSub: document.getElementById("homeSkinSub"),
+      homeSkinTag: document.getElementById("homeSkinTag"),
+      homeSkinDesc: document.getElementById("homeSkinDesc"),
+      homeCurrentChapter: document.getElementById("homeCurrentChapter"),
+      homeCurrentStatus: document.getElementById("homeCurrentStatus"),
+      homeCurrentLevelTitle: document.getElementById("homeCurrentLevelTitle"),
+      homeCurrentLevelDesc: document.getElementById("homeCurrentLevelDesc"),
+      homeCurrentStarsRow: document.getElementById("homeCurrentStarsRow"),
+      btnHomeResume: document.getElementById("btnHomeResume"),
+      btnHomeModeCampaign: document.getElementById("btnHomeModeCampaign"),
+      btnHomeModeTower: document.getElementById("btnHomeModeTower"),
+      btnHomeModeDaily: document.getElementById("btnHomeModeDaily"),
+      btnHomeModeFuji: document.getElementById("btnHomeModeFuji"),
+      btnHomeModeWardrobe: document.getElementById("btnHomeModeWardrobe"),
+      btnHomeModeTrophies: document.getElementById("btnHomeModeTrophies"),
+      homeTowerBadge: document.getElementById("homeTowerBadge"),
+      homeDailyBadge: document.getElementById("homeDailyBadge"),
+      homeTrophiesBadge: document.getElementById("homeTrophiesBadge"),
       btnJumpFujiDrawer: document.getElementById("btnJumpFujiDrawer"),
       drawerChapterTabs: document.getElementById("drawerChapterTabs"),
       btnMobileHapticToggle: document.getElementById("btnMobileHapticToggle"),
@@ -287,6 +319,16 @@ class GameEngine {
     // 9. Update Tower of 100 Trials UI
     if (typeof TowerTrial !== "undefined" && typeof TowerTrial.updateUI === "function") {
       TowerTrial.updateUI();
+    }
+
+    // 10. Update & Display Main Home Screen
+    this.updateHomeScreen();
+    const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    const skipHome = urlParams.has("skipHome") || (typeof navigator !== "undefined" && navigator.webdriver && !urlParams.has("showHome"));
+    if (!skipHome) {
+      this.showHomeScreen();
+    } else {
+      this.hideHomeScreen();
     }
   }
 
@@ -452,13 +494,110 @@ class GameEngine {
       });
     }
 
-    // Direct Header Jump to Mount Fuji (Kapitel 6 · Level 51)
-    if (this.dom.btnHeaderFuji) {
-      this.dom.btnHeaderFuji.addEventListener("click", () => {
+    // Top Nav: Return to Main Home Screen
+    if (this.dom.btnHome) {
+      this.dom.btnHome.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.showHomeScreen();
+      });
+    }
+
+    // Home Screen Actions
+    if (this.dom.btnHomeClose) {
+      this.dom.btnHomeClose.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.hideHomeScreen();
+      });
+    }
+
+    if (this.dom.btnHomeResume) {
+      this.dom.btnHomeResume.addEventListener("click", () => {
+        this.triggerHaptic(20);
+        this.hideHomeScreen();
+      });
+    }
+
+    if (this.dom.btnHomeOpenWardrobe) {
+      this.dom.btnHomeOpenWardrobe.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.openSkinsModal();
+      });
+    }
+
+    if (this.dom.btnHomeModeCampaign) {
+      this.dom.btnHomeModeCampaign.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.hideHomeScreen();
+        this.openLevelDrawer();
+      });
+    }
+
+    if (this.dom.btnHomeModeTower) {
+      this.dom.btnHomeModeTower.addEventListener("click", () => {
+        this.triggerHaptic(20);
+        this.hideHomeScreen();
+        if (this.dom.modalTowerIntro) {
+          if (typeof TowerTrial !== "undefined") TowerTrial.updateUI();
+          this.dom.modalTowerIntro.classList.add("active");
+        }
+      });
+    }
+
+    if (this.dom.btnHomeModeDaily) {
+      this.dom.btnHomeModeDaily.addEventListener("click", () => {
+        this.triggerHaptic(20);
+        this.hideHomeScreen();
+        if (this.dom.modalDailyTrial) {
+          if (typeof DailyTrial !== "undefined") DailyTrial.updateUI();
+          this.dom.modalDailyTrial.classList.add("active");
+        }
+      });
+    }
+
+    if (this.dom.btnHomeModeFuji) {
+      this.dom.btnHomeModeFuji.addEventListener("click", () => {
         this.triggerHaptic(25);
+        this.hideHomeScreen();
         if (this.dom.levelDrawer) this.dom.levelDrawer.classList.remove("open");
         this.loadLevel(50); // Level 51 (Der erste Bergwind)
         this.setFeedback("🏔️ Willkommen am Fuße des heiligen Berges Fuji!", "good");
+      });
+    }
+
+    if (this.dom.btnHomeModeWardrobe) {
+      this.dom.btnHomeModeWardrobe.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.openSkinsModal();
+      });
+    }
+
+    if (this.dom.btnHomeModeTrophies) {
+      this.dom.btnHomeModeTrophies.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.openTrophiesModal();
+      });
+    }
+
+    if (this.dom.btnHomeAudioMusic) {
+      this.dom.btnHomeAudioMusic.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        Sound.toggleMusic();
+        this.updateAudioButtons();
+      });
+    }
+
+    if (this.dom.btnHomeAudioSound) {
+      this.dom.btnHomeAudioSound.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        Sound.toggleSound();
+        this.updateAudioButtons();
+      });
+    }
+
+    if (this.dom.btnHomeHelp) {
+      this.dom.btnHomeHelp.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        if (this.dom.modalHelp) this.dom.modalHelp.classList.add("active");
       });
     }
 
@@ -747,13 +886,36 @@ class GameEngine {
     // 3. Update Mobile Hub Audio Buttons
     if (this.dom.btnMobileMusicToggle) {
       const isMusicActive = Sound.bgmPlaying && !Sound.masterMuted;
-      this.dom.btnMobileMusicToggle.textContent = isMusicActive ? "Musik pausieren ⏸️" : "Musik starten ▶️";
+      const mIcon = typeof KOMA_ICONS !== "undefined"
+        ? (isMusicActive ? KOMA_ICONS.musicOn(16) : KOMA_ICONS.musicOff(16))
+        : "";
+      this.dom.btnMobileMusicToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${mIcon} <span>${isMusicActive ? "Musik pausieren" : "Musik starten"}</span></span>`;
       this.dom.btnMobileMusicToggle.classList.toggle("active", isMusicActive);
     }
     if (this.dom.btnMobileSoundToggle) {
       const isMuted = Sound.masterMuted;
-      this.dom.btnMobileSoundToggle.textContent = isMuted ? "Stumm 🔇" : "SFX Aktiv 🔊";
+      const sIcon = typeof KOMA_ICONS !== "undefined"
+        ? (isMuted ? KOMA_ICONS.soundOff(16) : KOMA_ICONS.soundOn(16))
+        : "";
+      this.dom.btnMobileSoundToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${sIcon} <span>${isMuted ? "Stumm" : "SFX Aktiv"}</span></span>`;
       this.dom.btnMobileSoundToggle.classList.toggle("active", !isMuted);
+    }
+
+    // 4. Update Main Home Screen Audio Buttons
+    if (this.dom.btnHomeAudioMusic) {
+      const isMusicActive = Sound.bgmPlaying && !Sound.masterMuted;
+      this.dom.btnHomeAudioMusic.innerHTML = typeof KOMA_ICONS !== "undefined"
+        ? (isMusicActive ? KOMA_ICONS.musicOn(18) : KOMA_ICONS.musicOff(18))
+        : "";
+      this.dom.btnHomeAudioMusic.classList.toggle("muted", !isMusicActive);
+      this.dom.btnHomeAudioMusic.classList.toggle("playing", isMusicActive);
+    }
+    if (this.dom.btnHomeAudioSound) {
+      const isMuted = Sound.masterMuted;
+      this.dom.btnHomeAudioSound.innerHTML = typeof KOMA_ICONS !== "undefined"
+        ? (isMuted ? KOMA_ICONS.soundOff(18) : KOMA_ICONS.soundOn(18))
+        : "";
+      this.dom.btnHomeAudioSound.classList.toggle("muted", isMuted);
     }
   }
 
@@ -829,6 +991,7 @@ class GameEngine {
     if (this.dom.mobileHubTotalStars) {
       this.dom.mobileHubTotalStars.textContent = total;
     }
+    this.updateHomeScreen();
   }
 
   isSkinUnlocked(skinId) {
@@ -853,6 +1016,7 @@ class GameEngine {
     }
     this.renderSkinsModal();
     this.renderMobileSkins();
+    this.updateHomeScreen();
     const skin = window.KOMA_SKINS && window.KOMA_SKINS[skinId];
     this.setFeedback(`Skin "${skin ? skin.name : skinId}" ausgerüstet!`, "good");
   }
@@ -881,6 +1045,98 @@ class GameEngine {
   closeTrophiesModal() {
     if (this.dom.modalTrophies) {
       this.dom.modalTrophies.classList.remove("active");
+    }
+  }
+
+  showHomeScreen() {
+    this.updateHomeScreen();
+    if (this.dom.homeScreen) {
+      this.dom.homeScreen.classList.add("active");
+    }
+    if (this.renderer && typeof this.renderer.enterHomeScreenMode === "function") {
+      this.renderer.enterHomeScreenMode();
+    }
+  }
+
+  hideHomeScreen() {
+    if (this.dom.homeScreen) {
+      this.dom.homeScreen.classList.remove("active");
+    }
+    if (this.renderer && typeof this.renderer.exitHomeScreenMode === "function") {
+      this.renderer.exitHomeScreenMode();
+    }
+  }
+
+  updateHomeScreen() {
+    // 1. Synchronize Active Robot Skin in Showroom
+    const skinId = this.equippedSkin || "original";
+    const skinDef = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]) || {
+      name: "Shiro Usagi",
+      jpName: "白兎",
+      subtitle: "KOMA Original · Shinto-Bote",
+      tag: "Standard",
+      desc: "Das klassische weiße Shinto-Schrein-Chassis mit leuchtend cyanfarbenen Visor-Augen und natürlichem Furoshiki-Holzpaket.",
+      accentColor: "#00f5ff"
+    };
+
+    if (this.dom.homeSkinName) this.dom.homeSkinName.textContent = skinDef.name;
+    if (this.dom.homeSkinSub) this.dom.homeSkinSub.textContent = `${skinDef.jpName || ""} · ${skinDef.subtitle || "Shinto-Bote"}`;
+    if (this.dom.homeSkinTag) {
+      this.dom.homeSkinTag.textContent = skinDef.tag || "Standard";
+      this.dom.homeSkinTag.style.borderColor = skinDef.accentColor || "var(--accent-torii)";
+    }
+    if (this.dom.homeSkinDesc) this.dom.homeSkinDesc.textContent = skinDef.desc || "";
+    if (this.dom.homeSkinIcon) {
+      this.dom.homeSkinIcon.innerHTML = (typeof KOMA_ICONS !== "undefined" && typeof KOMA_ICONS.getSkinIcon === "function")
+        ? KOMA_ICONS.getSkinIcon(skinId, 32, skinDef.accentColor)
+        : "";
+    }
+
+    // 2. Synchronize Current Level Resume Card
+    const lvl = (typeof LEVELS !== "undefined" && LEVELS[this.currentLevelIdx]) ? LEVELS[this.currentLevelIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
+    if (lvl) {
+      const chNum = (lvl.chapter && lvl.chapter.num) ? lvl.chapter.num : Math.floor(this.currentLevelIdx / 10) + 1;
+      const chTitle = (lvl.chapter && lvl.chapter.title) ? lvl.chapter.title : (lvl.c || `Kapitel ${chNum}`);
+      const isCompleted = this.completedLevels.has(this.currentLevelIdx);
+      const stars = this.levelStars[this.currentLevelIdx] || 0;
+
+      if (this.dom.homeCurrentChapter) {
+        this.dom.homeCurrentChapter.textContent = `Kapitel ${String(chNum).padStart(2, "0")} · ${chTitle}`;
+      }
+      if (this.dom.homeCurrentStatus) {
+        this.dom.homeCurrentStatus.textContent = isCompleted ? "Gemeistert ✓" : "Aktuelles Ziel";
+        this.dom.homeCurrentStatus.className = `resume-status-badge ${isCompleted ? "completed" : "ready"}`;
+      }
+      if (this.dom.homeCurrentLevelTitle) {
+        this.dom.homeCurrentLevelTitle.textContent = `Level ${String(this.currentLevelIdx + 1).padStart(2, "0")}: ${lvl.n}`;
+      }
+      if (this.dom.homeCurrentLevelDesc) {
+        this.dom.homeCurrentLevelDesc.textContent = lvl.d || "Bringe die heilige Opfergabe sicher zum Schrein.";
+      }
+      if (this.dom.homeCurrentStarsRow) {
+        if (typeof KOMA_ICONS !== "undefined") {
+          let starsHtml = "";
+          for (let s = 1; s <= 3; s++) {
+            const filled = s <= stars;
+            starsHtml += `<span class="resume-star ${filled ? "filled" : "empty"}">${filled ? KOMA_ICONS.starFilled(20, "var(--gold)", true) : KOMA_ICONS.starEmpty(20, "rgba(255,255,255,0.25)")}</span>`;
+          }
+          starsHtml += `<span class="resume-stars-label">${stars > 0 ? `${stars}/3 Sterne erhalten` : "Noch keine Sterne"}</span>`;
+          this.dom.homeCurrentStarsRow.innerHTML = starsHtml;
+        }
+      }
+    }
+
+    // 3. Synchronize Mode Badges
+    if (this.dom.homeTowerBadge && typeof TowerTrial !== "undefined") {
+      this.dom.homeTowerBadge.textContent = `Rekord: Ebene ${TowerTrial.getBestFloor() || 1}`;
+    }
+    if (this.dom.homeDailyBadge && typeof DailyTrial !== "undefined") {
+      const streak = DailyTrial.getEffectiveStreak();
+      const isDone = DailyTrial.isTodayCompleted();
+      this.dom.homeDailyBadge.textContent = isDone ? `${streak} Tage ✓` : `${streak} Tage Streak`;
+    }
+    if (this.dom.homeTrophiesBadge) {
+      this.dom.homeTrophiesBadge.textContent = `${this.unlockedAchievements.size} / ${ACHIEVEMENTS.length} Siegel`;
     }
   }
 
@@ -987,11 +1243,14 @@ class GameEngine {
       const isUnlocked = this.unlockedAchievements.has(ach.id);
       const prog = Math.min(ach.goal, ach.getProgress(this));
       const pct = Math.round((prog / ach.goal) * 100);
+      const trophyIconSvg = typeof KOMA_ICONS !== "undefined"
+        ? (isUnlocked ? KOMA_ICONS.render(ach.iconKey, 26, "var(--gold)") : KOMA_ICONS.amulet(24, "rgba(255,255,255,0.3)"))
+        : ach.icon;
 
       return `
         <div class="trophy-card ${isUnlocked ? "unlocked" : "locked"}">
           <div class="trophy-icon-wrap">
-            <span>${ach.icon}</span>
+            <span>${trophyIconSvg}</span>
           </div>
           <div class="trophy-info">
             <div class="trophy-header-row">
@@ -1022,11 +1281,14 @@ class GameEngine {
       const isUnlocked = this.unlockedAchievements.has(ach.id);
       const prog = Math.min(ach.goal, ach.getProgress(this));
       const pct = Math.round((prog / ach.goal) * 100);
+      const trophyIconSvg = typeof KOMA_ICONS !== "undefined"
+        ? (isUnlocked ? KOMA_ICONS.render(ach.iconKey, 24, "var(--gold)") : KOMA_ICONS.amulet(22, "rgba(255,255,255,0.3)"))
+        : ach.icon;
 
       return `
         <div class="mobile-trophy-item ${isUnlocked ? "unlocked" : "locked"}">
           <div class="trophy-icon-wrap">
-            <span>${ach.icon}</span>
+            <span>${trophyIconSvg}</span>
           </div>
           <div class="trophy-info">
             <div class="trophy-header-row">
@@ -1040,7 +1302,7 @@ class GameEngine {
             </div>
           </div>
           <div class="trophy-status-badge ${isUnlocked ? "unlocked" : "locked"}">
-            ${isUnlocked ? "✓" : "🔒"}
+            ${isUnlocked ? "✓" : (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒")}
           </div>
         </div>
       `;
@@ -1081,7 +1343,8 @@ class GameEngine {
         actionBtn = `<button class="mobile-skin-btn equip" data-mobile-skin="${skin.id}">Ausrüsten</button>`;
       } else {
         const starSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(11, "var(--gold)", false) : "⭐";
-        statusBadge = `<span class="mobile-skin-badge locked">🔒 ${skin.starsRequired} ${starSvg}</span>`;
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
+        statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} ${skin.starsRequired} ${starSvg}</span>`;
         actionBtn = `
           <div class="mobile-skin-progress">
             <div class="mobile-skin-prog-bar"><div class="mobile-skin-prog-fill" style="width: ${progress}%"></div></div>
@@ -1189,7 +1452,8 @@ class GameEngine {
         actionButton = `<button class="skin-action-btn equip" data-skin-id="${skin.id}">Ausrüsten</button>`;
       } else {
         const starSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(12, "var(--gold)", false) : "⭐";
-        statusBadge = `<span class="skin-badge locked">🔒 ${skin.starsRequired} ${starSvg}</span>`;
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
+        statusBadge = `<span class="skin-badge locked">${lockSvg} ${skin.starsRequired} ${starSvg}</span>`;
         actionButton = `
           <div class="skin-progress-container">
             <div class="skin-progress-bar">
@@ -1291,7 +1555,8 @@ class GameEngine {
       }
     }
     if (this.dom.mobileLvlCredits) {
-      this.dom.mobileLvlCredits.textContent = `${this.cameraCredits}/${this.maxCameraCredits} 🎥`;
+      const camIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.camera(13) : "🎥";
+      this.dom.mobileLvlCredits.innerHTML = `${this.cameraCredits}/${this.maxCameraCredits} ${camIcon}<span class="sr-only">🎥</span>`;
     }
   }
 
@@ -1376,7 +1641,10 @@ class GameEngine {
     if (this.dom.missionBadge) this.dom.missionBadge.textContent = `⛩️ EBENE ${lvl.towerFloor}`;
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = `Turm · E${lvl.towerFloor}`;
-    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = `${this.cameraCredits}/${this.maxCameraCredits} 🎥`;
+    if (this.dom.mobileLvlCredits) {
+      const camIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.camera(13) : "🎥";
+      this.dom.mobileLvlCredits.innerHTML = `${this.cameraCredits}/${this.maxCameraCredits} ${camIcon}<span class="sr-only">🎥</span>`;
+    }
 
     this.setFeedback(`⛩️ Turm-Ebene ${lvl.towerFloor} geladen! Plane den Weg zum heiligen Schrein-Torii.`, "normal");
 
@@ -1403,11 +1671,17 @@ class GameEngine {
     choices.forEach(choice => {
       const card = document.createElement("div");
       card.className = "blessing-card";
+      const blessingSvg = (typeof KOMA_ICONS !== "undefined" && choice.iconKey)
+        ? KOMA_ICONS.render(choice.iconKey, 34, "var(--gold)")
+        : choice.icon;
+      const sakuraSvg = (typeof KOMA_ICONS !== "undefined")
+        ? KOMA_ICONS.sakura(16)
+        : "";
       card.innerHTML = `
-        <div class="blessing-icon">${choice.icon}</div>
+        <div class="blessing-icon">${blessingSvg}</div>
         <div class="blessing-name">${choice.name}</div>
         <div class="blessing-desc">${choice.desc}</div>
-        <div class="blessing-select-btn">Gabe empfangen 🌸</div>
+        <div class="blessing-select-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;"><span>Gabe empfangen</span> ${sakuraSvg}</div>
       `;
       card.addEventListener("click", () => {
         this.triggerHaptic([30, 40, 60]);
@@ -1418,7 +1692,7 @@ class GameEngine {
         if (typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
           Sound.playStarChime(2);
         }
-        this.setFeedback(`🌸 Gabe gewählt: ${choice.name}! Aufstieg zur nächsten Ebene...`, "good");
+        this.setFeedback(`Gabe gewählt: ${choice.name}! Aufstieg zur nächsten Ebene...`, "good");
         setTimeout(() => {
           this.loadTowerFloor();
         }, 600);
@@ -1437,7 +1711,8 @@ class GameEngine {
       this.dom.towerResultScore.textContent = `${failRes.score.toLocaleString("de-DE")} Pkt.`;
     }
     if (this.dom.towerResultZen) {
-      this.dom.towerResultZen.textContent = `${failRes.zenCount || 0} Ebene(n) ⚡ (+${(failRes.zenBonus || 0).toLocaleString("de-DE")} Pkt.)`;
+      const zenIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lightning(14) : "⚡";
+      this.dom.towerResultZen.innerHTML = `${failRes.zenCount || 0} Ebene(n) ${zenIcon} (+${(failRes.zenBonus || 0).toLocaleString("de-DE")} Pkt.)`;
     }
     if (this.dom.towerResultRecord) {
       this.dom.towerResultRecord.style.display = failRes.isRecord ? "block" : "none";
@@ -1476,7 +1751,10 @@ class GameEngine {
     if (this.dom.missionBadge) this.dom.missionBadge.textContent = `${String(idx + 1).padStart(2, "0")} / ${LEVELS.length}`;
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = `Lvl ${String(idx + 1).padStart(2, "0")}`;
-    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = `${this.cameraCredits}/${this.maxCameraCredits} 🎥`;
+    if (this.dom.mobileLvlCredits) {
+      const camIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.camera(13) : "🎥";
+      this.dom.mobileLvlCredits.innerHTML = `${this.cameraCredits}/${this.maxCameraCredits} ${camIcon}<span class="sr-only">🎥</span>`;
+    }
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-executing");
     }
@@ -1495,6 +1773,7 @@ class GameEngine {
     this.renderQueue();
     this.renderLevelDrawer();
     this.renderCameraCredits();
+    this.updateHomeScreen();
   }
 
   resetKomaPosition() {

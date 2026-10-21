@@ -3160,6 +3160,42 @@ class GardenRenderer {
     }
   }
 
+  enterHomeScreenMode() {
+    this.isHomeScreenMode = true;
+    if (this.komaGroup) {
+      if (!this.savedLevelKomaPos) {
+        this.savedLevelKomaPos = this.komaGroup.position.clone();
+      }
+      this.savedLevelKomaRotY = this.komaGroup.rotation.y;
+      this.homeScreenKomaY = 0.45;
+      this.komaGroup.position.set(0, 0.45, 0);
+    }
+    // Set showroom camera distance and smooth elevation
+    this.savedOrbitAzimuth = this.orbit.targetAzimuth;
+    this.savedOrbitElevation = this.orbit.targetElevation;
+    this.savedOrbitDistance = this.orbit.distance;
+
+    this.orbit.targetElevation = 0.38;
+    this.orbit.elevation = 0.38;
+    this.orbit.distance = 28;
+    this.updateCameraPosition();
+  }
+
+  exitHomeScreenMode() {
+    this.isHomeScreenMode = false;
+    if (this.komaGroup && this.savedLevelKomaPos) {
+      this.komaGroup.position.copy(this.savedLevelKomaPos);
+      this.komaGroup.rotation.y = this.savedLevelKomaRotY || 0;
+      this.savedLevelKomaPos = null;
+    }
+    if (this.savedOrbitElevation !== undefined) {
+      this.orbit.targetElevation = this.savedOrbitElevation;
+      this.orbit.targetAzimuth = this.savedOrbitAzimuth;
+      this.orbit.distance = this.savedOrbitDistance || this.defaultOrbit.distance;
+      this.updateCameraPosition();
+    }
+  }
+
   animateWin() {
     this.komaState.isCelebrating = true;
     this.spawnCelebrationBurst();
@@ -3203,7 +3239,17 @@ class GardenRenderer {
     let earTwitchX = 0;
     let earTwitchZ = 0;
 
-    if (this.komaState.isMoving) {
+    if (this.isHomeScreenMode && this.komaGroup) {
+      // Showroom 360-degree turntable continuous rotation
+      this.komaGroup.rotation.y += delta * 0.65;
+      const hoverY = Math.sin(time * 2.5) * 0.038;
+      this.komaGroup.position.y = (this.homeScreenKomaY || 0.45) + hoverY;
+      
+      const breathe = Math.sin(time * 2.2) * 0.02;
+      scaleY += breathe;
+      scaleX -= breathe * 0.5;
+      scaleZ -= breathe * 0.5;
+    } else if (this.komaState.isMoving) {
       const elapsed = now - this.komaState.moveStartTime;
       const progress = Math.min(elapsed / this.komaState.moveDuration, 1);
       

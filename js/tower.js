@@ -22,6 +22,7 @@
       id: "heal_lantern",
       name: "Heilige Schrein-Flamme",
       icon: "🏮",
+      iconKey: "lantern",
       desc: "Entzündet 1 erloschene Laterne neu (bis max. 3 Leben).",
       apply: (mgr) => {
         if (mgr.lanterns < mgr.maxLanterns) {
@@ -35,6 +36,7 @@
       id: "spirit_amulet",
       name: "Schutz-Amulett der Kitsune",
       icon: "🌸",
+      iconKey: "amulet",
       desc: "Das Amulett zerbricht beim nächsten Fehler und rettet eine Laterne.",
       apply: (mgr) => {
         mgr.amuletActive = true;
@@ -44,6 +46,7 @@
       id: "expand_queue",
       name: "Schriftrolle der Weitsicht",
       icon: "📜",
+      iconKey: "scroll",
       desc: "+3 zusätzliche Befehls-Slots im Plan für den restlichen Run.",
       apply: (mgr) => {
         mgr.extraSlots += 3;
@@ -53,6 +56,7 @@
       id: "camera_insight",
       name: "Kitsune-Weitsicht",
       icon: "👁️",
+      iconKey: "camera",
       desc: "+2 freie Kameraschwenker auf jeder kommenden Etage.",
       apply: (mgr) => {
         mgr.extraCredits += 2;
@@ -62,6 +66,7 @@
       id: "celestial_favour",
       name: "Göttliche Gunst",
       icon: "✨",
+      iconKey: "sparkle",
       desc: "+500 himmlische Bonuspunkte für deinen Turm-Rang.",
       apply: (mgr) => {
         mgr.score += 500;
@@ -683,7 +688,10 @@
         let html = "";
         for (let i = 1; i <= this.maxLanterns; i++) {
           const lit = i <= this.lanterns;
-          html += `<span class="tower-lantern ${lit ? "lit" : "unlit"}" title="${lit ? "Laterne leuchtet" : "Laterne erloschen"}">🏮</span>`;
+          const lanternIcon = typeof KOMA_ICONS !== "undefined"
+            ? KOMA_ICONS.lantern(18, lit, lit ? "#ff5533" : "rgba(255,255,255,0.25)")
+            : `🏮`;
+          html += `<span class="tower-lantern ${lit ? "lit" : "unlit"}" title="${lit ? "Laterne leuchtet" : "Laterne erloschen"}">${lanternIcon}</span>`;
         }
         hudLanterns.innerHTML = html;
       }
@@ -697,7 +705,8 @@
       if (hudZen) {
         if (this.zenPerfectCount > 0) {
           hudZen.style.display = "inline-flex";
-          hudZen.textContent = `⚡ ${this.zenPerfectCount} Zen`;
+          const lightningSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lightning(14) : "⚡";
+          hudZen.innerHTML = `${lightningSvg} <span>${this.zenPerfectCount} Zen</span>`;
         } else {
           hudZen.style.display = "none";
         }

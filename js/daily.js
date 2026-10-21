@@ -496,22 +496,33 @@
 
       const startLabel = document.getElementById("btnStartDailyLabel");
       if (startLabel) {
-        startLabel.textContent = isDone ? "Erneut spielen ↺" : "Prüfung antreten ▶";
+        const iconSvg = typeof KOMA_ICONS !== "undefined"
+          ? (isDone ? KOMA_ICONS.retry(16) : KOMA_ICONS.play(16))
+          : (isDone ? "↺" : "▶");
+        startLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${iconSvg} <span>${isDone ? "Erneut spielen" : "Prüfung antreten"}</span></span>`;
       }
 
       // 4. Render Weekly Stamp Grid
       const weekGrid = document.getElementById("dailyWeekGrid");
       if (weekGrid) {
         const week = this.getWeeklyHistory();
-        weekGrid.innerHTML = week.map(d => `
-          <div class="week-stamp-item ${d.completed ? "stamped" : ""} ${d.isToday ? "today" : ""}">
-            <div class="stamp-day-label">${d.label}</div>
-            <div class="stamp-icon-circle">
-              ${d.completed ? "⛩️" : (d.isToday ? "🔥" : "·")}
+        weekGrid.innerHTML = week.map(d => {
+          let stampContent = "·";
+          if (d.completed) {
+            stampContent = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.torii(16, "#ffffff") : "⛩️";
+          } else if (d.isToday) {
+            stampContent = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(16, "#ffaa44") : "🔥";
+          }
+          return `
+            <div class="week-stamp-item ${d.completed ? "stamped" : ""} ${d.isToday ? "today" : ""}">
+              <div class="stamp-day-label">${d.label}</div>
+              <div class="stamp-icon-circle">
+                ${stampContent}
+              </div>
+              <div class="stamp-date-label">${d.dayNum}.</div>
             </div>
-            <div class="stamp-date-label">${d.dayNum}.</div>
-          </div>
-        `).join("");
+          `;
+        }).join("");
       }
     }
   }

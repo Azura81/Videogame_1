@@ -26,15 +26,201 @@
 
     <!-- PWA Offline & Network Status Toast -->
     <div id="pwaNetworkBanner" class="pwa-toast hidden" role="status" aria-live="polite">
-      <span class="pwa-toast-icon">⛩️</span>
+      <span class="pwa-toast-icon">
+        <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+      </span>
       <span id="pwaNetworkText">Offline-Modus aktiv · Bereit zum Spielen</span>
+    </div>
+
+    <!-- Main Home Screen & 3D Robot Showroom Overlay -->
+    <div id="homeScreen" class="home-screen-backdrop" role="dialog" aria-modal="true" aria-label="KOMA Hauptmenü">
+      <div class="home-screen-modal">
+        <!-- Top Nav in Home Screen -->
+        <div class="home-screen-header">
+          <div class="home-brand-group">
+            <div class="home-brand-icon">
+              <svg class="svg-icon svg-torii" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--torii, #ff4d6d)" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.7));" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="var(--torii, #ff4d6d)" stroke="none"/></svg>
+            </div>
+            <div>
+              <div class="home-brand-title">KOMA</div>
+              <div class="home-brand-sub">SPIRIT DELIVERY · コマ</div>
+            </div>
+          </div>
+          <div class="home-header-stats">
+            <div class="home-stars-pill" title="Gesammelte Sterne für Kami-Skins">
+              <svg class="svg-icon star-icon-svg filled" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
+              <strong id="homeTotalStars">0</strong>
+              <span class="home-stars-max">/ 180</span>
+            </div>
+            <button id="btnHomeAudioMusic" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Musik umschalten">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
+            </button>
+            <button id="btnHomeAudioSound" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
+            </button>
+            <button id="btnHomeHelp" class="icon-btn" title="Spielanleitung" aria-label="Hilfe öffnen">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Home Layout -->
+        <div class="home-main-layout">
+          <!-- Left Column: 3D Robot Showroom Card -->
+          <div class="home-showroom-card">
+            <div class="showroom-pedestal-halo"></div>
+            <div class="showroom-badge">
+              <span class="showroom-live-dot"></span>
+              <span>Aktiver Roboter-Skin</span>
+            </div>
+
+            <!-- Showroom 3D Viewport Frame -->
+            <div class="showroom-robot-stage" id="showroomRobotStage">
+              <div class="showroom-pedestal-ring"></div>
+            </div>
+
+            <div class="showroom-info-box">
+              <div class="showroom-skin-meta">
+                <div class="showroom-skin-title-row">
+                  <span class="showroom-skin-icon" id="homeSkinIcon"></span>
+                  <div>
+                    <h3 class="showroom-skin-name" id="homeSkinName">Shiro Usagi</h3>
+                    <div class="showroom-skin-sub" id="homeSkinSub">KOMA Original · Shinto-Bote</div>
+                  </div>
+                  <span class="showroom-skin-tag" id="homeSkinTag">Standard</span>
+                </div>
+                <p class="showroom-skin-desc" id="homeSkinDesc">
+                  Klassisches weißes Shinto-Schrein-Chassis mit leuchtend cyanfarbenem Visor und Furoshiki-Holzpaket.
+                </p>
+              </div>
+              <button class="showroom-wardrobe-btn" id="btnHomeOpenWardrobe">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
+                <span>Garderobe & Kami-Skins öffnen</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Current Level Resume & Mode Selection Grid -->
+          <div class="home-modes-column">
+            <!-- Hero Card: Current Level / Weiterspielen -->
+            <div class="home-resume-card">
+              <div class="resume-card-glow"></div>
+              <div class="resume-card-body">
+                <div class="resume-header-row">
+                  <span class="resume-kicker" id="homeCurrentChapter">Kapitel 01 · Laternenviertel</span>
+                  <span class="resume-status-badge" id="homeCurrentStatus">Bereit</span>
+                </div>
+                <h2 class="resume-level-title" id="homeCurrentLevelTitle">Level 01: Die erste Lieferung</h2>
+                <p class="resume-level-desc" id="homeCurrentLevelDesc">
+                  Fahre zuerst geradeaus durch die Gasse und biege dann nach Süden zum Paket ab.
+                </p>
+                <div class="resume-stars-row" id="homeCurrentStarsRow">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+              <button class="play-btn home-resume-cta" id="btnHomeResume">
+                <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
+                <span>Weiterspielen</span>
+              </button>
+            </div>
+
+            <!-- Modes Grid -->
+            <div class="home-modes-wrapper">
+              <div class="home-section-heading">
+                <span>Schrein-Modi & Herausforderungen</span>
+              </div>
+              <div class="home-modes-grid">
+                <!-- Mode 1: 60-Level Kampagne -->
+                <button class="home-mode-card" id="btnHomeModeCampaign">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box torii-box">
+                      <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+                    </span>
+                    <span class="mode-pill">60 Level</span>
+                  </div>
+                  <h4 class="mode-name">Kampagne</h4>
+                  <p class="mode-summary">6 magische Kapitel voller Schrein-Rätsel & Geisterlichter.</p>
+                  <span class="mode-link">Level-Wahl öffnen →</span>
+                </button>
+
+                <!-- Mode 2: Turm der 100 Prüfungen -->
+                <button class="home-mode-card" id="btnHomeModeTower">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box lantern-box">
+                      <svg class="svg-icon svg-lantern lit" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+                    </span>
+                    <span class="mode-pill gold-pill" id="homeTowerBadge">Ebene 1</span>
+                  </div>
+                  <h4 class="mode-name">100-Level-Schreinprüfung</h4>
+                  <p class="mode-summary">Endlos-Roguelike mit 3 Laternen, Pforten & Zen-Bonus.</p>
+                  <span class="mode-link">Turm besteigen →</span>
+                </button>
+
+                <!-- Mode 3: Tägliche Schreinprüfung -->
+                <button class="home-mode-card" id="btnHomeModeDaily">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box flame-box">
+                      <svg class="svg-icon svg-flame" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
+                    </span>
+                    <span class="mode-pill flame-pill" id="homeDailyBadge">0 Tage Streak</span>
+                  </div>
+                  <h4 class="mode-name">Tägliche Prüfung</h4>
+                  <p class="mode-summary">Hardcore · 0 Kameraschwenker · Täglich frisches Layout.</p>
+                  <span class="mode-link">Tages-Run antreten →</span>
+                </button>
+
+                <!-- Mode 4: Kapitel 6 Heiliger Berg Fuji -->
+                <button class="home-mode-card" id="btnHomeModeFuji">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box fuji-box">
+                      <svg class="svg-icon svg-fuji" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg>
+                    </span>
+                    <span class="mode-pill fuji-pill">Kapitel 6</span>
+                  </div>
+                  <h4 class="mode-name">Der Heilige Berg Fuji</h4>
+                  <p class="mode-summary">Level 51–60 · Schneelandschaft, Eisflächen & Windböen.</p>
+                  <span class="mode-link">Zum Berg Fuji →</span>
+                </button>
+
+                <!-- Mode 5: Schrein-Garderobe -->
+                <button class="home-mode-card" id="btnHomeModeWardrobe">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box wardrobe-box">
+                      <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
+                    </span>
+                    <span class="mode-pill sakura-pill">6 Designs</span>
+                  </div>
+                  <h4 class="mode-name">Schrein-Garderobe</h4>
+                  <p class="mode-summary">6 seltene Kami-Skins mit Lichtspuren & Partikeleffekten.</p>
+                  <span class="mode-link">Skins ansehen →</span>
+                </button>
+
+                <!-- Mode 6: Trophäen-Kabinett -->
+                <button class="home-mode-card" id="btnHomeModeTrophies">
+                  <div class="mode-card-top">
+                    <span class="mode-icon-box trophy-box">
+                      <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
+                    </span>
+                    <span class="mode-pill" id="homeTrophiesBadge">0 / 6 Siegel</span>
+                  </div>
+                  <h4 class="mode-name">Heilige Siegel & Erfolge</h4>
+                  <p class="mode-summary">Meisterprüfungen, Zen-Boni & Schrein-Auszeichnungen.</p>
+                  <span class="mode-link">Siegel einsehen →</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Top Navigation Bar -->
     <header class="top-nav">
       <!-- Dedicated Mobile Hub Launcher Button (visible on mobile < 900px) -->
       <button id="btnMobileHub" class="mobile-hub-btn" title="Schrein-Menü, Garderobe & Levelauswahl öffnen" aria-label="Menü öffnen">
-        <span class="hub-btn-icon">⛩️</span>
+        <span class="hub-btn-icon">
+          <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+        </span>
         <span class="hub-btn-text">Menü</span>
       </button>
 
@@ -42,20 +228,28 @@
       <div class="mobile-level-pill" id="mobileLevelPill">
         <span class="mobile-lvl-title" id="mobileLvlTitle">Level 01</span>
         <span class="mobile-lvl-dot">·</span>
-        <span class="mobile-lvl-credits" id="mobileLvlCredits">6/6 🎥</span>
+        <span class="mobile-lvl-credits" id="mobileLvlCredits">6/6 <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/><circle cx="12" cy="13" r="4.2"/><circle cx="12" cy="13" r="1.5" fill="currentColor"/></svg></span>
       </div>
 
       <div class="brand-badge">
-        <div class="brand-icon">⛩️</div>
+        <div class="brand-icon">
+          <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--torii, #ff4d6d)" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(255, 77, 109, 0.6));" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="var(--torii, #ff4d6d)" stroke="none"/></svg>
+        </div>
         <div>
           <div class="brand-title">KOMA</div>
           <div class="brand-sub">SPIRIT DELIVERY · コマ</div>
         </div>
       </div>
       <div class="top-actions">
+        <!-- New Dedicated Home Screen Button -->
+        <button id="btnHome" class="home-header-btn" title="Hauptmenü, Roboter-Showroom & Modi öffnen" aria-label="Hauptmenü">
+          <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+          <span class="home-btn-label">Menü</span>
+        </button>
+
         <button id="btnInstallPwa" class="icon-btn pwa-install-btn hidden" title="KOMA als App installieren" aria-label="App installieren">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span class="sr-only">📲</span>
+          <span class="sr-only">App</span>
         </button>
         <div class="camera-actions-group">
           <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" aria-label="Kamera links drehen">
@@ -64,7 +258,7 @@
           </button>
           <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" aria-label="Kamera zurücksetzen">
             <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>
-            <span class="sr-only">🎥</span>
+            <span class="sr-only">Reset</span>
           </button>
           <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" aria-label="Kamera rechts drehen">
             <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L22 9"/><path d="M22 3v6h-6"/></svg>
@@ -80,41 +274,41 @@
         </div>
         <button id="btnSkins" class="icon-btn" title="Schrein-Garderobe & KOMA-Skins" aria-label="KOMA Skins öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
-          <span class="sr-only">👘</span>
+          <span class="sr-only">Garderobe</span>
         </button>
         <button id="btnTrophies" class="icon-btn" title="Schrein-Erfolge & Trophäen" aria-label="Erfolge öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
-          <span class="sr-only">🏆</span>
+          <span class="sr-only">Erfolge</span>
         </button>
         <button id="btnMusicToggle" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Hintergrundmusik umschalten">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
-          <span class="sr-only">🎵</span>
+          <span class="sr-only">Musik</span>
         </button>
         <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
-          <span class="sr-only">🔊</span>
+          <span class="sr-only">Audio</span>
         </button>
         <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/></svg>
-          <span class="sr-only">?</span>
+          <span class="sr-only">Hilfe</span>
         </button>
         <button id="btnDailyTrial" class="daily-header-btn" title="Tägliche Schreinprüfung (Hardcore · 0 Kameraschwenker)" aria-label="Tägliche Prüfung">
-          <span class="flame-icon">🔥</span>
+          <span class="flame-icon">
+            <svg class="svg-icon svg-flame" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
+          </span>
           <span class="daily-streak-count" id="headerDailyStreak">0</span>
           <span class="daily-label">Tages-Prüfung</span>
         </button>
         <button id="btnTowerMode" class="tower-header-btn" title="Turm der 100 Prüfungen (Endlos-Roguelike-Modus)" aria-label="Turm der 100 Prüfungen">
-          <span class="tower-icon">⛩️</span>
+          <span class="tower-icon">
+            <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+          </span>
           <span class="tower-badge-stat" id="headerTowerBest">Ebene 1</span>
           <span class="tower-label">Turm</span>
         </button>
-        <button id="btnHeaderFuji" class="fuji-header-btn" title="Zu Kapitel 6: Berg Fuji (Level 51–60)" aria-label="Berg Fuji Level 51">
-          <span>🏔️</span>
-          <span>Berg Fuji</span>
-        </button>
         <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-          <span class="sr-only">☰</span>
+          <span class="sr-only">Level</span>
         </button>
       </div>
     </header>
@@ -127,16 +321,31 @@
           <!-- Dedicated Tower Mode HUD Banner (active during Tower of 100 Trials) -->
           <div class="tower-hud-card" id="towerHudBar" style="display: none;">
             <div class="tower-hud-left">
-              <span class="tower-hud-pill" id="towerHudFloor">⛩️ Ebene 1</span>
+              <span class="tower-hud-pill" id="towerHudFloor">
+                <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+                <span id="towerHudFloorText">Ebene 1</span>
+              </span>
               <div class="tower-hud-lanterns" id="towerHudLanterns" title="3 Spirit-Laternen (Leben)">
-                <span class="tower-lantern lit">🏮</span>
-                <span class="tower-lantern lit">🏮</span>
-                <span class="tower-lantern lit">🏮</span>
+                <span class="tower-lantern lit">
+                  <svg class="svg-icon svg-lantern" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+                </span>
+                <span class="tower-lantern lit">
+                  <svg class="svg-icon svg-lantern" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+                </span>
+                <span class="tower-lantern lit">
+                  <svg class="svg-icon svg-lantern" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+                </span>
               </div>
             </div>
             <div class="tower-hud-right">
-              <span class="tower-hud-amulet" id="towerHudAmulet" style="display: none;" title="Kitsune-Schutzamulett aktiv">🌸 Amulett</span>
-              <span class="tower-hud-zen" id="towerHudZen" style="display: none;" title="Zen-Perfektion (Minimalzüge)">⚡ 0 Zen</span>
+              <span class="tower-hud-amulet" id="towerHudAmulet" style="display: none;" title="Kitsune-Schutzamulett aktiv">
+                <svg class="svg-icon svg-amulet" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><polygon points="8,4 16,4 19,8 19,21 5,21 5,8" fill="currentColor" fill-opacity="0.25"/><circle cx="12" cy="13" r="2.5" fill="currentColor"/></svg>
+                <span>Amulett</span>
+              </span>
+              <span class="tower-hud-zen" id="towerHudZen" style="display: none;" title="Zen-Perfektion (Minimalzüge)">
+                <svg class="svg-icon svg-lightning" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
+                <span>0 Zen</span>
+              </span>
               <span class="tower-hud-score" id="towerHudScore">0 Pkt.</span>
             </div>
           </div>
@@ -160,7 +369,7 @@
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8a2 2 0 0 1 2-2h3.5L9 3.5h6l1.5 2.5H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"/><circle cx="12" cy="13" r="4.2"/><circle cx="12" cy="13" r="1.5" fill="currentColor"/></svg>
               </span>
               <span class="cam-count" id="creditBadge">6 / 6</span>
-              <span class="cam-stars" id="creditStars">⭐⭐⭐</span>
+              <span class="cam-stars" id="creditStars"><span class="star-row-svg" style="display: inline-flex; align-items: center; gap: 3px;"><svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg><svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg><svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg></span><span class="sr-only">⭐⭐⭐</span></span>
             </div>
             <div class="koma-status-badge">
               <span class="status-dot"></span>
@@ -238,7 +447,9 @@
           </button>
 
           <div class="mobile-exec-bar" id="mobileExecBar">
-            <span class="mobile-exec-icon">🌸</span>
+            <span class="mobile-exec-icon">
+              <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4-1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
+            </span>
             <span class="mobile-exec-text">KOMA liefert aus …</span>
           </div>
 
@@ -261,7 +472,9 @@
       </div>
       <div class="drawer-fuji-shortcut">
         <button class="fuji-jump-btn" id="btnJumpFujiDrawer">
-          <span class="fuji-btn-icon">🏔️</span>
+          <span class="fuji-btn-icon">
+            <svg class="svg-icon svg-fuji" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg>
+          </span>
           <div class="fuji-btn-text">
             <strong>Kapitel 6: Der Heilige Berg Fuji</strong>
             <span>Level 51–60 · Schneelandschaft & Windböen</span>
@@ -276,7 +489,7 @@
         <button class="drawer-tab" data-chapter="3">Kap. 3</button>
         <button class="drawer-tab" data-chapter="4">Kap. 4</button>
         <button class="drawer-tab" data-chapter="5">Kap. 5</button>
-        <button class="drawer-tab fuji-tab" data-chapter="6">Kap. 6 🏔️</button>
+        <button class="drawer-tab fuji-tab" data-chapter="6">Kap. 6 <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
       </div>
       <div class="drawer-list" id="levelList"></div>
     </nav>
@@ -284,7 +497,9 @@
     <!-- Victory Celebration Modal -->
     <div class="modal-backdrop" id="modalWin" role="dialog" aria-modal="true">
       <div class="modal-card">
-        <div class="modal-emblem">🌸✨📦</div>
+        <div class="modal-emblem">
+          <svg class="svg-icon victory-emblem-svg" width="56" height="56" viewBox="0 0 48 48" fill="none" style="filter: drop-shadow(0 0 16px rgba(255, 77, 109, 0.7));" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0b1329" stroke="#ff4d6d" stroke-width="2"/><path d="M24 6c-2 4-5 6-9 7 4 1 6 4 7 9 2-5 5-7 9-8-4-1-6-4-7-8z" fill="#ff70a6" opacity="0.65"/><path d="M24 42c-2-4-5-6-9-7 4-1 6-4 7-9 2 5 5 7 9 8-4 1-6 4-7 8z" fill="#ff70a6" opacity="0.65"/><rect x="14" y="18" width="20" height="15" rx="3" fill="#ffbe0b" stroke="#ffffff" stroke-width="1.8"/><line x1="14" y1="25" x2="34" y2="25" stroke="#ffffff" stroke-width="1.5"/><line x1="24" y1="18" x2="24" y2="33" stroke="#ffffff" stroke-width="1.5"/><path d="M24 18c-3-4-8-4-8 0s8 4 8 0z" fill="#ff4d6d"/><path d="M24 18c3-4 8-4 8 0s-8 4-8 0z" fill="#ff4d6d"/><circle cx="24" cy="18" r="2.2" fill="#ffffff"/><polygon points="10,12 11.5,15.5 15,17 11.5,18.5 10,22 8.5,18.5 5,17 8.5,15.5" fill="#ffbe0b"/><polygon points="38,10 39.5,13.5 43,15 39.5,16.5 38,20 36.5,16.5 33,15 36.5,13.5" fill="#00f5ff"/></svg>
+        </div>
         <h2 class="modal-title" id="modalWinTitle">Lieferung erfolgreich!</h2>
         <p class="modal-desc" id="modalWinText">KOMA hat das Paket sicher abgeliefert.</p>
         <div id="modalWinStars" class="win-stars-container"></div>
@@ -293,7 +508,7 @@
         <div class="modal-btn-row">
           <button class="play-btn" id="btnNextLevel">Nächstes Level →</button>
           <button class="sec-btn hub-shortcut-btn" id="btnWinOpenHub" title="Zum Schrein-Hub (Skins & Level)">
-            <span>⛩️</span>
+            <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
             <span>Schrein-Hub</span>
           </button>
           <button class="sec-btn" id="btnReplayLevel">Noch einmal</button>
@@ -307,14 +522,16 @@
         <!-- Hub Header -->
         <div class="mobile-hub-header">
           <div class="mobile-hub-title-group">
-            <span class="mobile-hub-emblem">⛩️</span>
+            <span class="mobile-hub-emblem">
+              <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--torii, #ff4d6d)" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="var(--torii, #ff4d6d)" stroke="none"/></svg>
+            </span>
             <div>
               <h2 class="mobile-hub-heading">KOMA Schrein-Hub</h2>
               <span class="mobile-hub-sub">Garderobe · 60 Level · Erfolge</span>
             </div>
           </div>
           <div class="mobile-hub-stars" id="mobileHubStarsPill" title="Gesammelte Sterne für Kami-Skins">
-            <span class="star-icon">⭐</span>
+            <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
             <strong id="mobileHubTotalStars">0</strong>
             <span class="stars-max">/ 180</span>
           </div>
@@ -324,7 +541,9 @@
         <!-- Optional Win Banner inside Hub (when opened after victory) -->
         <div class="mobile-hub-win-banner" id="mobileHubWinBanner" style="display: none;">
           <div class="hub-win-header">
-            <span class="hub-win-emblem">🌸✨📦</span>
+            <span class="hub-win-emblem">
+              <svg class="svg-icon victory-emblem-svg" width="32" height="32" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#0b1329" stroke="#ff4d6d" stroke-width="2"/><path d="M24 6c-2 4-5 6-9 7 4 1 6 4 7 9 2-5 5-7 9-8-4-1-6-4-7-8z" fill="#ff70a6" opacity="0.65"/><path d="M24 42c-2-4-5-6-9-7 4-1 6-4 7-9 2 5 5 7 9 8-4 1-6 4-7 8z" fill="#ff70a6" opacity="0.65"/><rect x="14" y="18" width="20" height="15" rx="3" fill="#ffbe0b" stroke="#ffffff" stroke-width="1.8"/><circle cx="24" cy="18" r="2.2" fill="#ffffff"/></svg>
+            </span>
             <div class="hub-win-title" id="mobileHubWinTitle">Lieferung erfolgreich!</div>
           </div>
           <div class="hub-win-stars" id="mobileHubWinStars"></div>
@@ -337,7 +556,9 @@
         <!-- Daily Shrine Banner in Mobile Hub -->
         <div class="mobile-daily-banner" id="mobileDailyBanner">
           <div class="mobile-daily-left">
-            <span class="mobile-daily-flame">🔥</span>
+            <span class="mobile-daily-flame">
+              <svg class="svg-icon svg-flame" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
+            </span>
             <div>
               <div class="mobile-daily-title">Tägliche Schreinprüfung</div>
               <div class="mobile-daily-sub" id="mobileDailySub">0 Kameraschwenker · Streak: 0</div>
@@ -349,7 +570,9 @@
         <!-- Mobile Tower Mode Banner -->
         <div class="mobile-tower-banner" id="mobileTowerBanner">
           <div class="mobile-tower-left">
-            <span class="mobile-tower-icon">⛩️</span>
+            <span class="mobile-tower-icon">
+              <svg class="svg-icon svg-torii" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+            </span>
             <div>
               <div class="mobile-tower-title">Turm der 100 Prüfungen</div>
               <div class="mobile-tower-sub">Endlos-Modus · Rekord: <strong id="mobileTowerBest">Ebene 1</strong></div>
@@ -361,19 +584,27 @@
         <!-- Touch Navigation Tabs -->
         <div class="mobile-hub-tabs" role="tablist">
           <button class="mobile-hub-tab active" data-tab="skins" id="tabBtnSkins" role="tab" aria-selected="true">
-            <span class="tab-icon">👘</span>
+            <span class="tab-icon">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
+            </span>
             <span class="tab-label">Garderobe</span>
           </button>
           <button class="mobile-hub-tab" data-tab="levels" id="tabBtnLevels" role="tab" aria-selected="false">
-            <span class="tab-icon">🗺️</span>
+            <span class="tab-icon">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" fill="currentColor" fill-opacity="0.18"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            </span>
             <span class="tab-label">60 Level</span>
           </button>
           <button class="mobile-hub-tab" data-tab="trophies" id="tabBtnTrophies" role="tab" aria-selected="false">
-            <span class="tab-icon">🏆</span>
+            <span class="tab-icon">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
+            </span>
             <span class="tab-label">Erfolge</span>
           </button>
           <button class="mobile-hub-tab" data-tab="settings" id="tabBtnSettings" role="tab" aria-selected="false">
-            <span class="tab-icon">⚙️</span>
+            <span class="tab-icon">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </span>
             <span class="tab-label">Optionen</span>
           </button>
         </div>
@@ -396,7 +627,7 @@
             <button class="chapter-pill" data-chapter="3">Kap. 3</button>
             <button class="chapter-pill" data-chapter="4">Kap. 4</button>
             <button class="chapter-pill" data-chapter="5">Kap. 5</button>
-            <button class="chapter-pill" data-chapter="6">Kap. 6 🏔️</button>
+            <button class="chapter-pill" data-chapter="6">Kap. 6 <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
           </div>
           <div class="mobile-levels-grid" id="mobileLevelsGrid">
             <!-- Dynamically populated 10 levels for current chapter -->
@@ -406,7 +637,9 @@
         <!-- Tab 3: Erfolge & Schrein-Trophäen (Achievements) -->
         <div class="mobile-hub-panel" id="hubPanelTrophies" role="tabpanel">
           <div class="mobile-trophies-summary">
-            <span class="trophy-summary-icon">🏆</span>
+            <span class="trophy-summary-icon">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold, #ffb703)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(255,183,3,0.5));" aria-hidden="true"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
+            </span>
             <div>
               <div class="trophy-summary-title">Heilige Schrein-Siegel</div>
               <div class="trophy-summary-sub"><span id="mobileTrophiesCount">0</span> von 6 Errungenschaften gemeistert</div>
@@ -422,7 +655,9 @@
           <div class="mobile-settings-list">
             <div class="mobile-setting-item">
               <div class="setting-item-left">
-                <span class="setting-item-icon">🎵</span>
+                <span class="setting-item-icon">
+                  <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
+                </span>
                 <div>
                   <div class="setting-item-title">Hintergrundmusik (BGM)</div>
                   <div class="setting-item-sub">Koto- & Shamisen-Melodien</div>
@@ -432,7 +667,9 @@
             </div>
             <div class="mobile-setting-item">
               <div class="setting-item-left">
-                <span class="setting-item-icon">🔊</span>
+                <span class="setting-item-icon">
+                  <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
+                </span>
                 <div>
                   <div class="setting-item-title">Sound-Effekte (SFX)</div>
                   <div class="setting-item-sub">Schritte, Windböen, Torii-Glocken</div>
@@ -442,7 +679,9 @@
             </div>
             <div class="mobile-setting-item">
               <div class="setting-item-left">
-                <span class="setting-item-icon">📳</span>
+                <span class="setting-item-icon">
+                  <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><line x1="10" y1="18" x2="14" y2="18"/><path d="M1 9c1 1.5 1 4.5 0 6"/><path d="M23 9c-1 1.5-1 4.5 0 6"/></svg>
+                </span>
                 <div>
                   <div class="setting-item-title">Mobile Haptik (Vibration)</div>
                   <div class="setting-item-sub">Taktiles Feedback bei Schritten & Wind</div>
@@ -453,16 +692,19 @@
           </div>
 
           <div class="mobile-zen-card">
-            <div class="zen-card-title">🌸 Tipps für 3-Sterne-Meister:</div>
+            <div class="zen-card-title">
+              <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 4px;"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4-1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
+              <span>Tipps für 3-Sterne-Meister:</span>
+            </div>
             <div class="zen-card-text">
               • Halte alle <strong>Kamera-Credits</strong> zurück, um die volle 3-Sterne-Wertung zu erhalten.<br>
               • Plane vorab den Weg durch Tore und aktiviere Schalter mit <strong>✦ Aktion</strong>.<br>
-              • Auf dem <strong>Berg Fuji</strong> tragen dich Windböen (💨) automatisch in Pfeilrichtung weiter!
+              • Auf dem <strong>Berg Fuji</strong> tragen dich Windböen automatisch in Pfeilrichtung weiter!
             </div>
           </div>
 
           <button class="play-btn mobile-hub-resume-btn" id="btnMobileResume">
-            <span>⛩️</span>
+            <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
             <span>Zurück zum Spiel</span>
           </button>
         </div>
@@ -474,12 +716,15 @@
       <div class="modal-card modal-skins-card">
         <div class="modal-header-row">
           <div class="modal-header-left">
-            <div class="modal-kicker">⛩️ Schrein-Garderobe</div>
+            <div class="modal-kicker">
+              <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Schrein-Garderobe</span>
+            </div>
             <h2 class="modal-title" style="margin: 0;">KOMA Kami-Skins</h2>
           </div>
           <div class="modal-header-right">
             <div class="modal-stars-pill">
-              <span class="star-icon">⭐</span>
+              <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               <strong id="modalTotalStars">0</strong>
               <span class="modal-stars-max">/ 180</span>
             </div>
@@ -500,12 +745,15 @@
       <div class="modal-card modal-trophies-card">
         <div class="modal-header-row">
           <div class="modal-header-left">
-            <div class="modal-kicker">⛩️ Schrein-Trophäen</div>
+            <div class="modal-kicker">
+              <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Schrein-Trophäen</span>
+            </div>
             <h2 class="modal-title" style="margin: 0;">Heilige Siegel & Erfolge</h2>
           </div>
           <div class="modal-header-right">
             <div class="trophies-counter-pill">
-              <span class="trophy-icon">🏆</span>
+              <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold, #ffb703)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
               <strong id="modalTrophiesCount">0</strong>
               <span class="trophies-max">/ 6 gemeistert</span>
             </div>
@@ -539,8 +787,8 @@
             <ul style="padding-left: 16px; margin-top: 4px;">
               <li>Maus-Drag oder ↺ / ↻ schwenkt die 3D-Kamera.</li>
               <li>Jeder Schwenk kostet <strong>1 Credit</strong>.</li>
-              <li>Volle Credits = <strong>⭐⭐⭐ 3 Sterne</strong>.</li>
-              <li>Mindestens halbe Credits = <strong>⭐⭐ 2 Sterne</strong>.</li>
+              <li>Volle Credits = <strong>3 Sterne</strong>.</li>
+              <li>Mindestens halbe Credits = <strong>2 Sterne</strong>.</li>
               <li>0 Credits übrig = <strong>0 Sterne</strong> (Level kann trotzdem abgeschlossen werden!).</li>
             </ul>
           </li>
@@ -565,7 +813,10 @@
       <div class="modal-card modal-daily-card">
         <div class="modal-header-row">
           <div class="modal-header-left">
-            <div class="modal-kicker">⛩️ Tägliche Schreinprüfung</div>
+            <div class="modal-kicker">
+              <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Tägliche Schreinprüfung</span>
+            </div>
             <h2 class="modal-title" id="dailyModalTitle">Tages-Herausforderung</h2>
           </div>
           <div class="modal-header-right">
@@ -575,7 +826,9 @@
 
         <!-- Date & Streak Hero Banner -->
         <div class="daily-streak-hero">
-          <div class="daily-streak-flame">🔥</div>
+          <div class="daily-streak-flame">
+            <svg class="svg-icon svg-flame" width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
+          </div>
           <div class="daily-streak-details">
             <div class="daily-streak-value" id="dailyStreakValue">0 Tage Streak</div>
             <div class="daily-streak-sub" id="dailyStreakSub">Rekord: 0 Tage · Meistere die tägliche Prüfung</div>
@@ -585,7 +838,10 @@
 
         <!-- 7-Day Weekly Stamp Card -->
         <div class="daily-week-card">
-          <div class="daily-week-title">📅 Wochen-Stempelkarte</div>
+          <div class="daily-week-title">
+            <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Wochen-Stempelkarte</span>
+          </div>
           <div class="daily-week-grid" id="dailyWeekGrid">
             <!-- Rendered dynamically by DailyTrialManager -->
           </div>
@@ -594,21 +850,27 @@
         <!-- Rules & Modifiers -->
         <div class="daily-rules-card">
           <div class="daily-rule-item">
-            <span class="rule-icon">🚫</span>
+            <span class="rule-icon">
+              <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            </span>
             <div>
               <strong>0 Kameraschwenker:</strong>
               <span>Blickwinkel fest fixiert. Du musst die gesamte Route aus der Schrein-Perspektive vorausplanen!</span>
             </div>
           </div>
           <div class="daily-rule-item">
-            <span class="rule-icon">⚡</span>
+            <span class="rule-icon">
+              <svg class="svg-icon svg-lightning" width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
+            </span>
             <div>
               <strong>Hardcore-Prüfung:</strong>
               <span>Täglich wechselnde Schrein-Layouts mit Windböen, Toren, Portalen und Relikten.</span>
             </div>
           </div>
           <div class="daily-rule-item">
-            <span class="rule-icon">🎁</span>
+            <span class="rule-icon">
+              <svg class="svg-icon svg-package" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan, #00f5ff)" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" fill="currentColor" fill-opacity="0.2"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M12 8c-2-3-5-3-5 0s5 3 5 0z" fill="currentColor"/><path d="M12 8c2-3 5-3 5 0s-5 3-5 0z" fill="currentColor"/></svg>
+            </span>
             <div>
               <strong>Tages-Streak:</strong>
               <span>Ein Sieg heute erhöht deine Flammen-Streak um +1 Tag.</span>
@@ -618,127 +880,151 @@
 
         <div class="daily-actions">
           <button class="play-btn daily-start-btn" id="btnStartDailyTrial">
-            <span>⛩️</span>
+            <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
             <span id="btnStartDailyLabel">Prüfung antreten ▶</span>
           </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal: Turm der 100 Prüfungen (Intro & Run Start) -->
-  <div class="modal-backdrop" id="modalTowerIntro" role="dialog" aria-modal="true" aria-labelledby="towerIntroTitle">
-    <div class="modal-card modal-tower-card">
-      <div class="modal-header-row">
-        <div>
-          <span class="modal-kicker">Endlos-Roguelike · 百人鳥居</span>
-          <h2 class="modal-title" id="towerIntroTitle">Turm der 100 Prüfungen</h2>
+    <!-- Modal: Turm der 100 Prüfungen (Intro & Run Start) -->
+    <div class="modal-backdrop" id="modalTowerIntro" role="dialog" aria-modal="true" aria-labelledby="towerIntroTitle">
+      <div class="modal-card modal-tower-card">
+        <div class="modal-header-row">
+          <div>
+            <span class="modal-kicker">
+              <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Endlos-Roguelike · 百人鳥居</span>
+            </span>
+            <h2 class="modal-title" id="towerIntroTitle">Turm der 100 Prüfungen</h2>
+          </div>
+          <button class="modal-close-btn" id="btnCloseTowerIntro" aria-label="Schließen">×</button>
         </div>
-        <button class="modal-close-btn" id="btnCloseTowerIntro" aria-label="Schließen">×</button>
+
+        <div class="modal-body-scroll">
+          <!-- Tower Best Stats Hero -->
+          <div class="tower-stats-hero">
+            <div class="tower-stat-item">
+              <span class="tower-stat-label">Persönlicher Rekord</span>
+              <div class="tower-stat-val" id="towerHeroBestFloor">Ebene 1</div>
+            </div>
+            <div class="tower-stat-divider"></div>
+            <div class="tower-stat-item">
+              <span class="tower-stat-label">Bester Score</span>
+              <div class="tower-stat-val" id="towerHeroBestScore">0 Pkt.</div>
+            </div>
+          </div>
+
+          <!-- Rules & Modifiers -->
+          <div class="tower-rules-list">
+            <div class="tower-rule-box">
+              <span class="tower-rule-icon">
+                <svg class="svg-icon svg-lantern lit" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+              </span>
+              <div class="tower-rule-text">
+                <strong>3 Spirit-Laternen (Leben):</strong>
+                <span>Jeder Fehler (Kollision, geschlossenes Tor, verpasstes Relikt) löscht 1 Laterne. Bei 0 Laternen stürzt KOMA ab!</span>
+              </div>
+            </div>
+            <div class="tower-rule-box">
+              <span class="tower-rule-icon">
+                <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              </span>
+              <div class="tower-rule-text">
+                <strong>100 Aufsteigende Etagen:</strong>
+                <span>Jede Ebene steigert sich prozedural in Größe und Komplexität mit Schaltern, Portalen und Windböen.</span>
+              </div>
+            </div>
+            <div class="tower-rule-box">
+              <span class="tower-rule-icon">
+                <svg class="svg-icon svg-amulet" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sakura, #f472b6)" stroke-width="1.8"><polygon points="8,4 16,4 19,8 19,21 5,21 5,8" fill="currentColor" fill-opacity="0.25"/><circle cx="12" cy="13" r="2.5" fill="currentColor"/></svg>
+              </span>
+              <div class="tower-rule-text">
+                <strong>Altar der Segnungen (alle 5 Etagen):</strong>
+                <span>Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
+              </div>
+            </div>
+            <div class="tower-rule-box">
+              <span class="tower-rule-icon">
+                <svg class="svg-icon svg-lightning" width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
+              </span>
+              <div class="tower-rule-text">
+                <strong>Zen-Effizienz (Minimalzüge):</strong>
+                <span>Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tower-actions-row">
+            <button class="play-btn tower-start-btn" id="btnStartTowerRun">
+              <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Aufstieg beginnen ▶</span>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="modal-body-scroll">
-        <!-- Tower Best Stats Hero -->
-        <div class="tower-stats-hero">
-          <div class="tower-stat-item">
-            <span class="tower-stat-label">Persönlicher Rekord</span>
-            <div class="tower-stat-val" id="towerHeroBestFloor">Ebene 1</div>
+    <!-- Modal: Altar der Segnungen (Gaben-Auswahl alle 5 Etagen) -->
+    <div class="modal-backdrop" id="modalTowerAltar" role="dialog" aria-modal="true" aria-labelledby="towerAltarTitle">
+      <div class="modal-card modal-altar-card">
+        <div class="altar-header">
+          <span class="modal-kicker">
+            <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+            <span>Große Schrein-Pforte gemeistert!</span>
+          </span>
+          <h2 class="modal-title" id="towerAltarTitle">Altar der Segnungen</h2>
+          <p class="altar-desc">Wähle eine heilige Gabe der Kitsune-Göttin für deinen weiteren Aufstieg:</p>
+        </div>
+
+        <div class="altar-blessings-grid" id="towerAltarChoices">
+          <!-- Dynamically injected 3 blessing cards -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Turm-Sturz (Game Over) -->
+    <div class="modal-backdrop" id="modalTowerGameOver" role="dialog" aria-modal="true" aria-labelledby="towerGameOverTitle">
+      <div class="modal-card modal-tower-gameover-card">
+        <div class="gameover-emblem">
+          <svg class="svg-icon svg-lantern unlit" width="48" height="48" viewBox="0 0 24 24" fill="none" style="opacity: 0.45;"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="rgba(255,255,255,0.1)" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+        </div>
+        <h2 class="modal-title" id="towerGameOverTitle">Alle Laternen erloschen!</h2>
+        <p class="modal-desc" id="towerGameOverDesc">KOMA konnte die Balance im Turm der 100 Prüfungen nicht mehr halten.</p>
+
+        <div class="gameover-summary-box">
+          <div class="summary-line">
+            <span>Erreichte Ebene:</span>
+            <strong id="towerResultFloor">Ebene 7</strong>
           </div>
-          <div class="tower-stat-divider"></div>
-          <div class="tower-stat-item">
-            <span class="tower-stat-label">Bester Score</span>
-            <div class="tower-stat-val" id="towerHeroBestScore">0 Pkt.</div>
+          <div class="summary-line">
+            <span>Erzielte Punkte:</span>
+            <strong id="towerResultScore">1.850 Pkt.</strong>
+          </div>
+          <div class="summary-line" id="towerResultZenRow">
+            <span>
+              <svg class="svg-icon svg-lightning" width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 3px;"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
+              <span>Zen-Meisterzüge:</span>
+            </span>
+            <strong id="towerResultZen" style="color: var(--gold, #ffb703);">0 Ebenen</strong>
+          </div>
+          <div class="tower-record-badge" id="towerResultRecord" style="display: none;">
+            NEUER PERSÖNLICHER REKORD!
           </div>
         </div>
 
-        <!-- Rules & Modifiers -->
-        <div class="tower-rules-list">
-          <div class="tower-rule-box">
-            <span class="tower-rule-icon">🏮</span>
-            <div class="tower-rule-text">
-              <strong>3 Spirit-Laternen (Leben):</strong>
-              <span>Jeder Fehler (Kollision, geschlossenes Tor, verpasstes Relikt) löscht 1 Laterne. Bei 0 Laternen stürzt KOMA ab!</span>
-            </div>
-          </div>
-          <div class="tower-rule-box">
-            <span class="tower-rule-icon">⛩️</span>
-            <div class="tower-rule-text">
-              <strong>100 Aufsteigende Etagen:</strong>
-              <span>Jede Ebene steigert sich prozedural in Größe und Komplexität mit Schaltern, Portalen und Windböen.</span>
-            </div>
-          </div>
-          <div class="tower-rule-box">
-            <span class="tower-rule-icon">🌸</span>
-            <div class="tower-rule-text">
-              <strong>Altar der Segnungen (alle 5 Etagen):</strong>
-              <span>Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
-            </div>
-          </div>
-          <div class="tower-rule-box">
-            <span class="tower-rule-icon">⚡</span>
-            <div class="tower-rule-text">
-              <strong>Zen-Effizienz (Minimalzüge):</strong>
-              <span>Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="tower-actions-row">
-          <button class="play-btn tower-start-btn" id="btnStartTowerRun">
-            <span>⛩️</span>
-            <span>Aufstieg beginnen ▶</span>
+        <div class="modal-btn-row">
+          <button class="primary-btn" id="btnTowerRetry">
+            <svg class="svg-icon svg-retry" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+            <span>Erneut versuchen</span>
+          </button>
+          <button class="secondary-btn" id="btnTowerExitToCampaign">
+            <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+            <span>Zur Kampagne</span>
           </button>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Modal: Altar der Segnungen (Gaben-Auswahl alle 5 Etagen) -->
-  <div class="modal-backdrop" id="modalTowerAltar" role="dialog" aria-modal="true" aria-labelledby="towerAltarTitle">
-    <div class="modal-card modal-altar-card">
-      <div class="altar-header">
-        <span class="modal-kicker">⛩️ Große Schrein-Pforte gemeistert!</span>
-        <h2 class="modal-title" id="towerAltarTitle">Altar der Segnungen</h2>
-        <p class="altar-desc">Wähle eine heilige Gabe der Kitsune-Göttin für deinen weiteren Aufstieg:</p>
-      </div>
-
-      <div class="altar-blessings-grid" id="towerAltarChoices">
-        <!-- Dynamically injected 3 blessing cards -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Turm-Sturz (Game Over) -->
-  <div class="modal-backdrop" id="modalTowerGameOver" role="dialog" aria-modal="true" aria-labelledby="towerGameOverTitle">
-    <div class="modal-card modal-tower-gameover-card">
-      <div class="gameover-emblem">🏮</div>
-      <h2 class="modal-title" id="towerGameOverTitle">Alle Laternen erloschen!</h2>
-      <p class="modal-desc" id="towerGameOverDesc">KOMA konnte die Balance im Turm der 100 Prüfungen nicht mehr halten.</p>
-
-      <div class="gameover-summary-box">
-        <div class="summary-line">
-          <span>Erreichte Ebene:</span>
-          <strong id="towerResultFloor">Ebene 7</strong>
-        </div>
-        <div class="summary-line">
-          <span>Erzielte Punkte:</span>
-          <strong id="towerResultScore">1.850 Pkt.</strong>
-        </div>
-        <div class="summary-line" id="towerResultZenRow">
-          <span>⚡ Zen-Meisterzüge:</span>
-          <strong id="towerResultZen" style="color: var(--gold, #ffb703);">0 Ebenen</strong>
-        </div>
-        <div class="tower-record-badge" id="towerResultRecord" style="display: none;">
-          🎉 NEUER PERSÖNLICHER REKORD!
-        </div>
-      </div>
-
-      <div class="modal-btn-row">
-        <button class="primary-btn" id="btnTowerRetry">Erneut versuchen 🔄</button>
-        <button class="secondary-btn" id="btnTowerExitToCampaign">Zur Kampagne ⛩️</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Scripts -->
   <script src="js/three.min.js"></script>
