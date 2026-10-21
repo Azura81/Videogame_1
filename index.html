@@ -136,6 +136,7 @@
             </div>
             <div class="tower-hud-right">
               <span class="tower-hud-amulet" id="towerHudAmulet" style="display: none;" title="Kitsune-Schutzamulett aktiv">🌸 Amulett</span>
+              <span class="tower-hud-zen" id="towerHudZen" style="display: none;" title="Zen-Perfektion (Minimalzüge)">⚡ 0 Zen</span>
               <span class="tower-hud-score" id="towerHudScore">0 Pkt.</span>
             </div>
           </div>
@@ -673,6 +674,13 @@
               <span>Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
             </div>
           </div>
+          <div class="tower-rule-box">
+            <span class="tower-rule-icon">⚡</span>
+            <div class="tower-rule-text">
+              <strong>Zen-Effizienz (Minimalzüge):</strong>
+              <span>Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!</span>
+            </div>
+          </div>
         </div>
 
         <div class="tower-actions-row">
@@ -715,6 +723,10 @@
         <div class="summary-line">
           <span>Erzielte Punkte:</span>
           <strong id="towerResultScore">1.850 Pkt.</strong>
+        </div>
+        <div class="summary-line" id="towerResultZenRow">
+          <span>⚡ Zen-Meisterzüge:</span>
+          <strong id="towerResultZen" style="color: var(--gold, #ffb703);">0 Ebenen</strong>
         </div>
         <div class="tower-record-badge" id="towerResultRecord" style="display: none;">
           🎉 NEUER PERSÖNLICHER REKORD!

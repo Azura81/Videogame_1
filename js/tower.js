@@ -83,6 +83,8 @@
       this.extraCredits = 0;
       this.blessings = [];
       this.score = 0;
+      this.zenPerfectCount = 0;
+      this.totalZenBonus = 0;
       this.runSeed = 1337;
       this.currentLevel = null;
 
@@ -100,7 +102,8 @@
         bestFloor: 0,
         bestScore: 0,
         totalRuns: 0,
-        totalFloorsCleared: 0
+        totalFloorsCleared: 0,
+        bestZenCount: 0
       };
     }
 
@@ -130,6 +133,8 @@
       this.extraCredits = 0;
       this.blessings = [];
       this.score = 0;
+      this.zenPerfectCount = 0;
+      this.totalZenBonus = 0;
       this.runSeed = Math.floor(Math.random() * 900000) + 100000;
       this.data.totalRuns += 1;
       this.saveData();
@@ -484,7 +489,33 @@
       // Calculate score for cleared floor
       const basePoints = 100 * this.floor;
       const lanternBonus = this.lanterns * 50;
-      const floorScore = basePoints + lanternBonus;
+
+      // Zen Efficiency calculation (Minimalzüge Bonus)
+      const optimalSteps = (this.currentLevel && this.currentLevel.solution)
+        ? this.currentLevel.solution.length
+        : ((this.currentLevel && this.currentLevel.solverSolution) ? this.currentLevel.solverSolution.steps : 0);
+
+      let zenBonus = 0;
+      let zenTier = "none";
+      let zenLabel = "";
+
+      if (optimalSteps > 0 && typeof stepsUsed === "number" && stepsUsed > 0) {
+        if (stepsUsed <= optimalSteps) {
+          // ⚡ Perfekte Pfadführung / Zen-Meisterschaft (+50% der Ebenenpunkte)
+          zenBonus = Math.round(basePoints * 0.5);
+          zenTier = "perfect";
+          zenLabel = `⚡ Perfekte Eleganz (+${zenBonus} Zen-Bonus)`;
+          this.zenPerfectCount = (this.zenPerfectCount || 0) + 1;
+        } else if (stepsUsed <= optimalSteps + 2) {
+          // ✨ Fließender Geist (+25% der Ebenenpunkte)
+          zenBonus = Math.round(basePoints * 0.25);
+          zenTier = "great";
+          zenLabel = `✨ Fließender Geist (+${zenBonus} Effizienz-Bonus)`;
+        }
+      }
+
+      this.totalZenBonus = (this.totalZenBonus || 0) + zenBonus;
+      const floorScore = basePoints + lanternBonus + zenBonus;
       this.score += floorScore;
 
       let isNewBestFloor = false;
@@ -494,6 +525,9 @@
       }
       if (this.score > (this.data.bestScore || 0)) {
         this.data.bestScore = this.score;
+      }
+      if (this.zenPerfectCount > (this.data.bestZenCount || 0)) {
+        this.data.bestZenCount = this.zenPerfectCount;
       }
       this.saveData();
 
@@ -508,6 +542,14 @@
           type: "altar",
           floor: clearedFloor,
           score: this.score,
+          floorScore,
+          basePoints,
+          lanternBonus,
+          zenBonus,
+          zenTier,
+          zenLabel,
+          stepsUsed,
+          optimalSteps,
           isNewBestFloor,
           choices: this.pendingAltarChoices
         };
@@ -520,6 +562,14 @@
           type: "next_floor",
           floor: this.floor,
           score: this.score,
+          floorScore,
+          basePoints,
+          lanternBonus,
+          zenBonus,
+          zenTier,
+          zenLabel,
+          stepsUsed,
+          optimalSteps,
           isNewBestFloor
         };
       }
@@ -587,7 +637,9 @@
           gameOver: true,
           floor: reachedFloor,
           score: finalScore,
-          isRecord
+          isRecord,
+          zenCount: this.zenPerfectCount || 0,
+          zenBonus: this.totalZenBonus || 0
         };
       }
 
@@ -639,6 +691,16 @@
       const hudAmulet = document.getElementById("towerHudAmulet");
       if (hudAmulet) {
         hudAmulet.style.display = this.amuletActive ? "inline-flex" : "none";
+      }
+
+      const hudZen = document.getElementById("towerHudZen");
+      if (hudZen) {
+        if (this.zenPerfectCount > 0) {
+          hudZen.style.display = "inline-flex";
+          hudZen.textContent = `⚡ ${this.zenPerfectCount} Zen`;
+        } else {
+          hudZen.style.display = "none";
+        }
       }
 
       const hudScore = document.getElementById("towerHudScore");

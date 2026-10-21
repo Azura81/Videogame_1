@@ -205,5 +205,61 @@ test.describe('Tower of 100 Trials (Roguelike Endless Mode)', () => {
     await expect(altarModal).not.toHaveClass(/active/, { timeout: 8000 });
     await expect(page.locator('#towerHudFloor')).toHaveText(/Ebene 6/, { timeout: 8000 });
   });
+
+  test('Zen Efficiency awards +50% bonus for minimal steps and updates HUD & Game Over modal', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    // Start Tower Run
+    await page.locator('#btnTowerMode').click();
+    await page.locator('#btnStartTowerRun').click();
+
+    // 1. Solve Floor 1 with exact optimal minimal steps
+    const floor1Solution = await page.evaluate(() => {
+      const lvl = window.gameInstance.getCurrentLevel();
+      return lvl.solution || (lvl.solverSolution ? lvl.solverSolution.path : null);
+    });
+
+    expect(floor1Solution).not.toBeNull();
+    for (const cmd of floor1Solution) {
+      await page.locator(`button[data-cmd="${cmd}"]`).click();
+    }
+    await page.locator('#btnPlay').click();
+
+    // Floor 2 loaded
+    await expect(page.locator('#towerHudFloor')).toHaveText(/Ebene 2/, { timeout: 15000 });
+
+    // Verify Zen Bonus is awarded:
+    // Base points for floor 1 = 100, Lantern bonus (3*50) = 150, Zen bonus (+50% base) = 50. Total = 300.
+    const runStats = await page.evaluate(() => {
+      return {
+        score: window.TowerTrial.score,
+        zenCount: window.TowerTrial.zenPerfectCount,
+        totalZenBonus: window.TowerTrial.totalZenBonus
+      };
+    });
+
+    expect(runStats.zenCount).toBe(1);
+    expect(runStats.totalZenBonus).toBe(50);
+    expect(runStats.score).toBe(300);
+
+    // Verify HUD reflects Zen badge
+    const hudZen = page.locator('#towerHudZen');
+    await expect(hudZen).toBeVisible();
+    await expect(hudZen).toContainText('1 Zen');
+
+    // 2. Intentionally lose all lives to verify Zen stats in Game Over modal
+    for (let i = 0; i < 3; i++) {
+      await page.locator('button[data-cmd="L"]').click();
+      await page.locator('button[data-cmd="F"]').click();
+      await page.locator('#btnPlay').click();
+      await page.waitForTimeout(1000);
+    }
+
+    const gameOverModal = page.locator('#modalTowerGameOver');
+    await expect(gameOverModal).toHaveClass(/active/, { timeout: 10000 });
+    await expect(page.locator('#towerResultZen')).toContainText(/1 Ebene/);
+  });
 });
+
 

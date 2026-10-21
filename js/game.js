@@ -197,6 +197,8 @@ class GameEngine {
       towerHeroBestScore: document.getElementById("towerHeroBestScore"),
       towerResultFloor: document.getElementById("towerResultFloor"),
       towerResultScore: document.getElementById("towerResultScore"),
+      towerResultZen: document.getElementById("towerResultZen"),
+      towerResultZenRow: document.getElementById("towerResultZenRow"),
       towerResultRecord: document.getElementById("towerResultRecord")
     };
 
@@ -1434,6 +1436,9 @@ class GameEngine {
     if (this.dom.towerResultScore) {
       this.dom.towerResultScore.textContent = `${failRes.score.toLocaleString("de-DE")} Pkt.`;
     }
+    if (this.dom.towerResultZen) {
+      this.dom.towerResultZen.textContent = `${failRes.zenCount || 0} Ebene(n) ⚡ (+${(failRes.zenBonus || 0).toLocaleString("de-DE")} Pkt.)`;
+    }
     if (this.dom.towerResultRecord) {
       this.dom.towerResultRecord.style.display = failRes.isRecord ? "block" : "none";
     }
@@ -2030,13 +2035,24 @@ class GameEngine {
 
         if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
 
+        const earnedPts = res.floorScore || (res.score || 200);
+        const zenFeedback = res.zenLabel ? ` · ${res.zenLabel}` : "";
+
         if (res.type === "altar") {
-          this.setFeedback(`⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT! Altar der Segnungen öffnet sich...`, "good");
+          this.setFeedback(`⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`, "good");
+          if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
+            setTimeout(() => Sound.playStarChime(3), 200);
+          }
           setTimeout(() => {
             this.showTowerAltar(res.choices, res.floor);
           }, 700);
         } else {
-          this.setFeedback(`⛩️ EBENE ${res.floor - 1} GEMEISTERT! (+${res.score} Pkt.) Aufstieg zu Ebene ${res.floor}...`, "good");
+          this.setFeedback(`⛩️ EBENE ${res.floor - 1} GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Aufstieg zu Ebene ${res.floor}...`, "good");
+          if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
+            setTimeout(() => Sound.playStarChime(3), 200);
+          } else if (res.zenTier === "great" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
+            setTimeout(() => Sound.playStarChime(2), 200);
+          }
           setTimeout(() => {
             this.loadTowerFloor();
           }, 850);
