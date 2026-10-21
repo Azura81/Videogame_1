@@ -3251,9 +3251,9 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   position: fixed;
   inset: 0;
   z-index: 950;
-  background: radial-gradient(circle at 50% 20%, rgba(13, 24, 46, 0.94) 0%, rgba(4, 8, 16, 0.98) 100%);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  background: radial-gradient(circle at 65% 30%, rgba(13, 24, 46, 0.6) 0%, rgba(4, 8, 16, 0.8) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3371,7 +3371,7 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
 /* Left Column: 3D Robot Showroom Card */
 .home-showroom-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(16, 28, 48, 0.8) 0%, rgba(8, 14, 26, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(16, 28, 48, 0.35) 0%, rgba(8, 14, 26, 0.65) 100%);
   border: 1px solid rgba(0, 245, 255, 0.35);
   border-radius: 20px;
   padding: 20px;
@@ -3380,6 +3380,8 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   justify-content: space-between;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(0, 245, 255, 0.05);
   overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .showroom-pedestal-halo {
@@ -3429,6 +3431,16 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   pointer-events: none;
 }
 
+.showroom-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+  z-index: 2;
+}
+
 .showroom-pedestal-ring {
   width: 170px;
   height: 38px;
@@ -3438,6 +3450,8 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   box-shadow: 0 0 24px rgba(0, 245, 255, 0.45), inset 0 0 16px rgba(0, 245, 255, 0.3);
   transform: perspective(300px) rotateX(60deg);
   margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .showroom-info-box {

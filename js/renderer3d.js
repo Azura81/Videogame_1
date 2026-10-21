@@ -3167,8 +3167,6 @@ class GardenRenderer {
         this.savedLevelKomaPos = this.komaGroup.position.clone();
       }
       this.savedLevelKomaRotY = this.komaGroup.rotation.y;
-      this.homeScreenKomaY = 0.45;
-      this.komaGroup.position.set(0, 0.45, 0);
     }
     // Set showroom camera distance and smooth elevation
     this.savedOrbitAzimuth = this.orbit.targetAzimuth;
@@ -3179,10 +3177,48 @@ class GardenRenderer {
     this.orbit.elevation = 0.38;
     this.orbit.distance = 28;
     this.updateCameraPosition();
+
+    // Position KOMA exactly inside the showroom stage
+    this.alignKomaToShowroom();
+  }
+
+  alignKomaToShowroom() {
+    if (!this.komaGroup || !this.camera) return;
+    const stage = document.getElementById("showroomRobotStage");
+    if (stage) {
+      const rect = stage.getBoundingClientRect();
+      const screenW = window.innerWidth || 800;
+      const screenH = window.innerHeight || 600;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height * 0.65;
+      
+      const ndcX = (centerX / screenW) * 2 - 1;
+      const ndcY = -(centerY / screenH) * 2 + 1;
+
+      // Unproject NDC point into world space
+      const v = new THREE.Vector3(ndcX, ndcY, 0.5);
+      v.unproject(this.camera);
+
+      // Camera ray direction
+      const rayDir = new THREE.Vector3();
+      this.camera.getWorldDirection(rayDir);
+
+      // We want the point on the ray that intersects the horizontal plane Y = 0.45
+      const planeY = 0.45;
+      const t = (planeY - v.y) / rayDir.y;
+      const pos = v.clone().add(rayDir.clone().multiplyScalar(t));
+
+      this.homeScreenKomaY = planeY;
+      this.homeScreenKomaPos = pos.clone();
+      this.komaGroup.position.copy(pos);
+    } else {
+      this.komaGroup.position.set(0, 0.45, 0);
+    }
   }
 
   exitHomeScreenMode() {
     this.isHomeScreenMode = false;
+    this.homeScreenKomaPos = null;
     if (this.komaGroup && this.savedLevelKomaPos) {
       this.komaGroup.position.copy(this.savedLevelKomaPos);
       this.komaGroup.rotation.y = this.savedLevelKomaRotY || 0;
@@ -3243,7 +3279,13 @@ class GardenRenderer {
       // Showroom 360-degree turntable continuous rotation
       this.komaGroup.rotation.y += delta * 0.65;
       const hoverY = Math.sin(time * 2.5) * 0.038;
-      this.komaGroup.position.y = (this.homeScreenKomaY || 0.45) + hoverY;
+      if (this.homeScreenKomaPos) {
+        this.komaGroup.position.x = this.homeScreenKomaPos.x;
+        this.komaGroup.position.z = this.homeScreenKomaPos.z;
+        this.komaGroup.position.y = this.homeScreenKomaPos.y + hoverY;
+      } else {
+        this.komaGroup.position.y = (this.homeScreenKomaY || 0.45) + hoverY;
+      }
       
       const breathe = Math.sin(time * 2.2) * 0.02;
       scaleY += breathe;
@@ -3617,4 +3659,112 @@ class GardenRenderer {
       this.renderer.render(this.scene, this.camera);
     }
   }
+}
+
+/**
+ * Showroom3DViewer
+ * Dedicated lightweight 3D viewport that renders the equipped KOMA robot
+ * directly on the showroom pedestal inside the Home Screen card.
+ */
+class Showroom3DViewer {
+  constructor(canvasId = "showroomCanvas") {
+    this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) return;
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance"
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const w = this.canvas.clientWidth || 340;
+    const h = this.canvas.clientHeight || 230;
+    this.renderer.setSize(w, h, false);
+
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(34, w / h, 0.1, 50);
+    this.camera.position.set(0, 0.48, 2.3);
+    this.camera.lookAt(0, 0.22, 0);
+
+    // Warm Shinto Studio Lighting
+    const ambLight = new THREE.AmbientLight(0xffffff, 1.8);
+    this.scene.add(ambLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffeedd, 2.4);
+    keyLight.position.set(2.5, 4, 3.5);
+    this.scene.add(keyLight);
+
+    const cyanRimLight = new THREE.DirectionalLight(0x00f5ff, 2.2);
+    cyanRimLight.position.set(-2.5, 2.5, -2);
+    this.scene.add(cyanRimLight);
+
+    const bottomGlow = new THREE.PointLight(0x00f5ff, 2.5, 3.0);
+    bottomGlow.position.set(0, 0.05, 0);
+    this.scene.add(bottomGlow);
+
+    this.currentSkinId = "original";
+    this.komaGroup = null;
+    this.clock = new THREE.Clock();
+
+    this.loadSkin(window.gameInstance?.equippedSkin || "original");
+
+    // Handle resize
+    window.addEventListener("resize", () => this.onResize());
+
+    this.animate();
+  }
+
+  onResize() {
+    if (!this.canvas || !this.renderer || !this.camera) return;
+    const w = this.canvas.clientWidth || 340;
+    const h = this.canvas.clientHeight || 230;
+    if (w > 0 && h > 0) {
+      this.renderer.setSize(w, h, false);
+      this.camera.aspect = w / h;
+      this.camera.updateProjectionMatrix();
+    }
+  }
+
+  loadSkin(skinId = "original") {
+    this.currentSkinId = skinId;
+    if (this.komaGroup) {
+      this.scene.remove(this.komaGroup);
+      this.komaGroup = null;
+    }
+
+    if (window.gameInstance && window.gameInstance.renderer) {
+      const gRenderer = window.gameInstance.renderer;
+      const prevGroup = gRenderer.komaGroup;
+      gRenderer.buildKomaModel(skinId);
+      this.komaGroup = gRenderer.komaGroup;
+      gRenderer.komaGroup = prevGroup;
+    }
+
+    if (this.komaGroup) {
+      this.komaGroup.position.set(0, 0.16, 0);
+      this.komaGroup.scale.set(1.22, 1.22, 1.22);
+      this.scene.add(this.komaGroup);
+    }
+  }
+
+  animate() {
+    requestAnimationFrame(() => this.animate());
+    const delta = this.clock.getDelta();
+    const time = this.clock.getElapsedTime();
+
+    if (this.komaGroup) {
+      this.komaGroup.rotation.y += delta * 0.75;
+      this.komaGroup.position.y = 0.16 + Math.sin(time * 2.4) * 0.025;
+    }
+
+    if (this.renderer && this.scene && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.Showroom3DViewer = Showroom3DViewer;
 }

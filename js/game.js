@@ -322,6 +322,9 @@ class GameEngine {
     }
 
     // 10. Update & Display Main Home Screen
+    if (typeof Showroom3DViewer !== "undefined" && !window.showroomViewer) {
+      window.showroomViewer = new Showroom3DViewer("showroomCanvas");
+    }
     this.updateHomeScreen();
     const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
     const skipHome = urlParams.has("skipHome") || (typeof navigator !== "undefined" && navigator.webdriver && !urlParams.has("showHome"));
@@ -1090,6 +1093,10 @@ class GameEngine {
       this.dom.homeSkinIcon.innerHTML = (typeof KOMA_ICONS !== "undefined" && typeof KOMA_ICONS.getSkinIcon === "function")
         ? KOMA_ICONS.getSkinIcon(skinId, 32, skinDef.accentColor)
         : "";
+    }
+
+    if (window.showroomViewer && typeof window.showroomViewer.loadSkin === "function") {
+      window.showroomViewer.loadSkin(skinId);
     }
 
     // 2. Synchronize Current Level Resume Card
