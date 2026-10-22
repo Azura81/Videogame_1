@@ -5,12 +5,12 @@ module.exports = defineConfig({
   timeout: 75000,
   workers: 2,
   webServer: {
-    command: 'npx vite --port 5178',
-    port: 5178,
+    command: 'npx vite --port 5174',
+    port: 5174,
     reuseExistingServer: true,
   },
   use: {
-    baseURL: 'http://localhost:5178',
+    baseURL: 'http://localhost:5174',
     headless: true,
   },
 });

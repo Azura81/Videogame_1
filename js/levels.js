@@ -1,10 +1,3 @@
-/**
- * KOMA: Spirit Delivery - 60 Level Campaign
- * Fully verified for puzzle depth and zero gate/portal bypasses.
- * Features Japanese Garden & Mount Fuji aesthetics: Machiya houses, Pavilions,
- * Bamboo fences, Stone walls, Sculpted pines, Sakura blossoms, Moss meadows,
- * and the Sacred Mount Fuji with snow caps and wind gusts!
- */
 const LEVELS = [
   {
     "n": "Die erste Lieferung",
@@ -1028,12 +1021,98 @@ const LEVELS = [
       ]
     ],
     "walls": [
-      [0, 0], [1, 0], [2, 0], [3, 0], [5, 0],
-      [0, 1], [2, 1], [5, 1],
-      [0, 2], [2, 2], [4, 2], [5, 2],
-      [0, 3], [2, 3], [4, 3], [5, 3],
-      [0, 4], [2, 4], [4, 4], [5, 4],
-      [0, 5], [4, 5], [5, 5]
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ]
     ],
     "water": [
       [
@@ -1905,12 +1984,102 @@ const LEVELS = [
       5
     ],
     "walls": [
-      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
-      [0, 1], [5, 1],
-      [0, 2], [2, 2], [3, 2], [5, 2],
-      [0, 3], [2, 3], [3, 3], [5, 3],
-      [0, 4], [2, 4], [3, 4], [5, 4],
-      [0, 5], [2, 5], [3, 5], [5, 5]
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        5,
+        5
+      ]
     ],
     "water": [
       [
@@ -3247,10 +3416,10 @@ const LEVELS = [
     "grass": []
   },
   {
-    "n": "Über die Mauer",
+    "n": "Über Mauer & Lotusteich",
     "c": "Kapitel 04 · Kitsune-Garten",
-    "t": "Mauer-Sprung",
-    "d": "Eine dichte Steinmauer trennt die Gartenbereiche. Nutze das Portal, um direkt auf die andere Seite zu beamen.",
+    "t": "Fragile Dimension",
+    "d": "Der Lotusteich trennt KOMA vom Kitsune-Portal. Balanciere über die brüchigen Steine zum Schalter und springe durch das Portal zum Tor!",
     "w": 6,
     "h": 6,
     "s": [
@@ -3269,7 +3438,21 @@ const LEVELS = [
       ],
       [
         4,
-        2
+        1
+      ]
+    ],
+    "sw": [
+      [
+        2,
+        1,
+        "cyan"
+      ]
+    ],
+    "gates": [
+      [
+        4,
+        3,
+        "cyan"
       ]
     ],
     "walls": [
@@ -3302,19 +3485,7 @@ const LEVELS = [
         1
       ],
       [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
         3,
-        1
-      ],
-      [
-        4,
         1
       ],
       [
@@ -3323,10 +3494,6 @@ const LEVELS = [
       ],
       [
         0,
-        2
-      ],
-      [
-        2,
         2
       ],
       [
@@ -3339,10 +3506,6 @@ const LEVELS = [
       ],
       [
         0,
-        3
-      ],
-      [
-        2,
         3
       ],
       [
@@ -3394,48 +3557,80 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 8,
+    "water": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "fragile": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "wall_h",
+      "3,0": "wall_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,1": "fence_v",
+      "3,1": "wall_v",
+      "5,1": "fence_v",
+      "0,2": "wall_v",
+      "3,2": "wall_v",
+      "5,2": "wall_v",
+      "0,3": "fence_v",
+      "3,3": "wall_v",
+      "5,3": "fence_v",
+      "0,4": "wall_h",
+      "2,4": "sakura",
+      "3,4": "wall_v",
+      "5,4": "wall_h",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "wall_h",
+      "4,5": "fence_h",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        2
+      ]
+    ],
     "solution": [
       "F",
+      "R",
       "F",
-      "R",
-      "R",
+      "L",
+      "F",
+      "F",
+      "L",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
       "F",
       "F"
     ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_h",
-      "0,2": "wall_v",
-      "0,3": "pine",
-      "0,4": "fence_v",
-      "0,5": "fence_h",
-      "1,0": "fence_h",
-      "1,1": "wall_h",
-      "1,5": "fence_h",
-      "2,0": "wall_h",
-      "2,1": "wall_h",
-      "2,2": "sakura",
-      "2,3": "fence_h",
-      "2,4": "fence_h",
-      "2,5": "fence_h",
-      "3,0": "wall_h",
-      "3,1": "pine",
-      "3,2": "fence_h",
-      "3,3": "fence_h",
-      "3,4": "fence_h",
-      "3,5": "wall_h",
-      "4,0": "pine",
-      "4,1": "pavilion",
-      "4,5": "wall_h",
-      "5,0": "sakura",
-      "5,1": "fence_h",
-      "5,2": "fence_v",
-      "5,3": "fence_v",
-      "5,4": "wall_v",
-      "5,5": "wall_h"
-    },
-    "grass": []
+    "limit": 16
   },
   {
     "n": "Schritt ins Blaue",
@@ -4867,23 +5062,57 @@ const LEVELS = [
   {
     "n": "Das verlorene Licht",
     "c": "Kapitel 05 · Bambuswald",
-    "t": "Geisterlicht",
-    "d": "Sammle das schwebende Geisterlicht 🌸 ein, um das heilige Zieltor zu aktivieren.",
-    "w": 5,
-    "h": 5,
+    "t": "Bambusteich-Brücke",
+    "d": "Das heilige Geisterlicht ruht auf einer Insel im Bambusteich. Baue mit dem Felsblock eine Brücke zum Licht und balanciere über die Lotustrittsteine zum Schrein.",
+    "w": 6,
+    "h": 6,
     "s": [
-      0,
-      2,
+      1,
+      1,
       "E"
     ],
     "g": [
       4,
-      2
+      4
     ],
     "orbs": [
       [
-        2,
+        4,
         2
+      ]
+    ],
+    "blocks": [
+      [
+        3,
+        1
+      ]
+    ],
+    "water": [
+      [
+        4,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ]
+    ],
+    "fragile": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
       ]
     ],
     "walls": [
@@ -4908,43 +5137,35 @@ const LEVELS = [
         0
       ],
       [
+        5,
+        0
+      ],
+      [
         0,
         1
       ],
       [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
+        5,
         1
       ],
       [
         0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
+        2
       ],
       [
         3,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        0,
         3
       ],
       [
-        4,
+        5,
         3
       ],
       [
@@ -4960,44 +5181,92 @@ const LEVELS = [
         4
       ],
       [
-        3,
+        5,
         4
       ],
       [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
         4,
-        4
+        5
+      ],
+      [
+        5,
+        5
       ]
     ],
-    "limit": 6,
+    "obstacles": {
+      "0,0": "pine",
+      "1,0": "bamboo",
+      "2,0": "pine",
+      "3,0": "bamboo",
+      "4,0": "pine",
+      "5,0": "bamboo",
+      "0,1": "fence_v",
+      "5,1": "fence_v",
+      "0,2": "wall_v",
+      "3,2": "pine",
+      "5,2": "wall_v",
+      "0,3": "fence_v",
+      "5,3": "fence_v",
+      "0,4": "wall_h",
+      "1,4": "bamboo",
+      "2,4": "pine",
+      "5,4": "wall_h",
+      "0,5": "pine",
+      "1,5": "fence_h",
+      "2,5": "bamboo",
+      "3,5": "fence_h",
+      "4,5": "pine",
+      "5,5": "bamboo"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ]
+    ],
     "solution": [
       "F",
       "F",
       "F",
+      "R",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "R",
+      "F",
+      "L",
       "F"
     ],
-    "obstacles": {
-      "0,0": "pine",
-      "0,1": "sakura",
-      "0,3": "fence_h",
-      "0,4": "wall_h",
-      "1,0": "sakura",
-      "1,1": "fence_h",
-      "1,3": "fence_h",
-      "1,4": "wall_h",
-      "2,0": "fence_h",
-      "2,1": "fence_h",
-      "2,3": "wall_h",
-      "2,4": "wall_h",
-      "3,0": "fence_h",
-      "3,1": "fence_h",
-      "3,3": "wall_h",
-      "3,4": "pine",
-      "4,0": "fence_h",
-      "4,1": "fence_h",
-      "4,3": "pine",
-      "4,4": "sakura"
-    },
-    "grass": []
+    "limit": 23
   },
   {
     "n": "Zwei Opfergaben",
@@ -5545,14 +5814,14 @@ const LEVELS = [
   {
     "n": "Das heilige Becken",
     "c": "Kapitel 05 · Bambuswald",
-    "t": "Umfahrung",
-    "d": "Ein kreisförmiger Weg um das Wasser. Sammle die schwebenden Lichter an den gegenüberliegenden Ecken.",
+    "t": "Lotusteich der Ahnen",
+    "d": "Das heilige Wasserbecken birgt zwei Opferlichter. Versenke den heiligen Felsen, um das erste Licht zu bergen, und überquere die brüchigen Steine zum zweiten Licht.",
     "w": 7,
     "h": 7,
     "s": [
       1,
-      5,
-      "N"
+      1,
+      "E"
     ],
     "g": [
       5,
@@ -5560,12 +5829,46 @@ const LEVELS = [
     ],
     "orbs": [
       [
-        1,
+        5,
         1
       ],
       [
-        5,
+        1,
+        5
+      ]
+    ],
+    "blocks": [
+      [
+        3,
         1
+      ]
+    ],
+    "water": [
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "fragile": [
+      [
+        3,
+        3
       ]
     ],
     "walls": [
@@ -5614,11 +5917,11 @@ const LEVELS = [
         2
       ],
       [
-        3,
+        4,
         2
       ],
       [
-        4,
+        5,
         2
       ],
       [
@@ -5627,18 +5930,6 @@ const LEVELS = [
       ],
       [
         0,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
         3
       ],
       [
@@ -5654,10 +5945,6 @@ const LEVELS = [
         4
       ],
       [
-        3,
-        4
-      ],
-      [
         4,
         4
       ],
@@ -5667,18 +5954,6 @@ const LEVELS = [
       ],
       [
         0,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
         5
       ],
       [
@@ -5714,81 +5989,83 @@ const LEVELS = [
         6
       ]
     ],
-    "limit": 16,
+    "obstacles": {
+      "0,0": "bamboo",
+      "1,0": "pine",
+      "2,0": "bamboo",
+      "3,0": "pine",
+      "4,0": "bamboo",
+      "5,0": "pine",
+      "6,0": "bamboo",
+      "0,1": "fence_v",
+      "6,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "pine",
+      "4,2": "wall_h",
+      "5,2": "wall_h",
+      "6,2": "wall_v",
+      "0,3": "fence_v",
+      "6,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "bamboo",
+      "4,4": "pine",
+      "6,4": "wall_v",
+      "0,5": "fence_v",
+      "6,5": "fence_v",
+      "0,6": "bamboo",
+      "1,6": "fence_h",
+      "2,6": "pine",
+      "3,6": "fence_h",
+      "4,6": "bamboo",
+      "5,6": "pine",
+      "6,6": "bamboo"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        5
+      ]
+    ],
     "solution": [
       "F",
       "F",
       "F",
       "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
       "R",
       "F",
       "F",
       "F",
       "F",
       "R",
-      "F",
-      "F",
       "F",
       "F"
     ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_v",
-      "0,2": "fence_v",
-      "0,3": "wall_v",
-      "0,4": "pine",
-      "0,5": "sakura",
-      "0,6": "fence_h",
-      "1,0": "fence_h",
-      "1,6": "fence_h",
-      "2,0": "fence_h",
-      "2,2": "wall_h",
-      "2,3": "pine",
-      "2,4": "fence_h",
-      "2,5": "fence_h",
-      "2,6": "fence_h",
-      "3,0": "fence_h",
-      "3,2": "pine",
-      "3,3": "sakura",
-      "3,4": "fence_h",
-      "3,5": "pavilion",
-      "3,6": "wall_h",
-      "4,0": "wall_h",
-      "4,2": "sakura",
-      "4,3": "house",
-      "4,4": "fence_h",
-      "4,5": "fence_h",
-      "4,6": "wall_h",
-      "5,0": "wall_h",
-      "5,6": "wall_h",
-      "6,0": "pine",
-      "6,1": "sakura",
-      "6,2": "fence_v",
-      "6,3": "fence_v",
-      "6,4": "fence_v",
-      "6,5": "wall_v",
-      "6,6": "pine"
-    },
-    "grass": [
-      [
-        3,
-        1
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        5,
-        3
-      ]
-    ]
+    "limit": 30
   },
   {
     "n": "Geisterpfad",
     "c": "Kapitel 05 · Bambuswald",
     "t": "Portal & Licht",
-    "d": "Das erste Licht liegt vor dem Portal, das zweite wartet auf der anderen Seite des Gartens.",
+    "d": "Das erste Geisterlicht liegt vor dem Portal, das zweite wartet auf der anderen Seite des Gartens. Balanciere vorsichtig über die brüchigen Steine im Geisterbach.",
     "w": 7,
     "h": 7,
     "s": [
@@ -6033,6 +6310,26 @@ const LEVELS = [
       "6,6": "pine"
     },
     "grass": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        2
+      ]
+    ],
+    "water": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        2
+      ]
+    ],
+    "fragile": [
       [
         1,
         2
@@ -6579,33 +6876,63 @@ const LEVELS = [
     ]
   },
   {
-    "n": "Die dritte Flamme",
+    "n": "Die Himmelsbrücke",
     "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Gold-Tor",
-    "d": "Das goldene Torii-Tor ☀️ erstrahlt in Sonnenlicht. Aktiviere den goldenen Schalter zur Durchfahrt.",
+    "t": "Himmlischer Pfeiler",
+    "d": "Ein klaffender Abgrund trennt die Himmelsplattformen. Schiebe den Pfeilerblock in die Wolkenschlucht und balanciere über die brüchigen Wolkenfliesen zum Flammen-Siegel!",
     "w": 6,
     "h": 6,
     "s": [
       1,
-      5,
-      "N"
+      4,
+      "E"
     ],
     "g": [
-      3,
+      4,
       1
     ],
     "sw": [
       [
-        1,
+        4,
         3,
-        "gold"
+        "cyan"
       ]
     ],
     "gates": [
       [
+        3,
         1,
-        1,
-        "gold"
+        "cyan"
+      ]
+    ],
+    "blocks": [
+      [
+        2,
+        4
+      ]
+    ],
+    "water": [
+      [
+        3,
+        4
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "fragile": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
       ]
     ],
     "walls": [
@@ -6638,10 +6965,6 @@ const LEVELS = [
         1
       ],
       [
-        4,
-        1
-      ],
-      [
         5,
         1
       ],
@@ -6670,18 +6993,6 @@ const LEVELS = [
         3
       ],
       [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
         5,
         3
       ],
@@ -6690,23 +7001,15 @@ const LEVELS = [
         4
       ],
       [
-        2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
         5,
         4
       ],
       [
         0,
+        5
+      ],
+      [
+        1,
         5
       ],
       [
@@ -6726,49 +7029,61 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 10,
+    "obstacles": {
+      "0,0": "pine",
+      "1,0": "wall_h",
+      "2,0": "pine",
+      "3,0": "wall_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,1": "fence_v",
+      "5,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "wall_h",
+      "3,2": "wall_h",
+      "4,2": "pine",
+      "5,2": "wall_v",
+      "0,3": "fence_v",
+      "5,3": "fence_v",
+      "0,4": "wall_v",
+      "5,4": "wall_v",
+      "0,5": "pine",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "pine",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        4
+      ]
+    ],
     "solution": [
       "F",
       "F",
+      "F",
+      "L",
+      "F",
+      "L",
       "A",
+      "F",
       "F",
       "F",
       "R",
       "F",
+      "F",
+      "R",
+      "F",
+      "F",
       "F"
     ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_v",
-      "0,2": "wall_v",
-      "0,3": "sakura",
-      "0,4": "fence_v",
-      "0,5": "fence_v",
-      "1,0": "wall_h",
-      "2,0": "wall_h",
-      "2,2": "sakura",
-      "2,3": "fence_h",
-      "2,4": "fence_h",
-      "2,5": "wall_h",
-      "3,0": "wall_h",
-      "3,2": "fence_h",
-      "3,3": "fence_h",
-      "3,4": "fence_h",
-      "3,5": "wall_h",
-      "4,0": "pine",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,3": "house",
-      "4,4": "wall_h",
-      "4,5": "wall_h",
-      "5,0": "sakura",
-      "5,1": "fence_h",
-      "5,2": "fence_h",
-      "5,3": "fence_h",
-      "5,4": "wall_h",
-      "5,5": "pine"
-    },
-    "grass": []
+    "limit": 20
   },
   {
     "n": "Triade der Geister",
@@ -8787,31 +9102,61 @@ const LEVELS = [
   {
     "n": "Das Smaragd-Tor",
     "c": "Kapitel 07 · Palast der Kami",
-    "t": "Grün-Tor",
-    "d": "Im Palast der Götter leuchtet das smaragdgrüne Tor 🌲. Aktiviere den Jadeschalter.",
+    "t": "Palastgraben",
+    "d": "Der Palastgraben schützt die Residenz der Kami. Bilde mit dem Opferblock einen Übergang und balanciere über die Jade-Fliesen zum Smaragd-Schalter.",
     "w": 6,
     "h": 6,
     "s": [
       1,
-      5,
-      "N"
+      4,
+      "E"
     ],
     "g": [
-      3,
+      4,
       1
     ],
     "sw": [
       [
-        1,
+        4,
         3,
-        "green"
+        "cyan"
       ]
     ],
     "gates": [
       [
+        3,
         1,
-        1,
-        "green"
+        "cyan"
+      ]
+    ],
+    "blocks": [
+      [
+        2,
+        4
+      ]
+    ],
+    "water": [
+      [
+        3,
+        4
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "fragile": [
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        3
       ]
     ],
     "walls": [
@@ -8844,10 +9189,6 @@ const LEVELS = [
         1
       ],
       [
-        4,
-        1
-      ],
-      [
         5,
         1
       ],
@@ -8876,18 +9217,6 @@ const LEVELS = [
         3
       ],
       [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
         5,
         3
       ],
@@ -8896,23 +9225,15 @@ const LEVELS = [
         4
       ],
       [
-        2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
         5,
         4
       ],
       [
         0,
+        5
+      ],
+      [
+        1,
         5
       ],
       [
@@ -8932,49 +9253,61 @@ const LEVELS = [
         5
       ]
     ],
-    "limit": 10,
+    "obstacles": {
+      "0,0": "pine",
+      "1,0": "wall_h",
+      "2,0": "pavilion",
+      "3,0": "wall_h",
+      "4,0": "pine",
+      "5,0": "wall_h",
+      "0,1": "fence_v",
+      "5,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "wall_h",
+      "3,2": "wall_h",
+      "4,2": "pavilion",
+      "5,2": "wall_v",
+      "0,3": "fence_v",
+      "5,3": "fence_v",
+      "0,4": "wall_v",
+      "5,4": "wall_v",
+      "0,5": "pine",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "pine",
+      "5,5": "wall_h"
+    },
+    "grass": [
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        4
+      ]
+    ],
     "solution": [
       "F",
       "F",
+      "F",
+      "L",
+      "F",
+      "L",
       "A",
+      "F",
       "F",
       "F",
       "R",
       "F",
+      "F",
+      "R",
+      "F",
+      "F",
       "F"
     ],
-    "obstacles": {
-      "0,0": "sakura",
-      "0,1": "fence_v",
-      "0,2": "fence_v",
-      "0,3": "wall_v",
-      "0,4": "wall_v",
-      "0,5": "pine",
-      "1,0": "fence_h",
-      "2,0": "fence_h",
-      "2,2": "wall_h",
-      "2,3": "wall_h",
-      "2,4": "pine",
-      "2,5": "fence_h",
-      "3,0": "fence_h",
-      "3,2": "wall_h",
-      "3,3": "pine",
-      "3,4": "sakura",
-      "3,5": "fence_h",
-      "4,0": "fence_h",
-      "4,1": "pavilion",
-      "4,2": "wall_h",
-      "4,3": "house",
-      "4,4": "fence_h",
-      "4,5": "fence_h",
-      "5,0": "wall_h",
-      "5,1": "wall_h",
-      "5,2": "pine",
-      "5,3": "fence_h",
-      "5,4": "fence_h",
-      "5,5": "fence_h"
-    },
-    "grass": []
+    "limit": 20
   },
   {
     "n": "Quad-Siegel",
@@ -11823,7 +12156,7 @@ const LEVELS = [
     "n": "Schneeverwehte Pfade",
     "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
     "t": "Wind-Umleitung",
-    "d": "Dichter Schneefall verweht die Stufen. Nutze die abwärtsgerichtete Windböe, um den Schalter im Tal zu erreichen, und umrunde die Schlucht zum Schrein.",
+    "d": "Dichter Schneefall verweht die Stufen. Nutze die abwärtsgerichtete Windböe zum Schalter und überquere vorsichtig die brüchigen Eisschollen über der Gletscherspalte!",
     "w": 6,
     "h": 5,
     "s": [
@@ -11963,7 +12296,27 @@ const LEVELS = [
       "R",
       "F"
     ],
-    "limit": 18
+    "limit": 18,
+    "water": [
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ]
+    ],
+    "fragile": [
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ]
+    ]
   },
   {
     "n": "Kreuzende Böen",
@@ -13462,3 +13815,10 @@ const LEVELS = [
     "limit": 29
   }
 ];
+
+if (typeof window !== "undefined") {
+  window.LEVELS = LEVELS;
+}
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { LEVELS };
+}

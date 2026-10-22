@@ -99,6 +99,49 @@ function simulateLevel(lvl, solution) {
           state.collectedOrbs.add(`${state.x},${state.y}`);
         }
       }
+      // Wind check
+      if (lvl.winds && lvl.winds.length > 0) {
+        let windPushes = 0;
+        while (windPushes < 5) {
+          const windMatch = lvl.winds.find(w => w[0] === state.x && w[1] === state.y);
+          if (!windMatch) break;
+          const [wdx, wdy] = deltaMap[windMatch[2]] || [0, 0];
+          const wx = state.x + wdx;
+          const wy = state.y + wdy;
+          const isBlocked = wx < 0 || wy < 0 || wx >= lvl.w || wy >= lvl.h ||
+            hasCoord(lvl.walls, wx, wy) ||
+            blocks.some(b => b[0] === wx && b[1] === wy) ||
+            allGates.some(g => g[0] === wx && g[1] === wy && !state.openGates.has(g[2] || "magenta") && !(allGates.length === 1 && state.openGates.size > 0));
+          if (isBlocked) break;
+
+          // If leaving fragile tile, collapse it
+          if (fragileTiles.has(`${state.x},${state.y}`)) {
+            collapsedTiles.add(`${state.x},${state.y}`);
+          }
+
+          state.x = wx;
+          state.y = wy;
+          windPushes++;
+
+          if (lvl.orbs && lvl.orbs.length > 0) {
+            if (lvl.orbs.some(o => o[0] === state.x && o[1] === state.y)) {
+              state.collectedOrbs.add(`${state.x},${state.y}`);
+            }
+          }
+
+          // Check portal on wind landing tile
+          if (lvl.portals && lvl.portals.length === 2) {
+            const [p1, p2] = lvl.portals;
+            if (state.x === p1[0] && state.y === p1[1]) {
+              state.x = p2[0];
+              state.y = p2[1];
+            } else if (state.x === p2[0] && state.y === p2[1]) {
+              state.x = p1[0];
+              state.y = p1[1];
+            }
+          }
+        }
+      }
     } else if (cmd === "A") {
       const swOnTile = allSws.find(s => s[0] === state.x && s[1] === state.y);
       if (swOnTile) {
