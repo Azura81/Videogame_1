@@ -197,7 +197,6 @@ class GameEngine {
       btnHomeModeCampaign: document.getElementById("btnHomeModeCampaign"),
       btnHomeModeTower: document.getElementById("btnHomeModeTower"),
       btnHomeModeDaily: document.getElementById("btnHomeModeDaily"),
-      btnHomeModeFuji: document.getElementById("btnHomeModeFuji"),
       btnHomeModeWardrobe: document.getElementById("btnHomeModeWardrobe"),
       btnHomeModeTrophies: document.getElementById("btnHomeModeTrophies"),
       homeTowerBadge: document.getElementById("homeTowerBadge"),
@@ -554,16 +553,6 @@ class GameEngine {
           if (typeof DailyTrial !== "undefined") DailyTrial.updateUI();
           this.dom.modalDailyTrial.classList.add("active");
         }
-      });
-    }
-
-    if (this.dom.btnHomeModeFuji) {
-      this.dom.btnHomeModeFuji.addEventListener("click", () => {
-        this.triggerHaptic(25);
-        this.hideHomeScreen();
-        if (this.dom.levelDrawer) this.dom.levelDrawer.classList.remove("open");
-        this.loadLevel(50); // Level 51 (Der erste Bergwind)
-        this.setFeedback("🏔️ Willkommen am Fuße des heiligen Berges Fuji!", "good");
       });
     }
 
@@ -1036,6 +1025,7 @@ class GameEngine {
     if (this.dom.modalSkins) {
       this.dom.modalSkins.classList.remove("active");
     }
+    this.updateHomeScreen();
   }
 
   openTrophiesModal() {
@@ -1103,12 +1093,15 @@ class GameEngine {
     const lvl = (typeof LEVELS !== "undefined" && LEVELS[this.currentLevelIdx]) ? LEVELS[this.currentLevelIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
     if (lvl) {
       const chNum = (lvl.chapter && lvl.chapter.num) ? lvl.chapter.num : Math.floor(this.currentLevelIdx / 10) + 1;
-      const chTitle = (lvl.chapter && lvl.chapter.title) ? lvl.chapter.title : (lvl.c || `Kapitel ${chNum}`);
+      let chTitle = lvl.c || (lvl.chapter && lvl.chapter.title) || `Kapitel ${chNum}`;
+      if (!chTitle.toLowerCase().includes("kapitel")) {
+        chTitle = `Kapitel ${String(chNum).padStart(2, "0")} · ${chTitle}`;
+      }
       const isCompleted = this.completedLevels.has(this.currentLevelIdx);
       const stars = this.levelStars[this.currentLevelIdx] || 0;
 
       if (this.dom.homeCurrentChapter) {
-        this.dom.homeCurrentChapter.textContent = `Kapitel ${String(chNum).padStart(2, "0")} · ${chTitle}`;
+        this.dom.homeCurrentChapter.textContent = chTitle;
       }
       if (this.dom.homeCurrentStatus) {
         this.dom.homeCurrentStatus.textContent = isCompleted ? "Gemeistert ✓" : "Aktuelles Ziel";

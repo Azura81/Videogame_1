@@ -3684,9 +3684,9 @@ class Showroom3DViewer {
     this.renderer.setSize(w, h, false);
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(34, w / h, 0.1, 50);
-    this.camera.position.set(0, 0.48, 2.3);
-    this.camera.lookAt(0, 0.22, 0);
+    this.camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 50);
+    this.camera.position.set(0, 0.38, 2.35);
+    this.camera.lookAt(0, 0.36, 0);
 
     // Warm Shinto Studio Lighting
     const ambLight = new THREE.AmbientLight(0xffffff, 1.8);
@@ -3701,11 +3701,12 @@ class Showroom3DViewer {
     this.scene.add(cyanRimLight);
 
     const bottomGlow = new THREE.PointLight(0x00f5ff, 2.5, 3.0);
-    bottomGlow.position.set(0, 0.05, 0);
+    bottomGlow.position.set(0, 0.08, 0);
     this.scene.add(bottomGlow);
 
     this.currentSkinId = "original";
     this.komaGroup = null;
+    this.komaBaseY = 0.02;
     this.clock = new THREE.Clock();
 
     this.loadSkin(window.gameInstance?.equippedSkin || "original");
@@ -3743,7 +3744,7 @@ class Showroom3DViewer {
     }
 
     if (this.komaGroup) {
-      this.komaGroup.position.set(0, 0.16, 0);
+      this.komaGroup.position.set(0, this.komaBaseY || 0.02, 0);
       this.komaGroup.scale.set(1.22, 1.22, 1.22);
       this.scene.add(this.komaGroup);
     }
@@ -3756,7 +3757,7 @@ class Showroom3DViewer {
 
     if (this.komaGroup) {
       this.komaGroup.rotation.y += delta * 0.75;
-      this.komaGroup.position.y = 0.16 + Math.sin(time * 2.4) * 0.025;
+      this.komaGroup.position.y = (this.komaBaseY || 0.02) + Math.sin(time * 2.4) * 0.02;
     }
 
     if (this.renderer && this.scene && this.camera) {

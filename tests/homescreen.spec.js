@@ -36,16 +36,26 @@ test.describe('KOMA Main Home Screen & Showroom System', () => {
     await expect(page.locator('#homeCurrentChapter')).toHaveText(/Kapitel 01/);
     await expect(page.locator('#btnHomeResume')).toBeVisible();
 
-    // 4. Verify All Game Modes and Other Modis
+    // 4. Verify All Game Modes and Secondary Modis
     await expect(page.locator('#btnHomeModeCampaign')).toBeVisible();
     await expect(page.locator('#btnHomeModeTower')).toBeVisible();
     await expect(page.locator('#btnHomeModeDaily')).toBeVisible();
-    await expect(page.locator('#btnHomeModeFuji')).toBeVisible();
     await expect(page.locator('#btnHomeModeWardrobe')).toBeVisible();
     await expect(page.locator('#btnHomeModeTrophies')).toBeVisible();
 
-    // Verify Old Berg Fuji button is gone
+    // Verify Mount Fuji buttons are removed as requested
     await expect(page.locator('#btnHeaderFuji')).toHaveCount(0);
+    await expect(page.locator('#btnHomeModeFuji')).toHaveCount(0);
+
+    // Verify wardrobe opens in front of home screen (z-index check)
+    await page.locator('#btnHomeOpenWardrobe').click();
+    const modalSkins = page.locator('#modalSkins');
+    await expect(modalSkins).toHaveClass(/active/);
+    await page.screenshot({ path: '/Users/maxrietsch/.gemini/antigravity-ide/brain/ae562408-a431-4271-84da-8958f4628572/homescreen_wardrobe_in_front.png' });
+
+    await page.locator('#btnCloseSkins').click();
+    await expect(modalSkins).not.toHaveClass(/active/);
+    await page.waitForTimeout(400);
 
     // Capture screenshot of the Home Screen Showroom
     await page.screenshot({ path: '/Users/maxrietsch/.gemini/antigravity-ide/brain/ae562408-a431-4271-84da-8958f4628572/homescreen_showroom.png' });
