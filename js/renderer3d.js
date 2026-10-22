@@ -2493,11 +2493,11 @@ class GardenRenderer {
     );
 
     const startTime = performance.now();
-    const duration = 260;
+    const slideDuration = 220;
 
     const animateSlide = () => {
       const elapsed = performance.now() - startTime;
-      const progress = Math.min(1, elapsed / duration);
+      const progress = Math.min(1, elapsed / slideDuration);
       const ease = 1 - Math.pow(1 - progress, 2);
       item.obj.position.x = startPos.x + (targetPos.x - startPos.x) * ease;
       item.obj.position.z = startPos.z + (targetPos.z - startPos.z) * ease;
@@ -2505,16 +2505,41 @@ class GardenRenderer {
       if (progress < 1) {
         requestAnimationFrame(animateSlide);
       } else {
-        item.obj.position.copy(targetPos);
+        item.obj.position.x = targetPos.x;
+        item.obj.position.z = targetPos.z;
         delete this.blockMeshes[`${fromX},${fromY}`];
 
         if (isWaterDestination) {
-          item.obj.position.y = 0.22;
-          item.isSunken = true;
-          this.blockMeshes[`${toX},${toY}`] = item;
-          item.x = toX;
-          item.y = toY;
-          if (typeof onComplete === "function") onComplete();
+          // Phase 2: Splash plunge down into water canal so top surface sits flush with walking path (y = 0.45)
+          const sinkStartTime = performance.now();
+          const sinkDuration = 220;
+          const startY = 0.45;
+          const targetY = -0.31; // Top of stone will be exactly at -0.31 + 0.76 = 0.45
+
+          const animateSink = () => {
+            const sinkElapsed = performance.now() - sinkStartTime;
+            const sinkProgress = Math.min(1, sinkElapsed / sinkDuration);
+            const sinkEase = Math.sin((sinkProgress * Math.PI) / 2);
+            item.obj.position.y = startY + (targetY - startY) * sinkEase;
+
+            // Widen into a stable stepping stone bridge platform
+            const scaleX = 1 + 0.15 * sinkEase;
+            const scaleY = 1 - 0.25 * sinkEase;
+            item.obj.scale.set(scaleX, scaleY, scaleX);
+
+            if (sinkProgress < 1) {
+              requestAnimationFrame(animateSink);
+            } else {
+              item.obj.position.y = targetY;
+              item.obj.scale.set(1.15, 0.75, 1.15);
+              item.isSunken = true;
+              this.blockMeshes[`${toX},${toY}`] = item;
+              item.x = toX;
+              item.y = toY;
+              if (typeof onComplete === "function") onComplete();
+            }
+          };
+          requestAnimationFrame(animateSink);
         } else {
           this.blockMeshes[`${toX},${toY}`] = item;
           item.x = toX;

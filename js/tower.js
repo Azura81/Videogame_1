@@ -173,11 +173,22 @@
         const gates = lvl.gates || [];
         const portals = lvl.portals || [];
         const winds = lvl.winds || [];
+        const fragile = new Set((lvl.fragile || []).map(p => `${p[0]},${p[1]}`));
+        const water = new Set((lvl.water || []).map(w => `${w[0]},${w[1]}`));
+        const initialBlocks = (lvl.blocks || []).map(b => [b[0], b[1]]);
         const orbs = (lvl.orbs || []).map(o => `${o[0]},${o[1]}`).sort();
         const orbKey = (collected) => Array.from(collected).sort().join(";");
 
-        const initState = `${sx},${sy},${sd}|${orbKey(new Set())}|`;
-        const queue = [{ x: sx, y: sy, d: sd, gates: new Set(), orbs: new Set(), path: [] }];
+        const initState = `${sx},${sy},${sd}|${orbKey(new Set())}||||`;
+        const queue = [{
+          x: sx, y: sy, d: sd,
+          gates: new Set(),
+          orbs: new Set(),
+          collapsed: new Set(),
+          blocks: initialBlocks.map(b => [b[0], b[1]]),
+          bridges: new Set(),
+          path: []
+        }];
         const visited = new Set([initState]);
 
         while (queue.length > 0) {
@@ -187,17 +198,37 @@
           for (const cmd of ["F", "L", "R", "A"]) {
             if (cmd === "L") {
               const nd = TURN_LEFT[cur.d];
-              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              const blockSig = cur.blocks.map(b => `${b[0]},${b[1]}`).sort().join(";");
+              const colSig = Array.from(cur.collapsed).sort().join(";");
+              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}|${blockSig}|${colSig}`;
               if (!visited.has(stateKey)) {
                 visited.add(stateKey);
-                queue.push({ x: cur.x, y: cur.y, d: nd, gates: new Set(cur.gates), orbs: new Set(cur.orbs), path: [...cur.path, "L"] });
+                queue.push({
+                  x: cur.x, y: cur.y, d: nd,
+                  gates: new Set(cur.gates),
+                  orbs: new Set(cur.orbs),
+                  collapsed: new Set(cur.collapsed),
+                  blocks: cur.blocks.map(b => [b[0], b[1]]),
+                  bridges: new Set(cur.bridges),
+                  path: [...cur.path, "L"]
+                });
               }
             } else if (cmd === "R") {
               const nd = TURN_RIGHT[cur.d];
-              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              const blockSig = cur.blocks.map(b => `${b[0]},${b[1]}`).sort().join(";");
+              const colSig = Array.from(cur.collapsed).sort().join(";");
+              const stateKey = `${cur.x},${cur.y},${nd}|${orbKey(cur.orbs)}|${Array.from(cur.gates).sort().join(",")}|${blockSig}|${colSig}`;
               if (!visited.has(stateKey)) {
                 visited.add(stateKey);
-                queue.push({ x: cur.x, y: cur.y, d: nd, gates: new Set(cur.gates), orbs: new Set(cur.orbs), path: [...cur.path, "R"] });
+                queue.push({
+                  x: cur.x, y: cur.y, d: nd,
+                  gates: new Set(cur.gates),
+                  orbs: new Set(cur.orbs),
+                  collapsed: new Set(cur.collapsed),
+                  blocks: cur.blocks.map(b => [b[0], b[1]]),
+                  bridges: new Set(cur.bridges),
+                  path: [...cur.path, "R"]
+                });
               }
             } else if (cmd === "A") {
               const swMatch = sws.find(s => s[0] === cur.x && s[1] === cur.y);
@@ -206,10 +237,20 @@
                 const newGates = new Set(cur.gates);
                 newGates.add(color);
                 if (gates.length === 1) newGates.add(gates[0][2] || "magenta");
-                const stateKey = `${cur.x},${cur.y},${cur.d}|${orbKey(cur.orbs)}|${Array.from(newGates).sort().join(",")}`;
+                const blockSig = cur.blocks.map(b => `${b[0]},${b[1]}`).sort().join(";");
+                const colSig = Array.from(cur.collapsed).sort().join(";");
+                const stateKey = `${cur.x},${cur.y},${cur.d}|${orbKey(cur.orbs)}|${Array.from(newGates).sort().join(",")}|${blockSig}|${colSig}`;
                 if (!visited.has(stateKey)) {
                   visited.add(stateKey);
-                  queue.push({ x: cur.x, y: cur.y, d: cur.d, gates: newGates, orbs: new Set(cur.orbs), path: [...cur.path, "A"] });
+                  queue.push({
+                    x: cur.x, y: cur.y, d: cur.d,
+                    gates: newGates,
+                    orbs: new Set(cur.orbs),
+                    collapsed: new Set(cur.collapsed),
+                    blocks: cur.blocks.map(b => [b[0], b[1]]),
+                    bridges: new Set(cur.bridges),
+                    path: [...cur.path, "A"]
+                  });
                 }
               }
             } else if (cmd === "F") {
@@ -219,10 +260,43 @@
               if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
               if (walls.has(`${nx},${ny}`)) continue;
 
+              // Pushable blocks check
+              let newBlocks = cur.blocks.map(b => [b[0], b[1]]);
+              let newBridges = new Set(cur.bridges);
+              const bIdx = newBlocks.findIndex(b => b[0] === nx && b[1] === ny);
+              if (bIdx !== -1) {
+                const nnx = nx + dx;
+                const nny = ny + dy;
+                if (nnx < 0 || nny < 0 || nnx >= w || nny >= h) continue;
+                if (walls.has(`${nnx},${nny}`)) continue;
+                if (newBlocks.some(b => b[0] === nnx && b[1] === nny)) continue;
+                const bgMatch = gates.find(g => g[0] === nnx && g[1] === nny);
+                if (bgMatch) {
+                  const color = bgMatch[2] || "magenta";
+                  if (!cur.gates.has(color) && !(gates.length === 1 && cur.gates.size > 0)) continue;
+                }
+                if (water.has(`${nnx},${nny}`) && !newBridges.has(`${nnx},${nny}`)) {
+                  newBridges.add(`${nnx},${nny}`);
+                  newBlocks.splice(bIdx, 1);
+                } else {
+                  newBlocks[bIdx] = [nnx, nny];
+                }
+              }
+
+              // Collapsed fragile tile or open water collision
+              if (cur.collapsed.has(`${nx},${ny}`)) continue;
+              if (water.has(`${nx},${ny}`) && !fragile.has(`${nx},${ny}`) && !newBridges.has(`${nx},${ny}`)) continue;
+
               const gMatch = gates.find(g => g[0] === nx && g[1] === ny);
               if (gMatch) {
                 const color = gMatch[2] || "magenta";
                 if (!cur.gates.has(color) && !(gates.length === 1 && cur.gates.size > 0)) continue;
+              }
+
+              // Leaving fragile tile collapses it
+              const newCollapsed = new Set(cur.collapsed);
+              if (fragile.has(`${cur.x},${cur.y}`)) {
+                newCollapsed.add(`${cur.x},${cur.y}`);
               }
 
               let cx = nx;
@@ -274,10 +348,20 @@
                 }
               }
 
-              const stateKey = `${cx},${cy},${cur.d}|${orbKey(newOrbs)}|${Array.from(cur.gates).sort().join(",")}`;
+              const blockSig = newBlocks.map(b => `${b[0]},${b[1]}`).sort().join(";");
+              const colSig = Array.from(newCollapsed).sort().join(";");
+              const stateKey = `${cx},${cy},${cur.d}|${orbKey(newOrbs)}|${Array.from(cur.gates).sort().join(",")}|${blockSig}|${colSig}`;
               if (!visited.has(stateKey)) {
                 visited.add(stateKey);
-                queue.push({ x: cx, y: cy, d: cur.d, gates: new Set(cur.gates), orbs: newOrbs, path: [...cur.path, "F"] });
+                queue.push({
+                  x: cx, y: cy, d: cur.d,
+                  gates: new Set(cur.gates),
+                  orbs: newOrbs,
+                  collapsed: newCollapsed,
+                  blocks: newBlocks,
+                  bridges: newBridges,
+                  path: [...cur.path, "F"]
+                });
               }
             }
           }
@@ -367,6 +451,8 @@
       const hasRelic = (floor >= 3 && (floor % 3 !== 2 || isBossFloor));
       const hasPortal = (floor >= 4 && (floor % 2 === 0 || isBossFloor));
       const hasWind = (floor >= 7 && (floor % 3 === 1 || isFujiBiome));
+      const hasFragile = (floor >= 6 && (floor % 4 === 1 || (isBossFloor && floor >= 15)));
+      const hasBlock = (floor >= 8 && (floor % 4 === 3 || (isBossFloor && floor >= 20)));
 
       // 1. Primary Switch & Gate (Cyan)
       const sw = [];
@@ -374,6 +460,9 @@
       const orbs = [];
       let portals = undefined;
       let winds = undefined;
+      let fragileTiles = undefined;
+      let waterTiles = undefined;
+      let blockTiles = undefined;
 
       const [swX, swY] = getFreeTile(reserved, rng, w, h);
       sw.push([swX, swY, "cyan"]);
@@ -415,7 +504,20 @@
         winds = [[wx, wy, wdir]];
       }
 
-      // 6. Floor-specific inner obstacle walls (1 to 5 walls)
+      // 6. Fragile Stepping Stones
+      if (hasFragile) {
+        const [fx, fy] = getFreeTile(reserved, rng, w, h);
+        fragileTiles = [[fx, fy]];
+        waterTiles = [[fx, fy]];
+      }
+
+      // 7. Pushable Sacred Boulder
+      if (hasBlock) {
+        const [bx, by] = getFreeTile(reserved, rng, w, h);
+        blockTiles = [[bx, by]];
+      }
+
+      // 8. Floor-specific inner obstacle walls (1 to 5 walls)
       const wallCount = Math.min(5, 1 + Math.floor(floor / 20));
       const innerWalls = [];
       for (let i = 0; i < wallCount; i++) {
@@ -436,6 +538,9 @@
         walls: [...baseWalls, ...innerWalls],
         orbs: orbs.length > 0 ? orbs : undefined,
         portals, winds,
+        fragile: fragileTiles,
+        blocks: blockTiles,
+        water: waterTiles,
         maxCredits: Math.max(2, (isBossFloor ? 4 : 3) + this.extraCredits)
       };
 
@@ -451,6 +556,17 @@
       while (!sol.solved && innerWalls.length > 0) {
         innerWalls.pop();
         lvl.walls = [...baseWalls, ...innerWalls];
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved && lvl.blocks) {
+        lvl.blocks = undefined;
+        sol = solverFn(lvl);
+      }
+
+      if (!sol.solved && lvl.fragile) {
+        lvl.fragile = undefined;
+        if (!lvl.blocks) lvl.water = undefined;
         sol = solverFn(lvl);
       }
 
