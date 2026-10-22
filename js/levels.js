@@ -334,20 +334,20 @@ const LEVELS = [
     "grass": []
   },
   {
-    "n": "Der kleine Umweg",
+    "n": "Der brüchige Steg",
     "c": "Kapitel 02 · Alter Schrein",
-    "t": "Planen",
-    "d": "Ein längerer Korridor zwingt dich zu einem Richtungswechsel. Aktiviere unterwegs den Schalter, bevor du das Tor erreichst.",
-    "w": 6,
-    "h": 6,
+    "t": "Brüchiges Gestein",
+    "d": "Die Trittsteine über dem Lotusteich sind alt und brüchig. KOMA kann jeden Stein nur einmal betreten, bevor er im Wasser versinkt.",
+    "w": 5,
+    "h": 5,
     "s": [
-      1,
       0,
-      "S"
+      1,
+      "E"
     ],
     "g": [
-      3,
-      5
+      1,
+      3
     ],
     "walls": [
       [
@@ -355,185 +355,137 @@ const LEVELS = [
         0
       ],
       [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ]
-    ],
-    "sw": [
-      [
         1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        0,
         2
-      ]
-    ],
-    "gate": [
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        0,
+        4
+      ],
       [
         1,
         4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "water": [
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "fragile": [
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        3
       ]
     ],
     "limit": 9,
     "solution": [
       "F",
       "F",
-      "A",
+      "F",
+      "R",
       "F",
       "F",
-      "F",
-      "L",
+      "R",
       "F",
       "F"
     ],
     "obstacles": {
-      "0,0": "fence_v",
-      "0,1": "fence_v",
-      "0,2": "wall_v",
-      "0,3": "wall_v",
-      "0,4": "sakura",
-      "0,5": "fence_v",
+      "0,0": "wall_h",
+      "1,0": "pine",
       "2,0": "fence_h",
-      "2,1": "wall_h",
-      "2,2": "pine",
-      "2,3": "sakura",
-      "2,4": "fence_h",
       "3,0": "wall_h",
-      "3,1": "wall_h",
-      "3,2": "sakura",
-      "3,3": "fence_h",
+      "4,0": "sakura",
+      "4,1": "wall_v",
+      "0,2": "sakura",
+      "4,2": "wall_v",
+      "0,3": "fence_v",
+      "4,3": "pine",
+      "0,4": "wall_h",
+      "1,4": "fence_h",
+      "2,4": "wall_h",
       "3,4": "fence_h",
-      "4,0": "wall_h",
-      "4,1": "pavilion",
-      "4,2": "sakura",
-      "4,3": "house",
-      "4,4": "fence_h",
-      "4,5": "wall_h",
-      "5,0": "pine",
-      "5,1": "sakura",
-      "5,2": "fence_h",
-      "5,3": "fence_h",
-      "5,4": "fence_h",
-      "5,5": "wall_h"
+      "4,4": "wall_h"
     },
-    "grass": []
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        3
+      ]
+    ]
   },
   {
-    "n": "Zwei Schritte voraus",
+    "n": "Der heilige Felsblock",
     "c": "Kapitel 02 · Alter Schrein",
-    "t": "Kombination",
-    "d": "Plane eine längere Strecke mit mehreren Abschnitten. Der Schalter muss vor dem Tor aktiviert werden.",
-    "w": 6,
-    "h": 6,
+    "t": "Opferblock",
+    "d": "Ein schwerer Shinto-Felsblock versperrt den Pfad. Schiebe ihn vor dir her und nutze ihn als Brücke über das Wasser!",
+    "w": 5,
+    "h": 5,
     "s": [
+      1,
       4,
-      3,
-      "S"
+      "E"
     ],
     "g": [
-      0,
-      2
+      2,
+      0
     ],
     "walls": [
       [
@@ -545,19 +497,11 @@ const LEVELS = [
         0
       ],
       [
-        2,
-        0
-      ],
-      [
         3,
         0
       ],
       [
         4,
-        0
-      ],
-      [
-        5,
         0
       ],
       [
@@ -565,149 +509,110 @@ const LEVELS = [
         1
       ],
       [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
         4,
         1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        5,
-        4
       ],
       [
         0,
-        5
+        2
       ],
       [
         1,
-        5
-      ],
-      [
-        2,
-        5
+        2
       ],
       [
         3,
-        5
+        2
       ],
       [
         4,
-        5
+        2
       ],
       [
-        5,
-        5
-      ]
-    ],
-    "sw": [
+        0,
+        3
+      ],
       [
-        2,
-        4
-      ]
-    ],
-    "gate": [
+        1,
+        3
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        3
+      ],
       [
         0,
         4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
       ]
     ],
-    "limit": 10,
+    "water": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "blocks": [
+      [
+        2,
+        3
+      ]
+    ],
+    "limit": 7,
     "solution": [
       "F",
-      "R",
+      "L",
       "F",
       "F",
-      "A",
-      "F",
-      "F",
-      "R",
       "F",
       "F"
     ],
     "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_h",
-      "0,5": "fence_h",
-      "1,0": "fence_h",
-      "1,1": "wall_h",
-      "1,2": "wall_h",
-      "1,3": "sakura",
-      "1,5": "fence_h",
-      "2,0": "wall_h",
-      "2,1": "wall_h",
-      "2,2": "pine",
-      "2,3": "fence_h",
-      "2,5": "fence_h",
-      "3,0": "wall_h",
-      "3,1": "pine",
-      "3,2": "sakura",
-      "3,3": "fence_h",
-      "3,5": "wall_h",
+      "0,0": "wall_h",
+      "1,0": "sakura",
+      "3,0": "pine",
       "4,0": "wall_h",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,5": "wall_h",
-      "5,0": "pine",
-      "5,1": "fence_h",
-      "5,2": "fence_h",
-      "5,3": "fence_v",
-      "5,4": "wall_v",
-      "5,5": "wall_h"
+      "0,1": "wall_v",
+      "4,1": "wall_v",
+      "0,2": "wall_v",
+      "1,2": "fence_h",
+      "3,2": "fence_h",
+      "4,2": "wall_v",
+      "0,3": "wall_v",
+      "1,3": "pine",
+      "3,3": "sakura",
+      "4,3": "wall_v",
+      "0,4": "wall_h",
+      "3,4": "wall_h",
+      "4,4": "wall_h"
     },
     "grass": [
       [
-        4,
+        2,
         4
+      ],
+      [
+        2,
+        2
       ]
     ]
   },

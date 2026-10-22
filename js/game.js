@@ -228,6 +228,14 @@ class GameEngine {
       towerHeroBestScore: document.getElementById("towerHeroBestScore"),
       towerResultFloor: document.getElementById("towerResultFloor"),
       towerResultScore: document.getElementById("towerResultScore"),
+      modalMechanicIntro: document.getElementById("modalMechanicIntro"),
+      mechanicIntroTitle: document.getElementById("mechanicIntroTitle"),
+      mechanicIntroSubtitle: document.getElementById("mechanicIntroSubtitle"),
+      mechanicIntroDesc: document.getElementById("mechanicIntroDesc"),
+      mechanicIntroIcon: document.getElementById("mechanicIntroIcon"),
+      mechanicIntroBullets: document.getElementById("mechanicIntroBullets"),
+      btnDismissMechanicIntro: document.getElementById("btnDismissMechanicIntro"),
+      btnCloseMechanicIntro: document.getElementById("btnCloseMechanicIntro"),
       towerResultZen: document.getElementById("towerResultZen"),
       towerResultZenRow: document.getElementById("towerResultZenRow"),
       towerResultRecord: document.getElementById("towerResultRecord")
@@ -590,6 +598,20 @@ class GameEngine {
       this.dom.btnHomeHelp.addEventListener("click", () => {
         this.triggerHaptic(15);
         if (this.dom.modalHelp) this.dom.modalHelp.classList.add("active");
+      });
+    }
+
+    if (this.dom.btnDismissMechanicIntro) {
+      this.dom.btnDismissMechanicIntro.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.closeMechanicIntro();
+      });
+    }
+
+    if (this.dom.btnCloseMechanicIntro) {
+      this.dom.btnCloseMechanicIntro.addEventListener("click", () => {
+        this.triggerHaptic(12);
+        this.closeMechanicIntro();
       });
     }
 
@@ -1038,6 +1060,58 @@ class GameEngine {
   closeTrophiesModal() {
     if (this.dom.modalTrophies) {
       this.dom.modalTrophies.classList.remove("active");
+    }
+  }
+
+  showMechanicIntro(type) {
+    if (!this.dom.modalMechanicIntro) return;
+
+    if (type === "fragile") {
+      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neues Hindernis";
+      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Brüchige Trittsteine (Moroi Ishi)";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Uralte Steine im Wasserbecken, die KOMA nur ein einziges Mal tragen.";
+      if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined") {
+        this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.fragileTile(32, "var(--cyan)");
+      }
+      if (this.dom.mechanicIntroBullets) {
+        this.dom.mechanicIntroBullets.innerHTML = `
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Einmalige Überquerung:</strong> Sobald KOMA den Trittstein verlässt, versinkt er im Wasser.</div>
+          </div>
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Kein Rückweg:</strong> Versunkene Steine können nicht mehr betreten werden. Plane deinen Pfad ohne Schleifen!</div>
+          </div>
+        `;
+      }
+    } else if (type === "blocks") {
+      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neue Mechanik";
+      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Heilige Felsblöcke (Iwa-Karakuri)";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Schwere Opferblöcke, die von KOMA verschoben werden können.";
+      if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined") {
+        this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.shrineBlock(32, "var(--cyan)");
+      }
+      if (this.dom.mechanicIntroBullets) {
+        this.dom.mechanicIntroBullets.innerHTML = `
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Felsen schieben:</strong> Fahre vorwärts gegen den Felsblock, um ihn vor dir her zu schieben.</div>
+          </div>
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Brücken bauen:</strong> Schiebst du einen Block in ein Wasserfeld, versinkt er und wird zur begehbaren Trittstein-Brücke!</div>
+          </div>
+        `;
+      }
+    }
+
+    this.dom.modalMechanicIntro.classList.add("active");
+  }
+
+  closeMechanicIntro() {
+    if (this.dom.modalMechanicIntro) {
+      this.dom.modalMechanicIntro.classList.remove("active");
     }
   }
 
@@ -1774,6 +1848,20 @@ class GameEngine {
     this.renderLevelDrawer();
     this.renderCameraCredits();
     this.updateHomeScreen();
+
+    // Check for new mechanic introductions (Erklär-Box)
+    const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    const isTestSkipped = (typeof navigator !== "undefined" && navigator.webdriver) && !urlParams.has("testMechanic");
+
+    if (!isTestSkipped) {
+      if (lvl && lvl.fragile && lvl.fragile.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_fragile_intro"))) {
+        this.showMechanicIntro("fragile");
+        localStorage.setItem("koma_seen_fragile_intro", "true");
+      } else if (lvl && lvl.blocks && lvl.blocks.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_blocks_intro"))) {
+        this.showMechanicIntro("blocks");
+        localStorage.setItem("koma_seen_blocks_intro", "true");
+      }
+    }
   }
 
   resetKomaPosition() {
@@ -1785,6 +1873,9 @@ class GameEngine {
       isOpen: false,
       openGates: new Set(),
       collectedOrbs: new Set(),
+      collapsedFragileTiles: new Set(),
+      blocks: (lvl.blocks || []).map(b => [b[0], b[1]]),
+      waterTiles: new Set((lvl.water || []).map(w => `${w[0]},${w[1]}`)),
       isWin: false,
       isFail: false
     };
@@ -1793,6 +1884,9 @@ class GameEngine {
       this.renderer.setGateOpen("all", false);
       this.renderer.setSwitchActive("all", false);
       this.renderer.resetOrbs();
+      if (typeof this.renderer.resetMechanics === "function") {
+        this.renderer.resetMechanics(lvl);
+      }
     }
   }
 
@@ -2116,7 +2210,51 @@ class GameEngine {
         }
       }
 
-      if (isOutOfBounds || isWall || isBlockedGate) {
+      // Check collapsed fragile tile collision (cannot step into water where stone collapsed)
+      const isCollapsedTile = this.state.collapsedFragileTiles && this.state.collapsedFragileTiles.has(`${nx},${ny}`);
+
+      // Check open water hazard (cannot walk on water unless it's a fragile tile or bridge)
+      const isFragileTile = (lvl.fragile || []).some(f => f[0] === nx && f[1] === ny);
+      const isWaterHazard = this.state.waterTiles && this.state.waterTiles.has(`${nx},${ny}`) && !isFragileTile;
+
+      // Check Pushable Block collision / pushing
+      const blockIdx = this.state.blocks ? this.state.blocks.findIndex(b => b[0] === nx && b[1] === ny) : -1;
+      let isPushingBlock = false;
+      let pushTargetX = 0;
+      let pushTargetY = 0;
+      let isPushIntoWater = false;
+
+      if (blockIdx !== -1) {
+        pushTargetX = nx + dx;
+        pushTargetY = ny + dy;
+        const pushOOB = pushTargetX < 0 || pushTargetY < 0 || pushTargetX >= lvl.w || pushTargetY >= lvl.h;
+        const pushWall = hasCoord(lvl.walls, pushTargetX, pushTargetY);
+        const pushOtherBlock = this.state.blocks.some(b => b[0] === pushTargetX && b[1] === pushTargetY);
+        const pushGate = allGates.find(g => g[0] === pushTargetX && g[1] === pushTargetY);
+        let pushBlockedGate = false;
+        if (pushGate) {
+          const color = pushGate[2] || "magenta";
+          if (!this.state.openGates.has(color)) pushBlockedGate = true;
+        }
+        const pushIsWater = this.state.waterTiles && this.state.waterTiles.has(`${pushTargetX},${pushTargetY}`);
+
+        if (pushOOB || pushWall || pushOtherBlock || pushBlockedGate) {
+          this.state.isFail = true;
+          this.isPlaying = false;
+          if (typeof document !== "undefined") document.body.classList.remove("is-executing");
+          this.renderer.animateBump();
+          Sound.playBump();
+          this.triggerHaptic([45, 30, 50]);
+          this.setFeedback("Der heilige Felsblock ist blockiert und lässt sich nicht weiterschieben!", "bad");
+          this.renderQueue();
+          return;
+        }
+
+        isPushingBlock = true;
+        isPushIntoWater = pushIsWater;
+      }
+
+      if (isOutOfBounds || isWall || isBlockedGate || isCollapsedTile || isWaterHazard) {
         this.state.isFail = true;
         this.isPlaying = false;
         if (typeof document !== "undefined") {
@@ -2139,10 +2277,36 @@ class GameEngine {
           }
         }
 
-        const reason = isBlockedGate ? "Das Tor ist noch verschlossen!" : "Da ist ein Hindernis.";
+        let reason = "Da ist ein Hindernis.";
+        if (isBlockedGate) reason = "Das Tor ist noch verschlossen!";
+        else if (isCollapsedTile) reason = "Der Trittstein ist bereits im Wasser versunken!";
+        else if (isWaterHazard) reason = "Das Wasser ist zu tief! KOMA kann ohne Trittstein nicht hinüber.";
         this.setFeedback(`Plopp! ${reason} KOMA bleibt stehen – passe deinen Plan an.`, "bad");
         this.renderQueue();
         return;
+      }
+
+      // Check if KOMA is stepping off a fragile tile
+      const prevX = this.state.x;
+      const prevY = this.state.y;
+      const isSteppingOffFragile = (lvl.fragile || []).some(f => f[0] === prevX && f[1] === prevY);
+
+      // Handle pushing block
+      if (isPushingBlock) {
+        if (isPushIntoWater) {
+          this.state.waterTiles.delete(`${pushTargetX},${pushTargetY}`);
+          this.state.blocks.splice(blockIdx, 1);
+          Sound.playStoneSlide();
+          setTimeout(() => Sound.playSplash(), 160);
+          this.setFeedback("Platsch! Der Felsblock versinkt im Wasser und bildet eine neue Trittstein-Brücke!", "good");
+        } else {
+          this.state.blocks[blockIdx] = [pushTargetX, pushTargetY];
+          Sound.playStoneSlide();
+          this.setFeedback("Rumpel! KOMA schiebt den heiligen Steinblock vor sich her.", "normal");
+        }
+        if (this.renderer && typeof this.renderer.animateBlockPush === "function") {
+          this.renderer.animateBlockPush(nx, ny, pushTargetX, pushTargetY, isPushIntoWater);
+        }
       }
 
       // Valid step: Hop forward (300ms) and trigger audio & events on exact touchdown
@@ -2152,8 +2316,26 @@ class GameEngine {
       this.renderer.animateMove(nx, ny, 300, () => {
         if (!this.isPlaying) return; // In case reset was pressed during animation
 
-        // Play footstep sound and tactile step pulse precisely at touchdown
-        Sound.playStep();
+        // If KOMA stepped off a fragile tile, collapse it now!
+        if (isSteppingOffFragile) {
+          this.state.collapsedFragileTiles.add(`${prevX},${prevY}`);
+          if (this.renderer && typeof this.renderer.collapseFragileTile === "function") {
+            this.renderer.collapseFragileTile(prevX, prevY);
+          }
+          Sound.playSplash();
+        }
+
+        // If KOMA just stepped onto a fragile tile, crack it!
+        const isLandingOnFragile = (lvl.fragile || []).some(f => f[0] === nx && f[1] === ny);
+        if (isLandingOnFragile) {
+          Sound.playCrack();
+          if (this.renderer && typeof this.renderer.crackFragileTile === "function") {
+            this.renderer.crackFragileTile(nx, ny);
+          }
+          this.setFeedback("Knacks! Der morsche Trittstein bekommt Risse und versinkt gleich!", "normal");
+        } else {
+          Sound.playStep();
+        }
         this.triggerHaptic(18);
 
         // Check if stepped on a Spirit Orb
@@ -2564,4 +2746,5 @@ class GameEngine {
 // Start Game on DOM load
 window.addEventListener("DOMContentLoaded", () => {
   window.Game = new GameEngine();
+  window.gameInstance = window.Game;
 });

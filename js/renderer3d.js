@@ -86,6 +86,8 @@ class GardenRenderer {
     this.komaEarMeshes = [];
     this.fujiGroup = null;
     this.snowParticles = null;
+    this.fragileMeshes = {};
+    this.blockMeshes = {};
     
     // Lighting
     this.ambientLight = null;
@@ -2336,6 +2338,233 @@ class GardenRenderer {
     return lanternGroup;
   }
 
+  buildFragileTile(isFuji = false) {
+    const group = new THREE.Group();
+
+    // 1. Weathered Stone Slab with darker mossy tones
+    const slabGeo = new THREE.BoxGeometry(0.94, 0.45, 0.94);
+    const slabMat = new THREE.MeshStandardMaterial({
+      color: isFuji ? 0x8294a5 : 0x485848,
+      roughness: 0.88,
+      metalness: 0.05
+    });
+    const slab = new THREE.Mesh(slabGeo, slabMat);
+    slab.position.y = 0.22;
+    slab.receiveShadow = true;
+    group.add(slab);
+
+    // 2. Visible Glowing Fractures / Cracks on top surface
+    const crackMat = new THREE.MeshBasicMaterial({
+      color: 0xffaa00,
+      transparent: true,
+      opacity: 0.85
+    });
+
+    const c1 = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.02, 0.04), crackMat);
+    c1.position.set(0.05, 0.452, -0.05);
+    c1.rotation.y = 0.35;
+    group.add(c1);
+
+    const c2 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.02, 0.035), crackMat);
+    c2.position.set(-0.12, 0.452, 0.14);
+    c2.rotation.y = -0.55;
+    group.add(c2);
+
+    const c3 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.02, 0.03), crackMat);
+    c3.position.set(0.18, 0.452, 0.12);
+    c3.rotation.y = 0.85;
+    group.add(c3);
+
+    group.userData = { slab, crackMat, isFragile: true, state: "intact" };
+    return group;
+  }
+
+  buildStoneBlock() {
+    const group = new THREE.Group();
+
+    // 1. Carved Sacred Stone Boulder
+    const stoneGeo = new THREE.BoxGeometry(0.76, 0.74, 0.76);
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0x728394,
+      roughness: 0.65,
+      metalness: 0.15
+    });
+    const stone = new THREE.Mesh(stoneGeo, stoneMat);
+    stone.position.y = 0.38;
+    stone.castShadow = true;
+    stone.receiveShadow = true;
+    group.add(stone);
+
+    // 2. Shimenawa Sacred Straw Rope around middle perimeter
+    const ropeGeo = new THREE.TorusGeometry(0.42, 0.032, 8, 24);
+    const ropeMat = new THREE.MeshStandardMaterial({
+      color: 0xd4a373,
+      roughness: 0.9,
+      metalness: 0.02
+    });
+    const rope = new THREE.Mesh(ropeGeo, ropeMat);
+    rope.rotation.x = Math.PI / 2;
+    rope.position.y = 0.40;
+    group.add(rope);
+
+    // 3. Shide Paper Zigzags (4 hanging paper streamers)
+    const shideMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const shideGeo = new THREE.BoxGeometry(0.08, 0.14, 0.02);
+    const angles = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+    angles.forEach(ang => {
+      const shide = new THREE.Mesh(shideGeo, shideMat);
+      const rad = 0.40;
+      shide.position.set(Math.cos(ang) * rad, 0.33, Math.sin(ang) * rad);
+      shide.rotation.y = -ang;
+      group.add(shide);
+    });
+
+    // 4. Sacred Kanji Inscription plate on top (磐 - Iwa)
+    const topCapGeo = new THREE.BoxGeometry(0.38, 0.02, 0.38);
+    const topCapMat = new THREE.MeshStandardMaterial({
+      color: 0x00f5ff,
+      emissive: 0x00f5ff,
+      emissiveIntensity: 0.55,
+      roughness: 0.2
+    });
+    const topCap = new THREE.Mesh(topCapGeo, topCapMat);
+    topCap.position.y = 0.76;
+    group.add(topCap);
+
+    group.userData = { stone, rope, isBlock: true, isSunken: false };
+    return group;
+  }
+
+  crackFragileTile(x, y) {
+    const item = this.fragileMeshes[`${x},${y}`];
+    if (!item || item.state !== "intact") return;
+    item.state = "cracked";
+    const mesh = item.obj;
+    mesh.position.y = 0.18;
+    mesh.rotation.x = (Math.random() - 0.5) * 0.08;
+    mesh.rotation.z = (Math.random() - 0.5) * 0.08;
+    if (mesh.userData && mesh.userData.crackMat) {
+      mesh.userData.crackMat.color.setHex(0xff3300);
+    }
+  }
+
+  collapseFragileTile(x, y, onComplete) {
+    const item = this.fragileMeshes[`${x},${y}`];
+    if (!item || item.state === "collapsed") {
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+    item.state = "collapsed";
+    const mesh = item.obj;
+    const startY = mesh.position.y;
+    const targetY = -1.4;
+    const startTime = performance.now();
+    const duration = 280;
+
+    const animateCollapse = () => {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      mesh.position.y = startY + (targetY - startY) * (progress * progress);
+      mesh.rotation.x += 0.02;
+      if (progress < 1) {
+        requestAnimationFrame(animateCollapse);
+      } else {
+        mesh.visible = false;
+        if (typeof onComplete === "function") onComplete();
+      }
+    };
+    requestAnimationFrame(animateCollapse);
+  }
+
+  animateBlockPush(fromX, fromY, toX, toY, isWaterDestination, onComplete) {
+    const item = this.blockMeshes[`${fromX},${fromY}`];
+    if (!item) {
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+    const startPos = item.obj.position.clone();
+    const targetPos = new THREE.Vector3(
+      (toX - offsetX) * this.tileSize,
+      0.45,
+      (toY - offsetZ) * this.tileSize
+    );
+
+    const startTime = performance.now();
+    const duration = 260;
+
+    const animateSlide = () => {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const ease = 1 - Math.pow(1 - progress, 2);
+      item.obj.position.x = startPos.x + (targetPos.x - startPos.x) * ease;
+      item.obj.position.z = startPos.z + (targetPos.z - startPos.z) * ease;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateSlide);
+      } else {
+        item.obj.position.copy(targetPos);
+        delete this.blockMeshes[`${fromX},${fromY}`];
+
+        if (isWaterDestination) {
+          item.obj.position.y = 0.22;
+          item.isSunken = true;
+          this.blockMeshes[`${toX},${toY}`] = item;
+          item.x = toX;
+          item.y = toY;
+          if (typeof onComplete === "function") onComplete();
+        } else {
+          this.blockMeshes[`${toX},${toY}`] = item;
+          item.x = toX;
+          item.y = toY;
+          if (typeof onComplete === "function") onComplete();
+        }
+      }
+    };
+    requestAnimationFrame(animateSlide);
+  }
+
+  resetMechanics(levelData) {
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+
+    if (this.fragileMeshes) {
+      Object.values(this.fragileMeshes).forEach(item => {
+        item.state = "intact";
+        item.obj.visible = true;
+        item.obj.position.y = 0.22;
+        item.obj.rotation.set(0, 0, 0);
+        if (item.obj.userData && item.obj.userData.crackMat) {
+          item.obj.userData.crackMat.color.setHex(0xffaa00);
+        }
+      });
+    }
+
+    if (this.blockMeshes && levelData && levelData.blocks) {
+      const allBlockObjs = Object.values(this.blockMeshes).map(b => b.obj);
+      this.blockMeshes = {};
+      levelData.blocks.forEach((bCoord, idx) => {
+        const obj = allBlockObjs[idx];
+        if (obj) {
+          const posX = (bCoord[0] - offsetX) * this.tileSize;
+          const posZ = (bCoord[1] - offsetZ) * this.tileSize;
+          obj.position.set(posX, 0.45, posZ);
+          obj.visible = true;
+          this.blockMeshes[`${bCoord[0]},${bCoord[1]}`] = {
+            x: bCoord[0],
+            y: bCoord[1],
+            initialX: bCoord[0],
+            initialY: bCoord[1],
+            obj: obj,
+            isSunken: false
+          };
+        }
+      });
+    }
+  }
+
   /**
    * Load and render a level into the 3D scene
    */
@@ -2355,6 +2584,8 @@ class GardenRenderer {
     this.portalMeshes = [];
     this.orbMeshes = [];
     this.windMeshes = [];
+    this.fragileMeshes = {};
+    this.blockMeshes = {};
     this.goalMesh = null;
 
     // Apply Mount Fuji scenic background and alpine snowfall for Fuji levels
@@ -2374,6 +2605,7 @@ class GardenRenderer {
     const getBridgeDef = (x, y) => (levelData.bridges || []).find(b => b[0] === x && b[1] === y);
     const isGrass = (x, y) => (levelData.grass || []).some(g => g[0] === x && g[1] === y);
     const isRiver = (x, y) => (levelData.water || []).some(w => w[0] === x && w[1] === y);
+    const isFragile = (x, y) => (levelData.fragile || []).some(f => f[0] === x && f[1] === y);
     
     // 3. Build each grid cell
     for (let y = 0; y < this.gridHeight; y++) {
@@ -2390,6 +2622,14 @@ class GardenRenderer {
             const bridge = this.buildWoodBridge(bDir);
             bridge.position.set(posX, 0.22, posZ);
             this.tilesGroup.add(bridge);
+          } else if (isFragile(x, y)) {
+            // Fragile Stepping Stone sits in sunken river canal
+            const river = this.buildRiverTile(posX, posZ, isFuji);
+            this.tilesGroup.add(river);
+          } else if (isRiver(x, y)) {
+            // Open River / Water Canal
+            const river = this.buildRiverTile(posX, posZ, isFuji);
+            this.tilesGroup.add(river);
           } else if (isGrass(x, y)) {
             // Lush Green Moss / Alpine Frost Meadow Tile
             const grass = this.buildGrassTile(posX, posZ, isFuji);
@@ -2547,6 +2787,23 @@ class GardenRenderer {
           windMarker.position.set(posX, 0.455, posZ);
           this.tilesGroup.add(windMarker);
           this.windMeshes.push({ x: x, y: y, dir: windDef[2], obj: windMarker });
+        }
+
+        // Fragile Stepping Stone Tile
+        if (isFragile(x, y)) {
+          const fragileTile = this.buildFragileTile(isFuji);
+          fragileTile.position.set(posX, 0, posZ);
+          this.tilesGroup.add(fragileTile);
+          this.fragileMeshes[`${x},${y}`] = { x: x, y: y, obj: fragileTile, state: "intact" };
+        }
+
+        // Sacred Pushable Stone Boulder
+        const isBlock = (levelData.blocks || []).some(b => b[0] === x && b[1] === y);
+        if (isBlock) {
+          const stoneBlock = this.buildStoneBlock();
+          stoneBlock.position.set(posX, 0.45, posZ);
+          this.decorGroup.add(stoneBlock);
+          this.blockMeshes[`${x},${y}`] = { x: x, y: y, initialX: x, initialY: y, obj: stoneBlock, isSunken: false };
         }
         
         // Goal -> Golden Shrine Beacon

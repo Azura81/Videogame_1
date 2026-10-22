@@ -3857,4 +3857,94 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   }
 }
 
+/* Mechanic Explanation Modal (Erklär-Box) */
+.modal-mechanic-card {
+  max-width: 480px;
+  width: 92%;
+  padding: 26px 26px 28px 26px;
+  text-align: left;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(14, 25, 46, 0.96) 0%, rgba(6, 12, 24, 0.98) 100%);
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 245, 255, 0.15);
+}
+
+.mechanic-hero-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0, 245, 255, 0.06);
+  border: 1px solid rgba(0, 245, 255, 0.22);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin: 14px 0 16px 0;
+}
+
+.mechanic-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(0, 245, 255, 0.12);
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan);
+  flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.25);
+}
+
+.mechanic-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mechanic-feature-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.mechanic-feature-sub {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.mechanic-rules-card {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mechanic-rule-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.mechanic-rule-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.mechanic-rule-row strong {
+  color: #fff;
+}
+
 

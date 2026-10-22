@@ -501,6 +501,26 @@ const KOMA_ICONS = {
     }
   },
 
+  // 29. Fragile Cracking Stepping Stone Tile
+  fragileTile: (size = 20, color = "currentColor") => `
+    <svg class="svg-icon svg-fragile" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.8" fill="${color}" fill-opacity="0.12"/>
+      <path d="M7 5l4 6-3 3 5 5" stroke="${color}" stroke-width="2"/>
+      <path d="M17 5l-4 6 2 3-3 5" stroke="${color}" stroke-width="1.6" stroke-dasharray="2 2"/>
+    </svg>
+  `,
+
+  // 30. Sacred Pushable Stone Boulder with Shimenawa Rope
+  shrineBlock: (size = 20, color = "currentColor") => `
+    <svg class="svg-icon svg-shrine-block" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.8" fill="${color}" fill-opacity="0.18"/>
+      <path d="M3 12h18" stroke-width="2" stroke="${color}"/>
+      <path d="M8 12v4l2-2 2 2v-4" fill="${color}" fill-opacity="0.5" stroke-width="1.4"/>
+      <path d="M14 12v4l2-2 2 2v-4" fill="${color}" fill-opacity="0.5" stroke-width="1.4"/>
+      <circle cx="12" cy="7.5" r="1.5" fill="${color}"/>
+    </svg>
+  `,
+
   // Generic icon helper
   render: (name, size = 18, color = "currentColor", ...args) => {
     if (typeof KOMA_ICONS[name] === "function") {

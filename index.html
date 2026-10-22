@@ -798,6 +798,39 @@
       </div>
     </div>
 
+    <!-- New Mechanic Explanation Modal (Erklär-Box) -->
+    <div class="modal-backdrop" id="modalMechanicIntro" role="dialog" aria-modal="true">
+      <div class="modal-card modal-mechanic-card">
+        <div class="modal-header-row">
+          <div class="modal-header-left">
+            <div class="modal-kicker">
+              <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span id="mechanicIntroKicker">Schrein-Geheimnis</span>
+            </div>
+            <h2 class="modal-title" id="mechanicIntroTitle" style="margin: 0;">Neues Spielelement</h2>
+          </div>
+          <div class="modal-header-right">
+            <button class="icon-btn" id="btnCloseMechanicIntro" aria-label="Schließen">✕</button>
+          </div>
+        </div>
+
+        <div class="mechanic-hero-banner">
+          <div class="mechanic-icon-box" id="mechanicIntroIcon"></div>
+          <div class="mechanic-hero-text">
+            <h3 class="mechanic-feature-name" id="mechanicIntroSubtitle">Neues Element</h3>
+            <p class="mechanic-feature-sub" id="mechanicIntroDesc">Erklärung des Elements</p>
+          </div>
+        </div>
+
+        <div class="mechanic-rules-card" id="mechanicIntroBullets"></div>
+
+        <button class="play-btn" id="btnDismissMechanicIntro" style="margin-top: 18px;">
+          <span>Verstanden · Schrein betreten</span>
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+
     <!-- Daily Shrine Trial Modal -->
     <div class="modal-backdrop" id="modalDailyTrial" role="dialog" aria-modal="true">
       <div class="modal-card modal-daily-card">

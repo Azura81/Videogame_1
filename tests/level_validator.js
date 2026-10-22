@@ -19,6 +19,11 @@ function simulateLevel(lvl, solution) {
   const allGates = lvl.gates || lvl.gate || [];
   const allSws = lvl.sw || [];
 
+  const fragileTiles = new Set((lvl.fragile || []).map(p => `${p[0]},${p[1]}`));
+  const collapsedTiles = new Set();
+  const blocks = (lvl.blocks || []).map(b => [b[0], b[1]]);
+  const waterTiles = new Set((lvl.water || []).map(w => `${w[0]},${w[1]}`));
+
   for (let i = 0; i < solution.length; i++) {
     const cmd = solution[i];
     if (cmd === "L") {
@@ -30,11 +35,33 @@ function simulateLevel(lvl, solution) {
       const nx = state.x + dx;
       const ny = state.y + dy;
 
+      // Pushable block check
+      const blockIdx = blocks.findIndex(b => b[0] === nx && b[1] === ny);
+      if (blockIdx !== -1) {
+        const nnx = nx + dx;
+        const nny = ny + dy;
+        if (nnx < 0 || nny < 0 || nnx >= lvl.w || nny >= lvl.h || hasCoord(lvl.walls, nnx, nny) || blocks.some(b => b[0] === nnx && b[1] === nny)) {
+          return { success: false, error: `Step ${i+1} (${cmd}): Blocked push at (${nnx}, ${nny})` };
+        }
+        if (waterTiles.has(`${nnx},${nny}`)) {
+          waterTiles.delete(`${nnx},${nny}`);
+          blocks.splice(blockIdx, 1);
+        } else {
+          blocks[blockIdx] = [nnx, nny];
+        }
+      }
+
       if (nx < 0 || ny < 0 || nx >= lvl.w || ny >= lvl.h) {
         return { success: false, error: `Step ${i+1} (${cmd}): Out of bounds at (${nx}, ${ny})` };
       }
       if (hasCoord(lvl.walls, nx, ny)) {
         return { success: false, error: `Step ${i+1} (${cmd}): Wall collision at (${nx}, ${ny})` };
+      }
+      if (collapsedTiles.has(`${nx},${ny}`)) {
+        return { success: false, error: `Step ${i+1} (${cmd}): Collapsed fragile tile at (${nx}, ${ny})` };
+      }
+      if (waterTiles.has(`${nx},${ny}`) && !fragileTiles.has(`${nx},${ny}`)) {
+        return { success: false, error: `Step ${i+1} (${cmd}): Fell into water at (${nx}, ${ny})` };
       }
       const gateOnTile = allGates.find(g => g[0] === nx && g[1] === ny);
       if (gateOnTile) {
@@ -43,6 +70,11 @@ function simulateLevel(lvl, solution) {
         if (!isOpen) {
           return { success: false, error: `Step ${i+1} (${cmd}): Blocked by closed gate (${color}) at (${nx}, ${ny})` };
         }
+      }
+
+      // If leaving fragile tile, collapse it
+      if (fragileTiles.has(`${state.x},${state.y}`)) {
+        collapsedTiles.add(`${state.x},${state.y}`);
       }
 
       state.x = nx;
