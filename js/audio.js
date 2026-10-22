@@ -1565,6 +1565,120 @@ class SoundEngine {
     osc.start(t);
     osc.stop(t + 0.28);
   }
+
+  playDragonRoar() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Resonant low roar with pitch sweep and growl
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(320, t);
+    filter.frequency.exponentialRampToValueAtTime(120, t + 1.2);
+
+    osc1.type = "sawtooth";
+    osc1.frequency.setValueAtTime(75, t);
+    osc1.frequency.linearRampToValueAtTime(110, t + 0.35);
+    osc1.frequency.exponentialRampToValueAtTime(45, t + 1.2);
+
+    osc2.type = "triangle";
+    osc2.frequency.setValueAtTime(48, t);
+    osc2.frequency.linearRampToValueAtTime(80, t + 0.4);
+    osc2.frequency.exponentialRampToValueAtTime(35, t + 1.3);
+
+    gain.gain.setValueAtTime(0.01, t);
+    gain.gain.linearRampToValueAtTime(0.35, t + 0.25);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 1.35);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(dest);
+
+    osc1.start(t);
+    osc2.start(t);
+    osc1.stop(t + 1.4);
+    osc2.stop(t + 1.4);
+  }
+
+  playTaikoDrum() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(160, t);
+    osc.frequency.exponentialRampToValueAtTime(42, t + 0.38);
+
+    gain.gain.setValueAtTime(0.45, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+
+    osc.connect(gain);
+    gain.connect(dest);
+    osc.start(t);
+    osc.stop(t + 0.46);
+  }
+
+  playMagatamaShatter() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // High crystalline glass/bell resonance
+    [1046.5, 1318.5, 1567.98].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t + idx * 0.04);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + idx * 0.04 + 0.4);
+
+      gain.gain.setValueAtTime(0.2, t + idx * 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.04 + 0.6);
+
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start(t + idx * 0.04);
+      osc.stop(t + idx * 0.04 + 0.62);
+    });
+  }
+
+  playDragonVictory() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Harmonious ascending Japanese Pentatonic scale (Yo scale: D, E, G, A, B, D)
+    const notes = [293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 783.99];
+    notes.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = i === notes.length - 1 ? "triangle" : "sine";
+      osc.frequency.setValueAtTime(freq, t + i * 0.12);
+
+      gain.gain.setValueAtTime(0.18, t + i * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.8);
+
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start(t + i * 0.12);
+      osc.stop(t + i * 0.12 + 0.85);
+    });
+  }
 }
 
 const Sound = new SoundEngine();

@@ -147,6 +147,31 @@ const KOMA_SKINS = {
     },
     dustType: "gold",
     accessories: ["kamiHalo", "kamiEars"]
+  },
+  ryujin: {
+    id: "ryujin",
+    name: "Ryūjin Drache",
+    jpName: "龍神",
+    subtitle: "Drachenbändiger · Herrscher des Fuji",
+    desc: "Vom befreiten Himmelsdrachen des Fuji verliehen. Perlmutt-weißes Chassis mit kaiserlichen Drachenhörnern, schwebenden Himmelsbändern und Frost-Gleiten.",
+    starsRequired: 0,
+    specialUnlock: "boss_fuji",
+    icon: "🐉",
+    accentColor: "#00f0ff",
+    tag: "Boss-Trophäe",
+    materials: {
+      body: { color: 0xe6f7ff, metalness: 0.55, roughness: 0.18 },
+      visor: { color: 0x05131f, metalness: 0.95, roughness: 0.05 },
+      base: { color: 0x0d283d, metalness: 0.75, roughness: 0.2 },
+      eye: { color: 0x00f5ff },
+      glow: { color: 0x00f5ff, emissive: 0x00d4ff, emissiveIntensity: 1.5 },
+      pack: { color: 0x1f3a52, metalness: 0.6, roughness: 0.25 },
+      packStrap: { color: 0xffd700, emissive: 0xffb700, emissiveIntensity: 1.2 },
+      light: 0x00f5ff,
+      dustColor: 0x70d6ff
+    },
+    dustType: "ice",
+    accessories: ["dragonHorns", "celestialRibbon"]
   }
 };
 

@@ -13506,10 +13506,12 @@ const LEVELS = [
   {
     "n": "Der Geist des Fuji (富士の神)",
     "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
-    "t": "Meisterprüfung",
-    "d": "Der heilige Gipfel des Fuji liegt vor dir. Finde alle drei kaiserlichen Relikte, entsiegle die Doppeltore des Berggottes und erbringe die finale Geisterlieferung!",
+    "t": "Bosskampf · Ryūjin",
+    "d": "Der Himmelsdrache Ryūjin wütet über dem Krater des Fuji! Schiebe den Basaltblock in den Frost-Odem, überquere die brüchigen Eisschollen und bringe alle drei kaiserlichen Relikte zum Schrein, um den Drachen zu erlösen!",
     "w": 8,
     "h": 8,
+    "isBossLevel": true,
+    "bossId": "ryujin",
     "s": [
       3,
       7,
@@ -13518,6 +13520,16 @@ const LEVELS = [
     "g": [
       4,
       1
+    ],
+    "water": [
+      [1, 5],
+      [4, 4]
+    ],
+    "fragile": [
+      [1, 5]
+    ],
+    "blocks": [
+      [5, 4]
     ],
     "portals": [
       [

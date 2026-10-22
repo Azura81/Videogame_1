@@ -967,6 +967,418 @@ class GardenRenderer {
     }
   }
 
+  // ==========================================================================
+  // RYŪJIN: THE SKY DRAGON BOSS OF MOUNT FUJI (LEVEL 60)
+  // ==========================================================================
+
+  clearRyujinDragon() {
+    if (this.dragonGroup) {
+      this.disposeHierarchy(this.dragonGroup);
+      this.scene.remove(this.dragonGroup);
+      this.dragonGroup = null;
+      this.dragonSegments = [];
+      this.dragonEyes = [];
+      this.dragonWhiskers = [];
+      this.dragonBreathPoints = null;
+      this.isDragonAscending = false;
+      this.dragonAscendCallback = null;
+    }
+  }
+
+  spawnRyujinDragon(levelData) {
+    this.clearRyujinDragon();
+
+    this.dragonGroup = new THREE.Group();
+    this.dragonGroup.name = "RyujinDragonGroup";
+    this.dragonSegments = [];
+
+    const offsetZ = (this.gridHeight - 1) / 2;
+    this.dragonBasePos = new THREE.Vector3(0, 2.5, -(offsetZ * this.tileSize + 3.2));
+    this.dragonGroup.position.copy(this.dragonBasePos);
+
+    // Materials
+    const scaleMat = new THREE.MeshStandardMaterial({
+      color: 0xe0f7fa,
+      metalness: 0.65,
+      roughness: 0.22,
+      emissive: 0x004d66,
+      emissiveIntensity: 0.45
+    });
+    const bellyMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      metalness: 0.25,
+      roughness: 0.35,
+      emissive: 0x002b3d,
+      emissiveIntensity: 0.3
+    });
+    const goldMat = new THREE.MeshStandardMaterial({
+      color: 0xffd700,
+      metalness: 0.9,
+      roughness: 0.15,
+      emissive: 0xff9e00,
+      emissiveIntensity: 0.6
+    });
+    const hornMat = new THREE.MeshStandardMaterial({
+      color: 0x80deea,
+      metalness: 0.85,
+      roughness: 0.1,
+      emissive: 0x00b4d8,
+      emissiveIntensity: 0.85
+    });
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
+    const finMat = new THREE.MeshStandardMaterial({
+      color: 0x00e5ff,
+      transparent: true,
+      opacity: 0.82,
+      roughness: 0.2,
+      emissive: 0x00a8cc,
+      emissiveIntensity: 0.7
+    });
+
+    this.dragonMaterials = { scaleMat, bellyMat, goldMat, hornMat, eyeMat, finMat };
+
+    // --- 1. Dragon Head ---
+    const headGroup = new THREE.Group();
+    headGroup.position.set(0, 0, 0);
+
+    const skull = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.48, 0.75), scaleMat);
+    skull.position.set(0, 0.12, 0);
+    skull.castShadow = true;
+    headGroup.add(skull);
+
+    const snout = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.32, 0.65), scaleMat);
+    snout.position.set(0, 0.05, 0.6);
+    snout.castShadow = true;
+    headGroup.add(snout);
+
+    const jaw = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.16, 0.6), bellyMat);
+    jaw.position.set(0, -0.15, 0.58);
+    headGroup.add(jaw);
+
+    [-0.14, 0.14].forEach(nx => {
+      const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.065, 8, 8), goldMat);
+      nostril.position.set(nx, 0.16, 0.88);
+      headGroup.add(nostril);
+    });
+
+    this.dragonEyes = [];
+    [-0.32, 0.32].forEach(ex => {
+      const eyeSocket = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.07, 0.08, 12), goldMat);
+      eyeSocket.rotation.z = ex > 0 ? -Math.PI / 2 : Math.PI / 2;
+      eyeSocket.position.set(ex, 0.18, 0.28);
+      headGroup.add(eyeSocket);
+
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), eyeMat);
+      eye.position.set(ex + (ex > 0 ? 0.04 : -0.04), 0.18, 0.28);
+      headGroup.add(eye);
+      this.dragonEyes.push(eye);
+    });
+
+    [-1, 1].forEach(side => {
+      const hGroup = new THREE.Group();
+      const b1 = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.75, 8), hornMat);
+      b1.position.set(0, 0.36, -0.15);
+      b1.rotation.x = -0.55;
+      b1.castShadow = true;
+      hGroup.add(b1);
+
+      const b2 = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.38, 6), hornMat);
+      b2.position.set(0, 0.25, 0);
+      b2.rotation.x = 0.35;
+      b2.castShadow = true;
+      hGroup.add(b2);
+
+      const b3 = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.28, 6), hornMat);
+      b3.position.set(side * 0.08, 0.45, -0.1);
+      b3.rotation.z = side * 0.45;
+      b3.castShadow = true;
+      hGroup.add(b3);
+
+      hGroup.position.set(side * 0.26, 0.35, -0.15);
+      hGroup.rotation.z = -side * 0.28;
+      headGroup.add(hGroup);
+    });
+
+    this.dragonWhiskers = [];
+    [-1, 1].forEach(side => {
+      const whiskerGroup = new THREE.Group();
+      for (let w = 0; w < 6; w++) {
+        const segGeo = new THREE.CylinderGeometry(0.02 - w * 0.0028, 0.022 - w * 0.0028, 0.16, 6);
+        const wSeg = new THREE.Mesh(segGeo, goldMat);
+        wSeg.position.set(side * (0.02 + w * 0.05), -w * 0.06, w * 0.14);
+        wSeg.rotation.x = 0.4 + w * 0.08;
+        wSeg.rotation.z = side * (0.3 + w * 0.06);
+        whiskerGroup.add(wSeg);
+      }
+      whiskerGroup.position.set(side * 0.22, 0.05, 0.85);
+      headGroup.add(whiskerGroup);
+      this.dragonWhiskers.push({ group: whiskerGroup, side });
+    });
+
+    const beard = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.45, 6), scaleMat);
+    beard.position.set(0, -0.32, 0.45);
+    beard.rotation.x = 0.6;
+    headGroup.add(beard);
+
+    this.dragonHead = headGroup;
+    this.dragonGroup.add(headGroup);
+
+    // --- 2. Serpentine Body Segments (14 segments) ---
+    const segmentCount = 14;
+    for (let i = 1; i <= segmentCount; i++) {
+      const segGroup = new THREE.Group();
+      const progress = i / segmentCount;
+      const radius = 0.38 * (1 - progress * 0.65);
+
+      const bGeo = new THREE.SphereGeometry(radius, 12, 10);
+      bGeo.scale(1, 0.88, 1.2);
+      const bMesh = new THREE.Mesh(bGeo, scaleMat);
+      bMesh.castShadow = true;
+      segGroup.add(bMesh);
+
+      const underGeo = new THREE.SphereGeometry(radius * 0.85, 8, 8);
+      underGeo.scale(0.85, 0.45, 1.15);
+      const underMesh = new THREE.Mesh(underGeo, bellyMat);
+      underMesh.position.y = -radius * 0.45;
+      segGroup.add(underMesh);
+
+      if (i % 2 === 1) {
+        const finGeo = new THREE.ConeGeometry(0.08 * (1 - progress * 0.5), 0.32 * (1 - progress * 0.5), 4);
+        const fin = new THREE.Mesh(finGeo, finMat);
+        fin.position.set(0, radius + 0.1, 0);
+        fin.rotation.y = Math.PI / 4;
+        segGroup.add(fin);
+      }
+
+      const zOffset = -i * 0.62;
+      const xOffset = Math.sin(i * 0.55) * 0.95;
+      const yOffset = Math.cos(i * 0.45) * 0.35;
+      segGroup.position.set(xOffset, yOffset, zOffset);
+
+      segGroup.userData = {
+        baseX: xOffset,
+        baseY: yOffset,
+        baseZ: zOffset,
+        index: i
+      };
+
+      this.dragonSegments.push(segGroup);
+      this.dragonGroup.add(segGroup);
+    }
+
+    // --- 3. Front Paws & Claws ---
+    [-1, 1].forEach(side => {
+      const clawGroup = new THREE.Group();
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.08, 0.7, 8), scaleMat);
+      arm.position.set(0, -0.28, 0.2);
+      arm.rotation.x = 0.55;
+      arm.rotation.z = side * 0.35;
+      arm.castShadow = true;
+      clawGroup.add(arm);
+
+      for (let t = 0; t < 4; t++) {
+        const talon = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.22, 6), goldMat);
+        const angle = (t - 1.5) * 0.35;
+        talon.position.set(Math.sin(angle) * 0.15, -0.6, 0.45 + Math.cos(angle) * 0.08);
+        talon.rotation.x = 0.7;
+        talon.rotation.z = angle;
+        clawGroup.add(talon);
+      }
+
+      clawGroup.position.set(side * 0.9, -0.1, -0.2);
+      this.dragonGroup.add(clawGroup);
+    });
+
+    // --- 4. Frost Breath Particle System ---
+    const breathCount = 35;
+    const breathGeo = new THREE.BufferGeometry();
+    const breathPos = new Float32Array(breathCount * 3);
+    this.breathParticleData = [];
+
+    for (let p = 0; p < breathCount; p++) {
+      breathPos[p * 3] = (Math.random() - 0.5) * 0.3;
+      breathPos[p * 3 + 1] = (Math.random() - 0.5) * 0.2;
+      breathPos[p * 3 + 2] = Math.random() * 2.5;
+
+      this.breathParticleData.push({
+        x: (Math.random() - 0.5) * 0.2,
+        y: -0.15 + (Math.random() - 0.5) * 0.1,
+        z: Math.random() * 3.5,
+        speed: 1.2 + Math.random() * 1.5,
+        spread: (Math.random() - 0.5) * 0.8
+      });
+    }
+
+    breathGeo.setAttribute("position", new THREE.BufferAttribute(breathPos, 3));
+    const breathMat = new THREE.PointsMaterial({
+      color: 0x00f5ff,
+      size: 0.14,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending
+    });
+
+    const breathPoints = new THREE.Points(breathGeo, breathMat);
+    breathPoints.position.set(0, 0, 0.8);
+    this.dragonBreathPoints = breathPoints;
+    headGroup.add(breathPoints);
+
+    this.scene.add(this.dragonGroup);
+  }
+
+  animateRyujinDragon(time, delta) {
+    if (!this.dragonGroup) return;
+
+    if (this.isDragonAscending) {
+      this.dragonAscendTimer += delta;
+      const p = Math.min(this.dragonAscendTimer / 2.8, 1);
+      
+      this.dragonGroup.position.y += delta * 7.5;
+      this.dragonGroup.rotation.y += delta * 4.2;
+      const currentScale = Math.max(0.01, 1 - p * 0.65);
+      this.dragonGroup.scale.set(currentScale, currentScale, currentScale);
+
+      if (p >= 1 && typeof this.dragonAscendCallback === "function") {
+        const cb = this.dragonAscendCallback;
+        this.dragonAscendCallback = null;
+        this.isDragonAscending = false;
+        this.clearRyujinDragon();
+        cb();
+      }
+      return;
+    }
+
+    const dTime = time * 2.2;
+
+    this.dragonHead.position.y = Math.sin(dTime * 0.8) * 0.14;
+    this.dragonHead.rotation.x = Math.sin(dTime * 0.6) * 0.08 + 0.12;
+    this.dragonHead.rotation.y = Math.sin(dTime * 0.35) * 0.15;
+
+    if (this.dragonWhiskers) {
+      this.dragonWhiskers.forEach(w => {
+        w.group.rotation.y = Math.sin(dTime * 1.5) * 0.15 * w.side;
+        w.group.rotation.x = Math.cos(dTime * 1.2) * 0.12;
+      });
+    }
+
+    if (this.dragonEyes) {
+      const eyeIntensity = Math.sin(time * 3.5) * 0.25 + 1.0;
+      this.dragonEyes.forEach(e => {
+        e.scale.set(eyeIntensity, eyeIntensity, eyeIntensity);
+      });
+    }
+
+    if (this.dragonSegments) {
+      this.dragonSegments.forEach(seg => {
+        const idx = seg.userData.index;
+        const phase = idx * 0.42;
+        seg.position.x = seg.userData.baseX + Math.sin(dTime + phase) * (0.35 + idx * 0.035);
+        seg.position.y = seg.userData.baseY + Math.cos(dTime * 0.8 + phase) * 0.16;
+        seg.rotation.y = Math.cos(dTime + phase) * 0.22;
+      });
+    }
+
+    if (this.dragonBreathPoints && this.breathParticleData) {
+      const posAttr = this.dragonBreathPoints.geometry.attributes.position;
+      const posArr = posAttr.array;
+
+      for (let i = 0; i < this.breathParticleData.length; i++) {
+        const p = this.breathParticleData[i];
+        p.z += p.speed * delta;
+        p.x += p.spread * delta;
+        p.y -= 0.2 * delta;
+
+        if (p.z > 3.8) {
+          p.z = 0;
+          p.x = (Math.random() - 0.5) * 0.2;
+          p.y = -0.15 + (Math.random() - 0.5) * 0.1;
+        }
+
+        posArr[i * 3] = p.x;
+        posArr[i * 3 + 1] = p.y;
+        posArr[i * 3 + 2] = p.z;
+      }
+      posAttr.needsUpdate = true;
+    }
+  }
+
+  triggerScreenShake(intensity = 14, duration = 450) {
+    const target = this.container || document.getElementById("webgl-container");
+    if (!target) return;
+    const start = performance.now();
+    const shakeInterval = setInterval(() => {
+      const elapsed = performance.now() - start;
+      if (elapsed >= duration) {
+        clearInterval(shakeInterval);
+        target.style.transform = "";
+        return;
+      }
+      const p = 1 - (elapsed / duration);
+      const ox = (Math.random() - 0.5) * intensity * p;
+      const oy = (Math.random() - 0.5) * intensity * p;
+      target.style.transform = `translate(${ox.toFixed(1)}px, ${oy.toFixed(1)}px)`;
+    }, 40);
+  }
+
+  animateDragonRoar() {
+    if (!this.dragonGroup) return;
+    if (typeof Sound !== "undefined" && typeof Sound.playDragonRoar === "function") {
+      Sound.playDragonRoar();
+      Sound.playTaikoDrum();
+    }
+    this.triggerScreenShake(14, 450);
+
+    const startRotX = this.dragonHead.rotation.x;
+    const startTime = performance.now();
+    const roarDuration = 800;
+
+    const animateRoarStep = () => {
+      const elapsed = performance.now() - startTime;
+      const p = Math.min(elapsed / roarDuration, 1);
+      if (this.dragonHead) {
+        if (p < 0.35) {
+          this.dragonHead.rotation.x = startRotX - (p / 0.35) * 0.38;
+        } else {
+          this.dragonHead.rotation.x = (startRotX - 0.38) + ((p - 0.35) / 0.65) * 0.38;
+        }
+      }
+      if (p < 1) requestAnimationFrame(animateRoarStep);
+    };
+    requestAnimationFrame(animateRoarStep);
+  }
+
+  animateDragonAscend(callback) {
+    if (!this.dragonGroup) {
+      if (typeof callback === "function") callback();
+      return;
+    }
+
+    if (typeof Sound !== "undefined") {
+      if (typeof Sound.playDragonRoar === "function") Sound.playDragonRoar();
+      if (typeof Sound.playTaikoDrum === "function") Sound.playTaikoDrum();
+      setTimeout(() => {
+        if (typeof Sound.playDragonVictory === "function") Sound.playDragonVictory();
+      }, 350);
+    }
+
+    if (this.dragonMaterials) {
+      this.dragonMaterials.scaleMat.color.setHex(0xffd700);
+      this.dragonMaterials.scaleMat.emissive.setHex(0xffaa00);
+      this.dragonMaterials.scaleMat.emissiveIntensity = 1.4;
+      this.dragonMaterials.bellyMat.color.setHex(0xfff3b0);
+      this.dragonMaterials.hornMat.color.setHex(0xffe066);
+      this.dragonMaterials.hornMat.emissive.setHex(0xffd700);
+      this.dragonMaterials.eyeMat.color.setHex(0xffffff);
+    }
+
+    this.spawnCelebrationBurst();
+    setTimeout(() => this.spawnCelebrationBurst(), 600);
+
+    this.isDragonAscending = true;
+    this.dragonAscendTimer = 0;
+    this.dragonAscendCallback = callback;
+  }
+
   setupFireflyParticles() {
     const count = 14;
     const geometry = new THREE.BufferGeometry();
@@ -1375,6 +1787,53 @@ class GardenRenderer {
         this.komaGroup.add(kEarGroup);
         this.komaEarMeshes.push({ mesh: kEarGroup, baseRotZ: -side * 0.25, baseRotX: -0.15, type: "kami", side: side });
       });
+    }
+
+    // (k) Ryūjin Dragon Horns & Celestial Ribbon (Ryūjin Drache)
+    if (accessories.includes("dragonHorns")) {
+      const dHornMat = new THREE.MeshStandardMaterial({
+        color: 0x00f5ff,
+        metalness: 0.9,
+        roughness: 0.1,
+        emissive: 0x0099cc,
+        emissiveIntensity: 0.8
+      });
+      [-1, 1].forEach(side => {
+        const dHornGroup = new THREE.Group();
+        const b1 = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.28, 8), dHornMat);
+        b1.position.y = 0.14;
+        b1.castShadow = true;
+        dHornGroup.add(b1);
+
+        const b2 = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.18, 8), dHornMat);
+        b2.position.set(0, 0.12, 0.06);
+        b2.rotation.x = 0.45;
+        b2.castShadow = true;
+        dHornGroup.add(b2);
+
+        dHornGroup.position.set(side * 0.15, 0.72, 0.05);
+        dHornGroup.rotation.z = -side * 0.35;
+        dHornGroup.rotation.x = -0.2;
+        this.komaGroup.add(dHornGroup);
+        this.komaEarMeshes.push({ mesh: dHornGroup, baseRotZ: -side * 0.35, baseRotX: -0.2, type: "dragon", side: side });
+      });
+    }
+
+    if (accessories.includes("celestialRibbon")) {
+      const ribbonMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.2,
+        roughness: 0.3,
+        emissive: 0x00f5ff,
+        emissiveIntensity: 0.4,
+        transparent: true,
+        opacity: 0.85
+      });
+      const ribbonGeo = new THREE.TorusGeometry(0.36, 0.015, 8, 32, Math.PI * 1.3);
+      const ribbon = new THREE.Mesh(ribbonGeo, ribbonMat);
+      ribbon.position.set(0, 0.48, -0.15);
+      ribbon.rotation.x = Math.PI * 0.65;
+      this.komaGroup.add(ribbon);
     }
     
     // 5. Delivery Backpack / Spirit Parcel
@@ -2613,6 +3072,13 @@ class GardenRenderer {
     this.blockMeshes = {};
     this.goalMesh = null;
 
+    // Boss fight: Spawn Ryūjin Dragon for Level 60
+    this.clearRyujinDragon();
+    const isBossLevel = levelData.isBossLevel || (levelData.n && levelData.n.includes("Geist des Fuji"));
+    if (isBossLevel) {
+      this.spawnRyujinDragon(levelData);
+    }
+
     // Apply Mount Fuji scenic background and alpine snowfall for Fuji levels
     const isFuji = (levelData.c && (levelData.c.includes("Fuji") || levelData.c.includes("Berg"))) || levelData.theme === "fuji";
     this.setFujiTheme(isFuji);
@@ -3548,6 +4014,11 @@ class GardenRenderer {
         if (eff.disposeMat && eff.mesh.material) eff.mesh.material.dispose();
         this.dynamicEffects.splice(i, 1);
       }
+    }
+
+    // Animate Ryūjin Dragon if active
+    if (this.dragonGroup) {
+      this.animateRyujinDragon(time, cappedDelta);
     }
     
     // 1. KOMA Movement Interpolation & Juicy Physics

@@ -2011,6 +2011,24 @@ html, body {
   transform: scale(1.05);
 }
 
+.win-skin-banner.boss-skin-banner {
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.22), rgba(112, 214, 255, 0.15), rgba(255, 215, 0, 0.18));
+  border: 1px solid rgba(0, 245, 255, 0.65);
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: bossHudGlow 2.5s ease-in-out infinite alternate;
+}
+
+.win-skin-banner.boss-skin-banner .win-skin-kicker {
+  color: #00f5ff;
+  text-shadow: 0 0 8px rgba(0, 245, 255, 0.7);
+}
+
+.win-skin-banner.boss-skin-banner .win-skin-btn {
+  background: linear-gradient(135deg, #00f5ff, #70d6ff);
+  color: #05131f;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.5);
+}
+
 /* ==========================================================================
    PWA & Mobile Optimization (Touch Targets, Safe Area & Install Prompt)
    ========================================================================== */
@@ -3945,6 +3963,117 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
 
 .mechanic-rule-row strong {
   color: #fff;
+}
+
+/* ==========================================================================
+   BOSS FIGHT: RYŪJIN · GEIST DES FUJI (LEVEL 60)
+   ========================================================================== */
+.boss-hud-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(8, 26, 46, 0.95), rgba(16, 42, 68, 0.92));
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 245, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: bossHudGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes bossHudGlow {
+  0% { border-color: rgba(0, 245, 255, 0.3); box-shadow: 0 4px 18px rgba(0, 245, 255, 0.12); }
+  100% { border-color: rgba(0, 245, 255, 0.65); box-shadow: 0 4px 24px rgba(0, 245, 255, 0.28); }
+}
+
+.boss-hud-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.boss-hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 245, 255, 0.12);
+  border: 1px solid rgba(0, 245, 255, 0.4);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #00f5ff;
+}
+
+.boss-dragon-icon {
+  font-size: 15px;
+  filter: drop-shadow(0 0 4px rgba(0, 245, 255, 0.8));
+  animation: dragonIconFloat 2s ease-in-out infinite alternate;
+}
+
+@keyframes dragonIconFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+.boss-magatama-seals {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.boss-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.boss-seal.lit {
+  color: #d946ef;
+  border-color: #d946ef;
+  background: rgba(217, 70, 239, 0.2);
+  box-shadow: 0 0 10px rgba(217, 70, 239, 0.6);
+  animation: sealPulse 2s ease-in-out infinite alternate;
+}
+
+.boss-seal.shattered {
+  color: #64748b;
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+  filter: grayscale(1);
+  transform: scale(0.85);
+  opacity: 0.5;
+}
+
+@keyframes sealPulse {
+  0% { transform: scale(1); box-shadow: 0 0 6px rgba(217, 70, 239, 0.4); }
+  100% { transform: scale(1.08); box-shadow: 0 0 14px rgba(217, 70, 239, 0.8); }
+}
+
+.boss-phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #a5f3fc;
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px dashed rgba(0, 245, 255, 0.35);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.3px;
 }
 
 

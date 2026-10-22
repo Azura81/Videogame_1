@@ -488,6 +488,15 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  skinRyujinDragon: (size = 24, color = "currentColor") => `
+    <svg class="svg-icon skin-svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 14c2-4 6-6 10-4 3 1.5 5 5 4 8-1 3-5 3-7 1"/>
+      <path d="M12 4l3 3m-1-4l4 2"/>
+      <circle cx="16" cy="8" r="1.5" fill="${color}"/>
+      <path d="M7 17l-3 3m1-4l-3 2"/>
+    </svg>
+  `,
+
   // Helper to fetch skin SVG by id
   getSkinIcon: (skinId, size = 24, color = "currentColor") => {
     switch (skinId) {
@@ -497,6 +506,7 @@ const KOMA_ICONS = {
       case "oni": return KOMA_ICONS.skinAkumaOni(size, color);
       case "shinobi": return KOMA_ICONS.skinTsukuyomi(size, color);
       case "kami": return KOMA_ICONS.skinGoldKami(size, color);
+      case "ryujin": return KOMA_ICONS.skinRyujinDragon(size, color);
       default: return KOMA_ICONS.skinShiroUsagi(size, color);
     }
   },

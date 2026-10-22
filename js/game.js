@@ -238,7 +238,13 @@ class GameEngine {
       btnCloseMechanicIntro: document.getElementById("btnCloseMechanicIntro"),
       towerResultZen: document.getElementById("towerResultZen"),
       towerResultZenRow: document.getElementById("towerResultZenRow"),
-      towerResultRecord: document.getElementById("towerResultRecord")
+      towerResultRecord: document.getElementById("towerResultRecord"),
+      bossHudBar: document.getElementById("bossHudBar"),
+      bossHudName: document.getElementById("bossHudName"),
+      bossPhaseBadge: document.getElementById("bossPhaseBadge"),
+      seal1: document.getElementById("seal1"),
+      seal2: document.getElementById("seal2"),
+      seal3: document.getElementById("seal3")
     };
 
     this.isDailyTrial = false;
@@ -1012,6 +1018,13 @@ class GameEngine {
     if (skinId === "original") return true;
     const skin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]);
     if (!skin) return false;
+    if (skin.specialUnlock === "boss_fuji") {
+      try {
+        return typeof localStorage !== "undefined" && localStorage.getItem("koma_defeated_ryujin") === "true";
+      } catch (e) {
+        return false;
+      }
+    }
     return this.getTotalStars() >= skin.starsRequired;
   }
 
@@ -1400,7 +1413,7 @@ class GameEngine {
     const skins = Object.values(window.KOMA_SKINS);
 
     this.dom.mobileSkinsGrid.innerHTML = skins.map(skin => {
-      const isUnlocked = totalStars >= skin.starsRequired;
+      const isUnlocked = this.isSkinUnlocked(skin.id);
       const isEquipped = this.equippedSkin === skin.id;
       const progress = skin.starsRequired > 0 
         ? Math.min(100, Math.round((totalStars / skin.starsRequired) * 100)) 
@@ -1415,6 +1428,14 @@ class GameEngine {
       } else if (isUnlocked) {
         statusBadge = `<span class="mobile-skin-badge unlocked">Frei</span>`;
         actionBtn = `<button class="mobile-skin-btn equip" data-mobile-skin="${skin.id}">Ausrüsten</button>`;
+      } else if (skin.specialUnlock === "boss_fuji") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
+        statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} Boss</span>`;
+        actionBtn = `
+          <div class="mobile-skin-progress">
+            <span class="mobile-skin-prog-txt">🐉 Lvl 60 Boss besiegen</span>
+          </div>
+        `;
       } else {
         const starSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(11, "var(--gold)", false) : "⭐";
         const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
@@ -1509,7 +1530,7 @@ class GameEngine {
     const skins = Object.values(window.KOMA_SKINS);
 
     this.dom.skinsGrid.innerHTML = skins.map(skin => {
-      const isUnlocked = totalStars >= skin.starsRequired;
+      const isUnlocked = this.isSkinUnlocked(skin.id);
       const isEquipped = this.equippedSkin === skin.id;
       const progress = skin.starsRequired > 0 
         ? Math.min(100, Math.round((totalStars / skin.starsRequired) * 100)) 
@@ -1524,6 +1545,14 @@ class GameEngine {
       } else if (isUnlocked) {
         statusBadge = `<span class="skin-badge unlocked">Freigeschaltet</span>`;
         actionButton = `<button class="skin-action-btn equip" data-skin-id="${skin.id}">Ausrüsten</button>`;
+      } else if (skin.specialUnlock === "boss_fuji") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
+        statusBadge = `<span class="skin-badge locked">${lockSvg} Boss-Sieg</span>`;
+        actionButton = `
+          <div class="skin-progress-container">
+            <span class="skin-progress-text">🐉 Besiege Ryūjin in Level 60</span>
+          </div>
+        `;
       } else {
         const starSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(12, "var(--gold)", false) : "⭐";
         const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
@@ -1637,6 +1666,7 @@ class GameEngine {
   loadDailyTrial() {
     if (this.isPlaying) return;
     this.isDailyTrial = true;
+    if (this.dom.bossHudBar) this.dom.bossHudBar.style.display = "none";
     const dailyLevel = (typeof DailyTrial !== "undefined") ? DailyTrial.getTodayLevel() : null;
     if (!dailyLevel) return;
     
@@ -1687,6 +1717,7 @@ class GameEngine {
     if (this.isPlaying) return;
     this.isTowerMode = true;
     this.isDailyTrial = false;
+    if (this.dom.bossHudBar) this.dom.bossHudBar.style.display = "none";
 
     const lvl = towerLevel || (typeof TowerTrial !== "undefined" ? TowerTrial.getCurrentLevel() : null);
     if (!lvl) return;
@@ -1816,6 +1847,21 @@ class GameEngine {
     
     const lvl = this.getCurrentLevel();
     this.resetState();
+
+    // Dedicated Boss Fight HUD (Level 60 Ryūjin Boss Fight)
+    const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
+    if (this.dom.bossHudBar) {
+      this.dom.bossHudBar.style.display = isBoss ? "flex" : "none";
+    }
+    if (isBoss) {
+      if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
+      if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
+      if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
+      if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem aktiv";
+      if (typeof Sound !== "undefined" && typeof Sound.playTaikoDrum === "function") {
+        setTimeout(() => Sound.playTaikoDrum(), 250);
+      }
+    }
     
     // Update Header & Card
     if (this.dom.levelTitle) this.dom.levelTitle.textContent = lvl.n;
@@ -1886,6 +1932,39 @@ class GameEngine {
       this.renderer.resetOrbs();
       if (typeof this.renderer.resetMechanics === "function") {
         this.renderer.resetMechanics(lvl);
+      }
+    }
+
+    if (lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel)) {
+      if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
+      if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
+      if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
+      if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem aktiv";
+    }
+  }
+
+  onOrbCollected(lvl) {
+    if (lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel)) {
+      const count = this.state.collectedOrbs.size;
+      if (count === 1) {
+        if (this.dom.seal1) this.dom.seal1.className = "boss-seal shattered";
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚔️ Relikt 1 befreit (Eisschwert)";
+        this.setFeedback("🔮 1. Magatama-Siegel zerborsten! Der Himmelsdrache tobt!", "good");
+      } else if (count === 2) {
+        if (this.dom.seal2) this.dom.seal2.className = "boss-seal shattered";
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "🪞 Relikt 2 befreit (Himmelsspiegel)";
+        this.setFeedback("🔮 2. Magatama-Siegel zerborsten! Drachen-Aura pulsiert!", "good");
+      } else if (count >= 3) {
+        if (this.dom.seal3) this.dom.seal3.className = "boss-seal shattered";
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "💥 Alle Siegel zerborsten! Erklimme den Gipfel!";
+        this.setFeedback("💥 Alle 3 Siegel gebrochen! Das Gipfel-Torii erstrahlt!", "good");
+      }
+
+      if (typeof Sound !== "undefined" && typeof Sound.playMagatamaShatter === "function") {
+        Sound.playMagatamaShatter();
+      }
+      if (this.renderer && typeof this.renderer.animateDragonRoar === "function") {
+        this.renderer.animateDragonRoar();
       }
     }
   }
@@ -2351,6 +2430,7 @@ class GameEngine {
             this.triggerHaptic([15, 30, 25]);
             this.renderer.collectOrb(this.state.x, this.state.y);
             this.setFeedback(`🌸 Geisterlicht eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
+            this.onOrbCollected(lvl);
           }
         }
 
@@ -2443,6 +2523,7 @@ class GameEngine {
           Sound.playOrb();
           this.renderer.collectOrb(wx, wy);
           this.setFeedback(`🌸 Geisterlicht im Flug eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
+          this.onOrbCollected(lvl);
         }
       }
 
@@ -2573,22 +2654,44 @@ class GameEngine {
       this.renderQueue();
       this.updateStarsDisplay();
 
+      const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
+      if (isBoss) {
+        try {
+          localStorage.setItem("koma_defeated_ryujin", "true");
+        } catch (e) {}
+        if (this.renderer && typeof this.renderer.animateDragonAscend === "function") {
+          this.renderer.animateDragonAscend();
+        }
+      }
+
       this.renderer.animateWin();
       Sound.playWin();
       this.triggerHaptic([40, 50, 40, 50, 80, 80, 120]);
 
       if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
-      this.setFeedback("Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
+      if (isBoss) {
+        this.setFeedback("🐉 Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
+      } else {
+        this.setFeedback("Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
+      }
 
       setTimeout(() => {
         if (this.dom.modalWinTitle) {
-          this.dom.modalWinTitle.textContent =
-            this.currentLevelIdx === LEVELS.length - 1 ? "Alle Lieferungen geschafft! 🎉" : "Lieferung erfolgreich! 🌸";
+          if (isBoss) {
+            this.dom.modalWinTitle.textContent = "「富士の龍神」 BEZWUNGEN! 🐉";
+          } else {
+            this.dom.modalWinTitle.textContent =
+              this.currentLevelIdx === LEVELS.length - 1 ? "Alle Lieferungen geschafft! 🎉" : "Lieferung erfolgreich! 🌸";
+          }
         }
         if (this.dom.modalWinText) {
-          this.dom.modalWinText.textContent = `KOMA hat das Paket in ${this.currentStep} Befehl${
-            this.currentStep === 1 ? "" : "en"
-          } sicher abgeliefert.`;
+          if (isBoss) {
+            this.dom.modalWinText.textContent = `Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in ${this.currentStep} Schritten erlöst!`;
+          } else {
+            this.dom.modalWinText.textContent = `KOMA hat das Paket in ${this.currentStep} Befehl${
+              this.currentStep === 1 ? "" : "en"
+            } sicher abgeliefert.`;
+          }
         }
         if (this.dom.modalWinStars) {
           let starHtml = "";
@@ -2636,7 +2739,31 @@ class GameEngine {
         }
 
         if (this.dom.modalWinSkinNotice) {
-          if (newlyUnlockedSkin) {
+          if (isBoss) {
+            const ryujinSkin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS.ryujin);
+            if (ryujinSkin) {
+              this.dom.modalWinSkinNotice.innerHTML = `
+                <div class="win-skin-banner boss-skin-banner">
+                  <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("ryujin", 32, "#00f0ff") : "🐉"}</span>
+                  <div class="win-skin-info">
+                    <span class="win-skin-kicker">👑 LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!</span>
+                    <strong class="win-skin-name">${ryujinSkin.name} (${ryujinSkin.jpName})</strong>
+                    <div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">Perlmutt-Chassis · Kaiserliche Hörner · Himmelsbänder</div>
+                  </div>
+                  <button class="win-skin-btn" id="btnWinOpenSkins">Ausrüsten 👘</button>
+                </div>
+              `;
+              this.dom.modalWinSkinNotice.style.display = "block";
+              const btnNotice = document.getElementById("btnWinOpenSkins");
+              if (btnNotice) {
+                btnNotice.addEventListener("click", () => {
+                  if (this.dom.modalWin) this.dom.modalWin.classList.remove("active");
+                  this.equipSkin("ryujin");
+                  this.openSkinsModal();
+                });
+              }
+            }
+          } else if (newlyUnlockedSkin) {
             this.dom.modalWinSkinNotice.innerHTML = `
               <div class="win-skin-banner">
                 <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon(newlyUnlockedSkin.id, 28, newlyUnlockedSkin.accentColor) : newlyUnlockedSkin.icon}</span>
@@ -2666,7 +2793,7 @@ class GameEngine {
             this.currentLevelIdx === LEVELS.length - 1 ? "Erstes Level erneut spielen" : "Nächstes Level →";
         }
         if (this.dom.modalWin) this.dom.modalWin.classList.add("active");
-      }, 700);
+      }, isBoss ? 1100 : 700);
       return;
     }
 
