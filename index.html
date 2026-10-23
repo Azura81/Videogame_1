@@ -55,25 +55,43 @@
     </div>
 
     <!-- Main Home Screen & 3D Robot Showroom Overlay -->
-    <div id="homeScreen" class="home-screen-backdrop" role="dialog" aria-modal="true" aria-label="KOMA Hauptmenü">
-      <div class="home-screen-modal">
-        <!-- Top Nav in Home Screen -->
-        <div class="home-screen-header">
-          <div class="home-brand-group">
-            <div class="home-brand-icon">
-              <svg class="svg-icon svg-torii" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--torii, #ff4d6d)" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.7));" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="var(--torii, #ff4d6d)" stroke="none"/></svg>
-            </div>
-            <div>
-              <div class="home-brand-title">SPIRIT DELIVERY</div>
-              <div class="home-brand-sub">精霊配達 · 3D ZEN PUZZLE</div>
-            </div>
+    <div id="homeScreen" class="home-screen-backdrop" role="dialog" aria-modal="true" aria-label="Spirit Delivery Hauptmenü">
+      <div class="home-screen-modal flow-layout">
+        
+        <!-- Top Controls Bar -->
+        <div class="home-top-bar">
+          <!-- Top Left: Daily Challenge Widget + Wardrobe Widget -->
+          <div class="home-top-left-widgets">
+            <button id="btnHomeDailyWidget" class="home-pill-widget daily-widget" title="Tägliche Schreinprüfung öffnen" aria-label="Tägliche Prüfung">
+              <span class="widget-icon">🔥</span>
+              <div class="widget-meta">
+                <span class="widget-kicker">TÄGLICH</span>
+                <strong class="widget-value" id="homeDailyBadge">0 Tage</strong>
+              </div>
+            </button>
+
+            <button id="btnHomeWardrobeWidget" class="home-pill-widget wardrobe-widget" title="Schrein-Garderobe & Skins öffnen" aria-label="Garderobe">
+              <span class="widget-icon">👘</span>
+              <div class="widget-meta">
+                <span class="widget-kicker">GARDEROBE</span>
+                <strong class="widget-value" id="homeActiveSkinLabel">Skins</strong>
+              </div>
+            </button>
           </div>
-          <div class="home-header-stats">
+
+          <!-- Top Right: Stars + Chapters + Audio Toggles -->
+          <div class="home-top-right-group">
             <div class="home-stars-pill" title="Gesammelte Sterne für Kami-Skins">
               <svg class="svg-icon star-icon-svg filled" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               <strong id="homeTotalStars">0</strong>
               <span class="home-stars-max">/ 180</span>
             </div>
+
+            <button id="btnHomeChapters" class="home-action-pill chapters-pill" title="Kapitel- & Level-Übersicht" aria-label="Kapitel-Übersicht">
+              <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
+              <span>Kapitel</span>
+            </button>
+
             <button id="btnHomeAudioMusic" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Musik umschalten">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
             </button>
@@ -86,143 +104,79 @@
           </div>
         </div>
 
-        <!-- Main Home Layout -->
-        <div class="home-main-layout">
-          <!-- Left Column: 3D Robot Showroom Card -->
-          <div class="home-showroom-card">
-            <div class="showroom-pedestal-halo"></div>
-            <div class="showroom-badge">
-              <span class="showroom-live-dot"></span>
-              <span>Aktiver Roboter-Skin</span>
+        <!-- Center Stage: Level Plaque, Centered 3D Robot, Play & Mode CTA -->
+        <div class="home-center-stage">
+          
+          <!-- 1. Level Plaque (Above Robot) -->
+          <div class="home-level-plaque" id="homeLevelPlaque">
+            <span class="home-chapter-kicker" id="homeCurrentChapter">KAPITEL 01 · LATERNENVIERTEL</span>
+            <div class="home-level-big" id="homeLevelBigNumber">LEVEL 1</div>
+            <div class="home-level-subtitle" id="homeCurrentLevelTitle">Die erste Lieferung</div>
+            <div class="home-level-stars-row" id="homeCurrentStarsRow">
+              <!-- Rendered dynamically -->
             </div>
+          </div>
 
-            <!-- Showroom 3D Viewport Frame -->
+          <!-- 2. Centered 3D Robot Stage -->
+          <div class="home-robot-stage-wrapper">
+            <div class="showroom-pedestal-halo"></div>
             <div class="showroom-robot-stage" id="showroomRobotStage">
               <canvas id="showroomCanvas" class="showroom-canvas" aria-label="3D Roboter Showroom"></canvas>
               <div class="showroom-pedestal-ring"></div>
             </div>
-
-            <div class="showroom-info-box">
-              <div class="showroom-skin-meta">
-                <div class="showroom-skin-title-row">
-                  <span class="showroom-skin-icon" id="homeSkinIcon"></span>
-                  <div>
-                    <h3 class="showroom-skin-name" id="homeSkinName">Shiro Usagi</h3>
-                    <div class="showroom-skin-sub" id="homeSkinSub">KOMA Original · Shinto-Bote</div>
-                  </div>
-                  <span class="showroom-skin-tag" id="homeSkinTag">Standard</span>
-                </div>
-                <p class="showroom-skin-desc" id="homeSkinDesc">
-                  Klassisches weißes Shinto-Schrein-Chassis mit leuchtend cyanfarbenem Visor und Furoshiki-Holzpaket.
-                </p>
-              </div>
-              <button class="showroom-wardrobe-btn" id="btnHomeOpenWardrobe">
-                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
-                <span>Garderobe & Kami-Skins öffnen</span>
-              </button>
+            <div class="showroom-drag-hint">
+              <span>✦ Ziehen zum Drehen</span>
             </div>
           </div>
 
-          <!-- Right Column: Current Level Resume & Mode Selection Grid -->
-          <div class="home-modes-column">
-            <!-- Hero Card: Current Level / Weiterspielen -->
-            <div class="home-resume-card">
-              <div class="resume-card-glow"></div>
-              <div class="resume-card-body">
-                <div class="resume-header-row">
-                  <span class="resume-kicker" id="homeCurrentChapter">Kapitel 01 · Laternenviertel</span>
-                  <span class="resume-status-badge" id="homeCurrentStatus">Bereit</span>
-                </div>
-                <h2 class="resume-level-title" id="homeCurrentLevelTitle">Level 01: Die erste Lieferung</h2>
-                <p class="resume-level-desc" id="homeCurrentLevelDesc">
-                  Fahre zuerst geradeaus durch die Gasse und biege dann nach Süden zum Paket ab.
-                </p>
-                <div class="resume-stars-row" id="homeCurrentStarsRow">
-                  <!-- Rendered dynamically -->
-                </div>
-              </div>
-              <button class="play-btn home-resume-cta" id="btnHomeResume">
-                <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
-                <span>Weiterspielen</span>
+          <!-- 3. Bottom Play & Mode Controls (Under Robot) -->
+          <div class="home-bottom-controls">
+            <!-- Big Play Button -->
+            <button class="home-play-btn" id="btnHomePlay">
+              <svg class="svg-icon" width="28" height="28" viewBox="0 0 24 24" fill="none"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
+              <span id="homePlayBtnText">SPIELEN</span>
+            </button>
+
+            <!-- Mode Selector Dropdown Button -->
+            <div class="home-mode-dropdown-wrapper">
+              <button class="home-mode-dropdown-btn" id="btnHomeModeDropdown" title="Spielmodus wählen" aria-haspopup="true" aria-expanded="false">
+                <span id="homeCurrentModeIcon">⛩️</span>
+                <span id="homeCurrentModeLabel">Kampagne</span>
+                <svg class="svg-icon chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
-            </div>
 
-            <!-- Modes Grid -->
-            <div class="home-modes-wrapper">
-              <div class="home-section-heading">
-                <span>Schrein-Modi & Herausforderungen</span>
-              </div>
-              <div class="home-modes-grid primary-modes">
-                <!-- Mode 1: 60-Level Kampagne -->
-                <button class="home-mode-card" id="btnHomeModeCampaign">
-                  <div class="mode-card-top">
-                    <span class="mode-icon-box torii-box">
-                      <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-                    </span>
-                    <span class="mode-pill">60 Level</span>
+              <!-- Mode Selection Popover Menu -->
+              <div class="home-mode-menu hidden" id="homeModeMenu" role="menu">
+                <button class="home-mode-item active" data-mode="campaign" role="menuitem">
+                  <span class="mode-item-icon">⛩️</span>
+                  <div class="mode-item-info">
+                    <strong>Kampagne</strong>
+                    <small>60 Level Progression</small>
                   </div>
-                  <h4 class="mode-name">Kampagne</h4>
-                  <p class="mode-summary">6 magische Kapitel voller Schrein-Rätsel & Geisterlichter.</p>
-                  <span class="mode-link">Level-Wahl öffnen →</span>
+                  <span class="mode-item-check" id="checkModeCampaign">✓</span>
                 </button>
-
-                <!-- Mode 2: Turm der 100 Prüfungen -->
-                <button class="home-mode-card" id="btnHomeModeTower">
-                  <div class="mode-card-top">
-                    <span class="mode-icon-box lantern-box">
-                      <svg class="svg-icon svg-lantern lit" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
-                    </span>
-                    <span class="mode-pill gold-pill" id="homeTowerBadge">Ebene 1</span>
+                <button class="home-mode-item" data-mode="tower" role="menuitem">
+                  <span class="mode-item-icon">🗼</span>
+                  <div class="mode-item-info">
+                    <strong>100-Level-Schreinprüfung</strong>
+                    <small id="homeTowerBadge">Ebene 1</small>
                   </div>
-                  <h4 class="mode-name">100-Level-Schreinprüfung</h4>
-                  <p class="mode-summary">Endlos-Roguelike mit 3 Laternen, Pforten & Zen-Bonus.</p>
-                  <span class="mode-link">Turm besteigen →</span>
+                  <span class="mode-item-check" id="checkModeTower"></span>
                 </button>
-
-                <!-- Mode 3: Tägliche Schreinprüfung -->
-                <button class="home-mode-card" id="btnHomeModeDaily">
-                  <div class="mode-card-top">
-                    <span class="mode-icon-box flame-box">
-                      <svg class="svg-icon svg-flame" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
-                    </span>
-                    <span class="mode-pill flame-pill" id="homeDailyBadge">0 Tage Streak</span>
+                <button class="home-mode-item" data-mode="daily" role="menuitem">
+                  <span class="mode-item-icon">🔥</span>
+                  <div class="mode-item-info">
+                    <strong>Tägliche Prüfung</strong>
+                    <small id="menuDailyBadge">0 Tage Streak</small>
                   </div>
-                  <h4 class="mode-name">Tägliche Prüfung</h4>
-                  <p class="mode-summary">Hardcore · 0 Kameraschwenker · Täglich frisches Layout.</p>
-                  <span class="mode-link">Tages-Run antreten →</span>
-                </button>
-              </div>
-
-              <div class="home-modes-grid secondary-modes">
-                <!-- Mode 4: Schrein-Garderobe -->
-                <button class="home-mode-card" id="btnHomeModeWardrobe">
-                  <div class="mode-card-top">
-                    <span class="mode-icon-box wardrobe-box">
-                      <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
-                    </span>
-                    <span class="mode-pill sakura-pill">6 Designs</span>
-                  </div>
-                  <h4 class="mode-name">Schrein-Garderobe</h4>
-                  <p class="mode-summary">6 seltene Kami-Skins mit Lichtspuren & Partikeleffekten.</p>
-                  <span class="mode-link">Skins ansehen →</span>
-                </button>
-
-                <!-- Mode 5: Trophäen-Kabinett -->
-                <button class="home-mode-card" id="btnHomeModeTrophies">
-                  <div class="mode-card-top">
-                    <span class="mode-icon-box trophy-box">
-                      <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
-                    </span>
-                    <span class="mode-pill" id="homeTrophiesBadge">0 / 6 Siegel</span>
-                  </div>
-                  <h4 class="mode-name">Heilige Siegel & Erfolge</h4>
-                  <p class="mode-summary">Meisterprüfungen, Zen-Boni & Schrein-Auszeichnungen.</p>
-                  <span class="mode-link">Siegel einsehen →</span>
+                  <span class="mode-item-check" id="checkModeDaily"></span>
                 </button>
               </div>
             </div>
           </div>
+
         </div>
+
       </div>
     </div>
 

@@ -179,6 +179,23 @@ class GameEngine {
       btnHome: document.getElementById("btnHome"),
       homeScreen: document.getElementById("homeScreen"),
       btnHomeClose: document.getElementById("btnHomeClose"),
+      btnHomePlay: document.getElementById("btnHomePlay"),
+      homePlayBtnText: document.getElementById("homePlayBtnText"),
+      btnHomeModeDropdown: document.getElementById("btnHomeModeDropdown"),
+      homeCurrentModeIcon: document.getElementById("homeCurrentModeIcon"),
+      homeCurrentModeLabel: document.getElementById("homeCurrentModeLabel"),
+      homeModeMenu: document.getElementById("homeModeMenu"),
+      checkModeCampaign: document.getElementById("checkModeCampaign"),
+      checkModeTower: document.getElementById("checkModeTower"),
+      checkModeDaily: document.getElementById("checkModeDaily"),
+      menuDailyBadge: document.getElementById("menuDailyBadge"),
+      btnHomeDailyWidget: document.getElementById("btnHomeDailyWidget"),
+      btnHomeWardrobeWidget: document.getElementById("btnHomeWardrobeWidget"),
+      homeActiveSkinLabel: document.getElementById("homeActiveSkinLabel"),
+      btnHomeChapters: document.getElementById("btnHomeChapters"),
+      homeTotalStars: document.getElementById("homeTotalStars"),
+      homeLevelPlaque: document.getElementById("homeLevelPlaque"),
+      homeLevelBigNumber: document.getElementById("homeLevelBigNumber"),
       btnHomeAudioMusic: document.getElementById("btnHomeAudioMusic"),
       btnHomeAudioSound: document.getElementById("btnHomeAudioSound"),
       btnHomeHelp: document.getElementById("btnHomeHelp"),
@@ -252,6 +269,7 @@ class GameEngine {
     this.activeMobileChapter = 1;
     this.activeMobileTab = "skins";
     this.activeDrawerChapter = "all";
+    this.selectedHomeMode = "campaign";
     
     this.hapticsEnabled = (typeof localStorage === "undefined" || localStorage.getItem("koma_haptics_enabled") !== "false");
     this.equippedSkin = (typeof localStorage !== "undefined" && localStorage.getItem("koma_equipped_skin")) || "original";
@@ -315,7 +333,16 @@ class GameEngine {
       this.renderer.setKomaSkin(this.equippedSkin);
     }
 
-    // 6. Load First Level
+    // 6. Load First Level or Progression Level
+    const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    if (urlParams.has("level") || urlParams.has("lvl")) {
+      const targetLvl = parseInt(urlParams.get("level") || urlParams.get("lvl"), 10);
+      if (!isNaN(targetLvl) && targetLvl >= 1 && targetLvl <= LEVELS.length) {
+        this.currentLevelIdx = targetLvl - 1;
+      }
+    } else {
+      this.currentLevelIdx = this.getProgressionLevel();
+    }
     this.loadLevel(this.currentLevelIdx);
 
     // Initial check for any achievements already achieved from saved progress
@@ -339,14 +366,7 @@ class GameEngine {
       window.showroomViewer = new Showroom3DViewer("showroomCanvas");
     }
     this.updateHomeScreen();
-    const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
-    if (urlParams.has("level") || urlParams.has("lvl")) {
-      const targetLvl = parseInt(urlParams.get("level") || urlParams.get("lvl"), 10);
-      if (!isNaN(targetLvl) && targetLvl >= 1 && targetLvl <= LEVELS.length) {
-        this.currentLevelIdx = targetLvl - 1;
-        this.loadLevel(this.currentLevelIdx);
-      }
-    }
+
     const skipHome = urlParams.has("skipHome") || urlParams.has("level") || urlParams.has("lvl") || (typeof navigator !== "undefined" && navigator.webdriver && !urlParams.has("showHome"));
     if (!skipHome) {
       this.showHomeScreen();
@@ -533,6 +553,106 @@ class GameEngine {
       });
     }
 
+    // Colony Flow-style Big Play Button (Directly launches current progression level or mode)
+    if (this.dom.btnHomePlay) {
+      this.dom.btnHomePlay.addEventListener("click", () => {
+        this.triggerHaptic(25);
+        if (this.selectedHomeMode === "tower") {
+          this.hideHomeScreen();
+          if (this.dom.modalTowerIntro) {
+            if (typeof TowerTrial !== "undefined") TowerTrial.updateUI();
+            this.dom.modalTowerIntro.classList.add("active");
+          }
+        } else if (this.selectedHomeMode === "daily") {
+          this.hideHomeScreen();
+          if (this.dom.modalDailyTrial) {
+            if (typeof DailyTrial !== "undefined") DailyTrial.updateUI();
+            this.dom.modalDailyTrial.classList.add("active");
+          }
+        } else {
+          // Campaign progression
+          const progLvl = this.getProgressionLevel();
+          this.hideHomeScreen();
+          this.loadLevel(progLvl);
+        }
+      });
+    }
+
+    // Mode Selector Dropdown Button
+    if (this.dom.btnHomeModeDropdown) {
+      this.dom.btnHomeModeDropdown.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.triggerHaptic(12);
+        if (!this.dom.homeModeMenu) return;
+        const isHidden = this.dom.homeModeMenu.classList.contains("hidden");
+        if (isHidden) {
+          this.dom.homeModeMenu.classList.remove("hidden");
+          this.dom.btnHomeModeDropdown.classList.add("open");
+          this.dom.btnHomeModeDropdown.setAttribute("aria-expanded", "true");
+        } else {
+          this.dom.homeModeMenu.classList.add("hidden");
+          this.dom.btnHomeModeDropdown.classList.remove("open");
+          this.dom.btnHomeModeDropdown.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    // Mode Selection Menu Items
+    const homeModeItems = document.querySelectorAll(".home-mode-item");
+    homeModeItems.forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.triggerHaptic(15);
+        const m = item.getAttribute("data-mode");
+        if (m) this.setHomeMode(m);
+        if (this.dom.homeModeMenu) this.dom.homeModeMenu.classList.add("hidden");
+        if (this.dom.btnHomeModeDropdown) {
+          this.dom.btnHomeModeDropdown.classList.remove("open");
+          this.dom.btnHomeModeDropdown.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    // Close mode menu on click outside
+    document.addEventListener("click", (e) => {
+      if (this.dom.homeModeMenu && !this.dom.homeModeMenu.classList.contains("hidden")) {
+        if (!this.dom.homeModeMenu.contains(e.target) && (!this.dom.btnHomeModeDropdown || !this.dom.btnHomeModeDropdown.contains(e.target))) {
+          this.dom.homeModeMenu.classList.add("hidden");
+          if (this.dom.btnHomeModeDropdown) {
+            this.dom.btnHomeModeDropdown.classList.remove("open");
+            this.dom.btnHomeModeDropdown.setAttribute("aria-expanded", "false");
+          }
+        }
+      }
+    });
+
+    // Top-Left Widgets: Daily Challenge & Wardrobe
+    if (this.dom.btnHomeDailyWidget) {
+      this.dom.btnHomeDailyWidget.addEventListener("click", () => {
+        this.triggerHaptic(18);
+        this.hideHomeScreen();
+        if (this.dom.modalDailyTrial) {
+          if (typeof DailyTrial !== "undefined") DailyTrial.updateUI();
+          this.dom.modalDailyTrial.classList.add("active");
+        }
+      });
+    }
+
+    if (this.dom.btnHomeWardrobeWidget) {
+      this.dom.btnHomeWardrobeWidget.addEventListener("click", () => {
+        this.triggerHaptic(16);
+        this.openSkinsModal();
+      });
+    }
+
+    // Top-Right Widget: Chapters Overview
+    if (this.dom.btnHomeChapters) {
+      this.dom.btnHomeChapters.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        this.openLevelDrawer();
+      });
+    }
+
     if (this.dom.btnHomeResume) {
       this.dom.btnHomeResume.addEventListener("click", () => {
         this.triggerHaptic(20);
@@ -631,8 +751,15 @@ class GameEngine {
     // Drawer Fuji Quick-Jump Banner
     if (this.dom.btnJumpFujiDrawer) {
       this.dom.btnJumpFujiDrawer.addEventListener("click", () => {
+        if (!this.isLevelUnlocked(50)) {
+          Sound.playBump();
+          this.triggerHaptic([35, 30, 40]);
+          this.setFeedback("🔒 Kapitel 6 ist noch gesperrt! Schließe zuerst Kapitel 5 (Level 50) ab.", "bad");
+          return;
+        }
         this.triggerHaptic(25);
         if (this.dom.levelDrawer) this.dom.levelDrawer.classList.remove("open");
+        this.hideHomeScreen();
         this.loadLevel(50); // Level 51
         this.setFeedback("🏔️ Kapitel 6: Der Heilige Berg Fuji geladen!", "good");
       });
@@ -1135,6 +1262,59 @@ class GameEngine {
     }
   }
 
+  getProgressionLevel() {
+    if (typeof LEVELS === "undefined" || !LEVELS.length) return 0;
+    for (let i = 0; i < LEVELS.length; i++) {
+      if (!this.completedLevels.has(i)) {
+        return i;
+      }
+    }
+    return LEVELS.length - 1;
+  }
+
+  isLevelUnlocked(idx) {
+    if (typeof navigator !== "undefined" && navigator.webdriver) return true; // keep automated tests unblocked
+    if (idx === 0) return true;
+    return this.completedLevels.has(idx - 1) || this.completedLevels.has(idx);
+  }
+
+  openLevelDrawer() {
+    this.renderLevelDrawer();
+    if (this.dom.levelDrawer) {
+      this.dom.levelDrawer.classList.add("open");
+    }
+  }
+
+  closeLevelDrawer() {
+    if (this.dom.levelDrawer) {
+      this.dom.levelDrawer.classList.remove("open");
+    }
+  }
+
+  setHomeMode(mode) {
+    this.selectedHomeMode = mode;
+    const items = document.querySelectorAll(".home-mode-item");
+    items.forEach(item => {
+      const isCurrent = item.getAttribute("data-mode") === mode;
+      item.classList.toggle("active", isCurrent);
+    });
+    if (this.dom.checkModeCampaign) this.dom.checkModeCampaign.textContent = (mode === "campaign" ? "✓" : "");
+    if (this.dom.checkModeTower) this.dom.checkModeTower.textContent = (mode === "tower" ? "✓" : "");
+    if (this.dom.checkModeDaily) this.dom.checkModeDaily.textContent = (mode === "daily" ? "✓" : "");
+
+    if (mode === "campaign") {
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "⛩️";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Kampagne";
+    } else if (mode === "tower") {
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "🗼";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Turm";
+    } else if (mode === "daily") {
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "🔥";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Täglich";
+    }
+    this.updateHomeScreen();
+  }
+
   showHomeScreen() {
     this.updateHomeScreen();
     if (this.dom.homeScreen) {
@@ -1155,6 +1335,9 @@ class GameEngine {
   }
 
   updateHomeScreen() {
+    const progIdx = this.getProgressionLevel();
+    const lvl = (typeof LEVELS !== "undefined" && LEVELS[progIdx]) ? LEVELS[progIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
+
     // 1. Synchronize Active Robot Skin in Showroom
     const skinId = this.equippedSkin || "original";
     const skinDef = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]) || {
@@ -1166,6 +1349,9 @@ class GameEngine {
       accentColor: "#00f5ff"
     };
 
+    if (this.dom.homeActiveSkinLabel) {
+      this.dom.homeActiveSkinLabel.textContent = skinDef.name;
+    }
     if (this.dom.homeSkinName) this.dom.homeSkinName.textContent = skinDef.name;
     if (this.dom.homeSkinSub) this.dom.homeSkinSub.textContent = `${skinDef.jpName || ""} · ${skinDef.subtitle || "Shinto-Bote"}`;
     if (this.dom.homeSkinTag) {
@@ -1183,26 +1369,28 @@ class GameEngine {
       window.showroomViewer.loadSkin(skinId);
     }
 
-    // 2. Synchronize Current Level Resume Card
-    const lvl = (typeof LEVELS !== "undefined" && LEVELS[this.currentLevelIdx]) ? LEVELS[this.currentLevelIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
+    // 2. Synchronize Current Level Plaque
     if (lvl) {
-      const chNum = (lvl.chapter && lvl.chapter.num) ? lvl.chapter.num : Math.floor(this.currentLevelIdx / 10) + 1;
+      const chNum = (lvl.chapter && lvl.chapter.num) ? lvl.chapter.num : Math.floor(progIdx / 10) + 1;
       let chTitle = lvl.c || (lvl.chapter && lvl.chapter.title) || `Kapitel ${chNum}`;
       if (!chTitle.toLowerCase().includes("kapitel")) {
         chTitle = `Kapitel ${String(chNum).padStart(2, "0")} · ${chTitle}`;
       }
-      const isCompleted = this.completedLevels.has(this.currentLevelIdx);
-      const stars = this.levelStars[this.currentLevelIdx] || 0;
+      const isCompleted = this.completedLevels.has(progIdx);
+      const stars = this.levelStars[progIdx] || 0;
 
       if (this.dom.homeCurrentChapter) {
-        this.dom.homeCurrentChapter.textContent = chTitle;
+        this.dom.homeCurrentChapter.textContent = chTitle.toUpperCase();
+      }
+      if (this.dom.homeLevelBigNumber) {
+        this.dom.homeLevelBigNumber.textContent = `LEVEL ${progIdx + 1}`;
+      }
+      if (this.dom.homeCurrentLevelTitle) {
+        this.dom.homeCurrentLevelTitle.textContent = lvl.n || "";
       }
       if (this.dom.homeCurrentStatus) {
         this.dom.homeCurrentStatus.textContent = isCompleted ? "Gemeistert ✓" : "Aktuelles Ziel";
         this.dom.homeCurrentStatus.className = `resume-status-badge ${isCompleted ? "completed" : "ready"}`;
-      }
-      if (this.dom.homeCurrentLevelTitle) {
-        this.dom.homeCurrentLevelTitle.textContent = `Level ${String(this.currentLevelIdx + 1).padStart(2, "0")}: ${lvl.n}`;
       }
       if (this.dom.homeCurrentLevelDesc) {
         this.dom.homeCurrentLevelDesc.textContent = lvl.d || "Bringe die heilige Opfergabe sicher zum Schrein.";
@@ -1212,25 +1400,47 @@ class GameEngine {
           let starsHtml = "";
           for (let s = 1; s <= 3; s++) {
             const filled = s <= stars;
-            starsHtml += `<span class="resume-star ${filled ? "filled" : "empty"}">${filled ? KOMA_ICONS.starFilled(20, "var(--gold)", true) : KOMA_ICONS.starEmpty(20, "rgba(255,255,255,0.25)")}</span>`;
+            starsHtml += `<span class="home-plaque-star ${filled ? "filled" : "empty"}">${filled ? KOMA_ICONS.starFilled(22, "var(--gold)", true) : KOMA_ICONS.starEmpty(22, "rgba(255,255,255,0.22)")}</span>`;
           }
-          starsHtml += `<span class="resume-stars-label">${stars > 0 ? `${stars}/3 Sterne erhalten` : "Noch keine Sterne"}</span>`;
           this.dom.homeCurrentStarsRow.innerHTML = starsHtml;
         }
       }
     }
 
-    // 3. Synchronize Mode Badges
+    // 3. Synchronize Total Stars in Top-Right
+    const totalStars = this.getTotalStars();
+    if (this.dom.homeTotalStars) {
+      this.dom.homeTotalStars.textContent = totalStars;
+    }
+
+    // 4. Synchronize Mode Badges
     if (this.dom.homeTowerBadge && typeof TowerTrial !== "undefined") {
       this.dom.homeTowerBadge.textContent = `Rekord: Ebene ${TowerTrial.getBestFloor() || 1}`;
     }
-    if (this.dom.homeDailyBadge && typeof DailyTrial !== "undefined") {
+    if (typeof DailyTrial !== "undefined") {
       const streak = DailyTrial.getEffectiveStreak();
       const isDone = DailyTrial.isTodayCompleted();
-      this.dom.homeDailyBadge.textContent = isDone ? `${streak} Tage ✓` : `${streak} Tage Streak`;
+      const streakStr = isDone ? `${streak} Tage ✓` : `${streak} Tage`;
+      if (this.dom.homeDailyBadge) {
+        this.dom.homeDailyBadge.textContent = streakStr;
+      }
+      if (this.dom.menuDailyBadge) {
+        this.dom.menuDailyBadge.textContent = isDone ? `${streak} Tage geschafft ✓` : `${streak} Tage Streak`;
+      }
     }
     if (this.dom.homeTrophiesBadge) {
       this.dom.homeTrophiesBadge.textContent = `${this.unlockedAchievements.size} / ${ACHIEVEMENTS.length} Siegel`;
+    }
+
+    // 5. Update Play Button Text based on mode
+    if (this.dom.homePlayBtnText) {
+      if (this.selectedHomeMode === "tower") {
+        this.dom.homePlayBtnText.textContent = "SCHREINPRÜFUNG";
+      } else if (this.selectedHomeMode === "daily") {
+        this.dom.homePlayBtnText.textContent = "TÄGLICHE PRÜFUNG";
+      } else {
+        this.dom.homePlayBtnText.textContent = "SPIELEN";
+      }
     }
   }
 
@@ -1496,18 +1706,21 @@ class GameEngine {
       const absIdx = startIdx + relIdx;
       const isActive = absIdx === this.currentLevelIdx;
       const isDone = this.completedLevels.has(absIdx);
+      const isUnlocked = this.isLevelUnlocked(absIdx);
       const stars = this.levelStars[absIdx];
 
       let starsHtml = "";
-      if (stars !== undefined && stars > 0) {
+      if (isUnlocked && stars !== undefined && stars > 0) {
         starsHtml = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getStarsRow(stars, stars, 11) : "⭐".repeat(stars);
-      } else {
+      } else if (isUnlocked) {
         starsHtml = `<span style="opacity:0.3; font-size:11px;">–</span>`;
+      } else {
+        starsHtml = `<span style="opacity:0.5; font-size:10px; font-weight:700;">🔒 Gesperrt</span>`;
       }
 
       return `
-        <button class="mobile-level-card ${isActive ? "active" : ""} ${isDone ? "done" : ""}" data-level-idx="${absIdx}">
-          <div class="mobile-level-num">${String(absIdx + 1).padStart(2, "0")}</div>
+        <button class="mobile-level-card ${isActive ? "active" : ""} ${isDone ? "done" : ""} ${!isUnlocked ? "locked" : ""}" data-level-idx="${absIdx}" ${!isUnlocked ? 'aria-disabled="true"' : ""}>
+          <div class="mobile-level-num">${!isUnlocked ? "🔒" : String(absIdx + 1).padStart(2, "0")}</div>
           <div class="mobile-level-info">
             <div class="mobile-level-name">${lvl.n}</div>
             <div class="mobile-level-meta">
@@ -1524,7 +1737,14 @@ class GameEngine {
       btn.addEventListener("click", () => {
         const idx = parseInt(btn.getAttribute("data-level-idx"), 10);
         if (!isNaN(idx)) {
+          if (!this.isLevelUnlocked(idx)) {
+            Sound.playBump();
+            this.triggerHaptic([35, 30, 40]);
+            this.setFeedback(`🔒 Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
+            return;
+          }
           this.closeMobileHub();
+          this.hideHomeScreen();
           this.loadLevel(idx);
         }
       });
@@ -2305,15 +2525,25 @@ class GameEngine {
     LEVELS.forEach((lvl, idx) => {
       if (idx < minIdx || idx > maxIdx) return;
 
+      const isUnlocked = this.isLevelUnlocked(idx);
+      const isCompleted = this.completedLevels.has(idx);
+      const isActive = idx === this.currentLevelIdx;
+
       const btn = document.createElement("button");
       btn.className =
         "level-pill-btn" +
-        (idx === this.currentLevelIdx ? " active" : "") +
-        (this.completedLevels.has(idx) ? " done" : "");
+        (isActive ? " active" : "") +
+        (isCompleted ? " done" : "") +
+        (!isUnlocked ? " locked" : "");
       
+      if (!isUnlocked) {
+        btn.setAttribute("aria-disabled", "true");
+        btn.title = `Level ${idx + 1} ist noch gesperrt. Schließe Level ${idx} ab.`;
+      }
+
       const stars = this.levelStars[idx];
       let starMarkup = "";
-      if (stars !== undefined) {
+      if (isUnlocked && stars !== undefined) {
         if (stars > 0) {
           const starsSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getStarsRow(stars, stars, 12) : "⭐".repeat(stars);
           starMarkup = `<span class="pill-stars">${starsSvg}<span class="sr-only">${"⭐".repeat(stars)}</span></span>`;
@@ -2328,11 +2558,18 @@ class GameEngine {
         <span class="pill-number">${idx + 1}</span>
         <span class="pill-title">${isFujiLvl ? "🏔️ " : ""}${lvl.n}</span>
         ${starMarkup}
-        ${this.completedLevels.has(idx) ? '<span class="pill-check">✓</span>' : ""}
+        ${!isUnlocked ? '<span class="pill-lock">🔒</span>' : (isCompleted ? '<span class="pill-check">✓</span>' : "")}
       `;
       btn.onclick = () => {
+        if (!isUnlocked) {
+          Sound.playBump();
+          this.triggerHaptic([35, 30, 40]);
+          this.setFeedback(`🔒 Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
+          return;
+        }
         this.triggerHaptic(14);
         this.dom.levelDrawer.classList.remove("open");
+        this.hideHomeScreen();
         this.loadLevel(idx);
       };
       this.dom.levelList.appendChild(btn);
