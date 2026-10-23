@@ -4648,6 +4648,12 @@ class Showroom3DViewer {
     // 3D Sacred Shinto Pedestal with Glowing Cyber-Runes & Ambient Spirit Motes
     this.buildPedestal();
 
+    // 3D Shinto Shrine Torii Gate in Background
+    this.buildTorii();
+
+    // Floating Japanese Hitodama Spirit Lights (Geisterlichter)
+    this.buildSpiritLights();
+
     this.loadSkin(window.gameInstance?.equippedSkin || "original");
 
     // Handle resize
@@ -4708,15 +4714,15 @@ class Showroom3DViewer {
     this.pedestalGroup.add(this.runeRingInner);
 
     // 5. Subtle Floating Spirit Particles
-    const particleCount = 24;
+    const particleCount = 32;
     const pGeo = new THREE.BufferGeometry();
     const posArr = new Float32Array(particleCount * 3);
     const speedArr = new Float32Array(particleCount);
     for (let i = 0; i < particleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 0.22 + Math.random() * 0.45;
+      const radius = 0.22 + Math.random() * 0.55;
       posArr[i * 3] = Math.cos(angle) * radius;
-      posArr[i * 3 + 1] = 0.08 + Math.random() * 0.75;
+      posArr[i * 3 + 1] = 0.08 + Math.random() * 0.95;
       posArr[i * 3 + 2] = Math.sin(angle) * radius;
       speedArr[i] = 0.25 + Math.random() * 0.45;
     }
@@ -4725,7 +4731,7 @@ class Showroom3DViewer {
 
     const pMat = new THREE.PointsMaterial({
       color: 0x67e8f9,
-      size: 0.04,
+      size: 0.038,
       transparent: true,
       opacity: 0.85,
       blending: THREE.AdditiveBlending
@@ -4734,6 +4740,226 @@ class Showroom3DViewer {
     this.pedestalGroup.add(this.spiritParticles);
 
     this.scene.add(this.pedestalGroup);
+  }
+
+  buildTorii() {
+    this.toriiGroup = new THREE.Group();
+    // Positioned behind the pedestal and robot, framing them in center
+    this.toriiGroup.position.set(0, -0.32, -0.72);
+
+    // Materials
+    const vermillionMat = new THREE.MeshStandardMaterial({
+      color: 0xcc222b, // Sacred Shinto vermillion lacquer
+      roughness: 0.35,
+      metalness: 0.15
+    });
+
+    const basaltMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16, // Dark basalt stone base
+      roughness: 0.8,
+      metalness: 0.1
+    });
+
+    const goldAccentMat = new THREE.MeshStandardMaterial({
+      color: 0xffc107, // Gold trim & end caps
+      emissive: 0xffa000,
+      emissiveIntensity: 0.85,
+      roughness: 0.25,
+      metalness: 0.85
+    });
+
+    const cyanRuneMat = new THREE.MeshStandardMaterial({
+      color: 0x00f5ff, // Glowing cyber rune stripe
+      emissive: 0x00f5ff,
+      emissiveIntensity: 2.2,
+      roughness: 0.2
+    });
+
+    // Twin Pillars (Hashira)
+    const pillarSpacing = 0.76;
+    const pillarHeight = 1.22;
+
+    [-pillarSpacing, pillarSpacing].forEach((xPos) => {
+      // Stone nemaki base
+      const baseGeo = new THREE.CylinderGeometry(0.095, 0.115, 0.16, 20);
+      const baseMesh = new THREE.Mesh(baseGeo, basaltMat);
+      baseMesh.position.set(xPos, 0.08, 0);
+      this.toriiGroup.add(baseMesh);
+
+      // Gold base ring
+      const goldRingGeo = new THREE.TorusGeometry(0.088, 0.009, 12, 24);
+      const goldRing = new THREE.Mesh(goldRingGeo, goldAccentMat);
+      goldRing.rotation.x = Math.PI / 2;
+      goldRing.position.set(xPos, 0.16, 0);
+      this.toriiGroup.add(goldRing);
+
+      // Main upright pillar with subtle inward lean
+      const pGeo = new THREE.CylinderGeometry(0.066, 0.080, pillarHeight, 20);
+      const pillar = new THREE.Mesh(pGeo, vermillionMat);
+      pillar.position.set(xPos, 0.16 + pillarHeight / 2, 0);
+      pillar.rotation.z = xPos < 0 ? -0.016 : 0.016;
+      this.toriiGroup.add(pillar);
+
+      // Cyber rune strip along the pillar
+      const stripeGeo = new THREE.CylinderGeometry(0.012, 0.012, pillarHeight * 0.88, 12);
+      const stripe = new THREE.Mesh(stripeGeo, cyanRuneMat);
+      stripe.position.set(xPos + (xPos < 0 ? 0.02 : -0.02), 0.16 + pillarHeight / 2, 0.068);
+      this.toriiGroup.add(stripe);
+    });
+
+    // Lower Tie Beam (Nuki)
+    const nukiGeo = new THREE.BoxGeometry(1.68, 0.065, 0.10);
+    const nukiMesh = new THREE.Mesh(nukiGeo, vermillionMat);
+    nukiMesh.position.set(0, 1.04, 0);
+    this.toriiGroup.add(nukiMesh);
+
+    // Secondary Upper Beam (Shimaki)
+    const shimakiGeo = new THREE.BoxGeometry(1.82, 0.075, 0.13);
+    const shimakiMesh = new THREE.Mesh(shimakiGeo, vermillionMat);
+    shimakiMesh.position.set(0, 1.26, 0);
+    this.toriiGroup.add(shimakiMesh);
+
+    // Top Lintel Beam (Kasagi) with gold end caps
+    const kasagiGeo = new THREE.BoxGeometry(2.05, 0.09, 0.15);
+    const kasagiMesh = new THREE.Mesh(kasagiGeo, basaltMat);
+    kasagiMesh.position.set(0, 1.33, 0);
+    this.toriiGroup.add(kasagiMesh);
+
+    [-1.02, 1.02].forEach((xCap) => {
+      const capGeo = new THREE.BoxGeometry(0.05, 0.10, 0.16);
+      const capMesh = new THREE.Mesh(capGeo, goldAccentMat);
+      capMesh.position.set(xCap, 1.33, 0);
+      this.toriiGroup.add(capMesh);
+    });
+
+    // Central Sacred Shrine Plaque (Gakuzuka)
+    const plaqueGeo = new THREE.BoxGeometry(0.18, 0.18, 0.06);
+    const plaqueMesh = new THREE.Mesh(plaqueGeo, basaltMat);
+    plaqueMesh.position.set(0, 1.15, 0.04);
+    this.toriiGroup.add(plaqueMesh);
+
+    const runeGeo = new THREE.PlaneGeometry(0.12, 0.12);
+    const runeMesh = new THREE.Mesh(runeGeo, cyanRuneMat);
+    runeMesh.position.set(0, 1.15, 0.075);
+    this.toriiGroup.add(runeMesh);
+
+    // Flanking Traditional Stone Lanterns (Ishidōrō) on ground
+    this.buildLantern(-0.92, 0, 0.12, 0xff9d3b);
+    this.buildLantern(0.92, 0, 0.12, 0x00f5ff);
+
+    this.scene.add(this.toriiGroup);
+  }
+
+  buildLantern(x, y, z, flameColor = 0xff9d3b) {
+    const lGroup = new THREE.Group();
+    lGroup.position.set(x, y, z);
+
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0x1f2937,
+      roughness: 0.8,
+      metalness: 0.15
+    });
+    const flameMat = new THREE.MeshStandardMaterial({
+      color: flameColor,
+      emissive: flameColor,
+      emissiveIntensity: 2.2,
+      roughness: 0.2
+    });
+
+    // Pedestal
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.06, 0.16), stoneMat);
+    base.position.y = 0.03;
+    lGroup.add(base);
+
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.20, 8), stoneMat);
+    post.position.y = 0.16;
+    lGroup.add(post);
+
+    // Firebox with warm glowing flame
+    const firebox = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.12), flameMat);
+    firebox.position.y = 0.31;
+    lGroup.add(firebox);
+
+    // Roof (Kasa)
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.09, 4), stoneMat);
+    roof.position.y = 0.41;
+    roof.rotation.y = Math.PI / 4;
+    lGroup.add(roof);
+
+    this.toriiGroup.add(lGroup);
+  }
+
+  buildSpiritLights() {
+    this.spiritLights = [];
+
+    // Floating Japanese Hitodama Spirit Lights (Cyan, Spirit Gold, Sakura Violet, Azure)
+    const configs = [
+      { x: -0.80, y: 0.38, z: -0.42, color: 0x00f5ff, speedX: 1.1, speedY: 1.7, speedZ: 0.9, phase: 0.0, size: 0.042 },
+      { x: 0.82, y: 0.44, z: -0.46, color: 0xffb703, speedX: 1.3, speedY: 1.5, speedZ: 1.0, phase: 1.8, size: 0.040 },
+      { x: -0.48, y: 0.74, z: -0.68, color: 0xdf6eff, speedX: 0.9, speedY: 2.1, speedZ: 1.2, phase: 3.2, size: 0.038 },
+      { x: 0.50, y: 0.68, z: -0.62, color: 0x38bdf8, speedX: 1.2, speedY: 1.8, speedZ: 0.8, phase: 4.7, size: 0.038 }
+    ];
+
+    configs.forEach((cfg) => {
+      const g = new THREE.Group();
+      g.position.set(cfg.x, cfg.y, cfg.z);
+
+      // Intense glowing core
+      const coreGeo = new THREE.SphereGeometry(cfg.size, 16, 16);
+      const coreMat = new THREE.MeshStandardMaterial({
+        color: cfg.color,
+        emissive: cfg.color,
+        emissiveIntensity: 2.8,
+        roughness: 0.15,
+        transparent: true,
+        opacity: 0.95
+      });
+      const core = new THREE.Mesh(coreGeo, coreMat);
+      g.add(core);
+
+      // Translucent ethereal halo
+      const auraGeo = new THREE.SphereGeometry(cfg.size * 2.1, 16, 16);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: cfg.color,
+        transparent: true,
+        opacity: 0.36,
+        blending: THREE.AdditiveBlending
+      });
+      const aura = new THREE.Mesh(auraGeo, auraMat);
+      g.add(aura);
+
+      // Trailing spirit flame wisp (downward teardrop)
+      const wispGeo = new THREE.ConeGeometry(cfg.size * 0.85, cfg.size * 2.2, 12);
+      const wispMat = new THREE.MeshBasicMaterial({
+        color: cfg.color,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending
+      });
+      const wisp = new THREE.Mesh(wispGeo, wispMat);
+      wisp.rotation.x = Math.PI;
+      wisp.position.y = -cfg.size * 0.9;
+      g.add(wisp);
+
+      // Point light for soft local ambient glow
+      const pLight = new THREE.PointLight(cfg.color, 0.6, 1.4);
+      g.add(pLight);
+
+      this.scene.add(g);
+
+      this.spiritLights.push({
+        group: g,
+        light: pLight,
+        baseX: cfg.x,
+        baseY: cfg.y,
+        baseZ: cfg.z,
+        speedX: cfg.speedX,
+        speedY: cfg.speedY,
+        speedZ: cfg.speedZ,
+        phase: cfg.phase,
+        wisp: wisp
+      });
+    });
   }
 
   onResize() {
@@ -4786,11 +5012,31 @@ class Showroom3DViewer {
       this.runeRingInner.rotation.z -= delta * 0.5;
     }
 
+    // Animate Hitodama Spirit Lights
+    if (this.spiritLights) {
+      for (let i = 0; i < this.spiritLights.length; i++) {
+        const s = this.spiritLights[i];
+        s.group.position.y = s.baseY + Math.sin(time * s.speedY + s.phase) * 0.055;
+        s.group.position.x = s.baseX + Math.cos(time * s.speedX + s.phase) * 0.035;
+        s.group.position.z = s.baseZ + Math.sin(time * s.speedZ + s.phase) * 0.025;
+
+        const pulse = 1.0 + Math.sin(time * 3.0 + s.phase) * 0.12;
+        s.group.scale.set(pulse, pulse, pulse);
+
+        if (s.light) {
+          s.light.intensity = 0.55 + Math.sin(time * 2.6 + s.phase) * 0.22;
+        }
+        if (s.wisp) {
+          s.wisp.rotation.z = Math.sin(time * 2.0 + s.phase) * 0.2;
+        }
+      }
+    }
+
     if (this.spiritParticles && this.spiritParticles.geometry) {
       const positions = this.spiritParticles.geometry.attributes.position.array;
       for (let i = 0; i < this.particleSpeeds.length; i++) {
         positions[i * 3 + 1] += delta * this.particleSpeeds[i] * 0.35;
-        if (positions[i * 3 + 1] > 0.85) {
+        if (positions[i * 3 + 1] > 1.15) {
           positions[i * 3 + 1] = 0.08;
         }
       }

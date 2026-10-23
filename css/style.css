@@ -3627,15 +3627,15 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
 
 .showroom-pedestal-halo {
   position: absolute;
-  top: 25px;
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 245, 255, 0.22) 0%, rgba(223, 110, 255, 0.08) 50%, transparent 70%);
+  width: 260px;
+  height: 220px;
+  background: radial-gradient(ellipse at 50% 55%, rgba(0, 245, 255, 0.22) 0%, rgba(223, 110, 255, 0.12) 40%, rgba(204, 34, 43, 0.08) 65%, transparent 78%);
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(16px);
+  filter: blur(18px);
 }
 
 .showroom-pedestal-ring {
