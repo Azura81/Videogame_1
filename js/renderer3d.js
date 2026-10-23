@@ -176,10 +176,11 @@ class GardenRenderer {
     // Isometric angle: 45° azimuth, ~35° elevation
     this.updateCameraPosition();
     
-    // 3. Renderer - High-performance single-pass WebGL (solid background, locked 1.0 pixelRatio for ultra-smooth laptop & mobile 60fps)
-    this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
+    // 3. Renderer - Crisp High-Resolution WebGL with hardware anti-aliasing (Retina-optimized, capped at 2.0 DPR for solid 60fps)
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     this.renderer.setSize(Math.min(w, 1920), Math.min(h, 1080));
-    this.renderer.setPixelRatio(1.0);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
+    this.renderer.setPixelRatio(dpr);
     this.renderer.shadowMap.enabled = false;
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.container.appendChild(this.renderer.domElement);
@@ -430,6 +431,8 @@ class GardenRenderer {
     }
     this.camera.updateProjectionMatrix();
     
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
+    this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h);
     if (this.fujiGroup && this.fujiGroup.visible) {
       this.updateFujiBackdrop();
@@ -4642,12 +4645,95 @@ class Showroom3DViewer {
     this.komaBaseY = -0.06;
     this.clock = new THREE.Clock();
 
+    // 3D Sacred Shinto Pedestal with Glowing Cyber-Runes & Ambient Spirit Motes
+    this.buildPedestal();
+
     this.loadSkin(window.gameInstance?.equippedSkin || "original");
 
     // Handle resize
     window.addEventListener("resize", () => this.onResize());
 
     this.animate();
+  }
+
+  buildPedestal() {
+    this.pedestalGroup = new THREE.Group();
+    this.pedestalGroup.position.set(0, -0.32, 0);
+
+    // 1. Dark Basalt Zen Base Plinth
+    const baseGeo = new THREE.CylinderGeometry(0.72, 0.78, 0.08, 36);
+    const baseMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.75,
+      metalness: 0.2
+    });
+    const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+    this.pedestalGroup.add(baseMesh);
+
+    // 2. Beveled Upper Slate Plinth
+    const topGeo = new THREE.CylinderGeometry(0.62, 0.68, 0.05, 36);
+    const topMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      roughness: 0.6,
+      metalness: 0.3
+    });
+    const topMesh = new THREE.Mesh(topGeo, topMat);
+    topMesh.position.y = 0.06;
+    this.pedestalGroup.add(topMesh);
+
+    // 3. Neon Cyber-Rune Ring (Cyan)
+    const ringGeo = new THREE.TorusGeometry(0.56, 0.012, 16, 48);
+    const ringMat = new THREE.MeshStandardMaterial({
+      color: 0x00f5ff,
+      emissive: 0x00f5ff,
+      emissiveIntensity: 2.2,
+      roughness: 0.2
+    });
+    this.runeRingOuter = new THREE.Mesh(ringGeo, ringMat);
+    this.runeRingOuter.rotation.x = Math.PI / 2;
+    this.runeRingOuter.position.y = 0.09;
+    this.pedestalGroup.add(this.runeRingOuter);
+
+    // 4. Inner Gold Lotus Ring
+    const innerRingGeo = new THREE.TorusGeometry(0.40, 0.009, 16, 36);
+    const innerRingMat = new THREE.MeshStandardMaterial({
+      color: 0xffbe0b,
+      emissive: 0xffbe0b,
+      emissiveIntensity: 1.8,
+      roughness: 0.3
+    });
+    this.runeRingInner = new THREE.Mesh(innerRingGeo, innerRingMat);
+    this.runeRingInner.rotation.x = Math.PI / 2;
+    this.runeRingInner.position.y = 0.092;
+    this.pedestalGroup.add(this.runeRingInner);
+
+    // 5. Subtle Floating Spirit Particles
+    const particleCount = 24;
+    const pGeo = new THREE.BufferGeometry();
+    const posArr = new Float32Array(particleCount * 3);
+    const speedArr = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 0.22 + Math.random() * 0.45;
+      posArr[i * 3] = Math.cos(angle) * radius;
+      posArr[i * 3 + 1] = 0.08 + Math.random() * 0.75;
+      posArr[i * 3 + 2] = Math.sin(angle) * radius;
+      speedArr[i] = 0.25 + Math.random() * 0.45;
+    }
+    pGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+    this.particleSpeeds = speedArr;
+
+    const pMat = new THREE.PointsMaterial({
+      color: 0x67e8f9,
+      size: 0.04,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+    this.spiritParticles = new THREE.Points(pGeo, pMat);
+    this.pedestalGroup.add(this.spiritParticles);
+
+    this.scene.add(this.pedestalGroup);
   }
 
   onResize() {
@@ -4690,7 +4776,25 @@ class Showroom3DViewer {
 
     if (this.komaGroup) {
       this.komaGroup.rotation.y += delta * 0.75;
-      this.komaGroup.position.y = (this.komaBaseY || 0.02) + Math.sin(time * 2.4) * 0.02;
+      this.komaGroup.position.y = (this.komaBaseY || -0.06) + Math.sin(time * 2.2) * 0.025;
+    }
+
+    if (this.runeRingOuter) {
+      this.runeRingOuter.rotation.z += delta * 0.35;
+    }
+    if (this.runeRingInner) {
+      this.runeRingInner.rotation.z -= delta * 0.5;
+    }
+
+    if (this.spiritParticles && this.spiritParticles.geometry) {
+      const positions = this.spiritParticles.geometry.attributes.position.array;
+      for (let i = 0; i < this.particleSpeeds.length; i++) {
+        positions[i * 3 + 1] += delta * this.particleSpeeds[i] * 0.35;
+        if (positions[i * 3 + 1] > 0.85) {
+          positions[i * 3 + 1] = 0.08;
+        }
+      }
+      this.spiritParticles.geometry.attributes.position.needsUpdate = true;
     }
 
     if (this.renderer && this.scene && this.camera) {
