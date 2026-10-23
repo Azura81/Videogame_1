@@ -1,12 +1,12 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('KOMA: Spirit Delivery - Game Tests', () => {
+test.describe('Spirit Delivery - Game Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
   });
 
   test('Page loads with title, 3D WebGL canvas, and full camera credits', async ({ page }) => {
-    await expect(page).toHaveTitle(/KOMA: Spirit Delivery/);
+    await expect(page).toHaveTitle(/Spirit Delivery/);
     const canvas = page.locator('#webgl-container canvas');
     await expect(canvas).toBeVisible();
     await expect(page.locator('#levelTitle')).toHaveText('Die erste Lieferung');
@@ -281,9 +281,9 @@ test.describe('KOMA: Spirit Delivery - Game Tests', () => {
     const modalSkins = page.locator('#modalSkins');
     await expect(modalSkins).toHaveClass(/active/);
 
-    // 3. Verify all 6 Japanese Kami skins are rendered
+    // 3. Verify all 7 Japanese Kami skins (including Ryūjin) are rendered
     const skinCards = modalSkins.locator('.skin-card');
-    await expect(skinCards).toHaveCount(6);
+    await expect(skinCards).toHaveCount(7);
 
     // 4. Verify initial skin is Shiro Usagi (equipped)
     const initialEquipped = await page.evaluate(() => window.gameInstance.equippedSkin);
@@ -383,7 +383,7 @@ test.describe('KOMA: Spirit Delivery - Game Tests', () => {
     const skinsPanel = page.locator('#hubPanelSkins');
     await expect(skinsPanel).toBeVisible();
     const mobileSkins = page.locator('.mobile-skin-card');
-    await expect(mobileSkins).toHaveCount(6);
+    await expect(mobileSkins).toHaveCount(7);
 
     // 7. Switch to 50 Levels Tab
     const tabLevels = page.locator('#tabBtnLevels');

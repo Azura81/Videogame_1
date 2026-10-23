@@ -1,7 +1,7 @@
 {
-  "name": "KOMA: Spirit Delivery",
-  "short_name": "KOMA",
-  "description": "Hilf dem kleinen Geister-Kurier KOMA bei der Zustellung heiliger Schrein-Pakete in einer zauberhaften 3D-Shinto-Welt.",
+  "name": "Spirit Delivery",
+  "short_name": "Spirit Delivery",
+  "description": "Hilf dem kleinen Geister-Kurier bei der Zustellung heiliger Schrein-Pakete in einer zauberhaften 3D-Shinto-Welt.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -42,7 +42,7 @@
       "sizes": "1920x1080",
       "type": "image/jpeg",
       "form_factor": "wide",
-      "label": "KOMA: Spirit Delivery — 3D Cyberpunk Japanese Zen Garden Puzzle"
+      "label": "Spirit Delivery — 3D Cyberpunk Japanese Zen Garden Puzzle"
     }
   ]
 }

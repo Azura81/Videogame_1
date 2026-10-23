@@ -1,7 +1,7 @@
 {
-  "name": "koma-spirit-delivery",
+  "name": "spirit-delivery",
   "version": "1.0.0",
-  "description": "KOMA: Spirit Delivery — 3D Cyberpunk Japanese Garden Casual Puzzle Game",
+  "description": "Spirit Delivery — 3D Cyberpunk Japanese Garden Casual Puzzle Game",
   "main": "index.html",
   "scripts": {
     "dev": "vite --host",
