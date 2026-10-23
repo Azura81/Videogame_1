@@ -340,7 +340,14 @@ class GameEngine {
     }
     this.updateHomeScreen();
     const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
-    const skipHome = urlParams.has("skipHome") || (typeof navigator !== "undefined" && navigator.webdriver && !urlParams.has("showHome"));
+    if (urlParams.has("level") || urlParams.has("lvl")) {
+      const targetLvl = parseInt(urlParams.get("level") || urlParams.get("lvl"), 10);
+      if (!isNaN(targetLvl) && targetLvl >= 1 && targetLvl <= LEVELS.length) {
+        this.currentLevelIdx = targetLvl - 1;
+        this.loadLevel(this.currentLevelIdx);
+      }
+    }
+    const skipHome = urlParams.has("skipHome") || urlParams.has("level") || urlParams.has("lvl") || (typeof navigator !== "undefined" && navigator.webdriver && !urlParams.has("showHome"));
     if (!skipHome) {
       this.showHomeScreen();
     } else {
