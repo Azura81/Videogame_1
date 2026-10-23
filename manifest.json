@@ -35,5 +35,14 @@
       "type": "image/svg+xml",
       "purpose": "any"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/og-banner.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "KOMA: Spirit Delivery — 3D Cyberpunk Japanese Zen Garden Puzzle"
+    }
   ]
 }

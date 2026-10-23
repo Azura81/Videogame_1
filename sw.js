@@ -3,7 +3,7 @@
  * Enables complete offline playability and asset caching for Progressive Web App (PWA).
  */
 
-const CACHE_NAME = "koma-spirit-delivery-v3";
+const CACHE_NAME = "koma-spirit-delivery-v4";
 
 const ASSETS_TO_CACHE = [
   "./",
@@ -23,7 +23,8 @@ const ASSETS_TO_CACHE = [
   "./icons/icon-512.png",
   "./icons/icon-maskable.png",
   "./icons/apple-touch-icon.png",
-  "./icons/favicon.svg"
+  "./icons/favicon.svg",
+  "./icons/og-banner.jpg"
 ];
 
 // Install Event - Pre-cache essential game files
