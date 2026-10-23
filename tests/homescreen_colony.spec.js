@@ -127,10 +127,10 @@ test.describe('Homescreen Colony Flow Redesign & Sequential Progression', () => 
     const chaptersBtn = page.locator('#btnHomeChapters');
     await expect(chaptersBtn).toBeVisible();
 
-    // Verify bounding box of top widgets is inside viewport (y >= 0)
+    // Verify bounding box of top widgets has generous clearance below Dynamic Island (y >= 80)
     const dailyBox = await dailyBtn.boundingBox();
     expect(dailyBox).not.toBeNull();
-    expect(dailyBox.y).toBeGreaterThanOrEqual(5);
+    expect(dailyBox.y).toBeGreaterThanOrEqual(80);
 
     // Bottom controls must be visible and within viewport (y + height <= 844)
     const playBtn = page.locator('#btnHomePlay');
@@ -153,6 +153,43 @@ test.describe('Homescreen Colony Flow Redesign & Sequential Progression', () => 
     await expect(page.locator('#modalSkins')).toHaveClass(/active/);
     await page.locator('#btnCloseSkins').click();
     await expect(page.locator('#modalSkins')).not.toHaveClass(/active/);
+  });
+
+  test('In-game Top Bar on iPhone: Distinct Menü and Homescreen buttons positioned below Dynamic Island', async ({ page }) => {
+    test.setTimeout(30000);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/?showHome=1', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#homeScreen.active', { timeout: 10000 });
+
+    // Click play to enter game
+    await page.locator('#btnHomePlay').click();
+    await expect(page.locator('#homeScreen')).not.toHaveClass(/active/);
+
+    // 1. Mobile Hub Button (left) must say "Menü"
+    const mobileHubBtn = page.locator('#btnMobileHub');
+    await expect(mobileHubBtn).toBeVisible();
+    await expect(mobileHubBtn).toContainText('Menü');
+
+    // 2. Return Home Button (right) must clearly say "Homescreen"
+    const btnHome = page.locator('#btnHome');
+    await expect(btnHome).toBeVisible();
+    await expect(btnHome).toContainText('Homescreen');
+
+    // 3. Both buttons must sit comfortably below the Dynamic Island (y >= 75)
+    const hubBox = await mobileHubBtn.boundingBox();
+    expect(hubBox).not.toBeNull();
+    expect(hubBox.y).toBeGreaterThanOrEqual(75);
+
+    const homeBox = await btnHome.boundingBox();
+    expect(homeBox).not.toBeNull();
+    expect(homeBox.y).toBeGreaterThanOrEqual(75);
+
+    // Capture in-game view on iPhone
+    await page.screenshot({ path: '/Users/maxrietsch/.gemini/antigravity-ide/brain/ae562408-a431-4271-84da-8958f4628572/ingame_iphone_view.png' });
+
+    // 4. Clicking Homescreen returns user back to Homescreen
+    await btnHome.click();
+    await expect(page.locator('#homeScreen')).toHaveClass(/active/);
   });
 });
 

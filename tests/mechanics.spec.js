@@ -66,8 +66,8 @@ test.describe('New Mechanics: Fragile Tiles and Pushable Blocks', () => {
       g.play();
     });
 
-    // Wait for execution to finish (each move takes ~400ms)
-    await page.waitForTimeout(4500);
+    // Wait for execution to finish and win condition to trigger
+    await page.waitForFunction(() => window.gameInstance?.state?.isWin === true, { timeout: 10000 });
 
     const winStatus = await page.evaluate(() => {
       return {
