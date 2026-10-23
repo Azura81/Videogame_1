@@ -1679,6 +1679,107 @@ class SoundEngine {
       osc.stop(t + i * 0.12 + 0.85);
     });
   }
+
+  playFrostBlast() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Sub-bass impact shockwave
+    const sub = this.ctx.createOscillator();
+    const subGain = this.ctx.createGain();
+    sub.type = "sine";
+    sub.frequency.setValueAtTime(95, t);
+    sub.frequency.exponentialRampToValueAtTime(32, t + 0.55);
+    subGain.gain.setValueAtTime(0.4, t);
+    subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+    sub.connect(subGain);
+    subGain.connect(dest);
+    sub.start(t);
+    sub.stop(t + 0.58);
+
+    // Howling arctic frost stream (filtered noise)
+    if (this.noiseBuffer) {
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = this.noiseBuffer;
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1400, t);
+      filter.frequency.exponentialRampToValueAtTime(350, t + 0.7);
+      filter.Q.value = 3.2;
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.35, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(dest);
+      noise.start(t);
+      noise.stop(t + 0.78);
+    }
+  }
+
+  playFreeze() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Instant ice crackle & freezing crystallization
+    [880, 1320, 1760, 2400].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t + idx * 0.03);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.8, t + idx * 0.03 + 0.25);
+      gain.gain.setValueAtTime(0.15, t + idx * 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.03 + 0.35);
+
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start(t + idx * 0.03);
+      osc.stop(t + idx * 0.03 + 0.38);
+    });
+  }
+
+  playShieldClash() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Heavy basalt stone shield impact
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(160, t);
+    osc.frequency.exponentialRampToValueAtTime(45, t + 0.35);
+    gain.gain.setValueAtTime(0.38, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    osc.connect(gain);
+    gain.connect(dest);
+    osc.start(t);
+    osc.stop(t + 0.42);
+
+    // Deflected ice shards ringing out
+    [1046.5, 1567.98].forEach((f, i) => {
+      const o = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(f, t + i * 0.04);
+      g.gain.setValueAtTime(0.12, t + i * 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.04 + 0.3);
+      o.connect(g);
+      g.connect(dest);
+      o.start(t + i * 0.04);
+      o.stop(t + i * 0.04 + 0.32);
+    });
+  }
 }
 
 const Sound = new SoundEngine();

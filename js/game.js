@@ -1857,7 +1857,10 @@ class GameEngine {
       if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
       if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
       if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
-      if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem aktiv";
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge";
+        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+      }
       if (typeof Sound !== "undefined" && typeof Sound.playTaikoDrum === "function") {
         setTimeout(() => Sound.playTaikoDrum(), 250);
       }
@@ -1939,7 +1942,13 @@ class GameEngine {
       if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
       if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
       if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
-      if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem aktiv";
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge";
+        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+      }
+      if (this.renderer && typeof this.renderer.clearFrostHazard === "function") {
+        this.renderer.clearFrostHazard();
+      }
     }
   }
 
@@ -1967,6 +1976,186 @@ class GameEngine {
         this.renderer.animateDragonRoar();
       }
     }
+  }
+
+  getBossHazardTarget(fireStep) {
+    const targets = {
+      3: {
+        type: "col",
+        index: 3,
+        name: "Spalte 3",
+        tiles: [[3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7]]
+      },
+      6: {
+        type: "col",
+        index: 2,
+        name: "Spalte 2",
+        tiles: [[2,0],[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7]]
+      },
+      9: {
+        type: "row",
+        index: 4,
+        name: "Krater-Schlucht (Reihe 4)",
+        tiles: [[0,4],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4]],
+        shieldable: true,
+        shieldPos: [4, 4]
+      },
+      12: {
+        type: "col",
+        index: 5,
+        name: "Spalte 5",
+        tiles: [[5,0],[5,1],[5,2],[5,3],[5,4],[5,5],[5,6],[5,7]]
+      },
+      15: {
+        type: "row",
+        index: 3,
+        name: "Reihe 3",
+        tiles: [[0,3],[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]]
+      },
+      18: {
+        type: "col",
+        index: 4,
+        name: "Zentraler Pfad (Spalte 4)",
+        tiles: [[4,0],[4,1],[4,2],[4,3],[4,4],[4,5],[4,6],[4,7]]
+      },
+      21: {
+        type: "row",
+        index: 3,
+        name: "Reihe 3",
+        tiles: [[0,3],[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]]
+      },
+      24: {
+        type: "col",
+        index: 3,
+        name: "Spalte 3",
+        tiles: [[3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7]]
+      },
+      27: {
+        type: "col",
+        index: 1,
+        name: "Spalte 1",
+        tiles: [[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]
+      }
+    };
+
+    if (targets[fireStep]) return targets[fireStep];
+
+    const fallbackCols = [3, 5, 2, 4];
+    const col = fallbackCols[Math.floor(fireStep / 3) % fallbackCols.length];
+    const tiles = [];
+    for (let y = 0; y < 8; y++) tiles.push([col, y]);
+    return {
+      type: "col",
+      index: col,
+      name: `Spalte ${col}`,
+      tiles
+    };
+  }
+
+  processBossBreath(lvl, step, onComplete) {
+    const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
+    if (!isBoss) {
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    const cycleMod = step % 3;
+
+    if (cycleMod === 1) {
+      if (this.renderer && typeof this.renderer.clearFrostHazard === "function") {
+        this.renderer.clearFrostHazard();
+      }
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge";
+        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+      }
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    if (cycleMod === 2) {
+      const nextFireStep = step + 1;
+      const target = this.getBossHazardTarget(nextFireStep);
+      if (this.renderer && typeof this.renderer.showFrostHazard === "function") {
+        this.renderer.showFrostHazard(target.tiles);
+      }
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
+        this.dom.bossPhaseBadge.textContent = `⚠️ ZIELVISIER: ${target.name} (Feuert nächste Runde!)`;
+      }
+      this.triggerHaptic([35, 40]);
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    if (cycleMod === 0 && step > 0) {
+      const target = this.getBossHazardTarget(step);
+      const isKomaInLane = target.tiles.some(([tx, ty]) => tx === this.state.x && ty === this.state.y);
+
+      let isBlocked = false;
+      let blockPos = null;
+
+      if (target.shieldable && target.shieldPos) {
+        const [sx, sy] = target.shieldPos;
+        const hasStandingBlock = (this.state.blocks || []).some(b => b[0] === sx && b[1] === sy);
+        const hasSunkenOrMeshBlock = this.renderer && this.renderer.blockMeshes && !!this.renderer.blockMeshes[`${sx},${sy}`];
+        const isWaterBridged = (lvl.water || []).some(w => w[0] === sx && w[1] === sy) &&
+                               this.state.waterTiles && !this.state.waterTiles.has(`${sx},${sy}`);
+
+        if (hasStandingBlock || hasSunkenOrMeshBlock || isWaterBridged) {
+          isBlocked = true;
+          blockPos = [sx, sy];
+        }
+      }
+
+      const isKomaHit = isKomaInLane && !isBlocked;
+
+      if (this.dom.bossPhaseBadge) {
+        if (isBlocked) {
+          this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
+          this.dom.bossPhaseBadge.textContent = "🛡️ Frost-Odem abgewehrt!";
+        } else if (isKomaHit) {
+          this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
+          this.dom.bossPhaseBadge.textContent = "❄️ KOMA eingefroren!";
+        } else {
+          this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
+          this.dom.bossPhaseBadge.textContent = "💥 Frost-Odem feuert!";
+        }
+      }
+
+      if (this.renderer && typeof this.renderer.fireDragonBreathBeam === "function") {
+        this.renderer.fireDragonBreathBeam(target.tiles, isBlocked, isKomaHit, blockPos, () => {
+          if (this.renderer && typeof this.renderer.clearFrostHazard === "function") {
+            this.renderer.clearFrostHazard();
+          }
+
+          if (isBlocked) {
+            this.setFeedback("🛡️ Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!", "good");
+          } else if (isKomaHit) {
+            this.state.isFail = true;
+            this.isPlaying = false;
+            if (typeof document !== "undefined") {
+              document.body.classList.remove("is-executing");
+            }
+            this.setFeedback("❄️ Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!", "bad");
+            this.triggerHaptic([60, 80, 100]);
+            this.renderQueue();
+            return;
+          } else {
+            this.setFeedback("💥 Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.", "normal");
+          }
+
+          if (typeof onComplete === "function") {
+            onComplete();
+          }
+        });
+      } else {
+        if (typeof onComplete === "function") onComplete();
+      }
+      return;
+    }
+
+    if (typeof onComplete === "function") onComplete();
   }
 
   resetState(resetCredits = true) {
@@ -2218,7 +2407,9 @@ class GameEngine {
       this.state.dir = turnMap[this.state.dir];
       this.renderer.animateRotate(this.state.dir, 220);
       Sound.playTurn();
-      this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+      this.processBossBreath(lvl, this.currentStep, () => {
+        this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+      });
       return;
     }
 
@@ -2228,7 +2419,9 @@ class GameEngine {
       this.state.dir = turnMap[this.state.dir];
       this.renderer.animateRotate(this.state.dir, 220);
       Sound.playTurn();
-      this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+      this.processBossBreath(lvl, this.currentStep, () => {
+        this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+      });
       return;
     }
 
@@ -2263,7 +2456,9 @@ class GameEngine {
         Sound.playBump();
         this.setFeedback("Hier gibt es keinen Schalter zum Aktivieren.", "normal");
       }
-      this.playbackTimer = setTimeout(() => this.executeNextStep(), 300);
+      this.processBossBreath(lvl, this.currentStep, () => {
+        this.playbackTimer = setTimeout(() => this.executeNextStep(), 300);
+      });
       return;
     }
 
@@ -2798,7 +2993,9 @@ class GameEngine {
     }
 
     // Next step with crisp, steady rhythm (100ms interval between steps)
-    this.playbackTimer = setTimeout(() => this.executeNextStep(), 100);
+    this.processBossBreath(lvl, this.currentStep, () => {
+      this.playbackTimer = setTimeout(() => this.executeNextStep(), 100);
+    });
   }
 
   // Progressive Web App (PWA) & Mobile Lifecycle

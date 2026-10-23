@@ -979,9 +979,13 @@ class GardenRenderer {
       this.dragonSegments = [];
       this.dragonEyes = [];
       this.dragonWhiskers = [];
-      this.dragonBreathPoints = null;
       this.isDragonAscending = false;
       this.dragonAscendCallback = null;
+    }
+    this.clearFrostHazard();
+    if (this.komaGroup) {
+      const existingCube = this.komaGroup.getObjectByName("komaIceCube");
+      if (existingCube) this.komaGroup.remove(existingCube);
     }
   }
 
@@ -1345,6 +1349,164 @@ class GardenRenderer {
       if (p < 1) requestAnimationFrame(animateRoarStep);
     };
     requestAnimationFrame(animateRoarStep);
+  }
+
+  showFrostHazard(tiles = []) {
+    this.clearFrostHazard();
+    if (!tiles || tiles.length === 0) return;
+    this.frostHazardGroup = new THREE.Group();
+    this.frostHazardGroup.name = "FrostHazardGroup";
+
+    tiles.forEach(([gx, gy]) => {
+      const wp = this.gridToWorld(gx, gy);
+      const planeGeo = new THREE.PlaneGeometry(this.tileSize * 0.94, this.tileSize * 0.94);
+      planeGeo.rotateX(-Math.PI / 2);
+      const planeMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide
+      });
+      const mesh = new THREE.Mesh(planeGeo, planeMat);
+      mesh.position.set(wp.x, 0.46, wp.z);
+      mesh.userData = { isHazard: true, phase: (gx + gy) * 0.8 };
+      this.frostHazardGroup.add(mesh);
+
+      // Warning border outline
+      const edgesGeo = new THREE.EdgesGeometry(planeGeo);
+      const edgesMat = new THREE.LineBasicMaterial({ color: 0xa5f3fc, transparent: true, opacity: 0.85 });
+      const edges = new THREE.LineSegments(edgesGeo, edgesMat);
+      edges.position.set(wp.x, 0.465, wp.z);
+      this.frostHazardGroup.add(edges);
+    });
+
+    this.scene.add(this.frostHazardGroup);
+  }
+
+  clearFrostHazard() {
+    if (this.frostHazardGroup) {
+      this.disposeHierarchy(this.frostHazardGroup);
+      this.scene.remove(this.frostHazardGroup);
+      this.frostHazardGroup = null;
+    }
+  }
+
+  fireDragonBreathBeam(tiles = [], isBlocked = false, isKomaHit = false, blockPos = null, callback = null) {
+    if (!this.dragonHead || tiles.length === 0) {
+      if (typeof callback === "function") callback();
+      return;
+    }
+
+    if (typeof Sound !== "undefined") {
+      if (typeof Sound.playFrostBlast === "function") Sound.playFrostBlast();
+      if (typeof Sound.playDragonRoar === "function") Sound.playDragonRoar();
+    }
+    this.triggerScreenShake(20, 550);
+
+    // Dragon head lunge forward
+    const startRotX = this.dragonHead.rotation.x;
+    this.dragonHead.rotation.x = startRotX - 0.42;
+    setTimeout(() => {
+      if (this.dragonHead) this.dragonHead.rotation.x = startRotX;
+    }, 450);
+
+    // Calculate 3D beam endpoints
+    const headWorld = new THREE.Vector3();
+    this.dragonHead.getWorldPosition(headWorld);
+    headWorld.y -= 0.15;
+    headWorld.z += 0.5;
+
+    const targetCenter = new THREE.Vector3();
+    tiles.forEach(([gx, gy]) => {
+      const wp = this.gridToWorld(gx, gy);
+      targetCenter.add(wp);
+    });
+    targetCenter.divideScalar(tiles.length);
+    targetCenter.y = 0.5;
+
+    // Glowing Frost Beam Cylinder
+    const dist = headWorld.distanceTo(targetCenter);
+    const beamGeo = new THREE.CylinderGeometry(0.22, 0.65, dist, 12, 1, true);
+    const beamMat = new THREE.MeshBasicMaterial({
+      color: 0x70d6ff,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+    const beamMesh = new THREE.Mesh(beamGeo, beamMat);
+    beamMesh.position.copy(headWorld).lerp(targetCenter, 0.5);
+    beamMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), targetCenter.clone().sub(headWorld).normalize());
+
+    this.scene.add(beamMesh);
+
+    // If blocked by holy stone block: spawn deflection flare
+    if (isBlocked && blockPos) {
+      setTimeout(() => {
+        const bwp = this.gridToWorld(blockPos[0], blockPos[1]);
+        const burstGeo = new THREE.RingGeometry(0.2, 0.95, 16);
+        burstGeo.rotateX(-Math.PI / 2);
+        const burstMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+          side: THREE.DoubleSide
+        });
+        const burst = new THREE.Mesh(burstGeo, burstMat);
+        burst.position.set(bwp.x, 0.65, bwp.z);
+        this.scene.add(burst);
+        if (typeof Sound !== "undefined" && typeof Sound.playShieldClash === "function") {
+          Sound.playShieldClash();
+        }
+        setTimeout(() => {
+          this.scene.remove(burst);
+          burstGeo.dispose();
+          burstMat.dispose();
+        }, 400);
+      }, 150);
+    }
+
+    // If KOMA hit: freeze KOMA!
+    if (isKomaHit) {
+      setTimeout(() => {
+        this.animateKomaFreeze();
+        if (typeof Sound !== "undefined" && typeof Sound.playFreeze === "function") {
+          Sound.playFreeze();
+        }
+      }, 180);
+    }
+
+    // Remove beam after breath duration
+    setTimeout(() => {
+      this.scene.remove(beamMesh);
+      beamGeo.dispose();
+      beamMat.dispose();
+      if (typeof callback === "function") callback();
+    }, 550);
+  }
+
+  animateKomaFreeze() {
+    if (!this.komaGroup) return;
+    const existing = this.komaGroup.getObjectByName("komaIceCube");
+    if (existing) this.komaGroup.remove(existing);
+
+    const cubeGeo = new THREE.BoxGeometry(0.88, 1.05, 0.88);
+    const cubeMat = new THREE.MeshStandardMaterial({
+      color: 0x9be8ff,
+      transparent: true,
+      opacity: 0.76,
+      roughness: 0.08,
+      metalness: 0.35,
+      emissive: 0x00f0ff,
+      emissiveIntensity: 0.8
+    });
+    const iceCube = new THREE.Mesh(cubeGeo, cubeMat);
+    iceCube.name = "komaIceCube";
+    iceCube.position.set(0, 0.52, 0);
+    this.komaGroup.add(iceCube);
+    this.triggerScreenShake(15, 400);
   }
 
   animateDragonAscend(callback) {
@@ -3047,6 +3209,12 @@ class GardenRenderer {
         }
       });
     }
+
+    this.clearFrostHazard();
+    if (this.komaGroup) {
+      const existingCube = this.komaGroup.getObjectByName("komaIceCube");
+      if (existingCube) this.komaGroup.remove(existingCube);
+    }
   }
 
   /**
@@ -3376,6 +3544,8 @@ class GardenRenderer {
     if (this.komaGroup) {
       this.komaGroup.position.copy(worldPos);
       this.komaGroup.rotation.y = rotY;
+      const existingCube = this.komaGroup.getObjectByName("komaIceCube");
+      if (existingCube) this.komaGroup.remove(existingCube);
     }
   }
 
@@ -4019,6 +4189,16 @@ class GardenRenderer {
     // Animate Ryūjin Dragon if active
     if (this.dragonGroup) {
       this.animateRyujinDragon(time, cappedDelta);
+    }
+
+    // Pulse frost hazard warning tiles if active
+    if (this.frostHazardGroup) {
+      const pPulse = Math.sin(time * 6.5) * 0.18 + 0.52;
+      this.frostHazardGroup.children.forEach(c => {
+        if (c.material && c.userData && c.userData.isHazard) {
+          c.material.opacity = pPulse;
+        }
+      });
     }
     
     // 1. KOMA Movement Interpolation & Juicy Physics

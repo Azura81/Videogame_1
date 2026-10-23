@@ -4074,6 +4074,33 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   letter-spacing: 0.3px;
+  transition: all 0.25s ease;
+}
+
+.boss-phase-badge.warning {
+  color: #ffbe0b;
+  background: rgba(255, 190, 11, 0.15);
+  border-color: rgba(255, 190, 11, 0.6);
+  animation: badgePulseWarning 0.8s ease-in-out infinite alternate;
+}
+
+.boss-phase-badge.firing {
+  color: #00f5ff;
+  background: rgba(0, 245, 255, 0.25);
+  border-color: #00f5ff;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.6);
+}
+
+.boss-phase-badge.shielded {
+  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes badgePulseWarning {
+  0% { transform: scale(1); box-shadow: 0 0 4px rgba(255, 190, 11, 0.3); }
+  100% { transform: scale(1.04); box-shadow: 0 0 12px rgba(255, 190, 11, 0.8); }
 }
 
 

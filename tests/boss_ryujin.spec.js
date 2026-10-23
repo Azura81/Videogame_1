@@ -108,6 +108,121 @@ test.describe('Boss Fight: Ryūjin · Himmelsdrache des Fuji (Level 60)', () => 
     });
   });
 
+  test('Level 60: Ryūjin telegraphs Frost-Odem warning on step 2 with 3D runes and badge', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    // Load Level 60
+    await page.evaluate(() => {
+      window.gameInstance.loadLevel(59);
+      window.gameInstance.queue = ['L', 'R'];
+      window.gameInstance.renderQueue();
+      window.gameInstance.play();
+    });
+
+    // Wait for step 2 to complete and telegraph warning
+    await page.waitForFunction(() => {
+      const g = window.gameInstance;
+      return g.currentStep === 2 && g.renderer && g.renderer.frostHazardGroup !== null;
+    }, { timeout: 5000 });
+
+    const telegraphState = await page.evaluate(() => {
+      const badge = document.getElementById('bossPhaseBadge');
+      const group = window.gameInstance.renderer.frostHazardGroup;
+      return {
+        badgeText: badge.textContent,
+        isWarningClass: badge.classList.contains('warning'),
+        hasHazardGroup: !!group,
+        hazardChildren: group ? group.children.length : 0
+      };
+    });
+
+    expect(telegraphState.badgeText).toContain('Spalte 3');
+    expect(telegraphState.badgeText).toContain('Feuert nächste Runde');
+    expect(telegraphState.isWarningClass).toBe(true);
+    expect(telegraphState.hasHazardGroup).toBe(true);
+    expect(telegraphState.hazardChildren).toBeGreaterThan(0);
+  });
+
+  test('Level 60: Frost-Odem freezes KOMA solid when caught unprotected on step 3', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    // Load Level 60 and execute 3 steps remaining in Column 3 (3,7)
+    await page.evaluate(() => {
+      window.gameInstance.loadLevel(59);
+      window.gameInstance.queue = ['L', 'R', 'A'];
+      window.gameInstance.renderQueue();
+      window.gameInstance.play();
+    });
+
+    // Wait for step 3 to fire Frost-Odem and freeze KOMA
+    await page.waitForFunction(() => {
+      const g = window.gameInstance;
+      return g.state.isFail === true && !g.isPlaying;
+    }, { timeout: 8000 });
+
+    const freezeState = await page.evaluate(() => {
+      const g = window.gameInstance;
+      const badge = document.getElementById('bossPhaseBadge');
+      const iceCube = g.renderer.komaGroup ? g.renderer.komaGroup.getObjectByName('komaIceCube') : null;
+      return {
+        isFail: g.state.isFail,
+        isPlaying: g.isPlaying,
+        badgeText: badge ? badge.textContent : '',
+        hasIceCube: !!iceCube,
+        feedback: document.getElementById('feedbackText') ? document.getElementById('feedbackText').textContent : ''
+      };
+    });
+
+    expect(freezeState.isFail).toBe(true);
+    expect(freezeState.isPlaying).toBe(false);
+    expect(freezeState.hasIceCube).toBe(true);
+    expect(freezeState.badgeText).toContain('KOMA eingefroren');
+    expect(freezeState.feedback).toContain('Eingefroren');
+  });
+
+  test('Level 60: Basalt block shields and deflects Frost-Odem on step 9', async ({ page }) => {
+    test.setTimeout(25000);
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    // Run first 9 steps that push block into (4,4) crater to shield Reihe 4
+    await page.evaluate(() => {
+      window.gameInstance.loadLevel(59);
+      window.gameInstance.queue = ['F', 'L', 'F', 'R', 'A', 'F', 'F', 'L', 'F'];
+      window.gameInstance.renderQueue();
+      window.gameInstance.play();
+    });
+
+    // Wait until step 9 finishes
+    await page.waitForFunction(() => {
+      return window.gameInstance.currentStep === 9;
+    }, { timeout: 15000 });
+
+    // Give beam and deflection a short moment to play out
+    await page.waitForTimeout(1000);
+
+    const shieldState = await page.evaluate(() => {
+      const g = window.gameInstance;
+      const badge = document.getElementById('bossPhaseBadge');
+      const iceCube = g.renderer.komaGroup ? g.renderer.komaGroup.getObjectByName('komaIceCube') : null;
+      return {
+        isFail: g.state.isFail,
+        hasIceCube: !!iceCube,
+        badgeText: badge ? badge.textContent : '',
+        badgeClasses: badge ? badge.className : '',
+        feedback: document.getElementById('feedbackText') ? document.getElementById('feedbackText').textContent : ''
+      };
+    });
+
+    // KOMA must NOT be frozen!
+    expect(shieldState.isFail).toBe(false);
+    expect(shieldState.hasIceCube).toBe(false);
+    expect(shieldState.badgeText).toContain('abgewehrt');
+    expect(shieldState.feedback).toContain('Basaltblock');
+  });
+
   test('Level 60: Full 27-step victory, seal shattering, ascension, and skin unlock', async ({ page }) => {
     test.setTimeout(60000);
     page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
