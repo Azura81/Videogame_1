@@ -1,0 +1,14 @@
+{
+  "appId": "com.azura81.spiritdelivery",
+  "appName": "Spirit Delivery",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "spiritdelivery"
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile",
+    "allowsLinkPreview": false
+  }
+}
