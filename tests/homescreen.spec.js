@@ -71,7 +71,7 @@ test.describe('KOMA Main Home Screen & Showroom System', () => {
     // 7. Test returning to Home Screen anytime from gameplay via header #btnHome
     const btnHome = page.locator('#btnHome');
     await expect(btnHome).toBeVisible();
-    await expect(btnHome).toContainText('Homescreen');
+    await expect(btnHome).toContainText('Home');
     await btnHome.click();
     await expect(homeScreen).toHaveClass(/active/);
   });

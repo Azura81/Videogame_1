@@ -804,18 +804,20 @@ html, body {
     display: flex !important;
     pointer-events: auto !important;
     align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
+    gap: 5px;
+    padding: 5px 10px;
     background: linear-gradient(135deg, rgba(255, 71, 87, 0.28), rgba(255, 107, 129, 0.16));
     border: 1px solid rgba(255, 71, 87, 0.5);
-    border-radius: 12px;
+    border-radius: 10px;
     color: #fff;
     font-family: var(--font);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(255, 71, 87, 0.25);
     transition: all 0.18s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .mobile-hub-btn:active {
@@ -827,16 +829,19 @@ html, body {
     display: flex !important;
     pointer-events: auto !important;
     align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
+    gap: 5px;
+    padding: 5px 9px;
     background: rgba(10, 20, 38, 0.88);
     border: 1px solid rgba(0, 240, 255, 0.28);
-    border-radius: 12px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
   }
 
   .mobile-lvl-dot {
@@ -845,7 +850,7 @@ html, body {
 
   .mobile-lvl-credits {
     color: var(--cyan);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
   }
 
@@ -853,6 +858,9 @@ html, body {
   #btnInstallPwa,
   #headerStarsBadge,
   #btnSkins,
+  #btnTrophies,
+  #btnDailyTrial,
+  #btnTowerMode,
   #btnMusicToggle,
   #btnSoundToggle,
   #btnHelp,
@@ -861,17 +869,36 @@ html, body {
   }
 
   .top-actions {
-    gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .home-header-btn {
+    padding: 5px 9px;
+    font-size: 11.5px;
+    gap: 4px;
+    border-radius: 10px;
+    flex-shrink: 0;
   }
 
   .camera-actions-group {
     display: flex !important;
-    padding: 2px 4px;
+    align-items: center;
+    padding: 2px 3px;
+    gap: 2px;
+    border-radius: 10px;
+    flex-shrink: 0;
   }
 
   .camera-actions-group .icon-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    padding: 0;
+    border-radius: 7px;
+    flex-shrink: 0;
   }
 
   /* Hide left mission card completely on mobile so 3D Garden is 100% visible */
@@ -2176,13 +2203,31 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   }
 
   .top-actions .icon-btn {
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .camera-actions-group {
+    padding: 2px 2px;
+    gap: 2px;
   }
 
   .camera-actions-group .icon-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    font-size: 12px;
+  }
+
+  .camera-actions-group .icon-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .home-header-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+    gap: 4px;
   }
 
   .stars-counter-badge {

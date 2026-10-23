@@ -170,10 +170,10 @@ test.describe('Homescreen Colony Flow Redesign & Sequential Progression', () => 
     await expect(mobileHubBtn).toBeVisible();
     await expect(mobileHubBtn).toContainText('Menü');
 
-    // 2. Return Home Button (right) must clearly say "Homescreen"
+    // 2. Return Home Button (right) must say "Home"
     const btnHome = page.locator('#btnHome');
     await expect(btnHome).toBeVisible();
-    await expect(btnHome).toContainText('Homescreen');
+    await expect(btnHome).toContainText('Home');
 
     // 3. Both buttons must sit comfortably below the Dynamic Island (y >= 75)
     const hubBox = await mobileHubBtn.boundingBox();
@@ -184,10 +184,30 @@ test.describe('Homescreen Colony Flow Redesign & Sequential Progression', () => 
     expect(homeBox).not.toBeNull();
     expect(homeBox.y).toBeGreaterThanOrEqual(75);
 
-    // Capture in-game view on iPhone
+    // 4. Verify all 3 camera rotation buttons are visible and inside screen bounds (< 390px)
+    const camLeft = page.locator('#btnCamRotateLeft');
+    const camReset = page.locator('#btnCamReset');
+    const camRight = page.locator('#btnCamRotateRight');
+
+    await expect(camLeft).toBeVisible();
+    await expect(camReset).toBeVisible();
+    await expect(camRight).toBeVisible();
+
+    const rightBox = await camRight.boundingBox();
+    expect(rightBox).not.toBeNull();
+    // Must be completely inside the viewport (<= 390)
+    expect(rightBox.x + rightBox.width).toBeLessThanOrEqual(390);
+
+    // Test clicking camera rotate button
+    const initialCredits = await page.evaluate(() => window.gameInstance.cameraCredits);
+    await camRight.click();
+    const updatedCredits = await page.evaluate(() => window.gameInstance.cameraCredits);
+    expect(updatedCredits).toBe(initialCredits - 1);
+
+    // Capture in-game view on iPhone with all buttons visible
     await page.screenshot({ path: '/Users/maxrietsch/.gemini/antigravity-ide/brain/ae562408-a431-4271-84da-8958f4628572/ingame_iphone_view.png' });
 
-    // 4. Clicking Homescreen returns user back to Homescreen
+    // 5. Clicking Home returns user back to Homescreen
     await btnHome.click();
     await expect(page.locator('#homeScreen')).toHaveClass(/active/);
   });
