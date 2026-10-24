@@ -8,14 +8,14 @@ class AdManager {
     this.admob = null;
     this.isInitialized = false;
 
-    // Official Google AdMob Test Ad Units (for Development, TestFlight & Apple Review)
+    // Official Google AdMob Ad Units
     this.adUnits = {
       ios: {
-        rewarded: "ca-app-pub-3940256099942544/1712485313",
+        rewarded: "ca-app-pub-4915881301731685/2652522912",
         interstitial: "ca-app-pub-3940256099942544/4411468910"
       },
       android: {
-        rewarded: "ca-app-pub-3940256099942544/5224354917",
+        rewarded: "ca-app-pub-4915881301731685/2652522912",
         interstitial: "ca-app-pub-3940256099942544/1033173712"
       }
     };
@@ -31,8 +31,7 @@ class AdManager {
       try {
         await this.admob.initialize({
           requestTrackingAuthorization: true,
-          testingDevices: ["EMULATOR"],
-          initializeForTesting: true
+          initializeForTesting: false
         });
         console.log("[AdMob] Native SDK initialized successfully.");
       } catch (err) {
@@ -56,7 +55,8 @@ class AdManager {
     if (this.isNative && this.admob) {
       try {
         const adId = this.adUnits.ios.rewarded;
-        await this.admob.prepareRewardVideoAd({ adId, isTesting: true });
+        const isTestUnit = adId.includes("3940256099942544");
+        await this.admob.prepareRewardVideoAd({ adId, isTesting: isTestUnit });
         const rewardItem = await this.admob.showRewardVideoAd();
         if (rewardItem) {
           return { rewarded: true };
@@ -81,7 +81,8 @@ class AdManager {
     if (this.isNative && this.admob) {
       try {
         const adId = this.adUnits.ios.interstitial;
-        await this.admob.prepareInterstitial({ adId, isTesting: true });
+        const isTestUnit = adId.includes("3940256099942544");
+        await this.admob.prepareInterstitial({ adId, isTesting: isTestUnit });
         await this.admob.showInterstitial();
       } catch (e) {
         console.warn("[AdMob] Interstitial notice:", e);
