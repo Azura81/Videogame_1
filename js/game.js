@@ -98,6 +98,7 @@ class GameEngine {
     this.maxCameraCredits = 6;
     this.cameraCredits = 6;
     this.levelStars = {};
+    this.bonusStars = 0;
     
     // Save completed levels
     this.completedLevels = new Set();
@@ -236,8 +237,12 @@ class GameEngine {
       modalTowerAltar: document.getElementById("modalTowerAltar"),
       towerAltarChoices: document.getElementById("towerAltarChoices"),
       modalTowerGameOver: document.getElementById("modalTowerGameOver"),
+      towerReviveBox: document.getElementById("towerReviveBox"),
+      btnTowerRevive: document.getElementById("btnTowerRevive"),
       btnTowerRetry: document.getElementById("btnTowerRetry"),
       btnTowerExitToCampaign: document.getElementById("btnTowerExitToCampaign"),
+      btnDesktopWardrobeAd: document.getElementById("btnDesktopWardrobeAd"),
+      btnMobileWardrobeAd: document.getElementById("btnMobileWardrobeAd"),
       towerHudBar: document.getElementById("towerHudBar"),
       headerTowerBest: document.getElementById("headerTowerBest"),
       mobileTowerBest: document.getElementById("mobileTowerBest"),
@@ -529,6 +534,29 @@ class GameEngine {
         }
       });
     }
+    if (this.dom.btnTowerRevive) {
+      this.dom.btnTowerRevive.addEventListener("click", async () => {
+        this.triggerHaptic(20);
+        if (typeof window !== "undefined" && window.adManager) {
+          const res = await window.adManager.showRewardedAd({
+            title: "Zweite Chance",
+            rewardDescription: "1 Laterne für den Turm der 100 Prüfungen retten"
+          });
+          if (res && res.rewarded) {
+            if (typeof TowerTrial !== "undefined" && typeof TowerTrial.revive === "function") {
+              TowerTrial.revive();
+            }
+            if (this.dom.modalTowerGameOver) {
+              this.dom.modalTowerGameOver.classList.remove("active");
+            }
+            if (typeof TowerTrial !== "undefined") {
+              this.loadTowerFloor(TowerTrial.getCurrentLevel());
+            }
+            this.showNetworkToast("🏮 1 Laterne neu entzündet! Dein Aufstieg geht weiter.");
+          }
+        }
+      });
+    }
     if (this.dom.btnTowerExitToCampaign) {
       this.dom.btnTowerExitToCampaign.addEventListener("click", () => {
         this.triggerHaptic(12);
@@ -798,6 +826,27 @@ class GameEngine {
       this.dom.modalSkins.addEventListener("click", (e) => {
         if (e.target === this.dom.modalSkins) this.closeSkinsModal();
       });
+    }
+
+    // Wardrobe Bonus Stars (Rewarded Ad)
+    const handleWardrobeAd = async () => {
+      this.triggerHaptic(20);
+      if (typeof window !== "undefined" && window.adManager) {
+        const res = await window.adManager.showRewardedAd({
+          title: "Kami-Gunst",
+          rewardDescription: "3 Kami-Sterne für die Schrein-Garderobe erhalten"
+        });
+        if (res && res.rewarded) {
+          this.addBonusStars(3);
+        }
+      }
+    };
+
+    if (this.dom.btnDesktopWardrobeAd) {
+      this.dom.btnDesktopWardrobeAd.addEventListener("click", handleWardrobeAd);
+    }
+    if (this.dom.btnMobileWardrobeAd) {
+      this.dom.btnMobileWardrobeAd.addEventListener("click", handleWardrobeAd);
     }
 
     // Shrine Trophies (Achievements) Modal
@@ -1103,6 +1152,12 @@ class GameEngine {
       if (achRaw) {
         JSON.parse(achRaw).forEach(id => this.unlockedAchievements.add(id));
       }
+      const bonus = localStorage.getItem("spirit_bonus_stars");
+      if (bonus) {
+        this.bonusStars = parseInt(bonus, 10) || 0;
+      } else {
+        this.bonusStars = 0;
+      }
     } catch (e) {}
 
     this.stats.threeStarCount = Object.values(this.levelStars || {}).filter(s => s === 3).length;
@@ -1131,7 +1186,22 @@ class GameEngine {
         total += (this.levelStars[idx] || 0);
       }
     }
+    total += (this.bonusStars || 0);
     return total;
+  }
+
+  addBonusStars(count = 3) {
+    this.bonusStars = (this.bonusStars || 0) + count;
+    try {
+      localStorage.setItem("spirit_bonus_stars", this.bonusStars.toString());
+    } catch (e) {}
+    this.updateStarsDisplay();
+    this.renderSkinsModal();
+    this.renderMobileSkins();
+    if (typeof Sound !== "undefined" && typeof Sound.playStarDing === "function") {
+      Sound.playStarDing(3);
+    }
+    this.showNetworkToast(`✨ +${count} Kami-Sterne geschenkt erhalten!`);
   }
 
   updateStarsDisplay() {
@@ -2071,6 +2141,9 @@ class GameEngine {
     }
     if (this.dom.towerResultRecord) {
       this.dom.towerResultRecord.style.display = failRes.isRecord ? "block" : "none";
+    }
+    if (this.dom.towerReviveBox) {
+      this.dom.towerReviveBox.style.display = (failRes && failRes.canRevive) ? "block" : "none";
     }
     if (this.dom.modalTowerGameOver) {
       this.dom.modalTowerGameOver.classList.add("active");
@@ -3274,6 +3347,9 @@ class GameEngine {
             this.currentLevelIdx === LEVELS.length - 1 ? "Erstes Level erneut spielen" : "Nächstes Level →";
         }
         if (this.dom.modalWin) this.dom.modalWin.classList.add("active");
+        if (typeof window !== "undefined" && window.adManager && typeof window.adManager.showInterstitialAd === "function") {
+          window.adManager.showInterstitialAd();
+        }
       }, isBoss ? 1100 : 700);
       return;
     }

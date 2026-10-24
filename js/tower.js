@@ -141,6 +141,7 @@
       this.zenPerfectCount = 0;
       this.totalZenBonus = 0;
       this.runSeed = Math.floor(Math.random() * 900000) + 100000;
+      this.hasRevived = false;
       this.data.totalRuns += 1;
       this.saveData();
 
@@ -760,7 +761,8 @@
           score: finalScore,
           isRecord,
           zenCount: this.zenPerfectCount || 0,
-          zenBonus: this.totalZenBonus || 0
+          zenBonus: this.totalZenBonus || 0,
+          canRevive: !this.hasRevived
         };
       }
 
@@ -770,6 +772,17 @@
         gameOver: false,
         message: `🏮 Eine Laterne ist erloschen! Noch ${this.lanterns} Laterne(n) übrig.`
       };
+    }
+
+    /**
+     * Revives player after watching a rewarded ad, restoring 1 lantern
+     */
+    revive() {
+      this.hasRevived = true;
+      this.lanterns = 1;
+      this.isActive = true;
+      this.updateUI();
+      return true;
     }
 
     /**

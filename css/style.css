@@ -4305,4 +4305,207 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   100% { transform: scale(1.04); box-shadow: 0 0 12px rgba(255, 190, 11, 0.8); }
 }
 
+/* ========================================================
+   Rewarded Ads & AdMob UI System
+   ======================================================== */
+.wardrobe-ad-banner {
+  margin: 10px 0 16px 0;
+  width: 100%;
+}
+
+.tower-revive-box {
+  margin: 12px 0 6px 0;
+  width: 100%;
+}
+
+.ad-reward-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(255, 183, 3, 0.16) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1.5px solid rgba(255, 183, 3, 0.55);
+  border-radius: 18px;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 18px rgba(255, 183, 3, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  text-align: left;
+}
+
+.ad-reward-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  border-color: #ffbe0b;
+  box-shadow: 0 8px 24px rgba(255, 183, 3, 0.35), 0 0 16px rgba(255, 183, 3, 0.25);
+}
+
+.ad-reward-btn:active {
+  transform: scale(0.98);
+}
+
+.ad-reward-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(255, 183, 3, 0.5));
+}
+
+.ad-reward-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.ad-reward-text strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffbe0b;
+  letter-spacing: 0.2px;
+}
+
+.ad-reward-text span {
+  font-size: 11.5px;
+  color: #cbd5e1;
+}
+
+.ad-pill {
+  background: rgba(255, 183, 3, 0.22);
+  border: 1px solid rgba(255, 183, 3, 0.6);
+  color: #ffbe0b;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Simulated Video Overlay for Web/Test */
+.ad-overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5, 10, 20, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+
+.ad-overlay-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.ad-modal-card {
+  max-width: 420px;
+  width: 100%;
+  background: linear-gradient(180deg, #101c33 0%, #070d18 100%);
+  border: 1.5px solid rgba(0, 245, 255, 0.4);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 245, 255, 0.2);
+  text-align: center;
+}
+
+.ad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ad-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.ad-timer {
+  font-size: 13px;
+  font-weight: 700;
+  color: #00f5ff;
+}
+
+.ad-video-mockup {
+  background: radial-gradient(circle, rgba(0, 245, 255, 0.12) 0%, rgba(15, 23, 42, 0.8) 75%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px 20px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-sponsor-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 16px rgba(0, 245, 255, 0.6));
+}
+
+.ad-video-mockup h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.ad-video-mockup p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 18px;
+}
+
+.ad-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ad-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00f5ff, #10b981);
+  transition: width 0.9s linear;
+}
+
+.ad-close-btn {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #64748b;
+  cursor: not-allowed;
+  transition: all 0.2s ease;
+}
+
+.ad-close-btn.ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);
+}
+
+.ad-close-btn.ready:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6);
+}
+
 

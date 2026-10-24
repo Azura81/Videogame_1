@@ -595,6 +595,16 @@
           <p class="mobile-hub-desc">
             Wähle dein Kami-Design. Schließe Level mit vollen Credits ab, um seltene mythische Formen freizuschalten!
           </p>
+          <div class="wardrobe-ad-banner" id="mobileWardrobeAdBanner">
+            <button class="ad-reward-btn" id="btnMobileWardrobeAd" title="+3 Kami-Sterne durch kurzes Werbevideo erhalten">
+              <span class="ad-reward-icon">⭐</span>
+              <div class="ad-reward-text">
+                <strong>+3 Kami-Sterne geschenkt</strong>
+                <span>Kurzes Video ansehen & Skins schneller freischalten</span>
+              </div>
+              <span class="ad-pill">WERBUNG</span>
+            </button>
+          </div>
           <div class="mobile-skins-grid" id="mobileSkinsGrid">
             <!-- Dynamically populated from KOMA_SKINS -->
           </div>
@@ -712,9 +722,19 @@
             <button class="icon-btn" id="btnCloseSkins" aria-label="Garderobe schließen">✕</button>
           </div>
         </div>
-        <p class="modal-desc" style="text-align: left; margin: 10px 0 18px 0;">
+        <p class="modal-desc" style="text-align: left; margin: 10px 0 14px 0;">
           Schließe die 60 Level mit möglichst vielen Kamera-Credits ab, um Sterne zu sammeln und mystische japanische Kami-Designs freizuschalten.
         </p>
+        <div class="wardrobe-ad-banner" id="desktopWardrobeAdBanner">
+          <button class="ad-reward-btn" id="btnDesktopWardrobeAd" title="+3 Kami-Sterne durch kurzes Werbevideo erhalten">
+            <span class="ad-reward-icon">⭐</span>
+            <div class="ad-reward-text">
+              <strong>+3 Kami-Sterne geschenkt</strong>
+              <span>Kurzes Video ansehen & Skins schneller freischalten</span>
+            </div>
+            <span class="ad-pill">WERBUNG</span>
+          </button>
+        </div>
         <div class="skins-grid" id="skinsGrid">
           <!-- Dynamically populated from KOMA_SKINS -->
         </div>
@@ -1030,6 +1050,17 @@
           </div>
         </div>
 
+        <div class="tower-revive-box" id="towerReviveBox">
+          <button class="ad-reward-btn" id="btnTowerRevive" title="Zweite Chance: 1 Laterne durch kurzes Werbevideo retten">
+            <span class="ad-reward-icon">🏮</span>
+            <div class="ad-reward-text">
+              <strong>Zweite Chance: 1 Laterne retten</strong>
+              <span>Kurzes Video ansehen & Ebene fortsetzen</span>
+            </div>
+            <span class="ad-pill">WERBUNG</span>
+          </button>
+        </div>
+
         <div class="modal-btn-row">
           <button class="primary-btn" id="btnTowerRetry">
             <svg class="svg-icon svg-retry" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
@@ -1051,6 +1082,7 @@
   <script src="js/audio.js"></script>
   <script src="js/daily.js"></script>
   <script src="js/tower.js"></script>
+  <script src="js/ads.js"></script>
   <script src="js/renderer3d.js"></script>
   <script src="js/game.js"></script>
 </body>
