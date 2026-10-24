@@ -12,11 +12,11 @@ class AdManager {
     this.adUnits = {
       ios: {
         rewarded: "ca-app-pub-4915881301731685/2652522912",
-        interstitial: "ca-app-pub-3940256099942544/4411468910"
+        interstitial: "ca-app-pub-4915881301731685/7800993537"
       },
       android: {
         rewarded: "ca-app-pub-4915881301731685/2652522912",
-        interstitial: "ca-app-pub-3940256099942544/1033173712"
+        interstitial: "ca-app-pub-4915881301731685/7800993537"
       }
     };
 
