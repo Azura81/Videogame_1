@@ -1216,7 +1216,7 @@ class GameEngine {
     if (type === "fragile") {
       if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neues Hindernis";
       if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Brüchige Trittsteine (Moroi Ishi)";
-      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Uralte Steine im Wasserbecken, die KOMA nur ein einziges Mal tragen.";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Uralte Steine im Wasserbecken, die den Roboter nur ein einziges Mal tragen.";
       if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined") {
         this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.fragileTile(32, "var(--cyan)");
       }
@@ -1224,7 +1224,7 @@ class GameEngine {
         this.dom.mechanicIntroBullets.innerHTML = `
           <div class="mechanic-rule-row">
             <span class="mechanic-rule-dot"></span>
-            <div><strong>Einmalige Überquerung:</strong> Sobald KOMA den Trittstein verlässt, versinkt er im Wasser.</div>
+            <div><strong>Einmalige Überquerung:</strong> Sobald der Roboter den Trittstein verlässt, versinkt er im Wasser.</div>
           </div>
           <div class="mechanic-rule-row">
             <span class="mechanic-rule-dot"></span>
@@ -1235,7 +1235,7 @@ class GameEngine {
     } else if (type === "blocks") {
       if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neue Mechanik";
       if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Heilige Felsblöcke (Iwa-Karakuri)";
-      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Schwere Opferblöcke, die von KOMA verschoben werden können.";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Schwere Opferblöcke, die verschoben werden können.";
       if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined") {
         this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.shrineBlock(32, "var(--cyan)");
       }
@@ -1248,6 +1248,29 @@ class GameEngine {
           <div class="mechanic-rule-row">
             <span class="mechanic-rule-dot"></span>
             <div><strong>Brücken bauen:</strong> Schiebst du einen Block in ein Wasserfeld, versinkt er und wird zur begehbaren Trittstein-Brücke!</div>
+          </div>
+        `;
+      }
+    } else if (type === "switch") {
+      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neues Element";
+      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Schrein-Schalter & Tore";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Leuchtende Boden-Schalter öffnen versperrte Tore im Schreingarten.";
+      if (this.dom.mechanicIntroIcon) {
+        this.dom.mechanicIntroIcon.innerHTML = `<svg width="34" height="34" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="4" fill="rgba(0, 245, 255, 0.18)" stroke="var(--cyan)" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="var(--cyan)"/><circle cx="12" cy="12" r="2" fill="#ffffff"/></svg>`;
+      }
+      if (this.dom.mechanicIntroBullets) {
+        this.dom.mechanicIntroBullets.innerHTML = `
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Auf den Schalter fahren:</strong> Bewege deinen Roboter direkt auf das leuchtende Schalter-Feld.</div>
+          </div>
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>✦ Aktion ausführen:</strong> Drücke den <strong>✦ Aktion</strong>-Befehl, während du auf dem Schalter stehst. Das Tor öffnet sich dauerhaft!</div>
+          </div>
+          <div class="mechanic-rule-row">
+            <span class="mechanic-rule-dot"></span>
+            <div><strong>Farbabstimmung:</strong> Die Leuchtfarbe des Schalters entspricht der Farbe des versperrten Tors.</div>
           </div>
         `;
       }
@@ -1343,7 +1366,7 @@ class GameEngine {
     const skinDef = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]) || {
       name: "Shiro Usagi",
       jpName: "白兎",
-      subtitle: "KOMA Original · Shinto-Bote",
+      subtitle: "Original · Shinto-Bote",
       tag: "Standard",
       desc: "Das klassische weiße Shinto-Schrein-Chassis mit leuchtend cyanfarbenen Visor-Augen und natürlichem Furoshiki-Holzpaket.",
       accentColor: "#00f5ff"
@@ -2136,6 +2159,9 @@ class GameEngine {
       } else if (lvl && lvl.blocks && lvl.blocks.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_blocks_intro"))) {
         this.showMechanicIntro("blocks");
         localStorage.setItem("koma_seen_blocks_intro", "true");
+      } else if (lvl && lvl.sw && lvl.sw.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("spirit_seen_switch_intro"))) {
+        this.showMechanicIntro("switch");
+        localStorage.setItem("spirit_seen_switch_intro", "true");
       }
     }
   }
@@ -2400,6 +2426,18 @@ class GameEngine {
   triggerHaptic(pattern = 14) {
     if (!this.hapticsEnabled) return;
     try {
+      // 1. Native iOS / Android Taptic Engine via Capacitor Plugin
+      if (typeof window !== "undefined" && window.Capacitor?.Plugins?.Haptics) {
+        const haptics = window.Capacitor.Plugins.Haptics;
+        if (Array.isArray(pattern) || pattern >= 35) {
+          haptics.notification({ type: "WARNING" }).catch(() => {});
+        } else if (pattern >= 20) {
+          haptics.impact({ style: "MEDIUM" }).catch(() => {});
+        } else {
+          haptics.impact({ style: "LIGHT" }).catch(() => {});
+        }
+      }
+      // 2. Standard Web Vibration API Fallback
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate(pattern);
       }
@@ -2476,7 +2514,11 @@ class GameEngine {
     this.dom.queueContainer.innerHTML = "";
 
     if (this.queue.length === 0) {
-      this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">Dein Plan erscheint hier …</div>`;
+      if (this.currentLevelIdx === 0 && !this.isTowerMode && !this.isDailyTrial) {
+        this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tippe auf <strong>Vorwärts</strong> & dann auf <strong>▶ Plan abspielen</strong>!</div>`;
+      } else {
+        this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">Dein Plan erscheint hier …</div>`;
+      }
     } else {
       this.queue.forEach((cmd, idx) => {
         const slot = document.createElement("button");

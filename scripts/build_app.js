@@ -28,7 +28,7 @@ function copyDirSync(src, dest) {
 copyDirSync(path.join(__dirname, '..', 'js'), path.join(distDir, 'js'));
 copyDirSync(path.join(__dirname, '..', 'icons'), path.join(distDir, 'icons'));
 
-const rootFiles = ['manifest.json', 'sw.js', 'shrine_texture.jpg', 'qr.html', 'qrcode.png'];
+const rootFiles = ['manifest.json', 'sw.js', 'shrine_texture.jpg', 'qr.html', 'qrcode.png', 'privacy.html'];
 for (const file of rootFiles) {
   const src = path.join(__dirname, '..', file);
   if (fs.existsSync(src)) {

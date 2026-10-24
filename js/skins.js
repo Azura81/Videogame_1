@@ -8,7 +8,7 @@ const KOMA_SKINS = {
     id: "original",
     name: "Shiro Usagi",
     jpName: "白兎",
-    subtitle: "KOMA Original · Shinto-Bote",
+    subtitle: "Original · Shinto-Bote",
     desc: "Das klassische weiße Shinto-Schrein-Chassis mit leuchtend cyanfarbenen Visor-Augen und natürlichem Furoshiki-Holzpaket.",
     starsRequired: 0,
     icon: "🐇",

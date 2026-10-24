@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spirit Delivery · Datenschutzerklärung / Privacy Policy</title>
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #070c16;
+      --card-bg: rgba(15, 25, 46, 0.94);
+      --border: rgba(0, 245, 255, 0.35);
+      --cyan: #00f5ff;
+      --gold: #ffb703;
+      --sakura: #ff85b8;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 50% 20%, #11203d 0%, #070c16 80%);
+      color: var(--text);
+      font-family: 'Outfit', -apple-system, sans-serif;
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    .container {
+      max-width: 760px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 28px;
+      padding: 40px 36px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 35px rgba(0, 245, 255, 0.14);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 245, 255, 0.12);
+      border: 1px solid rgba(0, 245, 255, 0.4);
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .last-updated {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .lang-switch {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0 28px;
+    }
+
+    .lang-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--cyan);
+      color: #070c16;
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px rgba(0, 245, 255, 0.4);
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: var(--cyan);
+      border-radius: 2px;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    .highlight-box {
+      background: rgba(0, 245, 255, 0.08);
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+
+    .highlight-box p {
+      color: #e2e8f0;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .footer-nav {
+      margin-top: 36px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 24px;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge">⛩️ SPIRIT DELIVERY</div>
+      <h1>Datenschutzerklärung / Privacy Policy</h1>
+      <div class="last-updated">Stand: 24. Oktober 2026 · App Version 1.0</div>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('de')">🇩🇪 Deutsch</button>
+      <button class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+    </div>
+
+    <!-- German Content -->
+    <div id="content-de">
+      <div class="highlight-box">
+        <p>🛡️ <strong>Kurz & bündig:</strong> <em>Spirit Delivery</em> respektiert deine Privatsphäre zu 100%. Das Spiel sammelt, speichert oder überträgt <strong>keinerlei persönliche Daten</strong>, nutzt <strong>keine Werbenetzwerke</strong> und <strong>keine Tracking-Dienste</strong>.</p>
+      </div>
+
+      <div class="section">
+        <h2>1. Verantwortlicher</h2>
+        <p>Verantwortlich für das Spiel <em>Spirit Delivery</em> ist:</p>
+        <p><strong>Max Rietsch (Azura81)</strong><br>
+        E-Mail: <a href="mailto:azura81.dev@gmail.com" style="color: var(--cyan); text-decoration: none;">azura81.dev@gmail.com</a><br>
+        Web: <a href="https://azura81.github.io/Videogame_1/" target="_blank" style="color: var(--cyan); text-decoration: none;">https://azura81.github.io/Videogame_1/</a></p>
+      </div>
+
+      <div class="section">
+        <h2>2. Welche Daten werden erhoben?</h2>
+        <p><strong>Keine personenbezogenen Daten.</strong></p>
+        <p>Das Spiel verarbeitet weder Namen, E-Mail-Adressen, IP-Adressen noch Standortdaten, Geräte-IDs oder biometrische Informationen. Du musst kein Benutzerkonto erstellen und keine Passwörter angeben.</p>
+      </div>
+
+      <div class="section">
+        <h2>3. Lokale Speicherung auf deinem Gerät (Offline-Speicher)</h2>
+        <p>Um deinen Spielfortschritt zu sichern, speichert das Spiel Daten <strong>ausschließlich lokal auf deinem eigenen Gerät</strong> (über den sogenannten <code>localStorage</code>):</p>
+        <ul>
+          <li>Erreichte Level und gesammelte Sterne</li>
+          <li>Freigeschaltete Kami-Skins und Schrein-Errungenschaften</li>
+          <li>Deine persönliche Streak im täglichen Schrein-Modus</li>
+          <li>Audio- und Haptik-Einstellungen (Ton an/aus)</li>
+        </ul>
+        <p>Diese Daten verlassen dein Gerät zu keinem Zeitpunkt und können jederzeit von dir über das Löschen der Browser-/App-Daten zurückgesetzt werden.</p>
+      </div>
+
+      <div class="section">
+        <h2>4. Keine Werbung & kein Tracking</h2>
+        <p><em>Spirit Delivery</em> enthält:</p>
+        <ul>
+          <li><strong>Keine Werbung</strong> (keine Werbebanner, keine Video-Ads).</li>
+          <li><strong>Keine Tracking- oder Analyse-Tools</strong> (weder Google Analytics, Firebase noch Drittanbieter-SDKs).</li>
+          <li><strong>Keine In-App-Käufe</strong> oder Bezahlschranken.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>5. Kinder- und Jugendschutz (COPPA & DSGVO)</h2>
+        <p>Das Spiel richtet sich an Spieler jeden Alters und eignet sich ausdrücklich auch für Kinder. Da keinerlei Daten erfasst werden, erfüllt das Spiel vollständig die Richtlinien von COPPA (Children's Online Privacy Protection Act) und der DSGVO (Datenschutz-Grundverordnung).</p>
+      </div>
+
+      <div class="section">
+        <h2>6. Deine Rechte & Kontakt</h2>
+        <p>Da wir keine personenbezogenen Daten speichern, liegen uns keine Daten über dich vor. Bei Fragen oder Anregungen erreichst du uns jederzeit unter <a href="mailto:azura81.dev@gmail.com" style="color: var(--cyan); text-decoration: none;">azura81.dev@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- English Content -->
+    <div id="content-en" style="display: none;">
+      <div class="highlight-box">
+        <p>🛡️ <strong>In Brief:</strong> <em>Spirit Delivery</em> 100% respects your privacy. The game does not collect, store, or transmit <strong>any personal data</strong>, and contains <strong>no advertisements</strong> or <strong>third-party trackers</strong>.</p>
+      </div>
+
+      <div class="section">
+        <h2>1. Controller & Developer</h2>
+        <p>Responsible for <em>Spirit Delivery</em>:</p>
+        <p><strong>Max Rietsch (Azura81)</strong><br>
+        Email: <a href="mailto:azura81.dev@gmail.com" style="color: var(--cyan); text-decoration: none;">azura81.dev@gmail.com</a><br>
+        Website: <a href="https://azura81.github.io/Videogame_1/" target="_blank" style="color: var(--cyan); text-decoration: none;">https://azura81.github.io/Videogame_1/</a></p>
+      </div>
+
+      <div class="section">
+        <h2>2. What Data Is Collected?</h2>
+        <p><strong>Zero Personal Data.</strong></p>
+        <p>The game does not collect, transmit, or process names, email addresses, IP addresses, location data, hardware identifiers, or analytics. No user account is required.</p>
+      </div>
+
+      <div class="section">
+        <h2>3. Local Storage on Your Device</h2>
+        <p>To preserve your game progress, information is saved <strong>exclusively on your local device</strong> via HTML5 <code>localStorage</code>:</p>
+        <ul>
+          <li>Completed levels and star ratings</li>
+          <li>Unlocked Kami skins and shrine achievements</li>
+          <li>Daily challenge streaks and personal high scores</li>
+          <li>Audio and haptics preferences</li>
+        </ul>
+        <p>This data never leaves your device and can be reset at any time by clearing your app or browser storage.</p>
+      </div>
+
+      <div class="section">
+        <h2>4. No Ads, No In-App Purchases, No Tracking</h2>
+        <p><em>Spirit Delivery</em> features:</p>
+        <ul>
+          <li><strong>No advertisements</strong> (no ad banners, no rewarded video ads).</li>
+          <li><strong>No third-party analytics</strong> (no Google Analytics, no telemetry SDKs).</li>
+          <li><strong>No in-app purchases</strong> or paywalls.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>5. Children's Privacy (COPPA & GDPR)</h2>
+        <p><em>Spirit Delivery</em> is family-friendly and safe for players of all ages, including children under 13. We do not solicit or gather any personal details from anyone.</p>
+      </div>
+
+      <div class="section">
+        <h2>6. Contact</h2>
+        <p>If you have any questions regarding this policy, feel free to reach out at <a href="mailto:azura81.dev@gmail.com" style="color: var(--cyan); text-decoration: none;">azura81.dev@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <a href="index.html" class="btn-back">← Zurück zum Spiel / Back to Game</a>
+    </div>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      if (lang === 'de') {
+        document.getElementById('content-de').style.display = 'block';
+        document.getElementById('content-en').style.display = 'none';
+        event.target.classList.add('active');
+      } else {
+        document.getElementById('content-de').style.display = 'none';
+        document.getElementById('content-en').style.display = 'block';
+        event.target.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

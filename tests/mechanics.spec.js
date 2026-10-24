@@ -124,8 +124,8 @@ test.describe('New Mechanics: Fragile Tiles and Pushable Blocks', () => {
       g.play();
     });
 
-    // Wait for execution to finish
-    await page.waitForTimeout(3500);
+    // Wait for execution to finish and win condition to trigger
+    await page.waitForFunction(() => window.gameInstance?.state?.isWin === true, { timeout: 10000 });
 
     const winStatus = await page.evaluate(() => {
       return {
