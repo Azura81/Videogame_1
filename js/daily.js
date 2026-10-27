@@ -449,6 +449,8 @@
     updateUI() {
       const streak = this.getEffectiveStreak();
       const isDone = this.isTodayCompleted();
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      const daysWord = (cnt) => isEn ? (cnt === 1 ? "day" : "days") : (cnt === 1 ? "Tag" : "Tage");
 
       // 1. Header Button Badge
       const badge = document.getElementById("headerDailyStreak");
@@ -460,36 +462,38 @@
       if (btn) {
         btn.classList.toggle("completed-today", isDone);
         btn.title = isDone 
-          ? `Tägliche Schreinprüfung heute gemeistert! (Streak: ${streak} Tage)`
-          : `Tägliche Schreinprüfung offen! (Streak: ${streak} Tage · 0 Kameraschwenker)`;
+          ? (isEn ? `Daily Shrine Trial completed today! (Streak: ${streak} ${daysWord(streak)})` : `Tägliche Schreinprüfung heute gemeistert! (Streak: ${streak} Tage)`)
+          : (isEn ? `Daily Shrine Trial open! (Streak: ${streak} ${daysWord(streak)} · 0 camera rotations)` : `Tägliche Schreinprüfung offen! (Streak: ${streak} Tage · 0 Kameraschwenker)`);
       }
 
       // 2. Mobile Hub Banner
       const mobileSub = document.getElementById("mobileDailySub");
       if (mobileSub) {
         mobileSub.textContent = isDone 
-          ? `Heute gemeistert ✓ · Streak: ${streak} Tage`
-          : `0 Kameraschwenker · Streak: ${streak} Tage`;
+          ? (isEn ? `Cleared today ✓ · Streak: ${streak} ${daysWord(streak)}` : `Heute gemeistert ✓ · Streak: ${streak} Tage`)
+          : (isEn ? `0 camera rotations · Streak: ${streak} ${daysWord(streak)}` : `0 Kameraschwenker · Streak: ${streak} Tage`);
       }
 
       // 3. Modal Elements (if open)
       const streakVal = document.getElementById("dailyStreakValue");
       if (streakVal) {
-        streakVal.textContent = `${streak} ${streak === 1 ? "Tag" : "Tage"} Streak`;
+        streakVal.textContent = isEn ? `${streak} ${daysWord(streak)} Streak` : `${streak} ${daysWord(streak)} Streak`;
       }
 
       const streakSub = document.getElementById("dailyStreakSub");
       if (streakSub) {
-        streakSub.textContent = `Rekord: ${this.data.bestStreak} ${this.data.bestStreak === 1 ? "Tag" : "Tage"} · Meistere die tägliche Prüfung`;
+        streakSub.textContent = isEn
+          ? `Record: ${this.data.bestStreak} ${daysWord(this.data.bestStreak)} · Master the daily trial`
+          : `Rekord: ${this.data.bestStreak} ${daysWord(this.data.bestStreak)} · Meistere die tägliche Prüfung`;
       }
 
       const statusTag = document.getElementById("dailyStatusTag");
       if (statusTag) {
         if (isDone) {
-          statusTag.textContent = "Heute gemeistert ✓";
+          statusTag.textContent = isEn ? "Cleared today ✓" : "Heute gemeistert ✓";
           statusTag.className = "daily-status-tag completed";
         } else {
-          statusTag.textContent = "Heute noch offen";
+          statusTag.textContent = isEn ? "Open for today" : "Heute noch offen";
           statusTag.className = "daily-status-tag pending";
         }
       }
@@ -499,7 +503,10 @@
         const iconSvg = typeof KOMA_ICONS !== "undefined"
           ? (isDone ? KOMA_ICONS.retry(16) : KOMA_ICONS.play(16))
           : (isDone ? "↺" : "▶");
-        startLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${iconSvg} <span>${isDone ? "Erneut spielen" : "Prüfung antreten"}</span></span>`;
+        const btnText = isDone
+          ? (isEn ? "Play Again" : "Erneut spielen")
+          : (isEn ? "Enter Trial" : "Prüfung antreten");
+        startLabel.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${iconSvg} <span>${btnText}</span></span>`;
       }
 
       // 4. Render Weekly Stamp Grid

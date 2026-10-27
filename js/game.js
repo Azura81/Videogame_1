@@ -266,7 +266,12 @@ class GameEngine {
       bossPhaseBadge: document.getElementById("bossPhaseBadge"),
       seal1: document.getElementById("seal1"),
       seal2: document.getElementById("seal2"),
-      seal3: document.getElementById("seal3")
+      seal3: document.getElementById("seal3"),
+      btnHomeLang: document.getElementById("btnHomeLang"),
+      homeLangFlag: document.getElementById("homeLangFlag"),
+      homeLangLabel: document.getElementById("homeLangLabel"),
+      btnSettingLangDe: document.getElementById("btnSettingLangDe"),
+      btnSettingLangEn: document.getElementById("btnSettingLangEn")
     };
 
     this.isDailyTrial = false;
@@ -348,6 +353,13 @@ class GameEngine {
     } else {
       this.currentLevelIdx = this.getProgressionLevel();
     }
+
+    // Initialize Internationalization (i18n)
+    if (typeof I18N !== "undefined") {
+      I18N.onChange(() => this.onLanguageChange());
+      this.onLanguageChange();
+    }
+
     this.loadLevel(this.currentLevelIdx);
 
     // Initial check for any achievements already achieved from saved progress
@@ -381,13 +393,18 @@ class GameEngine {
   }
 
   getCurrentLevel() {
+    let lvl;
     if (this.isTowerMode && typeof TowerTrial !== "undefined") {
-      return TowerTrial.getCurrentLevel();
+      lvl = TowerTrial.getCurrentLevel();
+    } else if (this.isDailyTrial && typeof DailyTrial !== "undefined") {
+      lvl = DailyTrial.getTodayLevel();
+    } else {
+      lvl = LEVELS[this.currentLevelIdx] || LEVELS[0];
     }
-    if (this.isDailyTrial && typeof DailyTrial !== "undefined") {
-      return DailyTrial.getTodayLevel();
+    if (typeof I18N !== "undefined" && typeof I18N.translateLevel === "function") {
+      return I18N.translateLevel(lvl, this.currentLevelIdx);
     }
-    return LEVELS[this.currentLevelIdx] || LEVELS[0];
+    return lvl;
   }
 
   bindEvents() {
@@ -570,6 +587,29 @@ class GameEngine {
       this.dom.btnHome.addEventListener("click", () => {
         this.triggerHaptic(15);
         this.showHomeScreen();
+      });
+    }
+
+    // Language Switcher Events
+    if (this.dom.btnHomeLang) {
+      this.dom.btnHomeLang.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        if (typeof I18N !== "undefined") {
+          const next = I18N.getLanguage() === "de" ? "en" : "de";
+          I18N.setLanguage(next);
+        }
+      });
+    }
+    if (this.dom.btnSettingLangDe) {
+      this.dom.btnSettingLangDe.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        if (typeof I18N !== "undefined") I18N.setLanguage("de");
+      });
+    }
+    if (this.dom.btnSettingLangEn) {
+      this.dom.btnSettingLangEn.addEventListener("click", () => {
+        this.triggerHaptic(15);
+        if (typeof I18N !== "undefined") I18N.setLanguage("en");
       });
     }
 
@@ -1280,13 +1320,74 @@ class GameEngine {
     }
   }
 
+  onLanguageChange() {
+    // 1. Update command names
+    if (this.commandMeta && typeof I18N !== "undefined") {
+      this.commandMeta.F.name = I18N.t("cmd_forward");
+      this.commandMeta.L.name = I18N.t("cmd_left");
+      this.commandMeta.R.name = I18N.t("cmd_right");
+      this.commandMeta.A.name = I18N.t("cmd_action");
+    }
+
+    // 2. Refresh active level details
+    const lvl = this.getCurrentLevel();
+    if (lvl) {
+      if (this.dom.levelTitle) this.dom.levelTitle.textContent = lvl.n;
+      if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = lvl.c;
+      if (this.dom.missionDesc) this.dom.missionDesc.textContent = lvl.d;
+      if (this.dom.levelTag) this.dom.levelTag.textContent = lvl.t;
+      if (this.dom.mobileLvlTitle) {
+        this.dom.mobileLvlTitle.textContent = this.isTowerMode
+          ? `${typeof I18N !== "undefined" ? I18N.t("tower_hud_floor", { floor: lvl.towerFloor }) : `Turm · E${lvl.towerFloor}`}`
+          : `Lvl ${this.currentLevelIdx + 1}`;
+      }
+    }
+
+    // 3. Update DOM buttons, inputs & labels
+    if (typeof I18N !== "undefined") {
+      I18N.updateDOM();
+    }
+    this.updateLanguageUI();
+    this.renderSkinsModal();
+    this.renderMobileSkins();
+    this.renderTrophies();
+    this.renderMobileTrophies();
+    this.renderLevelDrawer();
+    this.updateHomeScreen();
+
+    if (typeof TowerTrial !== "undefined" && typeof TowerTrial.updateUI === "function") {
+      TowerTrial.updateUI();
+    }
+    if (typeof DailyTrial !== "undefined" && typeof DailyTrial.updateUI === "function") {
+      DailyTrial.updateUI();
+    }
+  }
+
+  updateLanguageUI() {
+    if (typeof I18N === "undefined") return;
+    const lang = I18N.getLanguage();
+    if (this.dom.homeLangFlag) {
+      this.dom.homeLangFlag.textContent = lang === "de" ? "🇩🇪" : "🇬🇧";
+    }
+    if (this.dom.homeLangLabel) {
+      this.dom.homeLangLabel.textContent = lang === "de" ? "DE" : "EN";
+    }
+    if (this.dom.btnSettingLangDe) {
+      this.dom.btnSettingLangDe.classList.toggle("active", lang === "de");
+    }
+    if (this.dom.btnSettingLangEn) {
+      this.dom.btnSettingLangEn.classList.toggle("active", lang === "en");
+    }
+  }
+
   showMechanicIntro(type) {
     if (!this.dom.modalMechanicIntro) return;
+    const isEn = (typeof I18N !== "undefined" && I18N.getLanguage() === "en");
 
     if (type === "fragile") {
-      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = "Neues Hindernis";
-      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = "Brüchige Trittsteine (Moroi Ishi)";
-      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = "Uralte Steine im Wasserbecken, die den Roboter nur ein einziges Mal tragen.";
+      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = isEn ? "New Obstacle" : "Neues Hindernis";
+      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = isEn ? "Fragile Stepping Stones (Moroi Ishi)" : "Brüchige Trittsteine (Moroi Ishi)";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = isEn ? "Ancient stones in the water basin that carry the robot only once." : "Uralte Steine im Wasserbecken, die den Roboter nur ein einziges Mal tragen.";
       if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined") {
         this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.fragileTile(32, "var(--cyan)");
       }
@@ -1429,11 +1530,14 @@ class GameEngine {
 
   updateHomeScreen() {
     const progIdx = this.getProgressionLevel();
-    const lvl = (typeof LEVELS !== "undefined" && LEVELS[progIdx]) ? LEVELS[progIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
+    let lvl = (typeof LEVELS !== "undefined" && LEVELS[progIdx]) ? LEVELS[progIdx] : (typeof LEVELS !== "undefined" ? LEVELS[0] : null);
+    if (lvl && typeof I18N !== "undefined") {
+      lvl = I18N.translateLevel(lvl, progIdx);
+    }
 
     // 1. Synchronize Active Robot Skin in Showroom
     const skinId = this.equippedSkin || "original";
-    const skinDef = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]) || {
+    let skinDef = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS[skinId]) || {
       name: "Shiro Usagi",
       jpName: "白兎",
       subtitle: "Original · Shinto-Bote",
@@ -1441,6 +1545,9 @@ class GameEngine {
       desc: "Das klassische weiße Shinto-Schrein-Chassis mit leuchtend cyanfarbenen Visor-Augen und natürlichem Furoshiki-Holzpaket.",
       accentColor: "#00f5ff"
     };
+    if (typeof I18N !== "undefined") {
+      skinDef = I18N.getSkin(skinId, skinDef);
+    }
 
     if (this.dom.homeActiveSkinLabel) {
       this.dom.homeActiveSkinLabel.textContent = skinDef.name;
@@ -1464,10 +1571,12 @@ class GameEngine {
 
     // 2. Synchronize Current Level Plaque
     if (lvl) {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       const chNum = (lvl.chapter && lvl.chapter.num) ? lvl.chapter.num : Math.floor(progIdx / 10) + 1;
-      let chTitle = lvl.c || (lvl.chapter && lvl.chapter.title) || `Kapitel ${chNum}`;
-      if (!chTitle.toLowerCase().includes("kapitel")) {
-        chTitle = `Kapitel ${String(chNum).padStart(2, "0")} · ${chTitle}`;
+      const chPrefix = isEn ? "Chapter" : "Kapitel";
+      let chTitle = lvl.c || (lvl.chapter && lvl.chapter.title) || `${chPrefix} ${chNum}`;
+      if (!chTitle.toLowerCase().includes("kapitel") && !chTitle.toLowerCase().includes("chapter")) {
+        chTitle = `${chPrefix} ${String(chNum).padStart(2, "0")} · ${chTitle}`;
       }
       const isCompleted = this.completedLevels.has(progIdx);
       const stars = this.levelStars[progIdx] || 0;
@@ -1482,11 +1591,13 @@ class GameEngine {
         this.dom.homeCurrentLevelTitle.textContent = lvl.n || "";
       }
       if (this.dom.homeCurrentStatus) {
-        this.dom.homeCurrentStatus.textContent = isCompleted ? "Gemeistert ✓" : "Aktuelles Ziel";
+        const completedTxt = isEn ? "Mastered ✓" : "Gemeistert ✓";
+        const readyTxt = isEn ? "Current Goal" : "Aktuelles Ziel";
+        this.dom.homeCurrentStatus.textContent = isCompleted ? completedTxt : readyTxt;
         this.dom.homeCurrentStatus.className = `resume-status-badge ${isCompleted ? "completed" : "ready"}`;
       }
       if (this.dom.homeCurrentLevelDesc) {
-        this.dom.homeCurrentLevelDesc.textContent = lvl.d || "Bringe die heilige Opfergabe sicher zum Schrein.";
+        this.dom.homeCurrentLevelDesc.textContent = lvl.d || (isEn ? "Bring the sacred offering safely to the shrine." : "Bringe die heilige Opfergabe sicher zum Schrein.");
       }
       if (this.dom.homeCurrentStarsRow) {
         if (typeof KOMA_ICONS !== "undefined") {
@@ -1636,7 +1747,8 @@ class GameEngine {
     const countEl = this.dom.modalTrophiesCount;
     if (countEl) countEl.textContent = this.unlockedAchievements.size;
 
-    list.innerHTML = ACHIEVEMENTS.map(ach => {
+    list.innerHTML = ACHIEVEMENTS.map(rawAch => {
+      const ach = (typeof I18N !== "undefined" ? I18N.getAchievement(rawAch.id, rawAch) : rawAch);
       const isUnlocked = this.unlockedAchievements.has(ach.id);
       const prog = Math.min(ach.goal, ach.getProgress(this));
       const pct = Math.round((prog / ach.goal) * 100);
@@ -1661,7 +1773,7 @@ class GameEngine {
             </div>
           </div>
           <div class="trophy-status-badge ${isUnlocked ? "unlocked" : "locked"}">
-            ${isUnlocked ? "✓ Gemeistert" : "Versiegelt"}
+            ${isUnlocked ? "✓" : (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒")}
           </div>
         </div>
       `;
@@ -1674,7 +1786,8 @@ class GameEngine {
     const countEl = this.dom.mobileTrophiesCount;
     if (countEl) countEl.textContent = this.unlockedAchievements.size;
 
-    list.innerHTML = ACHIEVEMENTS.map(ach => {
+    list.innerHTML = ACHIEVEMENTS.map(rawAch => {
+      const ach = (typeof I18N !== "undefined" ? I18N.getAchievement(rawAch.id, rawAch) : rawAch);
       const isUnlocked = this.unlockedAchievements.has(ach.id);
       const prog = Math.min(ach.goal, ach.getProgress(this));
       const pct = Math.round((prog / ach.goal) * 100);
@@ -1723,6 +1836,10 @@ class GameEngine {
     const skins = Object.values(window.KOMA_SKINS);
 
     this.dom.mobileSkinsGrid.innerHTML = skins.map(skin => {
+      const origSkin = skin;
+      if (typeof I18N !== "undefined") {
+        skin = I18N.getSkin(skin.id, skin);
+      }
       const isUnlocked = this.isSkinUnlocked(skin.id);
       const isEquipped = this.equippedSkin === skin.id;
       const progress = skin.starsRequired > 0 
@@ -1733,17 +1850,22 @@ class GameEngine {
       let actionBtn = "";
 
       if (isEquipped) {
-        statusBadge = `<span class="mobile-skin-badge active">✓ Aktiv</span>`;
-        actionBtn = `<button class="mobile-skin-btn equipped" disabled>Ausgerüstet</button>`;
+        const activeTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Active" : "Aktiv";
+        const equippedTxt = (typeof I18N !== "undefined") ? I18N.t("wardrobe_equipped") : "Ausgerüstet";
+        statusBadge = `<span class="mobile-skin-badge active">✓ ${activeTxt}</span>`;
+        actionBtn = `<button class="mobile-skin-btn equipped" disabled>${equippedTxt}</button>`;
       } else if (isUnlocked) {
-        statusBadge = `<span class="mobile-skin-badge unlocked">Frei</span>`;
-        actionBtn = `<button class="mobile-skin-btn equip" data-mobile-skin="${skin.id}">Ausrüsten</button>`;
-      } else if (skin.specialUnlock === "boss_fuji") {
+        const freeTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Free" : "Frei";
+        const equipTxt = (typeof I18N !== "undefined") ? I18N.t("wardrobe_equip_btn") : "Ausrüsten";
+        statusBadge = `<span class="mobile-skin-badge unlocked">${freeTxt}</span>`;
+        actionBtn = `<button class="mobile-skin-btn equip" data-mobile-skin="${skin.id}">${equipTxt}</button>`;
+      } else if (origSkin.specialUnlock === "boss_fuji") {
         const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
+        const bossTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "🐉 Defeat Lvl 60 Boss" : "🐉 Lvl 60 Boss besiegen";
         statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} Boss</span>`;
         actionBtn = `
           <div class="mobile-skin-progress">
-            <span class="mobile-skin-prog-txt">🐉 Lvl 60 Boss besiegen</span>
+            <span class="mobile-skin-prog-txt">${bossTxt}</span>
           </div>
         `;
       } else {
@@ -1850,6 +1972,10 @@ class GameEngine {
     const skins = Object.values(window.KOMA_SKINS);
 
     this.dom.skinsGrid.innerHTML = skins.map(skin => {
+      const origSkin = skin;
+      if (typeof I18N !== "undefined") {
+        skin = I18N.getSkin(skin.id, skin);
+      }
       const isUnlocked = this.isSkinUnlocked(skin.id);
       const isEquipped = this.equippedSkin === skin.id;
       const progress = skin.starsRequired > 0 
@@ -1860,17 +1986,23 @@ class GameEngine {
       let actionButton = "";
 
       if (isEquipped) {
-        statusBadge = `<span class="skin-badge active">✓ Aktiv</span>`;
-        actionButton = `<button class="skin-action-btn equipped" disabled>Ausgerüstet</button>`;
+        const activeTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Active" : "Aktiv";
+        const equippedTxt = (typeof I18N !== "undefined") ? I18N.t("wardrobe_equipped") : "Ausgerüstet";
+        statusBadge = `<span class="skin-badge active">✓ ${activeTxt}</span>`;
+        actionButton = `<button class="skin-action-btn equipped" disabled>${equippedTxt}</button>`;
       } else if (isUnlocked) {
-        statusBadge = `<span class="skin-badge unlocked">Freigeschaltet</span>`;
-        actionButton = `<button class="skin-action-btn equip" data-skin-id="${skin.id}">Ausrüsten</button>`;
-      } else if (skin.specialUnlock === "boss_fuji") {
+        const unlockedTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Unlocked" : "Freigeschaltet";
+        const equipTxt = (typeof I18N !== "undefined") ? I18N.t("wardrobe_equip_btn") : "Ausrüsten";
+        statusBadge = `<span class="skin-badge unlocked">${unlockedTxt}</span>`;
+        actionButton = `<button class="skin-action-btn equip" data-skin-id="${skin.id}">${equipTxt}</button>`;
+      } else if (origSkin.specialUnlock === "boss_fuji") {
         const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
-        statusBadge = `<span class="skin-badge locked">${lockSvg} Boss-Sieg</span>`;
+        const bossVictory = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Boss Victory" : "Boss-Sieg";
+        const bossText = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "🐉 Defeat Ryūjin in Level 60" : "🐉 Besiege Ryūjin in Level 60";
+        statusBadge = `<span class="skin-badge locked">${lockSvg} ${bossVictory}</span>`;
         actionButton = `
           <div class="skin-progress-container">
-            <span class="skin-progress-text">🐉 Besiege Ryūjin in Level 60</span>
+            <span class="skin-progress-text">${bossText}</span>
           </div>
         `;
       } else {
@@ -1924,42 +2056,44 @@ class GameEngine {
       Sound.playCameraSwivel();
       this.renderCameraCredits();
       if (this.cameraCredits === 0) {
-        this.setFeedback("Kamera-Credits aufgebraucht (0 Sterne möglich – Level kann trotzdem abgeschlossen werden).", "bad");
+        this.setFeedback(typeof I18N !== "undefined" ? I18N.t("feedback_camera_empty") : "Kamera-Credits aufgebraucht (0 Sterne möglich – Level kann trotzdem abgeschlossen werden).", "bad");
       } else {
-        this.setFeedback(`Kamera geschwenkt (-1 Credit, noch ${this.cameraCredits} übrig).`, "normal");
+        this.setFeedback(typeof I18N !== "undefined" ? I18N.t("feedback_camera_credit", { remaining: this.cameraCredits }) : `Kamera geschwenkt (-1 Credit, noch ${this.cameraCredits} übrig).`, "normal");
       }
     }
   }
 
   renderCameraCredits() {
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
     if (this.isDailyTrial) {
       if (this.dom.creditBadge) {
-        this.dom.creditBadge.textContent = "0 / 0 (Gesperrt)";
+        this.dom.creditBadge.textContent = isEn ? "0 / 0 (Locked)" : "0 / 0 (Gesperrt)";
       }
       if (this.dom.creditStars) {
-        this.dom.creditStars.innerHTML = `<span style="color: #f97316; font-weight: 700;">🔥 Meister-Prüfung</span>`;
+        const trialLabel = isEn ? "🔥 Master Trial" : "🔥 Meister-Prüfung";
+        this.dom.creditStars.innerHTML = `<span style="color: #f97316; font-weight: 700;">${trialLabel}</span>`;
       }
       if (this.dom.mobileLvlCredits) {
         this.dom.mobileLvlCredits.textContent = "0/0 🚫";
       }
       if (this.dom.btnCamRotateLeft) {
         this.dom.btnCamRotateLeft.classList.add("disabled");
-        this.dom.btnCamRotateLeft.title = "Kameraschwenker in der täglichen Prüfung verboten!";
+        this.dom.btnCamRotateLeft.title = isEn ? "Camera rotation forbidden in daily trial!" : "Kameraschwenker in der täglichen Prüfung verboten!";
       }
       if (this.dom.btnCamRotateRight) {
         this.dom.btnCamRotateRight.classList.add("disabled");
-        this.dom.btnCamRotateRight.title = "Kameraschwenker in der täglichen Prüfung verboten!";
+        this.dom.btnCamRotateRight.title = isEn ? "Camera rotation forbidden in daily trial!" : "Kameraschwenker in der täglichen Prüfung verboten!";
       }
       return;
     }
 
     if (this.dom.btnCamRotateLeft) {
       this.dom.btnCamRotateLeft.classList.remove("disabled");
-      this.dom.btnCamRotateLeft.title = "Kamera 45° nach links schwenken (-1 Credit)";
+      this.dom.btnCamRotateLeft.title = isEn ? "Rotate camera 45° left (-1 Credit)" : "Kamera 45° nach links schwenken (-1 Credit)";
     }
     if (this.dom.btnCamRotateRight) {
       this.dom.btnCamRotateRight.classList.remove("disabled");
-      this.dom.btnCamRotateRight.title = "Kamera 45° nach rechts schwenken (-1 Credit)";
+      this.dom.btnCamRotateRight.title = isEn ? "Rotate camera 45° right (-1 Credit)" : "Kamera 45° nach rechts schwenken (-1 Credit)";
     }
 
     if (this.dom.creditBadge) {
@@ -2096,17 +2230,19 @@ class GameEngine {
     choices.forEach(choice => {
       const card = document.createElement("div");
       card.className = "blessing-card";
+      const transChoice = (typeof I18N !== "undefined") ? I18N.getBlessing(choice.id, choice) : choice;
       const blessingSvg = (typeof KOMA_ICONS !== "undefined" && choice.iconKey)
         ? KOMA_ICONS.render(choice.iconKey, 34, "var(--gold)")
         : choice.icon;
       const sakuraSvg = (typeof KOMA_ICONS !== "undefined")
         ? KOMA_ICONS.sakura(16)
         : "";
+      const btnLabel = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Receive Gift" : "Gabe empfangen";
       card.innerHTML = `
         <div class="blessing-icon">${blessingSvg}</div>
-        <div class="blessing-name">${choice.name}</div>
-        <div class="blessing-desc">${choice.desc}</div>
-        <div class="blessing-select-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;"><span>Gabe empfangen</span> ${sakuraSvg}</div>
+        <div class="blessing-name">${transChoice.name}</div>
+        <div class="blessing-desc">${transChoice.desc}</div>
+        <div class="blessing-select-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;"><span>${btnLabel}</span> ${sakuraSvg}</div>
       `;
       card.addEventListener("click", () => {
         this.triggerHaptic([30, 40, 60]);
@@ -2117,7 +2253,10 @@ class GameEngine {
         if (typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
           Sound.playStarChime(2);
         }
-        this.setFeedback(`Gabe gewählt: ${choice.name}! Aufstieg zur nächsten Ebene...`, "good");
+        const chosenFeedback = (typeof I18N !== "undefined" && I18N.getLanguage() === "en")
+          ? `Gift chosen: ${transChoice.name}! Ascending to next floor...`
+          : `Gabe gewählt: ${transChoice.name}! Aufstieg zur nächsten Ebene...`;
+        this.setFeedback(chosenFeedback, "good");
         setTimeout(() => {
           this.loadTowerFloor();
         }, 600);
@@ -2129,15 +2268,21 @@ class GameEngine {
   }
 
   showTowerGameOver(failRes) {
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    const floorWord = isEn ? "Floor" : "Ebene";
+    const ptsWord = isEn ? "Pts." : "Pkt.";
+    const floorsWord = isEn ? "Floor(s)" : "Ebene(n)";
+    const locale = isEn ? "en-US" : "de-DE";
+
     if (this.dom.towerResultFloor) {
-      this.dom.towerResultFloor.textContent = `Ebene ${failRes.floor}`;
+      this.dom.towerResultFloor.textContent = `${floorWord} ${failRes.floor}`;
     }
     if (this.dom.towerResultScore) {
-      this.dom.towerResultScore.textContent = `${failRes.score.toLocaleString("de-DE")} Pkt.`;
+      this.dom.towerResultScore.textContent = `${failRes.score.toLocaleString(locale)} ${ptsWord}`;
     }
     if (this.dom.towerResultZen) {
       const zenIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lightning(14) : "⚡";
-      this.dom.towerResultZen.innerHTML = `${failRes.zenCount || 0} Ebene(n) ${zenIcon} (+${(failRes.zenBonus || 0).toLocaleString("de-DE")} Pkt.)`;
+      this.dom.towerResultZen.innerHTML = `${failRes.zenCount || 0} ${floorsWord} ${zenIcon} (+${(failRes.zenBonus || 0).toLocaleString(locale)} ${ptsWord})`;
     }
     if (this.dom.towerResultRecord) {
       this.dom.towerResultRecord.style.display = failRes.isRecord ? "block" : "none";
@@ -3133,9 +3278,14 @@ class GameEngine {
 
         const earnedPts = res.floorScore || (res.score || 200);
         const zenFeedback = res.zenLabel ? ` · ${res.zenLabel}` : "";
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const ptsWord = isEn ? "Pts." : "Pkt.";
 
         if (res.type === "altar") {
-          this.setFeedback(`⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`, "good");
+          const altarMsg = isEn 
+            ? `⛩️ GREAT SHRINE GATE CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Altar opening...`
+            : `⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`;
+          this.setFeedback(altarMsg, "good");
           if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
             setTimeout(() => Sound.playStarChime(3), 200);
           }
@@ -3143,7 +3293,10 @@ class GameEngine {
             this.showTowerAltar(res.choices, res.floor);
           }, 700);
         } else {
-          this.setFeedback(`⛩️ EBENE ${res.floor - 1} GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Aufstieg zu Ebene ${res.floor}...`, "good");
+          const floorMsg = isEn
+            ? `⛩️ FLOOR ${res.floor - 1} CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Ascending to floor ${res.floor}...`
+            : `⛩️ EBENE ${res.floor - 1} GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Aufstieg zu Ebene ${res.floor}...`;
+          this.setFeedback(floorMsg, "good");
           if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
             setTimeout(() => Sound.playStarChime(3), 200);
           } else if (res.zenTier === "great" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
@@ -3166,26 +3319,35 @@ class GameEngine {
         this.triggerHaptic([40, 50, 40, 50, 80, 80, 120]);
 
         if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
-        this.setFeedback(`⛩️ TÄGLICHE PRÜFUNG GEMEISTERT! 🔥 Tages-Streak: ${res.currentStreak} Tage!`, "good");
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const daysWord = isEn ? (res.currentStreak === 1 ? "day" : "days") : (res.currentStreak === 1 ? "Tag" : "Tage");
+        const dailyFeedback = isEn
+          ? `⛩️ DAILY TRIAL CLEARED! 🔥 Streak: ${res.currentStreak} ${daysWord}!`
+          : `⛩️ TÄGLICHE PRÜFUNG GEMEISTERT! 🔥 Tages-Streak: ${res.currentStreak} Tage!`;
+        this.setFeedback(dailyFeedback, "good");
 
         setTimeout(() => {
           if (this.dom.modalWinTitle) {
-            this.dom.modalWinTitle.textContent = "Tägliche Schreinprüfung gemeistert! 🔥";
+            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_daily") : "Tägliche Schreinprüfung gemeistert! 🔥";
           }
           if (this.dom.modalWinText) {
-            this.dom.modalWinText.textContent = `Du hast die heutige Meisterprüfung ohne Kameraschwenker in ${this.currentStep} Schritten gelöst!`;
+            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_daily", { steps: this.currentStep }) : `Du hast die heutige Meisterprüfung ohne Kameraschwenker in ${this.currentStep} Schritten gelöst!`;
           }
           if (this.dom.modalWinStars) {
+            const streakTitle = `${res.currentStreak} ${daysWord} Streak!`;
+            const streakSub = res.isNewRecord 
+              ? (isEn ? "🎉 NEW PERSONAL RECORD!" : "🎉 NEUER PERSÖNLICHER REKORD!")
+              : (isEn ? "Come back tomorrow for the next shrine trial!" : "Komm morgen für die nächste Schrein-Prüfung wieder!");
             this.dom.modalWinStars.innerHTML = `
               <div class="daily-win-streak-badge">
                 <span class="flame-big">🔥</span>
-                <div class="streak-big-val">${res.currentStreak} ${res.currentStreak === 1 ? "Tag" : "Tage"} Streak!</div>
-                <div class="streak-sub-text">${res.isNewRecord ? "🎉 NEUER PERSÖNLICHER REKORD!" : "Komm morgen für die nächste Schrein-Prüfung wieder!"}</div>
+                <div class="streak-big-val">${streakTitle}</div>
+                <div class="streak-sub-text">${streakSub}</div>
               </div>
             `;
           }
           if (this.dom.modalWinCredits) {
-            this.dom.modalWinCredits.textContent = "0 Kameraschwenker verwendet · Reine Vorab-Planung!";
+            this.dom.modalWinCredits.textContent = typeof I18N !== "undefined" ? I18N.t("win_credits_zero") : "0 Kameraschwenker verwendet · Reine Vorab-Planung!";
           }
           if (this.dom.modalWin) this.dom.modalWin.classList.add("active");
         }, 450);
@@ -3223,26 +3385,29 @@ class GameEngine {
       this.triggerHaptic([40, 50, 40, 50, 80, 80, 120]);
 
       if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       if (isBoss) {
-        this.setFeedback("🐉 Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
+        this.setFeedback(isEn ? "🐉 Sacred dragon Ryūjin is redeemed and ascends into the heavens!" : "🐉 Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
       } else {
-        this.setFeedback("Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
+        this.setFeedback(isEn ? "Package successfully delivered! A sacred corner of Japan lights up." : "Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
       }
 
       setTimeout(() => {
         if (this.dom.modalWinTitle) {
           if (isBoss) {
-            this.dom.modalWinTitle.textContent = "「富士の龍神」 BEZWUNGEN! 🐉";
+            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_boss") : "「富士の龍神」 BEZWUNGEN! 🐉";
           } else {
             this.dom.modalWinTitle.textContent =
-              this.currentLevelIdx === LEVELS.length - 1 ? "Alle Lieferungen geschafft! 🎉" : "Lieferung erfolgreich! 🌸";
+              this.currentLevelIdx === LEVELS.length - 1 
+                ? (isEn ? "All Deliveries Completed! 🎉" : "Alle Lieferungen geschafft! 🎉")
+                : (typeof I18N !== "undefined" ? I18N.t("win_title_normal") : "Lieferung erfolgreich! 🌸");
           }
         }
         if (this.dom.modalWinText) {
           if (isBoss) {
-            this.dom.modalWinText.textContent = `Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in ${this.currentStep} Schritten erlöst!`;
+            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_boss", { steps: this.currentStep }) : `Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in ${this.currentStep} Schritten erlöst!`;
           } else {
-            this.dom.modalWinText.textContent = `KOMA hat das Paket in ${this.currentStep} Befehl${
+            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_normal", { steps: this.currentStep }) : `KOMA hat das Paket in ${this.currentStep} Befehl${
               this.currentStep === 1 ? "" : "en"
             } sicher abgeliefert.`;
           }
@@ -3257,10 +3422,17 @@ class GameEngine {
             starHtml += `<span class="win-star ${isFilled ? "filled" : "empty"}">${svgStar}<span class="sr-only">${isFilled ? "⭐" : "☆"}</span></span>`;
           }
           let starLabel = "";
-          if (stars === 3) starLabel = "3 Sterne · Volle Kamera-Credits erhalten (Perfekt!)";
-          else if (stars === 2) starLabel = "2 Sterne · Mindestens halbe Credits erhalten (Sehr gut!)";
-          else if (stars === 1) starLabel = "1 Stern · Wenig Credits übrig (Gut!)";
-          else starLabel = "0 Sterne · Alle Kamera-Credits aufgebraucht (Erfolgreich geliefert)";
+          if (isEn) {
+            if (stars === 3) starLabel = "3 Stars · Full Camera Credits preserved (Perfect!)";
+            else if (stars === 2) starLabel = "2 Stars · At least half Credits preserved (Great!)";
+            else if (stars === 1) starLabel = "1 Star · Few Credits remaining (Good!)";
+            else starLabel = "0 Stars · All Camera Credits depleted (Delivered!)";
+          } else {
+            if (stars === 3) starLabel = "3 Sterne · Volle Kamera-Credits erhalten (Perfekt!)";
+            else if (stars === 2) starLabel = "2 Sterne · Mindestens halbe Credits erhalten (Sehr gut!)";
+            else if (stars === 1) starLabel = "1 Stern · Wenig Credits übrig (Gut!)";
+            else starLabel = "0 Sterne · Alle Kamera-Credits aufgebraucht (Erfolgreich geliefert)";
+          }
           
           this.dom.modalWinStars.innerHTML = `
             <div class="stars-row">${starHtml}</div>
@@ -3273,7 +3445,9 @@ class GameEngine {
           }
         }
         if (this.dom.modalWinCredits) {
-          this.dom.modalWinCredits.textContent = `Übrige Kamera-Credits: ${this.cameraCredits} / ${this.maxCameraCredits}`;
+          this.dom.modalWinCredits.textContent = typeof I18N !== "undefined"
+            ? I18N.t("win_credits_normal", { credits: this.cameraCredits, max: this.maxCameraCredits })
+            : `Übrige Kamera-Credits: ${this.cameraCredits} / ${this.maxCameraCredits}`;
         }
 
         // Check if any new Kami skin was unlocked
@@ -3296,15 +3470,19 @@ class GameEngine {
           if (isBoss) {
             const ryujinSkin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS.ryujin);
             if (ryujinSkin) {
+              const bossKicker = isEn ? "👑 LEGENDARY BOSS TROPHY UNLOCKED!" : "👑 LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!";
+              const bossSub = isEn ? "Mother of Pearl Chassis · Imperial Horns · Celestial Ribbons" : "Perlmutt-Chassis · Kaiserliche Hörner · Himmelsbänder";
+              const equipBtnTxt = typeof I18N !== "undefined" ? `${I18N.t("wardrobe_equip_btn")} 👘` : "Ausrüsten 👘";
+              const transRyujin = typeof I18N !== "undefined" ? I18N.getSkin("ryujin", ryujinSkin) : ryujinSkin;
               this.dom.modalWinSkinNotice.innerHTML = `
                 <div class="win-skin-banner boss-skin-banner">
                   <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("ryujin", 32, "#00f0ff") : "🐉"}</span>
                   <div class="win-skin-info">
-                    <span class="win-skin-kicker">👑 LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!</span>
-                    <strong class="win-skin-name">${ryujinSkin.name} (${ryujinSkin.jpName})</strong>
-                    <div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">Perlmutt-Chassis · Kaiserliche Hörner · Himmelsbänder</div>
+                    <span class="win-skin-kicker">${bossKicker}</span>
+                    <strong class="win-skin-name">${transRyujin.name} (${transRyujin.jpName})</strong>
+                    <div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">${bossSub}</div>
                   </div>
-                  <button class="win-skin-btn" id="btnWinOpenSkins">Ausrüsten 👘</button>
+                  <button class="win-skin-btn" id="btnWinOpenSkins">${equipBtnTxt}</button>
                 </div>
               `;
               this.dom.modalWinSkinNotice.style.display = "block";
@@ -3318,14 +3496,17 @@ class GameEngine {
               }
             }
           } else if (newlyUnlockedSkin) {
+            const newKicker = isEn ? "🎉 New Kami Skin unlocked!" : "🎉 Neuer Kami-Skin freigeschaltet!";
+            const wardrobeBtnTxt = isEn ? "Wardrobe 👘" : "Garderobe 👘";
+            const transNewSkin = typeof I18N !== "undefined" ? I18N.getSkin(newlyUnlockedSkin.id, newlyUnlockedSkin) : newlyUnlockedSkin;
             this.dom.modalWinSkinNotice.innerHTML = `
               <div class="win-skin-banner">
                 <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon(newlyUnlockedSkin.id, 28, newlyUnlockedSkin.accentColor) : newlyUnlockedSkin.icon}</span>
                 <div class="win-skin-info">
-                  <span class="win-skin-kicker">🎉 Neuer Kami-Skin freigeschaltet!</span>
-                  <strong class="win-skin-name">${newlyUnlockedSkin.name} (${newlyUnlockedSkin.jpName})</strong>
+                  <span class="win-skin-kicker">${newKicker}</span>
+                  <strong class="win-skin-name">${transNewSkin.name} (${transNewSkin.jpName})</strong>
                 </div>
-                <button class="win-skin-btn" id="btnWinOpenSkins">Garderobe 👘</button>
+                <button class="win-skin-btn" id="btnWinOpenSkins">${wardrobeBtnTxt}</button>
               </div>
             `;
             this.dom.modalWinSkinNotice.style.display = "block";
@@ -3343,8 +3524,11 @@ class GameEngine {
         }
 
         if (this.dom.btnNextLevel) {
-          this.dom.btnNextLevel.textContent =
-            this.currentLevelIdx === LEVELS.length - 1 ? "Erstes Level erneut spielen" : "Nächstes Level →";
+          if (this.currentLevelIdx === LEVELS.length - 1) {
+            this.dom.btnNextLevel.textContent = typeof I18N !== "undefined" ? I18N.t("btn_replay_first") : "Erstes Level erneut spielen";
+          } else {
+            this.dom.btnNextLevel.textContent = typeof I18N !== "undefined" ? I18N.t("btn_next_level") : "Nächstes Level →";
+          }
         }
         if (this.dom.modalWin) this.dom.modalWin.classList.add("active");
         if (typeof window !== "undefined" && window.adManager && typeof window.adManager.showInterstitialAd === "function") {

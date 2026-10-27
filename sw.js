@@ -3,7 +3,7 @@
  * Enables complete offline playability and asset caching for Progressive Web App (PWA).
  */
 
-const CACHE_NAME = "koma-spirit-delivery-v6";
+const CACHE_NAME = "koma-spirit-delivery-v7";
 
 const ASSETS_TO_CACHE = [
   "./",
@@ -13,6 +13,7 @@ const ASSETS_TO_CACHE = [
   "./manifest.json",
   "./js/three.min.js",
   "./js/icons.js",
+  "./js/i18n.js",
   "./js/levels.js",
   "./js/skins.js",
   "./js/audio.js",

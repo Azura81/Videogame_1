@@ -622,17 +622,18 @@
       let zenLabel = "";
 
       if (optimalSteps > 0 && typeof stepsUsed === "number" && stepsUsed > 0) {
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         if (stepsUsed <= optimalSteps) {
           // ⚡ Perfekte Pfadführung / Zen-Meisterschaft (+50% der Ebenenpunkte)
           zenBonus = Math.round(basePoints * 0.5);
           zenTier = "perfect";
-          zenLabel = `⚡ Perfekte Eleganz (+${zenBonus} Zen-Bonus)`;
+          zenLabel = isEn ? `⚡ Perfect Elegance (+${zenBonus} Zen Bonus)` : `⚡ Perfekte Eleganz (+${zenBonus} Zen-Bonus)`;
           this.zenPerfectCount = (this.zenPerfectCount || 0) + 1;
         } else if (stepsUsed <= optimalSteps + 2) {
           // ✨ Fließender Geist (+25% der Ebenenpunkte)
           zenBonus = Math.round(basePoints * 0.25);
           zenTier = "great";
-          zenLabel = `✨ Fließender Geist (+${zenBonus} Effizienz-Bonus)`;
+          zenLabel = isEn ? `✨ Flowing Spirit (+${zenBonus} Efficiency Bonus)` : `✨ Fließender Geist (+${zenBonus} Effizienz-Bonus)`;
         }
       }
 
@@ -731,6 +732,8 @@
      */
     handleFail() {
       // 1. Check if spirit amulet is active
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+
       if (this.amuletActive) {
         this.amuletActive = false;
         this.updateUI();
@@ -738,7 +741,9 @@
           absorbed: true,
           lanterns: this.lanterns,
           gameOver: false,
-          message: "🌸 Dein Kitsune-Amulett ist zerbrochen und hat die Laterne gerettet!"
+          message: isEn
+            ? "🌸 Your Kitsune Amulet shattered and saved the lantern!"
+            : "🌸 Dein Kitsune-Amulett ist zerbrochen und hat die Laterne gerettet!"
         };
       }
 
@@ -770,7 +775,9 @@
         absorbed: false,
         lanterns: this.lanterns,
         gameOver: false,
-        message: `🏮 Eine Laterne ist erloschen! Noch ${this.lanterns} Laterne(n) übrig.`
+        message: isEn
+          ? `🏮 A lantern was extinguished! ${this.lanterns} lantern(s) remaining.`
+          : `🏮 Eine Laterne ist erloschen! Noch ${this.lanterns} Laterne(n) übrig.`
       };
     }
 
@@ -789,16 +796,19 @@
      * Updates header, mobile drawer and active in-game Tower HUD elements
      */
     updateUI() {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      const floorWord = isEn ? "Floor" : "Ebene";
+
       // 1. Header Best Floor Badge
       const headerBest = document.getElementById("headerTowerBest");
       if (headerBest) {
-        headerBest.textContent = `Ebene ${this.getBestFloor() || 1}`;
+        headerBest.textContent = `${floorWord} ${this.getBestFloor() || 1}`;
       }
 
       // 2. Mobile Drawer Banner
       const mobileBest = document.getElementById("mobileTowerBest");
       if (mobileBest) {
-        mobileBest.textContent = `Ebene ${this.getBestFloor() || 0}`;
+        mobileBest.textContent = `${floorWord} ${this.getBestFloor() || 0}`;
       }
 
       // 3. In-Game Tower HUD Bar
@@ -809,7 +819,7 @@
 
       const hudFloor = document.getElementById("towerHudFloor");
       if (hudFloor) {
-        hudFloor.textContent = `Ebene ${this.floor}`;
+        hudFloor.textContent = `${floorWord} ${this.floor}`;
       }
 
       const hudLanterns = document.getElementById("towerHudLanterns");
