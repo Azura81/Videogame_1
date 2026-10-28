@@ -1,0 +1,71 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload to TestFlight / App Store Connect"
+  lane :release do
+    api_key = nil
+    if ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"] && !ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"].empty?
+      api_key = app_store_connect_api_key(
+        key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+        key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
+        is_key_content_base64: true,
+        in_house: false
+      )
+
+      # Create temporary CI keychain for certificates
+      create_keychain(
+        name: "ci_keychain",
+        password: "ci_keychain_password_123",
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+
+      # Fetch or create distribution certificate
+      get_certificates(
+        api_key: api_key,
+        keychain_name: "ci_keychain",
+        keychain_password: "ci_keychain_password_123"
+      )
+
+      # Fetch or create App Store provisioning profile
+      get_provisioning_profile(
+        api_key: api_key,
+        app_identifier: "com.azura81.spiritdelivery"
+      )
+    end
+
+    # Build native iOS IPA archive
+    build_app(
+      workspace: "App.xcworkspace",
+      scheme: "App",
+      export_method: "app-store",
+      clean: true,
+      output_directory: "./build",
+      output_name: "SpiritDelivery.ipa"
+    )
+
+    # Upload to TestFlight / App Store Connect if API key is present
+    if api_key
+      upload_to_testflight(
+        api_key: api_key,
+        skip_waiting_for_build_processing: true,
+        ipa: "./build/SpiritDelivery.ipa"
+      )
+    end
+  end
+
+  desc "Build IPA for validation"
+  lane :build_only do
+    build_app(
+      workspace: "App.xcworkspace",
+      scheme: "App",
+      export_method: "app-store",
+      clean: true,
+      output_directory: "./build",
+      output_name: "SpiritDelivery.ipa"
+    )
+  end
+end
