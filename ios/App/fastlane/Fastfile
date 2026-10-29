@@ -1,4 +1,4 @@
-# Trigger build
+# Trigger build - rerun 18:04
 default_platform(:ios)
 
 platform :ios do
