@@ -79,6 +79,17 @@ platform :ios do
     # Automatically detect Xcode workspace or SPM project
     xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
 
+    # Ensure automatic code signing is enabled in Xcode project
+    begin
+      automatic_code_signing(
+        path: "App.xcodeproj",
+        use_automatic_signing: true,
+        team_id: team_id
+      )
+    rescue => e
+      UI.important("automatic_code_signing note: #{e.message}")
+    end
+
     # Build native iOS IPA archive
     build_args = xcode_target.merge({
       scheme: "App",
@@ -87,8 +98,11 @@ platform :ios do
       output_directory: "./build",
       output_name: "SpiritDelivery.ipa",
       export_team_id: team_id,
+      export_options: {
+        signingStyle: "automatic"
+      },
       export_xcargs: "-allowProvisioningUpdates",
-      xcargs: "DEVELOPMENT_TEAM=#{team_id}"
+      xcargs: "-allowProvisioningUpdates DEVELOPMENT_TEAM=#{team_id}"
     })
 
     build_app(build_args)
