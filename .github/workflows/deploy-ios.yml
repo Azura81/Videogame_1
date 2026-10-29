@@ -1,0 +1,71 @@
+name: Build and Deploy iOS App
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'js/**'
+      - 'css/**'
+      - 'index.html'
+      - 'ios/**'
+      - 'package.json'
+      - 'capacitor.config.json'
+      - '.github/workflows/deploy-ios.yml'
+  workflow_dispatch:
+    inputs:
+      upload_to_appstore:
+        description: 'Upload directly to App Store / TestFlight?'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build web application and sync Capacitor iOS
+        run: npm run build:ios
+
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios/App
+
+      - name: Run Fastlane Release
+        working-directory: ios/App
+        env:
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+        run: |
+          if [ -n "$APP_STORE_CONNECT_API_KEY_KEY_ID" ]; then
+            bundle exec fastlane release
+          else
+            echo "::warning::App Store Connect Secrets not yet set."
+            bundle exec fastlane build_only
+          fi
+
+      - name: Upload IPA Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpiritDelivery-iOS-Build
+          path: ios/App/build/*.ipa
+          if-no-files-found: ignore
