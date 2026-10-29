@@ -1,2 +1,3 @@
 app_identifier("com.azura81.spiritdelivery")
 apple_id(ENV["APPLE_ID"] || "")
+team_id("4SAM269S3L")
