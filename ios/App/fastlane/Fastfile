@@ -62,7 +62,7 @@ platform :ios do
       end
 
       # Determine team ID from sigh, cert, or environment
-      team_id ||= lane_context[SharedValues::SIGH_TEAM_ID] || lane_context[SharedValues::CERT_TEAM_ID]
+      team_id ||= ENV["SIGH_TEAM_ID"] || ENV["CERT_TEAM_ID"] || ENV["APPLE_TEAM_ID"]
       if team_id && !team_id.empty?
         UI.message("Configuring Xcode project with Team ID: #{team_id}")
         begin
