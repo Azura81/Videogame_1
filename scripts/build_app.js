@@ -5,7 +5,14 @@ const { execSync } = require('child_process');
 console.log('--- Building Spirit Delivery for Production / Capacitor ---');
 
 // 1. Run Vite build to compile HTML & CSS
-execSync('npx vite build', { stdio: 'inherit' });
+const localVite = path.join(__dirname, '..', 'node_modules', '.bin', 'vite');
+if (fs.existsSync(localVite)) {
+  console.log(`Running Vite build from: ${localVite}`);
+  execSync(`"${localVite}" build`, { stdio: 'inherit' });
+} else {
+  console.log('Running Vite build via npx --yes...');
+  execSync('npx --yes vite build', { stdio: 'inherit' });
+}
 
 const distDir = path.join(__dirname, '..', 'dist');
 
