@@ -28,6 +28,26 @@ platform :ios do
         lock_when_sleeps: false
       )
 
+      # Import distribution certificate and private key into CI keychain
+      if ENV["BUILD_CERTIFICATE_BASE64"] && !ENV["BUILD_CERTIFICATE_BASE64"].empty?
+        require "base64"
+        p12_path = File.expand_path("/tmp/distribution.p12")
+        File.open(p12_path, "wb") do |f|
+          f.write(Base64.decode64(ENV["BUILD_CERTIFICATE_BASE64"]))
+        end
+        begin
+          import_certificate(
+            certificate_path: p12_path,
+            certificate_password: ENV["P12_PASSWORD"] || "spiritdelivery123",
+            keychain_name: "ci_keychain",
+            keychain_password: "ci_keychain_password_123"
+          )
+          UI.success("Successfully imported distribution certificate and private key into CI keychain!")
+        rescue => e
+          UI.important("import_certificate note: #{e.message}")
+        end
+      end
+
       # Ensure App ID exists in Apple Developer Portal
       begin
         produce(
