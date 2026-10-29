@@ -76,16 +76,18 @@ platform :ios do
       end
     end
 
+    # Automatically detect Xcode workspace or SPM project
+    xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
+
     # Build native iOS IPA archive
-    build_args = {
-      workspace: "App.xcworkspace",
+    build_args = xcode_target.merge({
       scheme: "App",
       export_method: "app-store",
       clean: true,
       output_directory: "./build",
       output_name: "SpiritDelivery.ipa",
       export_xcargs: "-allowProvisioningUpdates"
-    }
+    })
     build_args[:export_team_id] = team_id if team_id && !team_id.empty?
 
     build_app(build_args)
@@ -102,13 +104,15 @@ platform :ios do
 
   desc "Build IPA for validation"
   lane :build_only do
+    xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
     build_app(
-      workspace: "App.xcworkspace",
-      scheme: "App",
-      export_method: "app-store",
-      clean: true,
-      output_directory: "./build",
-      output_name: "SpiritDelivery.ipa"
+      xcode_target.merge({
+        scheme: "App",
+        export_method: "app-store",
+        clean: true,
+        output_directory: "./build",
+        output_name: "SpiritDelivery.ipa"
+      })
     )
   end
 end
