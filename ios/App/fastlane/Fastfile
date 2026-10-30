@@ -100,30 +100,43 @@ platform :ios do
     # Automatically detect Xcode workspace or SPM project
     xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
 
-    # Ensure automatic code signing is enabled in Xcode project
+    profile_name = ENV["SIGH_NAME"] || "com.azura81.spiritdelivery AppStore"
+    profile_uuid = ENV["SIGH_UUID"] || ENV["SIGH_UDID"]
+
+    # Configure manual code signing with the downloaded App Store profile
     begin
-      automatic_code_signing(
+      update_code_signing_settings(
         path: "App.xcodeproj",
-        use_automatic_signing: true,
-        team_id: team_id
+        use_automatic_signing: false,
+        team_id: team_id,
+        targets: ["App"],
+        build_configurations: ["Release"],
+        code_sign_identity: "Apple Distribution",
+        profile_name: profile_name,
+        profile_uuid: profile_uuid,
+        bundle_identifier: "com.azura81.spiritdelivery"
       )
+      UI.success("Configured manual code signing with profile: #{profile_name}")
     rescue => e
-      UI.important("automatic_code_signing note: #{e.message}")
+      UI.important("update_code_signing_settings note: #{e.message}")
     end
 
     # Build native iOS IPA archive
     build_args = xcode_target.merge({
       scheme: "App",
+      configuration: "Release",
       export_method: "app-store",
       clean: true,
       output_directory: "./build",
       output_name: "SpiritDelivery.ipa",
       export_team_id: team_id,
+      codesigning_identity: "Apple Distribution",
       export_options: {
-        signingStyle: "automatic"
-      },
-      export_xcargs: "-allowProvisioningUpdates",
-      xcargs: "-allowProvisioningUpdates DEVELOPMENT_TEAM=#{team_id}"
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "com.azura81.spiritdelivery" => profile_name
+        }
+      }
     })
 
     build_app(build_args)
