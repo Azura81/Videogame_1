@@ -4,6 +4,13 @@ default_platform(:ios)
 platform :ios do
   desc "Build and upload to TestFlight / App Store Connect"
   lane :release do
+    # Select Xcode 26+ for iOS 26 SDK App Store compliance
+    xcode_26 = Dir.glob("/Applications/Xcode_26*.app").sort.last
+    if xcode_26
+      ENV["DEVELOPER_DIR"] = File.join(xcode_26, "Contents/Developer")
+      UI.success("Selected Xcode version for build and upload: #{xcode_26}")
+    end
+
     api_key = nil
     team_id = ENV["APPLE_TEAM_ID"] || "4SAM269S3L"
 
@@ -138,6 +145,7 @@ platform :ios do
         }
       }
     })
+    build_args[:xcode_path] = xcode_26 if xcode_26
 
     build_app(build_args)
 
