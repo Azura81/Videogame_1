@@ -44,6 +44,7 @@
       home_resume_btn: "FORTSETZEN ▶",
       home_wardrobe_btn: "Garderobe & Skins",
       home_trophies_btn: "Schrein-Siegel",
+      home_chapters_btn: "Levels",
       home_help_btn: "Spielanleitung",
 
       // Commands
@@ -78,17 +79,17 @@
       feedback_block_bridge: "Platsch! Der Felsblock versinkt im Wasser und bildet eine neue Trittstein-Brücke!",
       feedback_block_stuck: "Der heilige Felsblock ist blockiert und lässt sich nicht weiterschieben!",
       feedback_fragile_crack: "Knacks! Der morsche Trittstein bekommt Risse und versinkt gleich!",
-      feedback_orb_collected: "🌸 Geisterlicht eingesammelt! ({current} / {total})",
-      feedback_portal_entered: "🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.",
-      feedback_wind_gust: "💨 Eine kräftige Bergwindböe trägt KOMA mit sich!",
+      feedback_orb_collected: "Geisterlicht eingesammelt! ({current} / {total})",
+      feedback_portal_entered: "Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.",
+      feedback_wind_gust: "Eine kräftige Bergwindböe trägt KOMA mit sich!",
       feedback_camera_credit: "Kamera geschwenkt (-1 Credit, noch {remaining} übrig).",
       feedback_camera_empty: "Kamera-Credits aufgebraucht (0 Sterne möglich – Level kann trotzdem abgeschlossen werden).",
       tutorial_hint: "Tipp: Drücke auf „Vorwärts ↑“, um Befehle in deinen Plan einzufügen.",
 
       // Win Modal
       win_title_normal: "Lieferung erfolgreich!",
-      win_title_boss: "「富士の龍神」 BEZWUNGEN! 🐉",
-      win_title_daily: "Tägliche Schreinprüfung gemeistert! 🔥",
+      win_title_boss: "「富士の龍神」 BEZWUNGEN!",
+      win_title_daily: "Tägliche Schreinprüfung gemeistert!",
       win_desc_normal: "KOMA hat das Paket in {steps} Schritten zugestellt.",
       win_desc_boss: "Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in {steps} Schritten erlöst!",
       win_desc_daily: "Du hast die heutige Meisterprüfung ohne Kameraschwenker in {steps} Schritten gelöst!",
@@ -99,12 +100,12 @@
       btn_replay: "Nochmal ↺",
 
       // Tower Mode
-      tower_floor_title: "⛩️ EBENE {floor}",
+      tower_floor_title: "EBENE {floor}",
       tower_hud_floor: "Ebene {floor}",
-      tower_feedback_loaded: "⛩️ Turm-Ebene {floor} geladen! Plane den Weg zum heiligen Schrein-Torii.",
+      tower_feedback_loaded: "Turm-Ebene {floor} geladen! Plane den Weg zum heiligen Schrein-Torii.",
       tower_intro_title: "Turm der 100 Prüfungen",
       tower_intro_desc: "Beweise deine Weisheit im heiligen Pagodenturm. 100 prozedurale Schrein-Ebenen mit steigender Komplexität.",
-      tower_rule_1: "Du startest mit 3 heiligen Laternen (Leben 🏮🏮🏮).",
+      tower_rule_1: "Du startest mit 3 heiligen Laternen (3 Leben).",
       tower_rule_2: "Jede 5. Ebene wartet ein Altar der Kami mit wählbaren Segnungen.",
       tower_rule_3: "Erreiche Ebene 100, um den höchsten Schrein-Rang zu erlangen.",
       tower_btn_start: "Aufstieg beginnen (Ebene 1)",
@@ -129,9 +130,9 @@
       wardrobe_ad_sub: "Kurzes Video ansehen & Skins schneller freischalten",
       wardrobe_equipped: "Ausgerüstet ✓",
       wardrobe_equip_btn: "Ausrüsten",
-      wardrobe_locked: "Gesperrt 🔒",
+      wardrobe_locked: "Gesperrt",
       wardrobe_ad_badge: "WERBUNG",
-      wardrobe_bonus_toast: "✨ +{count} Kami-Sterne geschenkt erhalten!",
+      wardrobe_bonus_toast: "+{count} Kami-Sterne geschenkt erhalten!",
 
       // Trophies / Achievements
       trophies_kicker: "SCHREIN-SIEGEL",
@@ -177,7 +178,7 @@
       mechanic_switch_desc: "Geheime Pfade werden durch farbcodierte Bodenschalter und magische Tore versiegelt.",
       mechanic_switch_rule1: "<strong>✦ Aktion auf Schalter:</strong> Stelle dich genau auf den Schalter und nutze den violetten ✦-Befehl.",
       mechanic_switch_rule2: "<strong>Dauerhaft geöffnet:</strong> Sobald der Schalter ausgelöst wurde, öffnet sich das Torii-Gitter für immer.",
-      mechanic_dismiss_btn: "Verstanden, Schrein betreten ⛩️",
+      mechanic_dismiss_btn: "Verstanden, Schrein betreten",
 
       // Help Modal
       help_title: "Wie man spielt",
@@ -225,6 +226,7 @@
       home_resume_btn: "RESUME ▶",
       home_wardrobe_btn: "Wardrobe & Skins",
       home_trophies_btn: "Shrine Seals",
+      home_chapters_btn: "Levels",
       home_help_btn: "How to Play",
 
       // Commands
@@ -259,17 +261,17 @@
       feedback_block_bridge: "Splash! The stone block sinks into the water, creating a new bridge!",
       feedback_block_stuck: "The stone block is blocked and cannot be pushed further!",
       feedback_fragile_crack: "Crack! The weathered stepping stone breaks and will sink soon!",
-      feedback_orb_collected: "🌸 Spirit light collected! ({current} / {total})",
-      feedback_portal_entered: "🌀 Kitsune Portal entered! KOMA teleports to the exit portal.",
-      feedback_wind_gust: "💨 A powerful mountain wind gust carries KOMA forward!",
+      feedback_orb_collected: "Spirit light collected! ({current} / {total})",
+      feedback_portal_entered: "Kitsune Portal entered! KOMA teleports to the exit portal.",
+      feedback_wind_gust: "A powerful mountain wind gust carries KOMA forward!",
       feedback_camera_credit: "Camera rotated (-1 credit, {remaining} remaining).",
       feedback_camera_empty: "Camera credits depleted (0 stars possible – level can still be completed).",
       tutorial_hint: "Tip: Tap “Forward ↑” below to insert commands into your plan.",
 
       // Win Modal
       win_title_normal: "Delivery Successful!",
-      win_title_boss: "「DRAGON OF FUJI」 DEFEATED! 🐉",
-      win_title_daily: "Daily Shrine Trial Cleared! 🔥",
+      win_title_boss: "「DRAGON OF FUJI」 DEFEATED!",
+      win_title_daily: "Daily Shrine Trial Cleared!",
       win_desc_normal: "KOMA delivered the package in {steps} steps.",
       win_desc_boss: "You recovered all 3 relics, reconciled the summit Torii, and redeemed dragon Ryūjin in {steps} steps!",
       win_desc_daily: "You solved today's master puzzle with zero camera rotations in {steps} steps!",
@@ -280,12 +282,12 @@
       btn_replay: "Replay ↺",
 
       // Tower Mode
-      tower_floor_title: "⛩️ FLOOR {floor}",
+      tower_floor_title: "FLOOR {floor}",
       tower_hud_floor: "Floor {floor}",
-      tower_feedback_loaded: "⛩️ Tower Floor {floor} loaded! Plan the path to the sacred shrine Torii.",
+      tower_feedback_loaded: "Tower Floor {floor} loaded! Plan the path to the sacred shrine Torii.",
       tower_intro_title: "Tower of 100 Trials",
       tower_intro_desc: "Prove your wisdom in the sacred pagoda tower. 100 procedural shrine floors of scaling complexity.",
-      tower_rule_1: "You start with 3 sacred lanterns (lives 🏮🏮🏮).",
+      tower_rule_1: "You start with 3 sacred lanterns (3 lives).",
       tower_rule_2: "Every 5th floor, an Altar of the Kami offers divine blessings.",
       tower_rule_3: "Reach floor 100 to attain the highest shrine rank.",
       tower_btn_start: "Begin Ascent (Floor 1)",
@@ -310,9 +312,9 @@
       wardrobe_ad_sub: "Watch brief video & unlock skins faster",
       wardrobe_equipped: "Equipped ✓",
       wardrobe_equip_btn: "Equip",
-      wardrobe_locked: "Locked 🔒",
+      wardrobe_locked: "Locked",
       wardrobe_ad_badge: "AD",
-      wardrobe_bonus_toast: "✨ +{count} Kami Stars claimed!",
+      wardrobe_bonus_toast: "+{count} Kami Stars claimed!",
 
       // Trophies / Achievements
       trophies_kicker: "SHRINE SEALS",
@@ -358,7 +360,7 @@
       mechanic_switch_desc: "Secret paths are sealed by color-coded floor switches and magical gates.",
       mechanic_switch_rule1: "<strong>✦ Action on Switch:</strong> Stand directly on the switch and use the purple ✦ command.",
       mechanic_switch_rule2: "<strong>Permanently Open:</strong> Once triggered, the Torii gate barrier opens forever.",
-      mechanic_dismiss_btn: "Understood, Enter Shrine ⛩️",
+      mechanic_dismiss_btn: "Understood, Enter Shrine",
 
       // Help Modal
       help_title: "How to Play",

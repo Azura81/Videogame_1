@@ -1367,7 +1367,7 @@ class GameEngine {
     if (typeof I18N === "undefined") return;
     const lang = I18N.getLanguage();
     if (this.dom.homeLangFlag) {
-      this.dom.homeLangFlag.textContent = lang === "de" ? "🇩🇪" : "🇬🇧";
+      this.dom.homeLangFlag.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.globe(15) : "";
     }
     if (this.dom.homeLangLabel) {
       this.dom.homeLangLabel.textContent = lang === "de" ? "DE" : "EN";
@@ -1497,13 +1497,13 @@ class GameEngine {
     if (this.dom.checkModeDaily) this.dom.checkModeDaily.textContent = (mode === "daily" ? "✓" : "");
 
     if (mode === "campaign") {
-      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "⛩️";
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.torii(16) : "";
       if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Kampagne";
     } else if (mode === "tower") {
-      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "🗼";
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.pagoda(16) : "";
       if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Turm";
     } else if (mode === "daily") {
-      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.textContent = "🔥";
+      if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(16) : "";
       if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Täglich";
     }
     this.updateHomeScreen();
@@ -2139,13 +2139,13 @@ class GameEngine {
     
     // Update Header & Card
     if (this.dom.levelTitle) this.dom.levelTitle.textContent = dailyLevel.n;
-    if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = `🔥 Tägliche Schreinprüfung · ${typeof DailyTrial !== "undefined" ? DailyTrial.getFormattedDate() : "Heute"}`;
+    if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = `Tägliche Schreinprüfung · ${typeof DailyTrial !== "undefined" ? DailyTrial.getFormattedDate() : "Heute"}`;
     if (this.dom.levelTag) this.dom.levelTag.textContent = dailyLevel.t;
     if (this.dom.missionDesc) this.dom.missionDesc.textContent = dailyLevel.d;
-    if (this.dom.missionBadge) this.dom.missionBadge.textContent = "🔥 DAILY";
+    if (this.dom.missionBadge) this.dom.missionBadge.textContent = "DAILY";
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = "Tages-Prüfung";
-    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = "0/0 🚫";
+    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = "0/0";
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-executing");
       document.body.classList.add("is-daily-trial");
@@ -2197,15 +2197,15 @@ class GameEngine {
     if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = lvl.c;
     if (this.dom.levelTag) this.dom.levelTag.textContent = lvl.t;
     if (this.dom.missionDesc) this.dom.missionDesc.textContent = lvl.d;
-    if (this.dom.missionBadge) this.dom.missionBadge.textContent = `⛩️ EBENE ${lvl.towerFloor}`;
+    if (this.dom.missionBadge) this.dom.missionBadge.textContent = `EBENE ${lvl.towerFloor}`;
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = `Turm · E${lvl.towerFloor}`;
     if (this.dom.mobileLvlCredits) {
-      const camIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.camera(13) : "🎥";
-      this.dom.mobileLvlCredits.innerHTML = `${this.cameraCredits}/${this.maxCameraCredits} ${camIcon}<span class="sr-only">🎥</span>`;
+      const camIcon = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.camera(13) : "";
+      this.dom.mobileLvlCredits.innerHTML = `${this.cameraCredits}/${this.maxCameraCredits} ${camIcon}`;
     }
 
-    this.setFeedback(`⛩️ Turm-Ebene ${lvl.towerFloor} geladen! Plane den Weg zum heiligen Schrein-Torii.`, "normal");
+    this.setFeedback(`Turm-Ebene ${lvl.towerFloor} geladen! Plane den Weg zum heiligen Schrein-Torii.`, "normal");
 
     this.renderer.loadLevel(lvl);
 
@@ -2428,16 +2428,16 @@ class GameEngine {
       const count = this.state.collectedOrbs.size;
       if (count === 1) {
         if (this.dom.seal1) this.dom.seal1.className = "boss-seal shattered";
-        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "⚔️ Relikt 1 befreit (Eisschwert)";
-        this.setFeedback("🔮 1. Magatama-Siegel zerborsten! Der Himmelsdrache tobt!", "good");
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "Relikt 1 befreit (Eisschwert)";
+        this.setFeedback("1. Magatama-Siegel zerborsten! Der Himmelsdrache tobt!", "good");
       } else if (count === 2) {
         if (this.dom.seal2) this.dom.seal2.className = "boss-seal shattered";
-        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "🪞 Relikt 2 befreit (Himmelsspiegel)";
-        this.setFeedback("🔮 2. Magatama-Siegel zerborsten! Drachen-Aura pulsiert!", "good");
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "Relikt 2 befreit (Himmelsspiegel)";
+        this.setFeedback("2. Magatama-Siegel zerborsten! Drachen-Aura pulsiert!", "good");
       } else if (count >= 3) {
         if (this.dom.seal3) this.dom.seal3.className = "boss-seal shattered";
-        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "💥 Alle Siegel zerborsten! Erklimme den Gipfel!";
-        this.setFeedback("💥 Alle 3 Siegel gebrochen! Das Gipfel-Torii erstrahlt!", "good");
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "Alle Siegel zerborsten! Erklimme den Gipfel!";
+        this.setFeedback("Alle 3 Siegel gebrochen! Das Gipfel-Torii erstrahlt!", "good");
       }
 
       if (typeof Sound !== "undefined" && typeof Sound.playMagatamaShatter === "function") {
@@ -3322,13 +3322,13 @@ class GameEngine {
         const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         const daysWord = isEn ? (res.currentStreak === 1 ? "day" : "days") : (res.currentStreak === 1 ? "Tag" : "Tage");
         const dailyFeedback = isEn
-          ? `⛩️ DAILY TRIAL CLEARED! 🔥 Streak: ${res.currentStreak} ${daysWord}!`
-          : `⛩️ TÄGLICHE PRÜFUNG GEMEISTERT! 🔥 Tages-Streak: ${res.currentStreak} Tage!`;
+          ? `DAILY TRIAL CLEARED! Streak: ${res.currentStreak} ${daysWord}!`
+          : `TÄGLICHE PRÜFUNG GEMEISTERT! Tages-Streak: ${res.currentStreak} Tage!`;
         this.setFeedback(dailyFeedback, "good");
 
         setTimeout(() => {
           if (this.dom.modalWinTitle) {
-            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_daily") : "Tägliche Schreinprüfung gemeistert! 🔥";
+            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_daily") : "Tägliche Schreinprüfung gemeistert!";
           }
           if (this.dom.modalWinText) {
             this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_daily", { steps: this.currentStep }) : `Du hast die heutige Meisterprüfung ohne Kameraschwenker in ${this.currentStep} Schritten gelöst!`;
@@ -3336,11 +3336,11 @@ class GameEngine {
           if (this.dom.modalWinStars) {
             const streakTitle = `${res.currentStreak} ${daysWord} Streak!`;
             const streakSub = res.isNewRecord 
-              ? (isEn ? "🎉 NEW PERSONAL RECORD!" : "🎉 NEUER PERSÖNLICHER REKORD!")
+              ? (isEn ? "NEW PERSONAL RECORD!" : "NEUER PERSÖNLICHER REKORD!")
               : (isEn ? "Come back tomorrow for the next shrine trial!" : "Komm morgen für die nächste Schrein-Prüfung wieder!");
             this.dom.modalWinStars.innerHTML = `
               <div class="daily-win-streak-badge">
-                <span class="flame-big">🔥</span>
+                <span class="flame-big">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(38) : ""}</span>
                 <div class="streak-big-val">${streakTitle}</div>
                 <div class="streak-sub-text">${streakSub}</div>
               </div>
@@ -3387,7 +3387,7 @@ class GameEngine {
       if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
       const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       if (isBoss) {
-        this.setFeedback(isEn ? "🐉 Sacred dragon Ryūjin is redeemed and ascends into the heavens!" : "🐉 Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
+        this.setFeedback(isEn ? "Sacred dragon Ryūjin is redeemed and ascends into the heavens!" : "Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
       } else {
         this.setFeedback(isEn ? "Package successfully delivered! A sacred corner of Japan lights up." : "Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
       }
@@ -3395,12 +3395,12 @@ class GameEngine {
       setTimeout(() => {
         if (this.dom.modalWinTitle) {
           if (isBoss) {
-            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_boss") : "「富士の龍神」 BEZWUNGEN! 🐉";
+            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_boss") : "「富士の龍神」 BEZWUNGEN!";
           } else {
             this.dom.modalWinTitle.textContent =
               this.currentLevelIdx === LEVELS.length - 1 
-                ? (isEn ? "All Deliveries Completed! 🎉" : "Alle Lieferungen geschafft! 🎉")
-                : (typeof I18N !== "undefined" ? I18N.t("win_title_normal") : "Lieferung erfolgreich! 🌸");
+                ? (isEn ? "All Deliveries Completed!" : "Alle Lieferungen geschafft!")
+                : (typeof I18N !== "undefined" ? I18N.t("win_title_normal") : "Lieferung erfolgreich!");
           }
         }
         if (this.dom.modalWinText) {
@@ -3470,13 +3470,13 @@ class GameEngine {
           if (isBoss) {
             const ryujinSkin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS.ryujin);
             if (ryujinSkin) {
-              const bossKicker = isEn ? "👑 LEGENDARY BOSS TROPHY UNLOCKED!" : "👑 LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!";
+              const bossKicker = isEn ? "LEGENDARY BOSS TROPHY UNLOCKED!" : "LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!";
               const bossSub = isEn ? "Mother of Pearl Chassis · Imperial Horns · Celestial Ribbons" : "Perlmutt-Chassis · Kaiserliche Hörner · Himmelsbänder";
-              const equipBtnTxt = typeof I18N !== "undefined" ? `${I18N.t("wardrobe_equip_btn")} 👘` : "Ausrüsten 👘";
+              const equipBtnTxt = typeof I18N !== "undefined" ? I18N.t("wardrobe_equip_btn") : "Ausrüsten";
               const transRyujin = typeof I18N !== "undefined" ? I18N.getSkin("ryujin", ryujinSkin) : ryujinSkin;
               this.dom.modalWinSkinNotice.innerHTML = `
                 <div class="win-skin-banner boss-skin-banner">
-                  <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("ryujin", 32, "#00f0ff") : "🐉"}</span>
+                  <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("ryujin", 32, "#00f0ff") : ""}</span>
                   <div class="win-skin-info">
                     <span class="win-skin-kicker">${bossKicker}</span>
                     <strong class="win-skin-name">${transRyujin.name} (${transRyujin.jpName})</strong>
@@ -3496,12 +3496,12 @@ class GameEngine {
               }
             }
           } else if (newlyUnlockedSkin) {
-            const newKicker = isEn ? "🎉 New Kami Skin unlocked!" : "🎉 Neuer Kami-Skin freigeschaltet!";
-            const wardrobeBtnTxt = isEn ? "Wardrobe 👘" : "Garderobe 👘";
+            const newKicker = isEn ? "New Kami Skin unlocked!" : "Neuer Kami-Skin freigeschaltet!";
+            const wardrobeBtnTxt = isEn ? "Wardrobe" : "Garderobe";
             const transNewSkin = typeof I18N !== "undefined" ? I18N.getSkin(newlyUnlockedSkin.id, newlyUnlockedSkin) : newlyUnlockedSkin;
             this.dom.modalWinSkinNotice.innerHTML = `
               <div class="win-skin-banner">
-                <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon(newlyUnlockedSkin.id, 28, newlyUnlockedSkin.accentColor) : newlyUnlockedSkin.icon}</span>
+                <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon(newlyUnlockedSkin.id, 28, newlyUnlockedSkin.accentColor) : ""}</span>
                 <div class="win-skin-info">
                   <span class="win-skin-kicker">${newKicker}</span>
                   <strong class="win-skin-name">${transNewSkin.name} (${transNewSkin.jpName})</strong>

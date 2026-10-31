@@ -18,7 +18,7 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     const currentLang = await page.evaluate(() => window.I18N?.getLanguage());
     expect(currentLang).toBe('de');
 
-    await expect(page.locator('#homeLangFlag')).toHaveText('🇩🇪');
+    await expect(page.locator('#homeLangFlag')).toBeVisible();
     await expect(page.locator('#homeLangLabel')).toHaveText('DE');
     await expect(page.locator('#homeCurrentLevelTitle')).toHaveText(/Die erste Lieferung/i);
   });
@@ -36,7 +36,7 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     await page.click('#btnHomeLang');
 
     // 3. Verify English UI updates immediately
-    await expect(page.locator('#homeLangFlag')).toHaveText('🇬🇧');
+    await expect(page.locator('#homeLangFlag')).toBeVisible();
     await expect(page.locator('#homeLangLabel')).toHaveText('EN');
     await expect(page.locator('#homeCurrentLevelTitle')).toHaveText('The First Delivery');
     await expect(page.locator('#homeCurrentChapter')).toContainText('CHAPTER 01');
@@ -47,7 +47,7 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
 
     // 4. Click again to return to German
     await page.click('#btnHomeLang');
-    await expect(page.locator('#homeLangFlag')).toHaveText('🇩🇪');
+    await expect(page.locator('#homeLangFlag')).toBeVisible();
     await expect(page.locator('#homeLangLabel')).toHaveText('DE');
     await expect(page.locator('#homeCurrentLevelTitle')).toHaveText('Die erste Lieferung');
     await expect(page.locator('#homeCurrentChapter')).toContainText('KAPITEL 01');

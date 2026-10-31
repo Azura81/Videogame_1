@@ -531,6 +531,57 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  // 31. Sacred Japanese Pagoda (100-Level Tower Trial)
+  pagoda: (size = 18, color = "currentColor", glow = false) => `
+    <svg class="svg-icon svg-pagoda" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round" style="${glow ? 'filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.6));' : ''}" aria-hidden="true">
+      <path d="M12 2v2.5M10.5 4.5h3" stroke-width="1.8"/>
+      <path d="M5.5 8c2-1 11-1 13 0l-1.5-3H7L5.5 8z" fill="${color}" fill-opacity="0.25" stroke-width="1.6"/>
+      <line x1="8.5" y1="8" x2="8.5" y2="12" stroke-width="1.6"/>
+      <line x1="15.5" y1="8" x2="15.5" y2="12" stroke-width="1.6"/>
+      <path d="M3.5 13.5c2.5-1 13.5-1 17 0l-2-2H5.5l-2 2z" fill="${color}" fill-opacity="0.3" stroke-width="1.6"/>
+      <line x1="7.5" y1="13.5" x2="7.5" y2="18.5" stroke-width="1.6"/>
+      <line x1="16.5" y1="13.5" x2="16.5" y2="18.5" stroke-width="1.6"/>
+      <path d="M2 20.5c3.5-1 16.5-1 20 0l-2-2H4l-2 2z" fill="${color}" fill-opacity="0.35" stroke-width="1.8"/>
+      <rect x="10.5" y="15" width="3" height="4" rx="0.5" fill="${color}" stroke="none"/>
+    </svg>
+  `,
+
+  // 32. Sacred Dragon Ryūjin Emblem
+  dragon: (size = 20, color = "currentColor") => `
+    <svg class="svg-icon svg-dragon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 14c2-4 6-6 10-4 3 1.5 5 5 4 8-1 3-5 3-7 1"/>
+      <path d="M12 4l3 3m-1-4l4 2"/>
+      <circle cx="16" cy="8" r="1.5" fill="${color}"/>
+      <path d="M7 17l-3 3m1-4l-3 2"/>
+      <path d="M14 11c1-1 3-1 4 0"/>
+    </svg>
+  `,
+
+  // 33. Sacred Shinto Magatama Jewel / Boss Relic
+  relic: (size = 18, color = "currentColor", lit = true) => `
+    <svg class="svg-icon svg-relic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" style="${lit ? 'filter: drop-shadow(0 0 8px rgba(217, 70, 239, 0.7));' : 'opacity:0.35;'}" aria-hidden="true">
+      <path d="M12 2C7 2 4 5.5 4 10c0 5 3.5 10 9 10 4.5 0 7-3.5 7-7.5 0-5.5-3.5-10.5-8-10.5z" fill="${color}" fill-opacity="${lit ? '0.4' : '0.1'}" stroke="${color}" stroke-width="1.8"/>
+      <circle cx="11" cy="7.5" r="2" fill="${color}"/>
+    </svg>
+  `,
+
+  // 34. Language Globe Vector
+  globe: (size = 16, color = "currentColor") => `
+    <svg class="svg-icon svg-globe" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  `,
+
+  // 35. Smartphone Vector
+  phone: (size = 16, color = "currentColor") => `
+    <svg class="svg-icon svg-phone" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="6" y="2" width="12" height="20" rx="2.5"/>
+      <line x1="10" y1="18" x2="14" y2="18"/>
+    </svg>
+  `,
+
   // Generic icon helper
   render: (name, size = 18, color = "currentColor", ...args) => {
     if (typeof KOMA_ICONS[name] === "function") {

@@ -85,6 +85,7 @@ html, body {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: radial-gradient(circle at 50% 35%, #132742 0%, #070e1c 80%);
 }
@@ -805,16 +806,16 @@ html, body {
     pointer-events: auto !important;
     align-items: center;
     gap: 5px;
-    padding: 5px 10px;
-    background: linear-gradient(135deg, rgba(255, 71, 87, 0.28), rgba(255, 107, 129, 0.16));
-    border: 1px solid rgba(255, 71, 87, 0.5);
+    padding: 5px 12px;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.28), rgba(0, 140, 255, 0.18));
+    border: 1px solid rgba(0, 240, 255, 0.7);
     border-radius: 10px;
-    color: #fff;
+    color: #e0f9ff;
     font-family: var(--font);
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(255, 71, 87, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 240, 255, 0.3), inset 0 0 8px rgba(0, 240, 255, 0.15);
     transition: all 0.18s ease;
     white-space: nowrap;
     flex-shrink: 0;
@@ -822,7 +823,9 @@ html, body {
 
   .mobile-hub-btn:active {
     transform: scale(0.95);
-    background: rgba(255, 71, 87, 0.45);
+    background: rgba(0, 240, 255, 0.45);
+    border-color: #00f0ff;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
   }
 
   .mobile-level-pill {
@@ -910,7 +913,7 @@ html, body {
   .ui-overlay {
     flex-direction: column;
     justify-content: flex-end;
-    padding: calc(52px + env(safe-area-inset-top, 0px)) 10px max(10px, env(safe-area-inset-bottom, 0px)) 10px;
+    padding: calc(52px + env(safe-area-inset-top, 0px)) 10px max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px)) 10px;
     gap: 0;
     pointer-events: none;
   }
@@ -920,6 +923,7 @@ html, body {
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
+    margin-bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 12px));
     pointer-events: auto;
     max-height: none;
     overflow-y: visible;
@@ -927,8 +931,8 @@ html, body {
   }
 
   .panel-right .glass-card {
-    padding: 8px 10px max(8px, env(safe-area-inset-bottom, 0px)) 10px;
-    border-radius: 18px 18px 12px 12px;
+    padding: 10px 12px max(14px, calc(env(safe-area-inset-bottom, 0px) + 8px)) 12px;
+    border-radius: 20px;
     background: rgba(8, 15, 28, 0.96);
     border: 1px solid var(--panel-border);
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.08);
@@ -2163,7 +2167,7 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
 }
 
 .ui-overlay {
-  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  padding-bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px));
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
 }
