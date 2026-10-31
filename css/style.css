@@ -3364,6 +3364,17 @@ button, .cmd-btn, .ctrl-btn, .icon-btn, .queue-chip {
   visibility: visible;
 }
 
+/* Ensure in-game UI (top-nav & ui-overlay) is strictly hidden when Home Screen is open */
+.home-screen-backdrop.active ~ .top-nav,
+.home-screen-backdrop.active ~ .ui-overlay,
+body.home-active .top-nav,
+body.home-active .ui-overlay {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
 .home-screen-modal {
   width: 100%;
   max-width: 440px;

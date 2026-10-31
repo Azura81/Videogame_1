@@ -1552,6 +1552,9 @@ class GameEngine {
     if (this.dom.homeScreen) {
       this.dom.homeScreen.classList.add("active");
     }
+    if (typeof document !== "undefined" && document.body) {
+      document.body.classList.add("home-active");
+    }
     if (this.renderer && typeof this.renderer.enterHomeScreenMode === "function") {
       this.renderer.enterHomeScreenMode();
     }
@@ -1560,6 +1563,9 @@ class GameEngine {
   hideHomeScreen() {
     if (this.dom.homeScreen) {
       this.dom.homeScreen.classList.remove("active");
+    }
+    if (typeof document !== "undefined" && document.body) {
+      document.body.classList.remove("home-active");
     }
     if (this.renderer && typeof this.renderer.exitHomeScreenMode === "function") {
       this.renderer.exitHomeScreenMode();
