@@ -178,7 +178,7 @@ class GardenRenderer {
     
     // 3. Renderer - Crisp High-Resolution WebGL with hardware anti-aliasing (Retina-optimized, capped at 2.0 DPR for solid 60fps)
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
-    this.renderer.setSize(Math.min(w, 1920), Math.min(h, 1080));
+    this.renderer.setSize(w, h);
     const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
     this.renderer.setPixelRatio(dpr);
     this.renderer.shadowMap.enabled = false;
@@ -406,8 +406,8 @@ class GardenRenderer {
     if (!this.container || !this.renderer || !this.camera) return;
     const rawW = this.container.clientWidth || window.innerWidth || 800;
     const rawH = this.container.clientHeight || window.innerHeight || 600;
-    const w = Math.min(rawW, 1920);
-    const h = Math.min(rawH, 1080);
+    const w = rawW;
+    const h = rawH;
     const aspect = w / h;
     
     // Dynamically adjust frustum to fit current grid dimensions

@@ -6,10 +6,12 @@
     "androidScheme": "https",
     "iosScheme": "spiritdelivery"
   },
+  "backgroundColor": "#070e1c",
   "ios": {
-    "contentInset": "automatic",
+    "contentInset": "never",
     "preferredContentMode": "mobile",
-    "allowsLinkPreview": false
+    "allowsLinkPreview": false,
+    "backgroundColor": "#070e1c"
   },
   "plugins": {
     "AdMob": {
