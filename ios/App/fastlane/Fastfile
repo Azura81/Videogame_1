@@ -145,7 +145,6 @@ platform :ios do
         }
       }
     })
-    build_args[:xcode_path] = xcode_26 if xcode_26
 
     build_app(build_args)
 
