@@ -46,6 +46,7 @@
       home_trophies_btn: "Schrein-Siegel",
       home_chapters_btn: "Levels",
       home_help_btn: "Spielanleitung",
+      home_story_btn: "Spielprinzip",
 
       // Commands
       cmd_forward: "Vorwärts",
@@ -228,6 +229,7 @@
       home_trophies_btn: "Shrine Seals",
       home_chapters_btn: "Levels",
       home_help_btn: "How to Play",
+      home_story_btn: "Spielprinzip",
 
       // Commands
       cmd_forward: "Forward",

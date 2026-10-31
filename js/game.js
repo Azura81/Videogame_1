@@ -200,6 +200,7 @@ class GameEngine {
       btnHomeAudioMusic: document.getElementById("btnHomeAudioMusic"),
       btnHomeAudioSound: document.getElementById("btnHomeAudioSound"),
       btnHomeHelp: document.getElementById("btnHomeHelp"),
+      btnHomeStory: document.getElementById("btnHomeStory"),
       btnHomeOpenWardrobe: document.getElementById("btnHomeOpenWardrobe"),
       homeSkinIcon: document.getElementById("homeSkinIcon"),
       homeSkinName: document.getElementById("homeSkinName"),
@@ -795,10 +796,47 @@ class GameEngine {
       });
     }
 
+    const openHelpModal = (targetTab = "helpTabStory") => {
+      this.triggerHaptic(15);
+      if (this.dom.modalHelp) {
+        const tabBtns = this.dom.modalHelp.querySelectorAll(".help-tab-btn");
+        const tabPanes = this.dom.modalHelp.querySelectorAll(".help-tab-pane");
+        tabBtns.forEach(btn => {
+          const isActive = btn.getAttribute("data-tab") === targetTab;
+          btn.classList.toggle("active", isActive);
+          btn.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+        tabPanes.forEach(pane => {
+          pane.classList.toggle("active", pane.id === targetTab);
+        });
+        this.dom.modalHelp.classList.add("active");
+      }
+    };
+
     if (this.dom.btnHomeHelp) {
-      this.dom.btnHomeHelp.addEventListener("click", () => {
-        this.triggerHaptic(15);
-        if (this.dom.modalHelp) this.dom.modalHelp.classList.add("active");
+      this.dom.btnHomeHelp.addEventListener("click", () => openHelpModal("helpTabStory"));
+    }
+
+    if (this.dom.btnHomeStory) {
+      this.dom.btnHomeStory.addEventListener("click", () => openHelpModal("helpTabStory"));
+    }
+
+    if (this.dom.modalHelp) {
+      const tabBtns = this.dom.modalHelp.querySelectorAll(".help-tab-btn");
+      const tabPanes = this.dom.modalHelp.querySelectorAll(".help-tab-pane");
+      tabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          this.triggerHaptic(10);
+          const target = btn.getAttribute("data-tab");
+          tabBtns.forEach(b => {
+            const isMatch = b === btn;
+            b.classList.toggle("active", isMatch);
+            b.setAttribute("aria-selected", isMatch ? "true" : "false");
+          });
+          tabPanes.forEach(p => {
+            p.classList.toggle("active", p.id === target);
+          });
+        });
       });
     }
 
@@ -847,9 +885,9 @@ class GameEngine {
       });
     }
 
-    // Help Modal
+    // Help Modal (In-game Button)
     if (this.dom.btnHelp && this.dom.modalHelp) {
-      this.dom.btnHelp.addEventListener("click", () => this.dom.modalHelp.classList.add("active"));
+      this.dom.btnHelp.addEventListener("click", () => openHelpModal("helpTabControls"));
     }
     if (this.dom.btnCloseHelp && this.dom.modalHelp) {
       this.dom.btnCloseHelp.addEventListener("click", () => this.dom.modalHelp.classList.remove("active"));
