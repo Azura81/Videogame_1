@@ -4620,9 +4620,9 @@ class Showroom3DViewer {
     this.renderer.setSize(w, h, false);
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(28, w / h, 0.1, 50);
-    this.camera.position.set(0, 0.28, 2.75);
-    this.camera.lookAt(0, 0.22, 0);
+    this.camera = new THREE.PerspectiveCamera(33, w / h, 0.1, 50);
+    this.camera.position.set(0, 0.35, 3.15);
+    this.camera.lookAt(0, 0.28, 0);
 
     // Warm Shinto Studio Lighting
     const ambLight = new THREE.AmbientLight(0xffffff, 1.8);
@@ -4642,7 +4642,7 @@ class Showroom3DViewer {
 
     this.currentSkinId = "original";
     this.komaGroup = null;
-    this.komaBaseY = -0.06;
+    this.komaBaseY = -0.10;
     this.clock = new THREE.Clock();
 
     // 3D Sacred Shinto Pedestal with Glowing Cyber-Runes & Ambient Spirit Motes
@@ -4650,6 +4650,9 @@ class Showroom3DViewer {
 
     // 3D Shinto Shrine Torii Gate in Background
     this.buildTorii();
+
+    // 3D Natural Shrine Scenery (Sakura & Pine Trees, Stylized Clouds, Petals)
+    this.buildBackgroundScenery();
 
     // Floating Japanese Hitodama Spirit Lights (Geisterlichter)
     this.buildSpiritLights();
@@ -4664,7 +4667,7 @@ class Showroom3DViewer {
 
   buildPedestal() {
     this.pedestalGroup = new THREE.Group();
-    this.pedestalGroup.position.set(0, -0.32, 0);
+    this.pedestalGroup.position.set(0, -0.36, 0);
 
     // 1. Dark Basalt Zen Base Plinth
     const baseGeo = new THREE.CylinderGeometry(0.72, 0.78, 0.08, 36);
@@ -4745,7 +4748,7 @@ class Showroom3DViewer {
   buildTorii() {
     this.toriiGroup = new THREE.Group();
     // Positioned behind the pedestal and robot, framing them in center
-    this.toriiGroup.position.set(0, -0.32, -0.72);
+    this.toriiGroup.position.set(0, -0.36, -0.72);
 
     // Materials
     const vermillionMat = new THREE.MeshStandardMaterial({
@@ -4995,6 +4998,169 @@ class Showroom3DViewer {
     }
   }
 
+  buildBackgroundScenery() {
+    this.sceneryGroup = new THREE.Group();
+    this.sceneryGroup.position.set(0, -0.36, -1.25);
+
+    // 1. Left Sakura Tree (Cherry Blossom)
+    const sakuraTree = this.createStylizedTree("sakura", 1);
+    sakuraTree.position.set(-1.42, 0, 0);
+    sakuraTree.scale.set(0.68, 0.68, 0.68);
+    this.sceneryGroup.add(sakuraTree);
+
+    // 2. Right Sculpted Cloud Pine Tree (Niwaki)
+    const pineTree = this.createStylizedTree("pine", 2);
+    pineTree.position.set(1.42, 0, 0);
+    pineTree.scale.set(0.68, 0.68, 0.68);
+    this.sceneryGroup.add(pineTree);
+
+    // 3. Distant Secondary Accent Trees (Depth framing)
+    const smallPine = this.createStylizedTree("pine", 3);
+    smallPine.position.set(-0.95, 0.1, -0.6);
+    smallPine.scale.set(0.48, 0.48, 0.48);
+    this.sceneryGroup.add(smallPine);
+
+    const smallSakura = this.createStylizedTree("sakura", 4);
+    smallSakura.position.set(0.98, 0.1, -0.6);
+    smallSakura.scale.set(0.48, 0.48, 0.48);
+    this.sceneryGroup.add(smallSakura);
+
+    // 4. Stylized Floating Shinto Clouds (Low-Poly Cloud Clusters)
+    this.clouds = [];
+    const cloudConfigs = [
+      { x: -1.2, y: 1.45, z: -0.9, scale: 0.35, speed: 0.15 },
+      { x: 1.15, y: 1.55, z: -0.8, scale: 0.38, speed: 0.12 },
+      { x: 0.05, y: 1.72, z: -1.4, scale: 0.48, speed: 0.08 }
+    ];
+
+    cloudConfigs.forEach((cfg, idx) => {
+      const cGroup = this.createStylizedCloud(cfg.scale);
+      cGroup.position.set(cfg.x, cfg.y, cfg.z);
+      this.sceneryGroup.add(cGroup);
+      this.clouds.push({ group: cGroup, baseX: cfg.x, baseY: cfg.y, speed: cfg.speed, phase: idx * 2.1 });
+    });
+
+    // 5. Gentle Drifting Sakura Petals in the Breeze
+    this.buildShowroomPetals();
+
+    this.scene.add(this.sceneryGroup);
+  }
+
+  createStylizedTree(type = "sakura", seed = 0) {
+    const tGroup = new THREE.Group();
+    const trunkMat = new THREE.MeshStandardMaterial({
+      color: 0x3d271d,
+      roughness: 0.85,
+      metalness: 0.05
+    });
+
+    const trunkGeo = new THREE.CylinderGeometry(0.12, 0.18, 1.1, 8);
+    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.y = 0.55;
+    trunk.rotation.z = (seed % 2 === 0 ? 0.09 : -0.09);
+    tGroup.add(trunk);
+
+    if (type === "sakura") {
+      const pinkColors = [0xff8eb8, 0xff70a6, 0xffa5c5];
+      const folMat = new THREE.MeshStandardMaterial({
+        color: pinkColors[seed % pinkColors.length],
+        roughness: 0.75,
+        metalness: 0.05
+      });
+      const clusters = [
+        { x: 0, y: 1.35, z: 0, r: 0.48 },
+        { x: -0.28, y: 1.25, z: 0.15, r: 0.38 },
+        { x: 0.3, y: 1.28, z: -0.12, r: 0.4 },
+        { x: 0.1, y: 1.48, z: 0.18, r: 0.34 }
+      ];
+      clusters.forEach(c => {
+        const fMesh = new THREE.Mesh(new THREE.DodecahedronGeometry(c.r, 1), folMat);
+        fMesh.position.set(c.x, c.y, c.z);
+        tGroup.add(fMesh);
+      });
+    } else {
+      const pineMat = new THREE.MeshStandardMaterial({
+        color: 0x1b4324,
+        roughness: 0.85,
+        metalness: 0.02
+      });
+      const pads = [
+        { x: 0.06, y: 1.22, z: 0, rx: 0.42, h: 0.15 },
+        { x: -0.32, y: 0.98, z: 0.08, rx: 0.34, h: 0.13 },
+        { x: 0.35, y: 1.05, z: -0.08, rx: 0.36, h: 0.14 },
+        { x: -0.08, y: 1.38, z: 0.04, rx: 0.28, h: 0.12 }
+      ];
+      pads.forEach(p => {
+        const padMesh = new THREE.Mesh(new THREE.CylinderGeometry(p.rx, p.rx * 1.1, p.h, 10), pineMat);
+        padMesh.position.set(p.x, p.y, p.z);
+        tGroup.add(padMesh);
+      });
+    }
+
+    return tGroup;
+  }
+
+  createStylizedCloud(scale = 1.0) {
+    const cGroup = new THREE.Group();
+    const cloudMat = new THREE.MeshStandardMaterial({
+      color: 0xe0f2fe,
+      emissive: 0x38bdf8,
+      emissiveIntensity: 0.18,
+      roughness: 0.9,
+      metalness: 0.05,
+      transparent: true,
+      opacity: 0.72
+    });
+
+    const puffs = [
+      { x: 0, y: 0, z: 0, sx: 0.65, sy: 0.35, sz: 0.45 },
+      { x: -0.35, y: -0.05, z: 0.05, sx: 0.45, sy: 0.28, sz: 0.35 },
+      { x: 0.38, y: -0.04, z: -0.05, sx: 0.48, sy: 0.3, sz: 0.38 },
+      { x: 0.1, y: 0.12, z: 0, sx: 0.38, sy: 0.28, sz: 0.32 }
+    ];
+
+    puffs.forEach(p => {
+      const geo = new THREE.SphereGeometry(1, 12, 10);
+      geo.scale(p.sx * scale, p.sy * scale, p.sz * scale);
+      const m = new THREE.Mesh(geo, cloudMat);
+      m.position.set(p.x * scale, p.y * scale, p.z * scale);
+      cGroup.add(m);
+    });
+
+    return cGroup;
+  }
+
+  buildShowroomPetals() {
+    const count = 30;
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    const speeds = new Float32Array(count * 3);
+
+    for (let i = 0; i < count; i++) {
+      pos[i * 3 + 0] = (Math.random() - 0.5) * 3.2;
+      pos[i * 3 + 1] = Math.random() * 2.0;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 1.8;
+
+      speeds[i * 3 + 0] = (Math.random() - 0.5) * 0.15;
+      speeds[i * 3 + 1] = -(Math.random() * 0.15 + 0.08);
+      speeds[i * 3 + 2] = (Math.random() - 0.5) * 0.08;
+    }
+
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    this.petalSpeeds = speeds;
+
+    const mat = new THREE.PointsMaterial({
+      color: 0xffb7d5,
+      size: 0.045,
+      transparent: true,
+      opacity: 0.78,
+      blending: THREE.NormalBlending
+    });
+
+    this.petalsPoints = new THREE.Points(geo, mat);
+    this.sceneryGroup.add(this.petalsPoints);
+  }
+
   animate() {
     requestAnimationFrame(() => this.animate());
     const delta = this.clock.getDelta();
@@ -5002,7 +5168,7 @@ class Showroom3DViewer {
 
     if (this.komaGroup) {
       this.komaGroup.rotation.y += delta * 0.75;
-      this.komaGroup.position.y = (this.komaBaseY || -0.06) + Math.sin(time * 2.2) * 0.025;
+      this.komaGroup.position.y = (this.komaBaseY || -0.10) + Math.sin(time * 2.2) * 0.025;
     }
 
     if (this.runeRingOuter) {
@@ -5010,6 +5176,28 @@ class Showroom3DViewer {
     }
     if (this.runeRingInner) {
       this.runeRingInner.rotation.z -= delta * 0.5;
+    }
+
+    // Drift background clouds
+    if (this.clouds) {
+      this.clouds.forEach(c => {
+        c.group.position.x = c.baseX + Math.sin(time * c.speed + c.phase) * 0.12;
+        c.group.position.y = c.baseY + Math.cos(time * c.speed * 0.8 + c.phase) * 0.04;
+      });
+    }
+
+    // Drifting Sakura Petals in the showroom
+    if (this.petalsPoints && this.petalsPoints.geometry) {
+      const positions = this.petalsPoints.geometry.attributes.position.array;
+      for (let i = 0; i < positions.length / 3; i++) {
+        positions[i * 3 + 0] += Math.sin(time + i) * 0.003;
+        positions[i * 3 + 1] += this.petalSpeeds[i * 3 + 1] * delta;
+        if (positions[i * 3 + 1] < 0) {
+          positions[i * 3 + 1] = 2.0;
+          positions[i * 3 + 0] = (Math.random() - 0.5) * 3.2;
+        }
+      }
+      this.petalsPoints.geometry.attributes.position.needsUpdate = true;
     }
 
     // Animate Hitodama Spirit Lights
