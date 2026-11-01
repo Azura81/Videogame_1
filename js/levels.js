@@ -5607,42 +5607,50 @@ const LEVELS = [
     "grass": []
   },
   {
-    "n": "Glühwürmchen-Garten",
+    "n": "Der steinerne Schreinwächter",
     "c": "Kapitel 05 · Bambuswald",
-    "t": "Glühwürmchen",
-    "d": "Die Lichter fliegen zwischen den Schreinteichen. Sammle beide ein, bevor du das Tor durchquerst.",
-    "w": 6,
-    "h": 6,
+    "t": "Zwischenboss · Iwa-Komainu",
+    "d": "Der uralte Stein-Komainu bewacht das Tor zur Himmelsbrücke mit ohrenbetäubendem Gebrüll! Schiebe den Basaltblock vor seinen Schrein, um ihn einzusperren, aktiviere den Wächterschalter und berge beide Relikte!",
+    "w": 7,
+    "h": 7,
+    "isBossLevel": true,
+    "bossId": "komainu",
     "s": [
-      0,
-      4,
+      1,
+      5,
       "N"
     ],
     "g": [
       5,
-      4
+      1
+    ],
+    "blocks": [
+      [
+        3,
+        4
+      ]
     ],
     "sw": [
       [
-        2,
+        1,
         2,
         "cyan"
       ]
     ],
     "gates": [
       [
-        4,
+        5,
         2,
         "cyan"
       ]
     ],
     "orbs": [
       [
-        0,
-        2
+        1,
+        3
       ],
       [
-        4,
+        5,
         4
       ]
     ],
@@ -5672,35 +5680,35 @@ const LEVELS = [
         0
       ],
       [
+        6,
+        0
+      ],
+      [
         0,
         1
       ],
       [
-        1,
+        6,
         1
       ],
       [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        5,
+        0,
         2
       ],
       [
-        1,
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
         3
       ],
       [
@@ -5708,23 +5716,19 @@ const LEVELS = [
         3
       ],
       [
-        3,
+        4,
         3
       ],
       [
-        5,
+        6,
         3
       ],
       [
-        1,
+        0,
         4
       ],
       [
-        2,
-        4
-      ],
-      [
-        3,
+        6,
         4
       ],
       [
@@ -5732,83 +5736,109 @@ const LEVELS = [
         5
       ],
       [
-        1,
+        6,
         5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
       ],
       [
         2,
-        5
+        6
       ],
       [
         3,
-        5
+        6
       ],
       [
         4,
-        5
+        6
       ],
       [
         5,
-        5
+        6
+      ],
+      [
+        6,
+        6
       ]
     ],
-    "limit": 16,
-    "solution": [
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F"
-    ],
     "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_h",
-      "0,5": "sakura",
-      "1,0": "fence_h",
-      "1,1": "fence_h",
-      "1,3": "wall_h",
-      "1,4": "house",
-      "1,5": "sakura",
-      "2,0": "fence_h",
-      "2,1": "fence_h",
-      "2,3": "pine",
-      "2,4": "sakura",
-      "2,5": "fence_h",
-      "3,0": "fence_h",
-      "3,1": "wall_h",
-      "3,3": "pine",
-      "3,4": "fence_h",
-      "3,5": "fence_h",
-      "4,0": "wall_h",
-      "4,1": "pavilion",
-      "4,5": "fence_h",
-      "5,0": "wall_h",
-      "5,1": "pine",
-      "5,2": "sakura",
-      "5,3": "fence_v",
-      "5,5": "fence_h"
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "wall_h",
+      "0,1": "fence_v",
+      "6,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "pine",
+      "4,2": "pine",
+      "6,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "4,3": "wall_h",
+      "6,3": "fence_v",
+      "0,4": "wall_v",
+      "6,4": "wall_v",
+      "0,5": "fence_v",
+      "6,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h"
     },
     "grass": [
       [
-        3,
-        2
-      ],
-      [
-        0,
-        3
+        2,
+        1
       ],
       [
         4,
-        3
+        1
+      ],
+      [
+        3,
+        5
       ]
+    ],
+    "limit": 27,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F"
     ]
   },
   {
@@ -6878,261 +6908,280 @@ const LEVELS = [
   {
     "n": "Die Himmelsbrücke",
     "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Himmlischer Pfeiler",
-    "d": "Ein klaffender Abgrund trennt die Himmelsplattformen. Schiebe den Pfeilerblock in die Wolkenschlucht und balanciere über die brüchigen Wolkenfliesen zum Flammen-Siegel!",
-    "w": 6,
+    "t": "Windüberquerung",
+    "d": "Willkommen auf der Himmelsbrücke! Reißende Höhenwinde wehen über das Wolkenmeer. Nutze den Seitenwind geschickt, berge die Himmelsrelikte und entsiegle das Schreinportal.",
+    "w": 7,
     "h": 6,
     "s": [
-      1,
-      4,
-      "E"
-    ],
-    "g": [
-      4,
-      1
-    ],
-    "sw": [
-      [
-        4,
-        3,
-        "cyan"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        1,
-        "cyan"
-      ]
-    ],
-    "blocks": [
-      [
-        2,
-        4
-      ]
-    ],
-    "water": [
-      [
-        3,
-        4
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ]
-    ],
-    "fragile": [
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ]
-    ],
-    "obstacles": {
-      "0,0": "pine",
-      "1,0": "wall_h",
-      "2,0": "pine",
-      "3,0": "wall_h",
-      "4,0": "pine",
-      "5,0": "wall_h",
-      "0,1": "fence_v",
-      "5,1": "fence_v",
-      "0,2": "wall_v",
-      "2,2": "wall_h",
-      "3,2": "wall_h",
-      "4,2": "pine",
-      "5,2": "wall_v",
-      "0,3": "fence_v",
-      "5,3": "fence_v",
-      "0,4": "wall_v",
-      "5,4": "wall_v",
-      "0,5": "pine",
-      "1,5": "fence_h",
-      "2,5": "wall_h",
-      "3,5": "fence_h",
-      "4,5": "pine",
-      "5,5": "wall_h"
-    },
-    "grass": [
-      [
-        1,
-        1
-      ],
-      [
-        4,
-        4
-      ]
-    ],
-    "solution": [
-      "F",
-      "F",
-      "F",
-      "L",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "F"
-    ],
-    "limit": 20
-  },
-  {
-    "n": "Triade der Geister",
-    "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Dreifach-Tor",
-    "d": "Zwischen den Laternen pfeift eine Windböe nach Osten. Plane deinen Weg genau, um die drei Geisterschalter zu aktivieren.",
-    "w": 7,
-    "h": 7,
-    "s": [
       0,
-      5,
+      4,
       "N"
     ],
     "g": [
       6,
       1
     ],
-    "sw": [
+    "orbs": [
       [
-        0,
-        3,
-        "cyan"
+        1,
+        1
       ],
       [
-        3,
-        3,
-        "magenta"
-      ],
-      [
-        5,
-        3,
-        "gold"
+        6,
+        4
       ]
     ],
-    "gates": [
+    "sw": [
       [
+        1,
         2,
-        3,
         "cyan"
       ],
       [
         4,
-        3,
+        4,
         "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        4,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
       ],
       [
         5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
         1,
-        "gold"
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "wall_h",
+      "3,1": "wall_v",
+      "4,1": "wall_v",
+      "1,2": "pine",
+      "3,2": "wall_v",
+      "4,2": "wall_v",
+      "1,3": "fence_h",
+      "2,3": "wall_h",
+      "4,3": "wall_h",
+      "5,3": "fence_h",
+      "0,5": "wall_h",
+      "1,5": "fence_h",
+      "2,5": "wall_h",
+      "3,5": "fence_h",
+      "4,5": "wall_h",
+      "5,5": "fence_h",
+      "6,5": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 25,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Triade der Geister",
+    "c": "Kapitel 06 · Himmelsbrücke",
+    "t": "Drei Himmelslichter",
+    "d": "Drei uralte Geisterlichter schweben über den Wolkenplateaus. Zwei kreuzende Himmelsböen fordern überlegtes Planen und Wendemanöver.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      1,
+      5,
+      "N"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        4
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        4,
+        "cyan"
+      ],
+      [
+        4,
+        2,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        2,
+        "cyan"
+      ],
+      [
+        5,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        5,
+        "N"
+      ],
+      [
+        4,
+        4,
+        "E"
       ]
     ],
     "walls": [
@@ -7169,19 +7218,7 @@ const LEVELS = [
         1
       ],
       [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
+        6,
         1
       ],
       [
@@ -7189,47 +7226,35 @@ const LEVELS = [
         2
       ],
       [
-        1,
-        2
-      ],
-      [
         2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
         2
       ],
       [
         6,
         2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
       ],
       [
         6,
         3
       ],
       [
-        1,
+        0,
         4
       ],
       [
         2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
         4
       ],
       [
@@ -7237,23 +7262,7 @@ const LEVELS = [
         4
       ],
       [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
+        0,
         5
       ],
       [
@@ -7289,104 +7298,109 @@ const LEVELS = [
         6
       ]
     ],
-    "limit": 17,
-    "solution": [
-      "F",
-      "F",
-      "R",
-      "A",
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F"
-    ],
     "obstacles": {
       "0,0": "wall_h",
-      "0,1": "wall_h",
-      "0,2": "pine",
-      "0,6": "wall_h",
-      "1,0": "wall_h",
-      "1,1": "wall_h",
-      "1,2": "sakura",
-      "1,4": "house",
-      "1,5": "fence_h",
-      "1,6": "wall_h",
-      "2,0": "wall_h",
-      "2,1": "pine",
-      "2,2": "fence_h",
-      "2,4": "fence_h",
-      "2,5": "wall_h",
-      "2,6": "wall_h",
-      "3,0": "pine",
-      "3,1": "sakura",
-      "3,2": "fence_h",
-      "3,4": "wall_h",
-      "3,5": "pavilion",
-      "3,6": "pine",
-      "4,0": "sakura",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,4": "wall_h",
-      "4,5": "wall_h",
-      "4,6": "sakura",
-      "5,0": "fence_h",
-      "5,4": "wall_h",
-      "5,5": "pine",
-      "5,6": "fence_h",
-      "6,0": "fence_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "wall_h",
+      "0,1": "fence_v",
+      "6,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "pine",
       "6,2": "wall_v",
-      "6,3": "wall_v",
-      "6,4": "pine",
-      "6,5": "sakura",
-      "6,6": "fence_h"
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "4,3": "fence_h",
+      "6,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "6,4": "wall_v",
+      "0,5": "fence_v",
+      "6,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h"
     },
     "grass": [
       [
-        5,
-        2
+        2,
+        1
+      ],
+      [
+        4,
+        1
       ]
     ],
-    "winds": [
-      [
-        2,
-        3,
-        "E"
-      ]
+    "limit": 25,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "R",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F"
     ]
   },
   {
     "n": "Goldener Sonnenaufgang",
     "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Brückenbogen",
-    "d": "Der goldene Schalter liegt am östlichen Aussichtspunkt der Himmelsbrücke.",
-    "w": 7,
+    "t": "Doppelsiegel im Wind",
+    "d": "Das Morgengold flutet die Himmelsbrücke. Zwei getrennte Tore verlangen die Aktivierung beider Wächtersteine. Lass dich vom Wind zur zweiten Terrasse tragen.",
+    "w": 8,
     "h": 7,
     "s": [
-      1,
-      6,
-      "N"
+      0,
+      5,
+      "E"
     ],
     "g": [
-      1,
+      7,
       1
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        3
+      ]
     ],
     "sw": [
       [
-        1,
-        3,
+        2,
+        5,
         "cyan"
       ],
       [
+        6,
         5,
-        3,
-        "gold"
+        "magenta"
       ]
     ],
     "gates": [
@@ -7396,9 +7410,21 @@ const LEVELS = [
         "cyan"
       ],
       [
-        3,
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
         1,
-        "gold"
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
       ]
     ],
     "walls": [
@@ -7431,11 +7457,27 @@ const LEVELS = [
         0
       ],
       [
+        7,
+        0
+      ],
+      [
         0,
         1
       ],
       [
-        6,
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
         1
       ],
       [
@@ -7451,35 +7493,27 @@ const LEVELS = [
         2
       ],
       [
-        3,
-        2
-      ],
-      [
         4,
         2
       ],
       [
-        6,
+        5,
+        2
+      ],
+      [
+        7,
         2
       ],
       [
         0,
-        3
+        4
       ],
       [
-        6,
-        3
-      ],
-      [
-        0,
+        1,
         4
       ],
       [
         2,
-        4
-      ],
-      [
-        3,
         4
       ],
       [
@@ -7491,35 +7525,15 @@ const LEVELS = [
         4
       ],
       [
-        6,
+        7,
         4
       ],
       [
         0,
-        5
+        6
       ],
       [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        0,
+        1,
         6
       ],
       [
@@ -7540,84 +7554,86 @@ const LEVELS = [
       ],
       [
         6,
+        6
+      ],
+      [
+        7,
         6
       ]
-    ],
-    "limit": 20,
-    "solution": [
-      "F",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "F",
-      "F"
     ],
     "obstacles": {
       "0,0": "wall_h",
-      "0,1": "wall_v",
-      "0,2": "pine",
-      "0,3": "fence_v",
-      "0,4": "fence_v",
-      "0,5": "fence_v",
-      "0,6": "wall_v",
-      "1,0": "wall_h",
-      "1,2": "sakura",
-      "2,0": "wall_h",
-      "2,2": "fence_h",
-      "2,4": "fence_h",
-      "2,5": "wall_h",
-      "2,6": "pine",
-      "3,0": "pine",
-      "3,2": "fence_h",
-      "3,4": "wall_h",
-      "3,5": "pavilion",
-      "3,6": "pine",
-      "4,0": "sakura",
-      "4,2": "fence_h",
-      "4,4": "wall_h",
-      "4,5": "pine",
-      "4,6": "sakura",
-      "5,0": "fence_h",
-      "5,4": "pine",
-      "5,5": "sakura",
-      "5,6": "fence_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "fence_h",
+      "4,0": "pine",
+      "5,0": "house",
       "6,0": "fence_h",
-      "6,1": "fence_v",
-      "6,2": "wall_v",
-      "6,3": "wall_v",
-      "6,4": "pine",
-      "6,5": "fence_h",
-      "6,6": "fence_h"
+      "7,0": "wall_h",
+      "1,2": "pine",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "pine",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "pine",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
     },
     "grass": [
       [
-        5,
+        3,
         1
       ],
       [
-        1,
+        3,
         5
       ]
+    ],
+    "limit": 29,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
     ]
   },
   {
-    "n": "Die drei Siegel",
+    "n": "Die drei Himmelssiegel",
     "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Kaskade 3x",
-    "d": "Jeder Schalter öffnet das Tor zur nächsten Kammer. Eine meisterhafte Kaskaden-Prüfung.",
-    "w": 7,
+    "t": "Dreifach-Prüfung",
+    "d": "Drei Schrein-Terrassen erstrecken sich über den Abgrund. Entsiegle die Barrieren mit präzisem Wendemanöver und sammle beide Geisterkristalle ein.",
+    "w": 8,
     "h": 7,
     "s": [
       1,
@@ -7626,1211 +7642,21 @@ const LEVELS = [
     ],
     "g": [
       6,
-      5
-    ],
-    "sw": [
-      [
-        1,
-        3,
-        "cyan"
-      ],
-      [
-        3,
-        1,
-        "magenta"
-      ],
-      [
-        5,
-        3,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        1,
-        1,
-        "cyan"
-      ],
-      [
-        3,
-        3,
-        "magenta"
-      ],
-      [
-        5,
-        5,
-        "gold"
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        6,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        1,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ]
-    ],
-    "limit": 24,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "wall_h",
-      "0,1": "pine",
-      "0,2": "sakura",
-      "0,3": "fence_v",
-      "0,4": "fence_v",
-      "0,5": "fence_v",
-      "0,6": "wall_h",
-      "1,0": "wall_h",
-      "1,6": "wall_h",
-      "2,0": "pine",
-      "2,2": "fence_v",
-      "2,3": "fence_v",
-      "2,4": "wall_h",
-      "2,5": "wall_h",
-      "2,6": "pine",
-      "3,0": "sakura",
-      "3,4": "wall_h",
-      "3,5": "pavilion",
-      "3,6": "sakura",
-      "4,0": "fence_h",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,4": "wall_h",
-      "4,5": "sakura",
-      "4,6": "fence_h",
-      "5,0": "fence_h",
-      "5,1": "fence_h",
-      "5,2": "wall_h",
-      "5,6": "fence_h",
-      "6,0": "fence_h",
-      "6,1": "fence_h",
-      "6,2": "wall_h",
-      "6,3": "pine",
-      "6,4": "sakura",
-      "6,6": "fence_h"
-    },
-    "grass": [
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        5,
-        4
-      ]
-    ]
-  },
-  {
-    "n": "Brücke der drei Winde",
-    "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Große Brücke",
-    "d": "Die Himmelsbrücke spannt sich über das 8x8-Tal. Überwinde alle drei Farbsiegel.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      1,
-      7,
-      "N"
-    ],
-    "g": [
-      7,
-      2
-    ],
-    "sw": [
-      [
-        1,
-        5,
-        "cyan"
-      ],
-      [
-        3,
-        3,
-        "magenta"
-      ],
-      [
-        5,
-        1,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        5,
-        "cyan"
-      ],
-      [
-        5,
-        3,
-        "magenta"
-      ],
-      [
-        7,
-        1,
-        "gold"
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        6,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        4,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
-      ]
-    ],
-    "limit": 26,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "wall_h",
-      "0,1": "pine",
-      "0,2": "fence_h",
-      "0,3": "fence_h",
-      "0,4": "fence_h",
-      "0,5": "wall_v",
-      "0,6": "wall_v",
-      "0,7": "pine",
-      "1,0": "pine",
-      "1,1": "sakura",
-      "1,2": "fence_h",
-      "1,3": "fence_h",
-      "1,4": "house",
-      "2,0": "sakura",
-      "2,1": "fence_h",
-      "2,2": "fence_h",
-      "2,3": "fence_h",
-      "2,4": "wall_h",
-      "2,6": "sakura",
-      "2,7": "fence_h",
-      "3,0": "sakura",
-      "3,1": "fence_h",
-      "3,2": "fence_h",
-      "3,6": "fence_h",
-      "3,7": "fence_h",
-      "4,0": "fence_h",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,4": "pine",
-      "4,5": "sakura",
-      "4,6": "fence_h",
-      "4,7": "fence_h",
-      "5,0": "fence_h",
-      "5,4": "sakura",
-      "5,5": "fence_h",
-      "5,6": "fence_h",
-      "5,7": "fence_h",
-      "6,0": "fence_h",
-      "6,2": "wall_v",
-      "6,3": "pine",
-      "6,4": "fence_h",
-      "6,5": "fence_h",
-      "6,6": "fence_h",
-      "6,7": "wall_h",
-      "7,0": "fence_h",
-      "7,3": "sakura",
-      "7,4": "fence_h",
-      "7,5": "fence_h",
-      "7,6": "wall_h",
-      "7,7": "wall_h"
-    },
-    "grass": []
-  },
-  {
-    "n": "Prüfung der Elemente",
-    "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Portale & 3 Tore",
-    "d": "Kombination aus Portalsprung und drei farbigen Toren auf der oberen Plattform.",
-    "w": 8,
-    "h": 6,
-    "s": [
-      0,
-      4,
-      "E"
-    ],
-    "g": [
-      2,
       1
-    ],
-    "sw": [
-      [
-        2,
-        4,
-        "cyan"
-      ],
-      [
-        6,
-        0,
-        "magenta"
-      ],
-      [
-        4,
-        0,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        4,
-        4,
-        "cyan"
-      ],
-      [
-        4,
-        0,
-        "magenta"
-      ],
-      [
-        2,
-        0,
-        "gold"
-      ]
-    ],
-    "portals": [
-      [
-        4,
-        4
-      ],
-      [
-        6,
-        2
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        7,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        7,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ]
-    ],
-    "limit": 24,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "wall_h",
-      "0,1": "sakura",
-      "0,2": "fence_h",
-      "0,3": "fence_h",
-      "0,5": "wall_h",
-      "1,0": "pine",
-      "1,1": "fence_h",
-      "1,2": "fence_h",
-      "1,3": "fence_h",
-      "1,5": "wall_h",
-      "2,2": "fence_h",
-      "2,3": "wall_h",
-      "2,5": "pine",
-      "3,1": "fence_h",
-      "3,2": "fence_h",
-      "3,3": "wall_h",
-      "3,5": "sakura",
-      "4,1": "pavilion",
-      "4,2": "wall_h",
-      "4,3": "house",
-      "4,5": "fence_h",
-      "5,1": "wall_h",
-      "5,2": "wall_h",
-      "5,3": "pine",
-      "5,4": "sakura",
-      "5,5": "fence_h",
-      "6,3": "sakura",
-      "6,4": "fence_h",
-      "6,5": "fence_h",
-      "7,0": "wall_v",
-      "7,1": "wall_v",
-      "7,2": "pine",
-      "7,3": "fence_h",
-      "7,4": "fence_h",
-      "7,5": "fence_h"
-    },
-    "grass": [
-      [
-        3,
-        0
-      ],
-      [
-        3,
-        4
-      ]
-    ]
-  },
-  {
-    "n": "Himmlisches Palais",
-    "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Tor & Licht",
-    "d": "Das Geisterlicht schwebt hinter dem dritten Tor. Erst nach dem Einsammeln ist das Ziel erreichbar.",
-    "w": 8,
-    "h": 7,
-    "s": [
-      1,
-      6,
-      "N"
-    ],
-    "g": [
-      7,
-      2
-    ],
-    "sw": [
-      [
-        1,
-        4,
-        "cyan"
-      ],
-      [
-        3,
-        2,
-        "magenta"
-      ],
-      [
-        5,
-        0,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        4,
-        "cyan"
-      ],
-      [
-        5,
-        2,
-        "magenta"
-      ],
-      [
-        7,
-        0,
-        "gold"
-      ]
     ],
     "orbs": [
       [
-        7,
-        0
+        1,
+        2
+      ],
+      [
+        6,
+        4
       ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        6,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ]
-    ],
-    "limit": 26,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "pine",
-      "0,1": "sakura",
-      "0,2": "fence_h",
-      "0,3": "fence_h",
-      "0,4": "wall_v",
-      "0,5": "wall_v",
-      "0,6": "pine",
-      "1,0": "sakura",
-      "1,1": "fence_h",
-      "1,2": "fence_h",
-      "1,3": "fence_h",
-      "2,0": "fence_h",
-      "2,1": "fence_h",
-      "2,2": "fence_h",
-      "2,3": "wall_h",
-      "2,5": "pine",
-      "2,6": "fence_h",
-      "3,0": "fence_h",
-      "3,1": "fence_h",
-      "3,5": "pavilion",
-      "3,6": "fence_h",
-      "4,0": "fence_h",
-      "4,1": "pavilion",
-      "4,3": "house",
-      "4,4": "sakura",
-      "4,5": "fence_h",
-      "4,6": "fence_h",
-      "5,3": "pine",
-      "5,4": "fence_h",
-      "5,5": "fence_h",
-      "5,6": "fence_h",
-      "6,1": "wall_v",
-      "6,2": "pine",
-      "6,3": "sakura",
-      "6,4": "fence_h",
-      "6,5": "fence_h",
-      "6,6": "wall_h",
-      "7,3": "fence_h",
-      "7,4": "fence_h",
-      "7,5": "fence_h",
-      "7,6": "wall_h"
-    },
-    "grass": [
-      [
-        5,
-        1
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        1,
-        5
-      ]
-    ]
-  },
-  {
-    "n": "Der Aufstieg",
-    "c": "Kapitel 06 · Himmelsbrücke",
-    "t": "Finale",
-    "d": "Erklimme die Stufen der Himmelsbrücke und meistere die Dreifach-Schranke mit Bravour.",
-    "w": 8,
-    "h": 7,
-    "s": [
-      0,
-      6,
-      "E"
-    ],
-    "g": [
-      4,
-      0
     ],
     "sw": [
       [
-        2,
-        6,
-        "cyan"
-      ],
-      [
-        4,
-        4,
-        "magenta"
-      ],
-      [
-        6,
-        2,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        2,
+        1,
         4,
         "cyan"
       ],
@@ -8838,776 +7664,31 @@ const LEVELS = [
         4,
         2,
         "magenta"
-      ],
-      [
-        6,
-        0,
-        "gold"
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        7,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        7,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ]
-    ],
-    "limit": 26,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "pine",
-      "0,1": "fence_h",
-      "0,2": "fence_h",
-      "0,3": "fence_h",
-      "0,4": "wall_h",
-      "0,5": "wall_h",
-      "1,0": "sakura",
-      "1,1": "fence_h",
-      "1,2": "fence_h",
-      "1,3": "wall_h",
-      "1,4": "house",
-      "1,5": "pine",
-      "2,0": "fence_h",
-      "2,1": "fence_h",
-      "2,2": "fence_h",
-      "2,3": "wall_h",
-      "3,0": "fence_h",
-      "3,1": "fence_h",
-      "3,2": "wall_h",
-      "3,3": "wall_h",
-      "3,5": "pavilion",
-      "3,6": "fence_h",
-      "4,1": "pavilion",
-      "4,5": "fence_h",
-      "4,6": "fence_h",
-      "5,1": "wall_h",
-      "5,3": "sakura",
-      "5,4": "fence_h",
-      "5,5": "fence_h",
-      "5,6": "fence_h",
-      "6,3": "fence_h",
-      "6,4": "fence_h",
-      "6,5": "fence_h",
-      "6,6": "wall_h",
-      "7,0": "wall_v",
-      "7,1": "pine",
-      "7,2": "sakura",
-      "7,3": "fence_h",
-      "7,4": "fence_h",
-      "7,5": "wall_h",
-      "7,6": "wall_h"
-    },
-    "grass": [
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        2,
-        5
-      ]
-    ]
-  },
-  {
-    "n": "Das Smaragd-Tor",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Palastgraben",
-    "d": "Der Palastgraben schützt die Residenz der Kami. Bilde mit dem Opferblock einen Übergang und balanciere über die Jade-Fliesen zum Smaragd-Schalter.",
-    "w": 6,
-    "h": 6,
-    "s": [
-      1,
-      4,
-      "E"
-    ],
-    "g": [
-      4,
-      1
-    ],
-    "sw": [
-      [
-        4,
-        3,
-        "cyan"
       ]
     ],
     "gates": [
       [
         3,
-        1,
-        "cyan"
-      ]
-    ],
-    "blocks": [
-      [
-        2,
-        4
-      ]
-    ],
-    "water": [
-      [
         3,
-        4
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ]
-    ],
-    "fragile": [
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ]
-    ],
-    "obstacles": {
-      "0,0": "pine",
-      "1,0": "wall_h",
-      "2,0": "pavilion",
-      "3,0": "wall_h",
-      "4,0": "pine",
-      "5,0": "wall_h",
-      "0,1": "fence_v",
-      "5,1": "fence_v",
-      "0,2": "wall_v",
-      "2,2": "wall_h",
-      "3,2": "wall_h",
-      "4,2": "pavilion",
-      "5,2": "wall_v",
-      "0,3": "fence_v",
-      "5,3": "fence_v",
-      "0,4": "wall_v",
-      "5,4": "wall_v",
-      "0,5": "pine",
-      "1,5": "fence_h",
-      "2,5": "wall_h",
-      "3,5": "fence_h",
-      "4,5": "pine",
-      "5,5": "wall_h"
-    },
-    "grass": [
-      [
-        1,
-        1
-      ],
-      [
-        4,
-        4
-      ]
-    ],
-    "solution": [
-      "F",
-      "F",
-      "F",
-      "L",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "F"
-    ],
-    "limit": 20
-  },
-  {
-    "n": "Quad-Siegel",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Vier Farben",
-    "d": "Vier Schalter, vier Siegel – und ein mächtiger Aufwind im Innenhof, der deinen Plan beschleunigt oder durchkreuzt!",
-    "w": 7,
-    "h": 6,
-    "s": [
-      0,
-      4,
-      "E"
-    ],
-    "g": [
-      4,
-      0
-    ],
-    "sw": [
-      [
-        2,
-        4,
         "cyan"
       ],
       [
-        4,
-        4,
-        "magenta"
-      ],
-      [
-        4,
-        2,
-        "gold"
-      ],
-      [
-        2,
-        2,
-        "green"
-      ]
-    ],
-    "gates": [
-      [
-        4,
-        4,
-        "cyan"
-      ],
-      [
-        4,
+        6,
         2,
         "magenta"
-      ],
-      [
-        2,
-        2,
-        "gold"
-      ],
-      [
-        2,
-        0,
-        "green"
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        6,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ]
-    ],
-    "limit": 22,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "R",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_h",
-      "0,2": "fence_h",
-      "0,3": "wall_h",
-      "0,5": "pine",
-      "1,0": "fence_h",
-      "1,1": "fence_h",
-      "1,2": "wall_h",
-      "1,3": "wall_h",
-      "1,5": "sakura",
-      "2,3": "wall_h",
-      "2,5": "fence_h",
-      "3,1": "wall_h",
-      "3,3": "pine",
-      "3,5": "fence_h",
-      "4,1": "pavilion",
-      "4,5": "fence_h",
-      "5,0": "wall_h",
-      "5,1": "wall_h",
-      "5,2": "sakura",
-      "5,3": "fence_h",
-      "5,4": "fence_h",
-      "5,5": "fence_h",
-      "6,0": "wall_h",
-      "6,1": "pine",
-      "6,2": "fence_h",
-      "6,3": "fence_h",
-      "6,4": "fence_h",
-      "6,5": "wall_h"
-    },
-    "grass": [
-      [
-        3,
-        0
-      ],
-      [
-        3,
-        4
       ]
     ],
     "winds": [
       [
         3,
-        3,
+        5,
+        "E"
+      ],
+      [
+        4,
+        4,
         "N"
       ]
-    ]
-  },
-  {
-    "n": "Großes Schrein-Labyrinth",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Großes Labyrinth",
-    "d": "Ein weitläufiger Schrein mit Portalsprung über die großen Felsspalten.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      1,
-      7,
-      "N"
-    ],
-    "g": [
-      5,
-      4
-    ],
-    "sw": [
-      [
-        1,
-        4,
-        "cyan"
-      ],
-      [
-        7,
-        2,
-        "magenta"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        4,
-        "cyan"
-      ],
-      [
-        7,
-        4,
-        "magenta"
-      ]
-    ],
-    "portals": [
-      [
-        3,
-        4
-      ],
-      [
-        5,
-        2
-      ]
     ],
     "walls": [
       [
@@ -9647,30 +7728,6 @@ const LEVELS = [
         1
       ],
       [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        6,
-        1
-      ],
-      [
         7,
         1
       ],
@@ -9679,19 +7736,15 @@ const LEVELS = [
         2
       ],
       [
-        1,
-        2
-      ],
-      [
         2,
         2
       ],
       [
-        3,
+        5,
         2
       ],
       [
-        4,
+        7,
         2
       ],
       [
@@ -9699,19 +7752,7 @@ const LEVELS = [
         3
       ],
       [
-        1,
-        3
-      ],
-      [
         2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
         3
       ],
       [
@@ -9719,7 +7760,7 @@ const LEVELS = [
         3
       ],
       [
-        6,
+        7,
         3
       ],
       [
@@ -9727,7 +7768,11 @@ const LEVELS = [
         4
       ],
       [
-        4,
+        2,
+        4
+      ],
+      [
+        7,
         4
       ],
       [
@@ -9735,26 +7780,6 @@ const LEVELS = [
         5
       ],
       [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
         7,
         5
       ],
@@ -9763,6 +7788,10 @@ const LEVELS = [
         6
       ],
       [
+        1,
+        6
+      ],
+      [
         2,
         6
       ],
@@ -9785,804 +7814,363 @@ const LEVELS = [
       [
         7,
         6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        4,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
       ]
-    ],
-    "limit": 22,
-    "solution": [
-      "F",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F"
     ],
     "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_h",
-      "0,2": "fence_h",
-      "0,3": "wall_h",
-      "0,4": "pine",
-      "0,5": "sakura",
-      "0,6": "fence_v",
-      "0,7": "fence_v",
-      "1,0": "fence_h",
-      "1,1": "fence_h",
-      "1,2": "wall_h",
-      "1,3": "wall_h",
-      "2,0": "fence_h",
-      "2,1": "wall_h",
-      "2,2": "wall_h",
-      "2,3": "pine",
-      "2,5": "fence_h",
-      "2,6": "fence_h",
-      "2,7": "wall_h",
-      "3,0": "fence_h",
-      "3,1": "wall_h",
-      "3,2": "pine",
-      "3,3": "sakura",
-      "3,5": "pavilion",
-      "3,6": "fence_h",
-      "3,7": "wall_h",
-      "4,0": "wall_h",
-      "4,1": "pavilion",
-      "4,2": "pine",
-      "4,3": "house",
-      "4,4": "fence_v",
-      "4,5": "fence_h",
-      "4,6": "wall_h",
-      "4,7": "wall_h",
-      "5,0": "wall_h",
-      "5,1": "pine",
-      "5,3": "fence_h",
-      "5,5": "wall_h",
-      "5,6": "wall_h",
-      "5,7": "pine",
-      "6,0": "wall_h",
-      "6,1": "sakura",
-      "6,3": "fence_h",
-      "6,5": "wall_h",
-      "6,6": "pine",
-      "6,7": "sakura",
-      "7,0": "pine",
-      "7,1": "fence_h",
-      "7,5": "wall_h",
-      "7,6": "pine",
-      "7,7": "fence_h"
-    },
-    "grass": [
-      [
-        6,
-        2
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        1,
-        5
-      ]
-    ]
-  },
-  {
-    "n": "Kitsunes Meisterstück",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Meisterstück",
-    "d": "Sammle das erste Licht, nimm das Portal und hole das zweite Licht im Oberdeck ab.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      0,
-      4,
-      "E"
-    ],
-    "g": [
-      4,
-      0
-    ],
-    "sw": [
-      [
-        2,
-        4,
-        "cyan"
-      ]
-    ],
-    "gates": [
-      [
-        4,
-        4,
-        "cyan"
-      ]
-    ],
-    "orbs": [
-      [
-        4,
-        4
-      ],
-      [
-        6,
-        0
-      ]
-    ],
-    "portals": [
-      [
-        4,
-        6
-      ],
-      [
-        6,
-        2
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        3,
-        1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        5,
-        1
-      ],
-      [
-        7,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        7,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        1,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        1,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        4,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
-      ]
-    ],
-    "limit": 20,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "L",
-      "L",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_h",
-      "0,2": "wall_h",
-      "0,3": "wall_h",
-      "0,5": "fence_h",
-      "0,6": "fence_h",
-      "0,7": "fence_h",
-      "1,0": "fence_h",
-      "1,1": "fence_h",
-      "1,2": "wall_h",
-      "1,3": "pine",
-      "1,5": "fence_h",
-      "1,6": "fence_h",
-      "1,7": "wall_h",
-      "2,0": "fence_h",
-      "2,1": "wall_h",
-      "2,2": "wall_h",
-      "2,3": "sakura",
-      "2,5": "fence_h",
-      "2,6": "fence_h",
-      "2,7": "wall_h",
-      "3,0": "wall_h",
-      "3,1": "wall_h",
-      "3,2": "pine",
-      "3,3": "sakura",
-      "3,5": "pavilion",
-      "3,6": "wall_h",
-      "3,7": "wall_h",
-      "4,1": "pavilion",
-      "4,2": "sakura",
-      "4,3": "house",
-      "4,7": "pine",
-      "5,1": "pine",
-      "5,2": "fence_h",
-      "5,3": "fence_h",
-      "5,4": "fence_h",
-      "5,5": "wall_h",
-      "5,6": "wall_h",
-      "5,7": "sakura",
-      "6,3": "fence_h",
-      "6,4": "wall_h",
-      "6,5": "wall_h",
-      "6,6": "pine",
-      "6,7": "fence_h",
-      "7,0": "sakura",
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
       "7,1": "fence_v",
-      "7,2": "fence_v",
-      "7,3": "fence_h",
-      "7,4": "wall_h",
-      "7,5": "pine",
-      "7,6": "sakura",
-      "7,7": "fence_h"
+      "0,2": "wall_v",
+      "2,2": "pine",
+      "5,2": "pine",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "7,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
     },
     "grass": [
       [
-        5,
-        0
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        1,
-        4
-      ]
-    ]
-  },
-  {
-    "n": "Weg der Erleuchtung",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Erleuchtung",
-    "d": "Lange Distanzen und hohe Präzision. Öffne die Tore der drei Himmelswinde.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      1,
-      7,
-      "N"
-    ],
-    "g": [
-      7,
-      4
-    ],
-    "sw": [
-      [
-        1,
-        5,
-        "cyan"
-      ],
-      [
-        3,
-        3,
-        "magenta"
-      ],
-      [
-        5,
-        1,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        5,
-        "cyan"
-      ],
-      [
-        5,
-        3,
-        "magenta"
-      ],
-      [
-        7,
-        1,
-        "gold"
-      ]
-    ],
-    "orbs": [
-      [
-        7,
-        1
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
         2,
         1
       ],
       [
-        3,
+        5,
         1
-      ],
-      [
-        4,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        2,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        6,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        6,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        4,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
       ]
     ],
     "limit": 26,
     "solution": [
       "F",
       "F",
-      "A",
-      "R",
+      "F",
+      "L",
+      "L",
+      "F",
       "F",
       "F",
       "L",
       "F",
       "F",
-      "A",
-      "R",
       "F",
       "F",
       "L",
       "F",
+      "L",
       "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Brücke der drei Winde",
+    "c": "Kapitel 06 · Himmelsbrücke",
+    "t": "Dreifach-Windkanal",
+    "d": "Drei gewaltige Windkanäle kreuzen die Hauptbrücke der Himmelsgötter! Nutze die Böen als Katapult, navigiere um die Wächtersäulen und öffne die Himmelsbarriere.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      6,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        4,
+        1,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "N"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ],
+      [
+        2,
+        2,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "5,2": "pine",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "3,4": "wall_v",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "2,5": "pine",
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 26,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
       "A",
-      "R",
       "F",
       "F",
-      "R",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
       "F",
       "F",
       "F"
-    ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "fence_h",
-      "0,2": "wall_h",
-      "0,3": "wall_h",
-      "0,4": "sakura",
-      "0,5": "fence_v",
-      "0,6": "fence_v",
-      "0,7": "fence_v",
-      "1,0": "fence_h",
-      "1,1": "wall_h",
-      "1,2": "wall_h",
-      "1,3": "pine",
-      "1,4": "house",
-      "2,0": "fence_h",
-      "2,1": "wall_h",
-      "2,2": "pine",
-      "2,3": "sakura",
-      "2,4": "fence_h",
-      "2,6": "wall_h",
-      "2,7": "wall_h",
-      "3,0": "wall_h",
-      "3,1": "wall_h",
-      "3,2": "sakura",
-      "3,6": "wall_h",
-      "3,7": "wall_h",
-      "4,0": "wall_h",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,4": "fence_h",
-      "4,5": "wall_h",
-      "4,6": "wall_h",
-      "4,7": "pine",
-      "5,0": "pine",
-      "5,4": "wall_h",
-      "5,5": "wall_h",
-      "5,6": "pine",
-      "5,7": "sakura",
-      "6,0": "sakura",
-      "6,2": "fence_v",
-      "6,3": "fence_v",
-      "6,4": "wall_h",
-      "6,5": "wall_h",
-      "6,6": "sakura",
-      "6,7": "fence_h",
-      "7,0": "sakura",
-      "7,5": "pine",
-      "7,6": "fence_h",
-      "7,7": "fence_h"
-    },
-    "grass": []
+    ]
   },
   {
-    "n": "Tempel der Ewigkeit",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Ewigkeit",
-    "d": "Der Tempel der Ewigkeit prüft deine Geduld. Portale und Mehrfach-Tore im Einklang.",
+    "n": "Prüfung der Elemente",
+    "c": "Kapitel 06 · Himmelsbrücke",
+    "t": "Elemente-Prüfung",
+    "d": "Kreuzende Windböen und versiegelte Brücken fordern deinen Geist. Aktiviere beide Kami-Schalter und nutze den Windwirbel zur Zielfreigabe.",
     "w": 8,
     "h": 7,
     "s": [
@@ -10591,348 +8179,53 @@ const LEVELS = [
       "E"
     ],
     "g": [
-      2,
-      3
-    ],
-    "sw": [
-      [
-        2,
-        5,
-        "cyan"
-      ],
-      [
-        6,
-        1,
-        "magenta"
-      ],
-      [
-        4,
-        1,
-        "green"
-      ]
-    ],
-    "gates": [
-      [
-        4,
-        5,
-        "cyan"
-      ],
-      [
-        4,
-        1,
-        "magenta"
-      ],
-      [
-        2,
-        1,
-        "green"
-      ]
-    ],
-    "portals": [
-      [
-        4,
-        5
-      ],
-      [
-        6,
-        3
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        7,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        7,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
-        6
-      ],
-      [
-        1,
-        6
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ]
-    ],
-    "limit": 24,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "L",
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_h",
-      "0,2": "wall_h",
-      "0,3": "pine",
-      "0,4": "sakura",
-      "0,6": "fence_h",
-      "1,0": "fence_h",
-      "1,1": "wall_h",
-      "1,2": "wall_h",
-      "1,3": "sakura",
-      "1,4": "house",
-      "1,6": "fence_h",
-      "2,0": "wall_h",
-      "2,4": "fence_h",
-      "2,6": "wall_h",
-      "3,0": "wall_h",
-      "3,2": "sakura",
-      "3,3": "fence_h",
-      "3,4": "fence_h",
-      "3,6": "wall_h",
-      "4,0": "wall_h",
-      "4,2": "fence_h",
-      "4,3": "house",
-      "4,4": "fence_h",
-      "4,6": "pine",
-      "5,0": "pine",
-      "5,2": "fence_h",
-      "5,3": "fence_h",
-      "5,4": "wall_h",
-      "5,5": "wall_h",
-      "5,6": "pine",
-      "6,0": "sakura",
-      "6,4": "wall_h",
-      "6,5": "pine",
-      "6,6": "sakura",
-      "7,0": "fence_h",
-      "7,1": "fence_v",
-      "7,2": "fence_v",
-      "7,3": "wall_v",
-      "7,4": "wall_h",
-      "7,5": "sakura",
-      "7,6": "fence_h"
-    },
-    "grass": []
-  },
-  {
-    "n": "Das letzte Orakel",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Vorfinale",
-    "d": "Das Orakel der Kami verlangt zwei Geisterlichter und drei geöffnete Himmelstore.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      1,
       7,
-      "N"
-    ],
-    "g": [
-      7,
-      3
-    ],
-    "sw": [
-      [
-        1,
-        5,
-        "cyan"
-      ],
-      [
-        3,
-        3,
-        "magenta"
-      ],
-      [
-        5,
-        1,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        3,
-        5,
-        "cyan"
-      ],
-      [
-        5,
-        3,
-        "magenta"
-      ],
-      [
-        7,
-        1,
-        "gold"
-      ]
+      1
     ],
     "orbs": [
       [
-        3,
-        5
+        2,
+        3
       ],
       [
         5,
         3
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        5,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
       ]
     ],
     "walls": [
@@ -10985,7 +8278,7 @@ const LEVELS = [
         1
       ],
       [
-        4,
+        5,
         1
       ],
       [
@@ -11001,32 +8294,16 @@ const LEVELS = [
         2
       ],
       [
-        3,
-        2
-      ],
-      [
         4,
         2
       ],
       [
-        6,
+        5,
         2
       ],
       [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        6,
-        3
+        7,
+        2
       ],
       [
         0,
@@ -11049,35 +8326,15 @@ const LEVELS = [
         4
       ],
       [
-        6,
-        4
-      ],
-      [
         7,
         4
       ],
       [
         0,
-        5
+        6
       ],
       [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        0,
+        1,
         6
       ],
       [
@@ -11103,459 +8360,2762 @@ const LEVELS = [
       [
         7,
         6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        4,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
       ]
     ],
-    "limit": 26,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "A",
-      "R",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F"
-    ],
     "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_h",
-      "0,2": "wall_h",
-      "0,3": "pine",
-      "0,4": "fence_h",
-      "0,5": "fence_v",
-      "0,6": "fence_v",
-      "0,7": "wall_v",
-      "1,0": "wall_h",
-      "1,1": "wall_h",
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "pine",
+      "5,0": "house",
+      "6,0": "fence_h",
+      "7,0": "wall_h",
       "1,2": "pine",
-      "1,3": "sakura",
-      "1,4": "house",
-      "2,0": "wall_h",
-      "2,1": "pine",
-      "2,2": "sakura",
-      "2,3": "fence_h",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "pine",
+      "1,4": "wall_h",
       "2,4": "fence_h",
+      "4,4": "pine",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
       "2,6": "wall_h",
-      "2,7": "pine",
-      "3,0": "wall_h",
-      "3,1": "pine",
-      "3,2": "fence_h",
-      "3,6": "wall_h",
-      "3,7": "sakura",
-      "4,0": "pine",
-      "4,1": "pavilion",
-      "4,2": "fence_h",
-      "4,4": "wall_h",
-      "4,5": "wall_h",
-      "4,6": "pine",
-      "4,7": "sakura",
-      "5,0": "sakura",
-      "5,4": "wall_h",
-      "5,5": "pine",
-      "5,6": "sakura",
-      "5,7": "fence_h",
-      "6,0": "fence_h",
-      "6,2": "fence_v",
-      "6,3": "wall_v",
-      "6,4": "wall_h",
-      "6,5": "pine",
-      "6,6": "fence_h",
-      "6,7": "fence_h",
-      "7,0": "fence_h",
-      "7,4": "pine",
-      "7,5": "sakura",
-      "7,6": "fence_h",
-      "7,7": "fence_h"
-    },
-    "grass": []
-  },
-  {
-    "n": "Die Legende des Schreins",
-    "c": "Kapitel 07 · Palast der Kami",
-    "t": "Meister-Finale",
-    "d": "Das große Finale von Spirit Delivery! Alle Schreinelemente vereinen sich im Palast der Götter.",
-    "w": 8,
-    "h": 8,
-    "s": [
-      0,
-      6,
-      "E"
-    ],
-    "g": [
-      2,
-      4
-    ],
-    "sw": [
-      [
-        2,
-        6,
-        "cyan"
-      ],
-      [
-        6,
-        1,
-        "magenta"
-      ],
-      [
-        2,
-        1,
-        "gold"
-      ]
-    ],
-    "gates": [
-      [
-        4,
-        6,
-        "cyan"
-      ],
-      [
-        4,
-        1,
-        "magenta"
-      ],
-      [
-        2,
-        3,
-        "gold"
-      ]
-    ],
-    "orbs": [
-      [
-        4,
-        6
-      ],
-      [
-        4,
-        1
-      ]
-    ],
-    "portals": [
-      [
-        4,
-        7
-      ],
-      [
-        6,
-        3
-      ]
-    ],
-    "walls": [
-      [
-        0,
-        0
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        4,
-        0
-      ],
-      [
-        5,
-        0
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        0,
-        1
-      ],
-      [
-        1,
-        1
-      ],
-      [
-        7,
-        1
-      ],
-      [
-        0,
-        2
-      ],
-      [
-        1,
-        2
-      ],
-      [
-        3,
-        2
-      ],
-      [
-        4,
-        2
-      ],
-      [
-        5,
-        2
-      ],
-      [
-        7,
-        2
-      ],
-      [
-        0,
-        3
-      ],
-      [
-        1,
-        3
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        4,
-        3
-      ],
-      [
-        5,
-        3
-      ],
-      [
-        7,
-        3
-      ],
-      [
-        0,
-        4
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        4
-      ],
-      [
-        6,
-        4
-      ],
-      [
-        7,
-        4
-      ],
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        2,
-        5
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4,
-        5
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        6,
-        5
-      ],
-      [
-        7,
-        5
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        6
-      ],
-      [
-        0,
-        7
-      ],
-      [
-        1,
-        7
-      ],
-      [
-        2,
-        7
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        5,
-        7
-      ],
-      [
-        6,
-        7
-      ],
-      [
-        7,
-        7
-      ]
-    ],
-    "limit": 26,
-    "solution": [
-      "F",
-      "F",
-      "A",
-      "F",
-      "F",
-      "R",
-      "F",
-      "L",
-      "L",
-      "F",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "F",
-      "F",
-      "L",
-      "A",
-      "F",
-      "F",
-      "F"
-    ],
-    "obstacles": {
-      "0,0": "fence_h",
-      "0,1": "wall_h",
-      "0,2": "pine",
-      "0,3": "sakura",
-      "0,4": "fence_h",
-      "0,5": "fence_h",
-      "0,7": "wall_h",
-      "1,0": "wall_h",
-      "1,1": "wall_h",
-      "1,2": "sakura",
-      "1,3": "fence_h",
-      "1,4": "house",
-      "1,5": "fence_h",
-      "1,7": "wall_h",
-      "2,0": "wall_h",
-      "2,5": "wall_h",
-      "2,7": "pine",
-      "3,0": "pine",
-      "3,2": "fence_h",
-      "3,3": "fence_h",
-      "3,4": "fence_h",
-      "3,5": "pavilion",
-      "3,7": "sakura",
-      "4,0": "pine",
-      "4,2": "fence_h",
-      "4,3": "house",
-      "4,4": "wall_h",
-      "4,5": "wall_h",
-      "5,0": "sakura",
-      "5,2": "fence_h",
-      "5,3": "wall_h",
-      "5,4": "wall_h",
-      "5,5": "pine",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
       "5,6": "fence_h",
-      "5,7": "fence_h",
-      "6,0": "fence_h",
-      "6,4": "pine",
-      "6,5": "sakura",
-      "6,6": "fence_h",
-      "6,7": "fence_h",
-      "7,0": "fence_h",
-      "7,1": "fence_v",
-      "7,2": "wall_v",
-      "7,3": "wall_v",
-      "7,4": "sakura",
-      "7,5": "fence_h",
-      "7,6": "fence_h",
-      "7,7": "fence_h"
+      "6,6": "wall_h",
+      "7,6": "wall_h"
     },
     "grass": [
       [
         3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "limit": 27,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ]
+  },
+  {
+    "n": "Himmlisches Palais",
+    "c": "Kapitel 06 · Himmelsbrücke",
+    "t": "Wolkenportal-Brücke",
+    "d": "Das schwebende Palais ist nur über uralte Kitsune-Himmelsportale erreichbar. Teleportiere zwischen den Wolkenpavillons und durchbrich die beiden Wächtertore.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "portals": [
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        5
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        4,
+        3,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
         6
       ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "1,2": "pine",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "pine",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "pine",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "limit": 34,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F"
+    ]
+  },
+  {
+    "n": "Der Große Himmelsaufstieg",
+    "c": "Kapitel 06 · Himmelsbrücke",
+    "t": "Kapitel-Finale · Himmelsbrücke",
+    "d": "Die letzte Etappe vor den Toren der Götter! Meistere den gewaltigen Himmelsaufstieg, überwinde die kreuzenden Winde und öffne das Goldtor zum Palast der Kami.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      6,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        4,
+        "cyan"
+      ],
+      [
+        4,
+        2,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "N"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ],
+      [
+        2,
+        2,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "pine",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "pine",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "5,2": "pine",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "2,5": "pine",
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 23,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Das Smaragd-Tor",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Smaragd-Hof",
+    "d": "Willkommen im Palast der Kami! Die heiligen Hallen der Shinto-Götter öffnen sich. Durchquere den Smaragdhof, berge die kaiserlichen Relikte und löse das Torsiegel.",
+    "w": 7,
+    "h": 7,
+    "s": [
+      1,
+      5,
+      "N"
+    ],
+    "g": [
+      5,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        5
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        5,
+        3,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        5,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        5,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "wall_h",
+      "0,1": "fence_v",
+      "6,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "sakura",
+      "3,2": "wall_h",
+      "4,2": "sakura",
+      "6,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "4,3": "wall_h",
+      "6,3": "fence_v",
+      "0,4": "wall_v",
+      "3,4": "wall_h",
+      "6,4": "wall_v",
+      "0,5": "fence_v",
+      "6,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "limit": 23,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "A",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Quad-Siegel der Kami",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Vier Götter-Siegel",
+    "d": "Vier heilige Pavillons umschließen den Zentralhof. Aktiviere beide Wächtersiegel in exakter Reihenfolge und hole die Relikte aus den Schatztürmen.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "orbs": [
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        5,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        2,
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "1,2": "sakura",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "sakura",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "sakura",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "limit": 27,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ]
+  },
+  {
+    "n": "Großes Schrein-Labyrinth",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Palast-Irrgarten",
+    "d": "Ein verschlungenes Netzwerk aus Wandelgängen und Zedernwänden. Plane deine Wendemanöver millimetergenau, um nicht in den Sackgassen des Palastes zu stranden.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      1,
+      5,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        4
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        4,
+        "cyan"
+      ],
+      [
+        4,
+        2,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        5,
+        "E"
+      ],
+      [
+        4,
+        4,
+        "N"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "2,2": "sakura",
+      "5,2": "sakura",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "7,5": "fence_v",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 26,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Kitsunes Meisterstück",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Götter-Portale",
+    "d": "Kitsune hat die Schrein-Terrassen mit Magie verwoben. Betritt die Portale im richtigen Winkel, um zwischen den getrennten Hallen zu wechseln und das Palast-Torii zu erreichen.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "portals": [
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        5
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        4,
+        3,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "1,2": "sakura",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "sakura",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "sakura",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "limit": 34,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "A",
+      "F",
+      "F",
+      "R",
+      "F"
+    ]
+  },
+  {
+    "n": "Weg der Erleuchtung",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Pfad der Erleuchtung",
+    "d": "Der Pfad der Erleuchtung verlangt höchste Meisterschaft. Drei kreuzende Wächterströme, zwei Magatama-Siegel und enge Gänge fordern dein ganzes logisches Geschick.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      6,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        4,
+        1,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "N"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ],
+      [
+        2,
+        2,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "5,2": "sakura",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "3,4": "wall_v",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "2,5": "sakura",
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 26,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Tempel der Ewigkeit",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Halle der Ewigkeit",
+    "d": "In der ewigen Halle verharren die Geister der Gründer. Öffne beide Palasttore, nutze den Himmelsstrom und berge die heiligen Spiegel.",
+    "w": 8,
+    "h": 7,
+    "s": [
+      0,
+      5,
+      "E"
+    ],
+    "g": [
+      7,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        3
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "sw": [
+      [
+        2,
+        5,
+        "cyan"
+      ],
+      [
+        6,
+        5,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        1,
+        5,
+        "E"
+      ],
+      [
+        4,
+        3,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "1,2": "sakura",
+      "2,2": "wall_h",
+      "4,2": "fence_v",
+      "5,2": "sakura",
+      "1,4": "wall_h",
+      "2,4": "fence_h",
+      "4,4": "sakura",
+      "5,4": "wall_h",
+      "0,6": "wall_h",
+      "1,6": "fence_h",
+      "2,6": "wall_h",
+      "3,6": "fence_h",
+      "4,6": "wall_h",
+      "5,6": "fence_h",
+      "6,6": "wall_h",
+      "7,6": "wall_h"
+    },
+    "grass": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        5
+      ]
+    ],
+    "limit": 29,
+    "solution": [
+      "F",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ]
+  },
+  {
+    "n": "Das letzte Orakel",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Orakel der Götter",
+    "d": "Das Orakel der Kami prüft deine Entschlossenheit vor dem Aufstieg zum Berg Fuji. Sammle die drei Orakel-Lichter ein und löse die verschlungenen Siegel.",
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      6,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        4,
+        1,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        3,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "N"
+      ],
+      [
+        2,
+        2,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "5,2": "sakura",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "3,4": "wall_v",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "2,5": "sakura",
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 27,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F"
+    ]
+  },
+  {
+    "n": "Die Legende des Schreins",
+    "c": "Kapitel 07 · Palast der Kami",
+    "t": "Kapitel-Finale · Palast der Kami",
+    "d": "Das große Finale des Palastes der Kami! Alle Prüfungen vereinen sich: Windströme, Schalter und uralte Magatama-Siegel. Öffne das Tor zum heiligen Berg Fuji!",
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      6,
+      "N"
+    ],
+    "g": [
+      6,
+      1
+    ],
+    "orbs": [
+      [
+        1,
+        1
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ]
+    ],
+    "sw": [
+      [
+        1,
+        3,
+        "cyan"
+      ],
+      [
+        4,
+        1,
+        "magenta"
+      ]
+    ],
+    "gates": [
+      [
+        3,
+        3,
+        "cyan"
+      ],
+      [
+        6,
+        2,
+        "magenta"
+      ]
+    ],
+    "winds": [
+      [
+        3,
+        6,
+        "N"
+      ],
+      [
+        4,
+        4,
+        "E"
+      ],
+      [
+        2,
+        2,
+        "E"
+      ]
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "obstacles": {
+      "0,0": "wall_h",
+      "1,0": "house",
+      "2,0": "house",
+      "3,0": "torii",
+      "4,0": "house",
+      "5,0": "house",
+      "6,0": "house",
+      "7,0": "wall_h",
+      "0,1": "fence_v",
+      "7,1": "fence_v",
+      "0,2": "wall_v",
+      "5,2": "sakura",
+      "7,2": "wall_v",
+      "0,3": "fence_v",
+      "2,3": "wall_h",
+      "5,3": "wall_h",
+      "7,3": "fence_v",
+      "0,4": "wall_v",
+      "2,4": "fence_h",
+      "3,4": "wall_v",
+      "7,4": "wall_v",
+      "0,5": "fence_v",
+      "2,5": "sakura",
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "wall_h",
+      "7,7": "wall_h"
+    },
+    "grass": [
+      [
+        2,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "limit": 30,
+    "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F",
+      "L",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F"
     ]
   },
   {
@@ -13522,14 +13082,26 @@ const LEVELS = [
       1
     ],
     "water": [
-      [1, 5],
-      [4, 4]
+      [
+        1,
+        5
+      ],
+      [
+        4,
+        4
+      ]
     ],
     "fragile": [
-      [1, 5]
+      [
+        1,
+        5
+      ]
     ],
     "blocks": [
-      [5, 4]
+      [
+        5,
+        4
+      ]
     ],
     "portals": [
       [

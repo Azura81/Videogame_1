@@ -1608,6 +1608,72 @@ class SoundEngine {
     osc2.stop(t + 1.4);
   }
 
+  playKomainuRoar() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Deep stone guardian roar: heavy rumbling sub-bass + stone grinding resonance
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(260, t);
+    filter.frequency.exponentialRampToValueAtTime(80, t + 1.0);
+
+    osc1.type = "sawtooth";
+    osc1.frequency.setValueAtTime(65, t);
+    osc1.frequency.linearRampToValueAtTime(95, t + 0.25);
+    osc1.frequency.exponentialRampToValueAtTime(38, t + 1.0);
+
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(42, t);
+    osc2.frequency.linearRampToValueAtTime(60, t + 0.3);
+    osc2.frequency.exponentialRampToValueAtTime(28, t + 1.1);
+
+    gain.gain.setValueAtTime(0.01, t);
+    gain.gain.linearRampToValueAtTime(0.38, t + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 1.15);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(dest);
+
+    osc1.start(t);
+    osc2.start(t);
+    osc1.stop(t + 1.2);
+    osc2.stop(t + 1.2);
+  }
+
+  playKomainuPacified() {
+    if (this.masterMuted) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const dest = this.sfxGain || this.ctx.destination;
+
+    // Harmonious shrine bell resonance: peaceful high chime
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t + idx * 0.08);
+
+      gain.gain.setValueAtTime(0.18, t + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.08 + 0.9);
+
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start(t + idx * 0.08);
+      osc.stop(t + idx * 0.08 + 0.95);
+    });
+  }
+
   playTaikoDrum() {
     if (this.masterMuted) return;
     this.init();

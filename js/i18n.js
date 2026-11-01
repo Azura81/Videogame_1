@@ -90,9 +90,11 @@
       // Win Modal
       win_title_normal: "Lieferung erfolgreich!",
       win_title_boss: "「富士の龍神」 BEZWUNGEN!",
+      win_title_komainu: "「岩狛犬」 BEZWUNGEN!",
       win_title_daily: "Tägliche Schreinprüfung gemeistert!",
       win_desc_normal: "Der kleine Roboter hat das Paket in {steps} Schritten zugestellt.",
       win_desc_boss: "Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in {steps} Schritten erlöst!",
+      win_desc_komainu: "Du hast den steinernen Schreinwächter eingesperrt, beide Relikte geborgen und das Bambus-Tor in {steps} Schritten erreicht!",
       win_desc_daily: "Du hast die heutige Meisterprüfung ohne Kameraschwenker in {steps} Schritten gelöst!",
       win_credits_normal: "Übrige Kamera-Credits: {credits} / {max}",
       win_credits_zero: "0 Kameraschwenker verwendet · Reine Vorab-Planung!",
@@ -273,9 +275,11 @@
       // Win Modal
       win_title_normal: "Delivery Successful!",
       win_title_boss: "「DRAGON OF FUJI」 DEFEATED!",
+      win_title_komainu: "「IWA-KOMAINU」 DEFEATED!",
       win_title_daily: "Daily Shrine Trial Cleared!",
       win_desc_normal: "The little robot delivered the package in {steps} steps.",
       win_desc_boss: "You recovered all 3 relics, reconciled the summit Torii, and redeemed dragon Ryūjin in {steps} steps!",
+      win_desc_komainu: "You trapped the stone guardian, recovered both relics, and reached the bamboo gate in {steps} steps!",
       win_desc_daily: "You solved today's master puzzle with zero camera rotations in {steps} steps!",
       win_credits_normal: "Remaining Camera Credits: {credits} / {max}",
       win_credits_zero: "0 camera rotations used · Pure spatial planning!",

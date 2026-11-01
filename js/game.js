@@ -2360,15 +2360,36 @@ class GameEngine {
     const lvl = this.getCurrentLevel();
     this.resetState();
 
-    // Dedicated Boss Fight HUD (Level 60 Ryūjin Boss Fight)
-    const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
+    // Dedicated Boss Fight HUD (Level 30 Komainu & Level 60 Ryūjin)
+    const isRyujin = lvl && (lvl.bossId === "ryujin" || (lvl.isBossLevel && lvl.bossId !== "komainu"));
+    const isKomainu = lvl && lvl.bossId === "komainu";
+    const isAnyBoss = isRyujin || isKomainu;
+
     if (this.dom.bossHudBar) {
-      this.dom.bossHudBar.style.display = isBoss ? "flex" : "none";
+      this.dom.bossHudBar.style.display = isAnyBoss ? "flex" : "none";
     }
-    if (isBoss) {
-      if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
-      if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
-      if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
+    if (this.dom.bossHudName) {
+      if (isKomainu) {
+        this.dom.bossHudName.textContent = "KOMAINU · 岩狛犬";
+      } else if (isRyujin) {
+        this.dom.bossHudName.textContent = "RYŪJIN · 富士の神";
+      }
+    }
+    if (isKomainu) {
+      if (this.dom.seal1) { this.dom.seal1.style.display = ""; this.dom.seal1.className = "boss-seal lit"; this.dom.seal1.title = "Relikt 1: Schrein-Glocke"; }
+      if (this.dom.seal2) { this.dom.seal2.style.display = ""; this.dom.seal2.className = "boss-seal lit"; this.dom.seal2.title = "Relikt 2: Ahnen-Spiegel"; }
+      if (this.dom.seal3) { this.dom.seal3.style.display = "none"; }
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge";
+        this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+      }
+      if (typeof Sound !== "undefined" && typeof Sound.playTaikoDrum === "function") {
+        setTimeout(() => Sound.playTaikoDrum(), 250);
+      }
+    } else if (isRyujin) {
+      if (this.dom.seal1) { this.dom.seal1.style.display = ""; this.dom.seal1.className = "boss-seal lit"; this.dom.seal1.title = "Relikt 1: Eisschwert"; }
+      if (this.dom.seal2) { this.dom.seal2.style.display = ""; this.dom.seal2.className = "boss-seal lit"; this.dom.seal2.title = "Relikt 2: Himmelsspiegel"; }
+      if (this.dom.seal3) { this.dom.seal3.style.display = ""; this.dom.seal3.className = "boss-seal lit"; this.dom.seal3.title = "Relikt 3: Magatama-Juwel"; }
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
         this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
@@ -2453,7 +2474,17 @@ class GameEngine {
       }
     }
 
-    if (lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel)) {
+    if (lvl && lvl.bossId === "komainu") {
+      if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
+      if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
+      if (this.dom.bossPhaseBadge) {
+        this.dom.bossPhaseBadge.className = "boss-phase-badge";
+        this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+      }
+      if (this.renderer && typeof this.renderer.clearSonicHazard === "function") {
+        this.renderer.clearSonicHazard();
+      }
+    } else if (lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel)) {
       if (this.dom.seal1) this.dom.seal1.className = "boss-seal lit";
       if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
       if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
@@ -2468,6 +2499,23 @@ class GameEngine {
   }
 
   onOrbCollected(lvl) {
+    if (lvl && lvl.bossId === "komainu") {
+      const count = this.state.collectedOrbs.size;
+      if (count === 1) {
+        if (this.dom.seal1) this.dom.seal1.className = "boss-seal shattered";
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "Relikt 1 geborgen (Schrein-Glocke)";
+        this.setFeedback("1. Heiliges Schrein-Relikt geborgen!", "good");
+      } else if (count >= 2) {
+        if (this.dom.seal2) this.dom.seal2.className = "boss-seal shattered";
+        if (this.dom.bossPhaseBadge) this.dom.bossPhaseBadge.textContent = "Alle Relikte geborgen! Erreiche das Bambus-Tor!";
+        this.setFeedback("Alle Schrein-Relikte geborgen! Das Tor ist frei!", "good");
+      }
+      if (typeof Sound !== "undefined" && typeof Sound.playMagatamaShatter === "function") {
+        Sound.playMagatamaShatter();
+      }
+      return;
+    }
+
     if (lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel)) {
       const count = this.state.collectedOrbs.size;
       if (count === 1) {
@@ -2568,7 +2616,108 @@ class GameEngine {
   }
 
   processBossBreath(lvl, step, onComplete) {
-    const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
+    if (lvl && lvl.bossId === "komainu") {
+      const isTrapped = (this.state.blocks || []).some(b => b[0] === 3 && b[1] === 2);
+      const cycleMod = step % 3;
+
+      if (cycleMod === 1) {
+        if (this.renderer && typeof this.renderer.clearSonicHazard === "function") {
+          this.renderer.clearSonicHazard();
+        }
+        if (this.dom.bossPhaseBadge) {
+          if (isTrapped) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
+            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Gebrüll gedämpft.";
+          } else {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge";
+            this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+          }
+        }
+        if (typeof onComplete === "function") onComplete();
+        return;
+      }
+
+      if (cycleMod === 2) {
+        if (isTrapped) {
+          if (this.dom.bossPhaseBadge) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
+            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
+          }
+        } else {
+          const roarLane = [[3, 1], [3, 2], [3, 3], [3, 4]];
+          if (this.renderer && typeof this.renderer.showSonicHazard === "function") {
+            this.renderer.showSonicHazard(roarLane);
+          }
+          if (this.dom.bossPhaseBadge) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
+            this.dom.bossPhaseBadge.textContent = "⚠️ GEBRÜLL-ZONE: Schrein-Schlucht (Feuert nächste Runde!)";
+          }
+          this.triggerHaptic([35, 40]);
+        }
+        if (typeof onComplete === "function") onComplete();
+        return;
+      }
+
+      if (cycleMod === 0 && step > 0) {
+        if (this.renderer && typeof this.renderer.clearSonicHazard === "function") {
+          this.renderer.clearSonicHazard();
+        }
+
+        if (isTrapped) {
+          if (this.dom.bossPhaseBadge) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
+            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Gebrüll gedämpft.";
+          }
+          if (this.renderer && typeof this.renderer.animateKomainuPacified === "function") {
+            this.renderer.animateKomainuPacified();
+          }
+          this.setFeedback("🛡️ Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.", "good");
+          if (typeof onComplete === "function") onComplete();
+          return;
+        }
+
+        const isKomaInRoar = (this.state.x === 3 && this.state.y >= 1 && this.state.y <= 4);
+        const hasShieldBlock = (this.state.blocks || []).some(b => b[0] === 3 && b[1] < this.state.y && b[1] >= 1);
+        const isKomaHit = isKomaInRoar && !hasShieldBlock;
+
+        if (this.dom.bossPhaseBadge) {
+          if (isKomaHit) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
+            this.dom.bossPhaseBadge.textContent = "💥 Vom Gebrüll betäubt!";
+          } else {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
+            this.dom.bossPhaseBadge.textContent = "🦁 Komainu brüllt!";
+          }
+        }
+
+        if (this.renderer && typeof this.renderer.animateKomainuRoar === "function") {
+          this.renderer.animateKomainuRoar(() => {
+            if (isKomaHit) {
+              this.state.isFail = true;
+              this.isPlaying = false;
+              if (typeof document !== "undefined") {
+                document.body.classList.remove("is-executing");
+              }
+              this.setFeedback("💥 Vom Gebrüll des Komainu erschüttert! Sperre ihn mit dem Basaltblock auf (3, 2) ein!", "bad");
+              this.triggerHaptic([60, 80, 100]);
+              this.renderQueue();
+              return;
+            } else {
+              this.setFeedback("🦁 Das mächtige Brüllen des Schreinwächters hallt durch den Bambuswald!", "normal");
+            }
+            if (typeof onComplete === "function") onComplete();
+          });
+        } else {
+          if (typeof onComplete === "function") onComplete();
+        }
+        return;
+      }
+
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    const isBoss = lvl && (lvl.bossId === "ryujin" || (lvl.isBossLevel && lvl.bossId !== "komainu"));
     if (!isBoss) {
       if (typeof onComplete === "function") onComplete();
       return;
@@ -3414,13 +3563,22 @@ class GameEngine {
       this.renderQueue();
       this.updateStarsDisplay();
 
-      const isBoss = lvl && (lvl.bossId === "ryujin" || lvl.isBossLevel);
-      if (isBoss) {
+      const isRyujin = lvl && (lvl.bossId === "ryujin" || (lvl.isBossLevel && lvl.bossId !== "komainu"));
+      const isKomainu = lvl && lvl.bossId === "komainu";
+      const isBoss = isRyujin || isKomainu;
+      if (isRyujin) {
         try {
           localStorage.setItem("koma_defeated_ryujin", "true");
         } catch (e) {}
         if (this.renderer && typeof this.renderer.animateDragonAscend === "function") {
           this.renderer.animateDragonAscend();
+        }
+      } else if (isKomainu) {
+        try {
+          localStorage.setItem("koma_caged_komainu", "true");
+        } catch (e) {}
+        if (this.renderer && typeof this.renderer.animateKomainuPacified === "function") {
+          this.renderer.animateKomainuPacified();
         }
       }
 
@@ -3430,16 +3588,20 @@ class GameEngine {
 
       if (this.dom.progressBar) this.dom.progressBar.style.width = "100%";
       const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
-      if (isBoss) {
+      if (isRyujin) {
         this.setFeedback(isEn ? "Sacred dragon Ryūjin is redeemed and ascends into the heavens!" : "Der heilige Drache Ryūjin ist erlöst und steigt in den Himmel auf!", "good");
+      } else if (isKomainu) {
+        this.setFeedback(isEn ? "The stone guardian is tamed and rests peacefully!" : "Der steinerne Schreinwächter ist gezähmt und ruht in Frieden!", "good");
       } else {
         this.setFeedback(isEn ? "Package successfully delivered! A sacred corner of Japan lights up." : "Paket erfolgreich zugestellt! Eine Ecke Japans leuchtet auf.", "good");
       }
 
       setTimeout(() => {
         if (this.dom.modalWinTitle) {
-          if (isBoss) {
+          if (isRyujin) {
             this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_boss") : "「富士の龍神」 BEZWUNGEN!";
+          } else if (isKomainu) {
+            this.dom.modalWinTitle.textContent = typeof I18N !== "undefined" ? I18N.t("win_title_komainu") : "「岩狛犬」 BEZWUNGEN!";
           } else {
             this.dom.modalWinTitle.textContent =
               this.currentLevelIdx === LEVELS.length - 1 
@@ -3448,8 +3610,10 @@ class GameEngine {
           }
         }
         if (this.dom.modalWinText) {
-          if (isBoss) {
+          if (isRyujin) {
             this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_boss", { steps: this.currentStep }) : `Du hast alle 3 Relikte geborgen, das Torii des Gipfels versöhnt und den Drachen Ryūjin in ${this.currentStep} Schritten erlöst!`;
+          } else if (isKomainu) {
+            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_komainu", { steps: this.currentStep }) : `Du hast den steinernen Schreinwächter eingesperrt, beide Relikte geborgen und das Bambus-Tor in ${this.currentStep} Schritten erreicht!`;
           } else {
             this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_normal", { steps: this.currentStep }) : `KOMA hat das Paket in ${this.currentStep} Befehl${
               this.currentStep === 1 ? "" : "en"
@@ -3511,7 +3675,7 @@ class GameEngine {
         }
 
         if (this.dom.modalWinSkinNotice) {
-          if (isBoss) {
+          if (isRyujin) {
             const ryujinSkin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS.ryujin);
             if (ryujinSkin) {
               const bossKicker = isEn ? "LEGENDARY BOSS TROPHY UNLOCKED!" : "LEGENDÄRE BOSS-TROPHÄE FREIGESCHALTET!";

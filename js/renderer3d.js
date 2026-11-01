@@ -971,6 +971,276 @@ class GardenRenderer {
   }
 
   // ==========================================================================
+  // IWA-KOMAINU: THE STONE GUARDIAN BOSS (LEVEL 30)
+  // ==========================================================================
+
+  clearKomainuBoss() {
+    if (this.komainuGroup) {
+      this.disposeHierarchy(this.komainuGroup);
+      this.scene.remove(this.komainuGroup);
+      this.komainuGroup = null;
+      this.komainuHead = null;
+      this.komainuEyes = [];
+      this.isKomainuPacified = false;
+    }
+    this.clearSonicHazard();
+  }
+
+  spawnKomainuBoss(levelData) {
+    this.clearKomainuBoss();
+
+    this.komainuGroup = new THREE.Group();
+    this.komainuGroup.name = "KomainuBossGroup";
+
+    // Place Komainu at northern shrine altar (x: 3, y: 0)
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+    const posX = (3 - offsetX) * this.tileSize;
+    const posZ = (0 - offsetZ) * this.tileSize;
+
+    this.komainuBasePos = new THREE.Vector3(posX, 0.05, posZ);
+    this.komainuGroup.position.copy(this.komainuBasePos);
+
+    // Stone Materials
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0x6a7b88,
+      metalness: 0.15,
+      roughness: 0.85
+    });
+    const darkStoneMat = new THREE.MeshStandardMaterial({
+      color: 0x3d4954,
+      metalness: 0.25,
+      roughness: 0.78
+    });
+    const mossMat = new THREE.MeshStandardMaterial({
+      color: 0x4d6f58,
+      metalness: 0.1,
+      roughness: 0.95
+    });
+    const runeGoldMat = new THREE.MeshStandardMaterial({
+      color: 0xffd700,
+      metalness: 0.8,
+      roughness: 0.2,
+      emissive: 0xff9900,
+      emissiveIntensity: 0.6
+    });
+    const eyeMat = new THREE.MeshBasicMaterial({
+      color: 0xff9900
+    });
+    this.komainuEyeMat = eyeMat;
+
+    // 1. Pedestal / Shrine Altar
+    const plinthGeo = new THREE.BoxGeometry(1.4, 0.35, 1.4);
+    const plinth = new THREE.Mesh(plinthGeo, darkStoneMat);
+    plinth.position.y = 0.175;
+    this.komainuGroup.add(plinth);
+
+    const stepGeo = new THREE.BoxGeometry(1.15, 0.2, 1.15);
+    const step = new THREE.Mesh(stepGeo, stoneMat);
+    step.position.y = 0.45;
+    this.komainuGroup.add(step);
+
+    // 2. Body of the Stone Komainu (Sturdy stone torso, low-poly)
+    const bodyGeo = new THREE.CylinderGeometry(0.38, 0.48, 0.75, 8);
+    const body = new THREE.Mesh(bodyGeo, stoneMat);
+    body.position.set(0, 0.9, 0);
+    body.rotation.y = Math.PI / 8;
+    this.komainuGroup.add(body);
+
+    // Moss shoulder patches
+    const mossPatch = new THREE.Mesh(new THREE.SphereGeometry(0.25, 6, 6), mossMat);
+    mossPatch.scale.set(1.1, 0.4, 1.1);
+    mossPatch.position.set(0, 1.25, -0.05);
+    this.komainuGroup.add(mossPatch);
+
+    // 3. Four sturdy stone legs & paws
+    const legGeo = new THREE.CylinderGeometry(0.12, 0.15, 0.5, 6);
+    const pawPositions = [
+      [-0.32, 0.65, 0.3],
+      [0.32, 0.65, 0.3],
+      [-0.34, 0.65, -0.25],
+      [0.34, 0.65, -0.25]
+    ];
+    pawPositions.forEach(([lx, ly, lz]) => {
+      const leg = new THREE.Mesh(legGeo, stoneMat);
+      leg.position.set(lx, ly, lz);
+      this.komainuGroup.add(leg);
+    });
+
+    // Sacred stone jewel beneath left front paw (traditional Komainu attribute)
+    const orbGeo = new THREE.SphereGeometry(0.16, 8, 8);
+    const sacredJewel = new THREE.Mesh(orbGeo, runeGoldMat);
+    sacredJewel.position.set(-0.32, 0.52, 0.4);
+    this.komainuGroup.add(sacredJewel);
+
+    // 4. Head Group (animated on roar)
+    const headGroup = new THREE.Group();
+    headGroup.position.set(0, 1.35, 0.18);
+
+    const headGeo = new THREE.BoxGeometry(0.55, 0.48, 0.55);
+    const headMesh = new THREE.Mesh(headGeo, stoneMat);
+    headGroup.add(headMesh);
+
+    // Snout / Muzzle
+    const muzzleGeo = new THREE.BoxGeometry(0.42, 0.28, 0.32);
+    const muzzleMesh = new THREE.Mesh(muzzleGeo, darkStoneMat);
+    muzzleMesh.position.set(0, -0.08, 0.32);
+    headGroup.add(muzzleMesh);
+
+    // Stone ears
+    const earGeo = new THREE.ConeGeometry(0.12, 0.25, 4);
+    [-0.22, 0.22].forEach(ex => {
+      const ear = new THREE.Mesh(earGeo, stoneMat);
+      ear.position.set(ex, 0.32, -0.05);
+      ear.rotation.z = ex > 0 ? -0.2 : 0.2;
+      headGroup.add(ear);
+    });
+
+    // Horn (traditional Komainu feature)
+    const hornGeo = new THREE.ConeGeometry(0.09, 0.32, 5);
+    const horn = new THREE.Mesh(hornGeo, runeGoldMat);
+    horn.position.set(0, 0.36, 0.1);
+    horn.rotation.x = -0.15;
+    headGroup.add(horn);
+
+    // Glowing Eyes
+    this.komainuEyes = [];
+    [-0.14, 0.14].forEach(eyeX => {
+      const eyeGeo = new THREE.BoxGeometry(0.09, 0.07, 0.08);
+      const eye = new THREE.Mesh(eyeGeo, eyeMat);
+      eye.position.set(eyeX, 0.04, 0.32);
+      headGroup.add(eye);
+      this.komainuEyes.push(eye);
+    });
+
+    // Mane curls (low-poly nodules)
+    const maneGeo = new THREE.DodecahedronGeometry(0.13, 0);
+    const maneCoords = [
+      [-0.28, 0.1, -0.18], [0.28, 0.1, -0.18],
+      [-0.32, -0.08, -0.05], [0.32, -0.08, -0.05],
+      [0, 0.22, -0.22], [0, -0.15, -0.22]
+    ];
+    maneCoords.forEach(([mx, my, mz]) => {
+      const maneNod = new THREE.Mesh(maneGeo, stoneMat);
+      maneNod.position.set(mx, my, mz);
+      headGroup.add(maneNod);
+    });
+
+    this.komainuHead = headGroup;
+    this.komainuGroup.add(headGroup);
+
+    // 5. Stylized tail
+    const tailGeo = new THREE.ConeGeometry(0.14, 0.55, 5);
+    const tail = new THREE.Mesh(tailGeo, stoneMat);
+    tail.position.set(0, 0.95, -0.5);
+    tail.rotation.x = -0.65;
+    this.komainuGroup.add(tail);
+
+    this.scene.add(this.komainuGroup);
+  }
+
+  animateKomainu(time, delta) {
+    if (!this.komainuGroup) return;
+    if (this.isKomainuPacified) {
+      if (this.komainuHead) {
+        this.komainuHead.rotation.x = Math.sin(time * 1.2) * 0.03 + 0.08;
+      }
+      return;
+    }
+    if (this.komainuHead) {
+      this.komainuHead.rotation.x = Math.sin(time * 2.0) * 0.05;
+      this.komainuHead.position.y = 1.35 + Math.sin(time * 2.5) * 0.02;
+    }
+  }
+
+  animateKomainuRoar(onComplete) {
+    if (!this.komainuHead) {
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+    this.komainuHead.rotation.x = -0.35;
+    if (typeof Sound !== "undefined" && typeof Sound.playKomainuRoar === "function") {
+      Sound.playKomainuRoar();
+    }
+    const ringGeo = new THREE.RingGeometry(0.2, 0.45, 24);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0xffaa00,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.copy(this.komainuBasePos);
+    ring.position.y = 0.15;
+    this.scene.add(ring);
+
+    let progress = 0;
+    const expandRing = () => {
+      progress += 0.06;
+      const s = 1 + progress * 5.5;
+      ring.scale.set(s, s, 1);
+      ring.position.z += 0.12;
+      ringMat.opacity = Math.max(0, 0.85 - progress);
+      if (progress < 1) {
+        requestAnimationFrame(expandRing);
+      } else {
+        this.scene.remove(ring);
+        ringGeo.dispose();
+        ringMat.dispose();
+        if (this.komainuHead) this.komainuHead.rotation.x = 0;
+        if (typeof onComplete === "function") onComplete();
+      }
+    };
+    expandRing();
+  }
+
+  animateKomainuPacified() {
+    this.isKomainuPacified = true;
+    if (this.komainuEyeMat) {
+      this.komainuEyeMat.color.setHex(0x00f5ff);
+    }
+    if (this.komainuHead) {
+      this.komainuHead.rotation.x = 0.15;
+    }
+    if (typeof Sound !== "undefined" && typeof Sound.playKomainuPacified === "function") {
+      Sound.playKomainuPacified();
+    }
+  }
+
+  showSonicHazard(tiles) {
+    this.clearSonicHazard();
+    this.sonicHazardMeshes = [];
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+    const hazardGeo = new THREE.PlaneGeometry(this.tileSize * 0.92, this.tileSize * 0.92);
+    const hazardMat = new THREE.MeshBasicMaterial({
+      color: 0xff9900,
+      transparent: true,
+      opacity: 0.35,
+      side: THREE.DoubleSide
+    });
+    tiles.forEach(([tx, ty]) => {
+      const mesh = new THREE.Mesh(hazardGeo, hazardMat);
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.set((tx - offsetX) * this.tileSize, 0.04, (ty - offsetZ) * this.tileSize);
+      this.scene.add(mesh);
+      this.sonicHazardMeshes.push(mesh);
+    });
+  }
+
+  clearSonicHazard() {
+    if (this.sonicHazardMeshes) {
+      this.sonicHazardMeshes.forEach(m => {
+        this.scene.remove(m);
+        m.geometry.dispose();
+        m.material.dispose();
+      });
+      this.sonicHazardMeshes = [];
+    }
+  }
+
+  // ==========================================================================
   // RYŪJIN: THE SKY DRAGON BOSS OF MOUNT FUJI (LEVEL 60)
   // ==========================================================================
 
@@ -3214,6 +3484,12 @@ class GardenRenderer {
     }
 
     this.clearFrostHazard();
+    this.clearSonicHazard();
+    if (this.komainuGroup) {
+      this.isKomainuPacified = false;
+      if (this.komainuEyeMat) this.komainuEyeMat.color.setHex(0xffaa00);
+      if (this.komainuHead) this.komainuHead.rotation.x = 0;
+    }
     if (this.komaGroup) {
       const existingCube = this.komaGroup.getObjectByName("komaIceCube");
       if (existingCube) this.komaGroup.remove(existingCube);
@@ -3243,11 +3519,16 @@ class GardenRenderer {
     this.blockMeshes = {};
     this.goalMesh = null;
 
-    // Boss fight: Spawn Ryūjin Dragon for Level 60
+    // Boss fight: Spawn Komainu for Level 30 or Ryūjin Dragon for Level 60
     this.clearRyujinDragon();
-    const isBossLevel = levelData.isBossLevel || (levelData.n && levelData.n.includes("Geist des Fuji"));
-    if (isBossLevel) {
-      this.spawnRyujinDragon(levelData);
+    this.clearKomainuBoss();
+    if (levelData.bossId === "komainu") {
+      this.spawnKomainuBoss(levelData);
+    } else {
+      const isBossLevel = levelData.isBossLevel || (levelData.n && levelData.n.includes("Geist des Fuji"));
+      if (isBossLevel) {
+        this.spawnRyujinDragon(levelData);
+      }
     }
 
     // Apply Mount Fuji scenic background and alpine snowfall for Fuji levels
@@ -4194,12 +4475,27 @@ class GardenRenderer {
       this.animateRyujinDragon(time, cappedDelta);
     }
 
+    // Animate Komainu Boss if active
+    if (this.komainuGroup) {
+      this.animateKomainu(time, cappedDelta);
+    }
+
     // Pulse frost hazard warning tiles if active
     if (this.frostHazardGroup) {
       const pPulse = Math.sin(time * 6.5) * 0.18 + 0.52;
       this.frostHazardGroup.children.forEach(c => {
         if (c.material && c.userData && c.userData.isHazard) {
           c.material.opacity = pPulse;
+        }
+      });
+    }
+
+    // Pulse sonic hazard warning tiles if active
+    if (this.sonicHazardMeshes && this.sonicHazardMeshes.length > 0) {
+      const sPulse = Math.sin(time * 7.5) * 0.18 + 0.45;
+      this.sonicHazardMeshes.forEach(m => {
+        if (m.material) {
+          m.material.opacity = sPulse;
         }
       });
     }
