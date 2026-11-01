@@ -330,7 +330,7 @@ const LEVELS = [
     "n": "Der brüchige Steg",
     "c": "Kapitel 02 · Alter Schrein",
     "t": "Brüchiges Gestein",
-    "d": "Die Trittsteine über dem Lotusteich sind alt und brüchig. KOMA kann jeden Stein nur einmal betreten, bevor er im Wasser versinkt.",
+    "d": "Die Trittsteine über dem Lotusteich sind alt und brüchig. Der Roboter kann jeden Stein nur einmal betreten, bevor er im Wasser versinkt.",
     "w": 5,
     "h": 5,
     "s": [
@@ -613,7 +613,7 @@ const LEVELS = [
     "n": "Laternenlicht",
     "c": "Kapitel 03 · Geistergarten",
     "t": "Route lesen",
-    "d": "Der Weg wird länger und führt um mehrere Ecken. Achte auf die Ausrichtung von KOMA nach jeder Drehung.",
+    "d": "Der Weg wird länger und führt um mehrere Ecken. Achte auf die Ausrichtung des Roboters nach jeder Drehung.",
     "w": 6,
     "h": 6,
     "s": [
@@ -3419,7 +3419,7 @@ const LEVELS = [
     "n": "Über Mauer & Lotusteich",
     "c": "Kapitel 04 · Kitsune-Garten",
     "t": "Fragile Dimension",
-    "d": "Der Lotusteich trennt KOMA vom Kitsune-Portal. Balanciere über die brüchigen Steine zum Schalter und springe durch das Portal zum Tor!",
+    "d": "Der Lotusteich trennt den Roboter vom Kitsune-Portal. Balanciere über die brüchigen Steine zum Schalter und springe durch das Portal zum Tor!",
     "w": 6,
     "h": 6,
     "s": [
@@ -5272,7 +5272,7 @@ const LEVELS = [
     "n": "Zwei Opfergaben",
     "c": "Kapitel 05 · Bambuswald",
     "t": "Zwei Lichter",
-    "d": "Ein plötzlicher Bergwindstoß im Bambuswald trägt KOMA nach Norden! Sammle beide Opfergaben links und rechts.",
+    "d": "Ein plötzlicher Bergwindstoß im Bambuswald trägt den Roboter nach Norden! Sammle beide Opfergaben links und rechts.",
     "w": 5,
     "h": 5,
     "s": [
@@ -11213,10 +11213,10 @@ const LEVELS = [
     "grass": []
   },
   {
-    "n": "Die Legende von KOMA",
+    "n": "Die Legende des Schreins",
     "c": "Kapitel 07 · Palast der Kami",
     "t": "Meister-Finale",
-    "d": "Das große Finale von KOMA: Spirit Delivery! Alle Schreinelemente vereinen sich im Palast der Götter.",
+    "d": "Das große Finale von Spirit Delivery! Alle Schreinelemente vereinen sich im Palast der Götter.",
     "w": 8,
     "h": 8,
     "s": [
@@ -11562,7 +11562,7 @@ const LEVELS = [
     "n": "Der erste Bergwind",
     "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
     "t": "Windböen",
-    "d": "Willkommen am schneebedeckten Fuß des Fuji! Eine sanfte Windböe trägt KOMA mit. Nutze den Windstoß, aktiviere den Schrein-Schalter und erreiche das Ziel.",
+    "d": "Willkommen am schneebedeckten Fuß des Fuji! Eine sanfte Windböe trägt den Roboter mit. Nutze den Windstoß, aktiviere den Schrein-Schalter und erreiche das Ziel.",
     "w": 5,
     "h": 5,
     "s": [
@@ -11703,7 +11703,7 @@ const LEVELS = [
     "n": "Die gefrorene Schlucht",
     "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
     "t": "Schlucht-Sprung",
-    "d": "Ein eisiger Abgrund trennt die Terrassen. Der Aufwind katapultiert KOMA über die Schlucht zum Bergkristall. Entsiegle das Tor, um den Berggarten zu betreten.",
+    "d": "Ein eisiger Abgrund trennt die Terrassen. Der Aufwind katapultiert den Roboter über die Schlucht zum Bergkristall. Entsiegle das Tor, um den Berggarten zu betreten.",
     "w": 6,
     "h": 6,
     "s": [
@@ -11903,7 +11903,7 @@ const LEVELS = [
     "n": "Das eisige Kitsune-Portal",
     "c": "Kapitel 06 · Der Heilige Berg Fuji (富士山)",
     "t": "Portal-Beschleunigung",
-    "d": "Das Kitsune-Portal steht mitten im Windkanal! Die Windträgheit schleudert KOMA direkt beim Austritt weiter. Sammle beide Lichter und finde den Weg zum Hof.",
+    "d": "Das Kitsune-Portal steht mitten im Windkanal! Die Windträgheit schleudert den Roboter direkt beim Austritt weiter. Sammle beide Lichter und finde den Weg zum Hof.",
     "w": 7,
     "h": 7,
     "s": [
