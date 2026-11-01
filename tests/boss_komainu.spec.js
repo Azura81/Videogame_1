@@ -96,4 +96,25 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(winData.title).toContain('BEZWUNGEN');
     expect(winData.isPacified).toBe(true);
   });
+
+  test('Level 30: Roar hits and fails KOMA if standing unprotected in canyon on step 3', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    const failFeedback = await page.evaluate(async () => {
+      window.gameInstance.loadLevel(29);
+      window.gameInstance.state.x = 3;
+      window.gameInstance.state.y = 3;
+      window.gameInstance.state.blocks = [[1, 1]]; // block not shielding
+      window.gameInstance.processBossBreath(window.gameInstance.getCurrentLevel(), 3);
+      await new Promise(r => setTimeout(r, 700));
+      return {
+        isFail: window.gameInstance.state.isFail,
+        feedback: document.getElementById('feedbackText')?.textContent || ''
+      };
+    });
+
+    expect(failFeedback.isFail).toBe(true);
+    expect(failFeedback.feedback).toContain('Gebrüll');
+  });
 });

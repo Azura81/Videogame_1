@@ -2644,7 +2644,7 @@ class GameEngine {
             this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
           }
         } else {
-          const roarLane = [[3, 1], [3, 2], [3, 3], [3, 4]];
+          const roarLane = [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]];
           if (this.renderer && typeof this.renderer.showSonicHazard === "function") {
             this.renderer.showSonicHazard(roarLane);
           }
@@ -2676,7 +2676,7 @@ class GameEngine {
           return;
         }
 
-        const isKomaInRoar = (this.state.x === 3 && this.state.y >= 1 && this.state.y <= 4);
+        const isKomaInRoar = (this.state.x === 3 && this.state.y >= 1 && this.state.y <= 5);
         const hasShieldBlock = (this.state.blocks || []).some(b => b[0] === 3 && b[1] < this.state.y && b[1] >= 1);
         const isKomaHit = isKomaInRoar && !hasShieldBlock;
 
@@ -2690,25 +2690,26 @@ class GameEngine {
           }
         }
 
+        if (isKomaHit) {
+          this.state.isFail = true;
+          this.isPlaying = false;
+          if (typeof document !== "undefined") {
+            document.body.classList.remove("is-executing");
+          }
+          this.setFeedback("💥 Vom Gebrüll des Komainu erschüttert! Sperre ihn mit dem Basaltblock auf (3, 2) ein!", "bad");
+          this.triggerHaptic([60, 80, 100]);
+          this.renderQueue();
+        }
+
         if (this.renderer && typeof this.renderer.animateKomainuRoar === "function") {
-          this.renderer.animateKomainuRoar(() => {
-            if (isKomaHit) {
-              this.state.isFail = true;
-              this.isPlaying = false;
-              if (typeof document !== "undefined") {
-                document.body.classList.remove("is-executing");
-              }
-              this.setFeedback("💥 Vom Gebrüll des Komainu erschüttert! Sperre ihn mit dem Basaltblock auf (3, 2) ein!", "bad");
-              this.triggerHaptic([60, 80, 100]);
-              this.renderQueue();
-              return;
-            } else {
+          this.renderer.animateKomainuRoar(isKomaHit, () => {
+            if (!isKomaHit) {
               this.setFeedback("🦁 Das mächtige Brüllen des Schreinwächters hallt durch den Bambuswald!", "normal");
+              if (typeof onComplete === "function") onComplete();
             }
-            if (typeof onComplete === "function") onComplete();
           });
         } else {
-          if (typeof onComplete === "function") onComplete();
+          if (!isKomaHit && typeof onComplete === "function") onComplete();
         }
         return;
       }
@@ -3451,6 +3452,14 @@ class GameEngine {
         this.setFeedback(`⛩️ Ziel noch versiegelt! Sammle noch ${lvl.orbs.length - this.state.collectedOrbs.size} Geisterlicht(er).`, "bad");
         Sound.playBump();
         return;
+      }
+      if (lvl.bossId === "komainu") {
+        const isTrapped = (this.state.blocks || []).some(b => b[0] === 3 && b[1] === 2);
+        if (!isTrapped) {
+          this.setFeedback("🦁 Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!", "bad");
+          Sound.playBump();
+          return;
+        }
       }
       this.state.isWin = true;
       this.isPlaying = false;

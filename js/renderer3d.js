@@ -1153,46 +1153,87 @@ class GardenRenderer {
     }
   }
 
-  animateKomainuRoar(onComplete) {
+  animateKomainuRoar(isKomaHit = false, onComplete = null) {
+    if (typeof isKomaHit === "function") {
+      onComplete = isKomaHit;
+      isKomaHit = false;
+    }
     if (!this.komainuHead) {
       if (typeof onComplete === "function") onComplete();
       return;
     }
-    this.komainuHead.rotation.x = -0.35;
+    this.komainuHead.rotation.x = -0.45;
+    this.triggerScreenShake(isKomaHit ? 18 : 8, 450);
+
     if (typeof Sound !== "undefined" && typeof Sound.playKomainuRoar === "function") {
       Sound.playKomainuRoar();
     }
-    const ringGeo = new THREE.RingGeometry(0.2, 0.45, 24);
-    const ringMat = new THREE.MeshBasicMaterial({
+
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+    const posX = (3 - offsetX) * this.tileSize;
+
+    // Glowing sonic ground wave covering column 3
+    const waveGeo = new THREE.PlaneGeometry(this.tileSize * 0.96, 5.2 * this.tileSize);
+    const waveMat = new THREE.MeshBasicMaterial({
       color: 0xffaa00,
-      side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.65,
+      side: THREE.DoubleSide
     });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.copy(this.komainuBasePos);
-    ring.position.y = 0.15;
-    this.scene.add(ring);
+    const wave = new THREE.Mesh(waveGeo, waveMat);
+    wave.rotation.x = -Math.PI / 2;
+    wave.position.set(posX, 0.08, (3 - offsetZ) * this.tileSize);
+    this.scene.add(wave);
+
+    // Dynamic sonic rings moving down the corridor
+    const rings = [];
+    for (let r = 0; r < 3; r++) {
+      const ringGeo = new THREE.RingGeometry(0.2, 0.5, 20);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xffdd44,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.set(posX, 0.12, (0 - offsetZ) * this.tileSize);
+      this.scene.add(ring);
+      rings.push({ mesh: ring, delay: r * 0.12, geo: ringGeo, mat: ringMat });
+    }
 
     let progress = 0;
-    const expandRing = () => {
-      progress += 0.06;
-      const s = 1 + progress * 5.5;
-      ring.scale.set(s, s, 1);
-      ring.position.z += 0.12;
-      ringMat.opacity = Math.max(0, 0.85 - progress);
-      if (progress < 1) {
-        requestAnimationFrame(expandRing);
+    const animateWave = () => {
+      progress += 0.045;
+      waveMat.opacity = Math.max(0, 0.65 * (1 - progress));
+
+      rings.forEach(({ mesh, delay, mat }) => {
+        const ringProg = Math.max(0, (progress - delay) / (1 - delay));
+        if (ringProg > 0 && ringProg <= 1) {
+          mesh.position.z = (0 - offsetZ) * this.tileSize + ringProg * (5.2 * this.tileSize);
+          const s = 1.0 + ringProg * 1.6;
+          mesh.scale.set(s, s, 1);
+          mat.opacity = Math.max(0, 0.85 * (1 - ringProg));
+        }
+      });
+
+      if (progress < 1.05) {
+        requestAnimationFrame(animateWave);
       } else {
-        this.scene.remove(ring);
-        ringGeo.dispose();
-        ringMat.dispose();
+        this.scene.remove(wave);
+        waveGeo.dispose();
+        waveMat.dispose();
+        rings.forEach(({ mesh, geo, mat }) => {
+          this.scene.remove(mesh);
+          geo.dispose();
+          mat.dispose();
+        });
         if (this.komainuHead) this.komainuHead.rotation.x = 0;
         if (typeof onComplete === "function") onComplete();
       }
     };
-    expandRing();
+    animateWave();
   }
 
   animateKomainuPacified() {
