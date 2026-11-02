@@ -1135,6 +1135,8 @@ class GameEngine {
   }
 
   updateAudioButtons() {
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+
     // 1. Update Master Sound Toggle Button
     if (this.dom.btnSoundToggle) {
       const isMuted = Sound.masterMuted;
@@ -1142,7 +1144,9 @@ class GameEngine {
         ? (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.soundOff(18) : "🔇")
         : (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.soundOn(18) : "🔊");
       this.dom.btnSoundToggle.innerHTML = `${sfxSvg}<span class="sr-only">${isMuted ? "🔇" : "🔊"}</span>`;
-      this.dom.btnSoundToggle.title = isMuted ? "Gesamten Ton aktivieren (Ton an)" : "Gesamten Ton stummschalten (Mute)";
+      this.dom.btnSoundToggle.title = isMuted 
+        ? (isEn ? "Unmute all audio (Sound on)" : "Gesamten Ton aktivieren (Ton an)")
+        : (isEn ? "Mute all audio (Mute)" : "Gesamten Ton stummschalten (Mute)");
       this.dom.btnSoundToggle.classList.toggle("muted", isMuted);
     }
 
@@ -1154,13 +1158,15 @@ class GameEngine {
         this.dom.btnMusicToggle.innerHTML = `${musicSvg}<span class="sr-only">🎵</span>`;
         this.dom.btnMusicToggle.classList.add("playing");
         this.dom.btnMusicToggle.classList.remove("muted");
-        this.dom.btnMusicToggle.title = "Hintergrundmusik pausieren";
+        this.dom.btnMusicToggle.title = isEn ? "Pause background music" : "Hintergrundmusik pausieren";
       } else {
         const musicSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.musicOff(18) : "🔇";
         this.dom.btnMusicToggle.innerHTML = `${musicSvg}<span class="sr-only">🔇</span>`;
         this.dom.btnMusicToggle.classList.remove("playing");
         this.dom.btnMusicToggle.classList.add("muted");
-        this.dom.btnMusicToggle.title = Sound.masterMuted ? "Musik stummgeschaltet (Master Mute)" : "Hintergrundmusik abspielen";
+        this.dom.btnMusicToggle.title = Sound.masterMuted 
+          ? (isEn ? "Music muted (Master Mute)" : "Musik stummgeschaltet (Master Mute)")
+          : (isEn ? "Play background music" : "Hintergrundmusik abspielen");
       }
     }
 
@@ -1170,7 +1176,10 @@ class GameEngine {
       const mIcon = typeof KOMA_ICONS !== "undefined"
         ? (isMusicActive ? KOMA_ICONS.musicOn(16) : KOMA_ICONS.musicOff(16))
         : "";
-      this.dom.btnMobileMusicToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${mIcon} <span>${isMusicActive ? "Musik pausieren" : "Musik starten"}</span></span>`;
+      const mText = isMusicActive 
+        ? (isEn ? "Pause Music" : "Musik pausieren")
+        : (isEn ? "Play Music" : "Musik starten");
+      this.dom.btnMobileMusicToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${mIcon} <span>${mText}</span></span>`;
       this.dom.btnMobileMusicToggle.classList.toggle("active", isMusicActive);
     }
     if (this.dom.btnMobileSoundToggle) {
@@ -1178,7 +1187,10 @@ class GameEngine {
       const sIcon = typeof KOMA_ICONS !== "undefined"
         ? (isMuted ? KOMA_ICONS.soundOff(16) : KOMA_ICONS.soundOn(16))
         : "";
-      this.dom.btnMobileSoundToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${sIcon} <span>${isMuted ? "Stumm" : "SFX Aktiv"}</span></span>`;
+      const sText = isMuted 
+        ? (isEn ? "Muted" : "Stumm")
+        : (isEn ? "SFX On" : "SFX Aktiv");
+      this.dom.btnMobileSoundToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${sIcon} <span>${sText}</span></span>`;
       this.dom.btnMobileSoundToggle.classList.toggle("active", !isMuted);
     }
 
@@ -1391,7 +1403,18 @@ class GameEngine {
     this.renderTrophies();
     this.renderMobileTrophies();
     this.renderLevelDrawer();
-    this.updateHomeScreen();
+    this.renderMobileLevels(this.activeMobileChapter || 1);
+    this.renderQueue();
+    if (this.selectedHomeMode) {
+      this.setHomeMode(this.selectedHomeMode);
+    } else {
+      this.updateHomeScreen();
+    }
+    this.updateAudioButtons();
+    this.updateHapticButton();
+    if (this.currentFeedbackRaw) {
+      this.setFeedback(this.currentFeedbackRaw, this.currentFeedbackType || "normal");
+    }
 
     if (typeof TowerTrial !== "undefined" && typeof TowerTrial.updateUI === "function") {
       TowerTrial.updateUI();
@@ -1534,15 +1557,16 @@ class GameEngine {
     if (this.dom.checkModeTower) this.dom.checkModeTower.textContent = (mode === "tower" ? "✓" : "");
     if (this.dom.checkModeDaily) this.dom.checkModeDaily.textContent = (mode === "daily" ? "✓" : "");
 
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
     if (mode === "campaign") {
       if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.torii(16) : "";
-      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Kampagne";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = isEn ? "Campaign" : "Kampagne";
     } else if (mode === "tower") {
       if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.pagoda(16) : "";
-      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Turm";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = isEn ? "Tower" : "Turm";
     } else if (mode === "daily") {
       if (this.dom.homeCurrentModeIcon) this.dom.homeCurrentModeIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(16) : "";
-      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = "Täglich";
+      if (this.dom.homeCurrentModeLabel) this.dom.homeCurrentModeLabel.textContent = isEn ? "Daily" : "Täglich";
     }
     this.updateHomeScreen();
   }
@@ -1662,32 +1686,42 @@ class GameEngine {
     }
 
     // 4. Synchronize Mode Badges
+    const isEnMode = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    const daysWord = (cnt) => isEnMode ? (cnt === 1 ? "day" : "days") : (cnt === 1 ? "Tag" : "Tage");
     if (this.dom.homeTowerBadge && typeof TowerTrial !== "undefined") {
-      this.dom.homeTowerBadge.textContent = `Rekord: Ebene ${TowerTrial.getBestFloor() || 1}`;
+      this.dom.homeTowerBadge.textContent = isEnMode 
+        ? `Record: Floor ${TowerTrial.getBestFloor() || 1}`
+        : `Rekord: Ebene ${TowerTrial.getBestFloor() || 1}`;
     }
     if (typeof DailyTrial !== "undefined") {
       const streak = DailyTrial.getEffectiveStreak();
       const isDone = DailyTrial.isTodayCompleted();
-      const streakStr = isDone ? `${streak} Tage ✓` : `${streak} Tage`;
+      const streakStr = isDone 
+        ? (isEnMode ? `${streak} ${daysWord(streak)} ✓` : `${streak} Tage ✓`)
+        : (isEnMode ? `${streak} ${daysWord(streak)}` : `${streak} Tage`);
       if (this.dom.homeDailyBadge) {
         this.dom.homeDailyBadge.textContent = streakStr;
       }
       if (this.dom.menuDailyBadge) {
-        this.dom.menuDailyBadge.textContent = isDone ? `${streak} Tage geschafft ✓` : `${streak} Tage Streak`;
+        this.dom.menuDailyBadge.textContent = isDone 
+          ? (isEnMode ? `${streak} ${daysWord(streak)} cleared ✓` : `${streak} Tage geschafft ✓`)
+          : (isEnMode ? `${streak} ${daysWord(streak)} streak` : `${streak} Tage Streak`);
       }
     }
     if (this.dom.homeTrophiesBadge) {
-      this.dom.homeTrophiesBadge.textContent = `${this.unlockedAchievements.size} / ${ACHIEVEMENTS.length} Siegel`;
+      this.dom.homeTrophiesBadge.textContent = isEnMode 
+        ? `${this.unlockedAchievements.size} / ${ACHIEVEMENTS.length} Seals`
+        : `${this.unlockedAchievements.size} / ${ACHIEVEMENTS.length} Siegel`;
     }
 
     // 5. Update Play Button Text based on mode
     if (this.dom.homePlayBtnText) {
       if (this.selectedHomeMode === "tower") {
-        this.dom.homePlayBtnText.textContent = "SCHREINPRÜFUNG";
+        this.dom.homePlayBtnText.textContent = isEnMode ? "SHRINE TRIAL" : "SCHREINPRÜFUNG";
       } else if (this.selectedHomeMode === "daily") {
-        this.dom.homePlayBtnText.textContent = "TÄGLICHE PRÜFUNG";
+        this.dom.homePlayBtnText.textContent = isEnMode ? "DAILY TRIAL" : "TÄGLICHE PRÜFUNG";
       } else {
-        this.dom.homePlayBtnText.textContent = "SPIELEN";
+        this.dom.homePlayBtnText.textContent = isEnMode ? "PLAY" : "SPIELEN";
       }
     }
   }
@@ -1968,20 +2002,24 @@ class GameEngine {
       const isUnlocked = this.isLevelUnlocked(absIdx);
       const stars = this.levelStars[absIdx];
 
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      const transLvl = (typeof I18N !== "undefined") ? I18N.translateLevel(lvl, absIdx) : lvl;
+
       let starsHtml = "";
       if (isUnlocked && stars !== undefined && stars > 0) {
         starsHtml = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getStarsRow(stars, stars, 11) : "⭐".repeat(stars);
       } else if (isUnlocked) {
         starsHtml = `<span style="opacity:0.3; font-size:11px;">–</span>`;
       } else {
-        starsHtml = `<span style="opacity:0.5; font-size:10px; font-weight:700;">🔒 Gesperrt</span>`;
+        const lockedLabel = isEn ? "🔒 Locked" : "🔒 Gesperrt";
+        starsHtml = `<span style="opacity:0.5; font-size:10px; font-weight:700;">${lockedLabel}</span>`;
       }
 
       return `
         <button class="mobile-level-card ${isActive ? "active" : ""} ${isDone ? "done" : ""} ${!isUnlocked ? "locked" : ""}" data-level-idx="${absIdx}" ${!isUnlocked ? 'aria-disabled="true"' : ""}>
           <div class="mobile-level-num">${!isUnlocked ? "🔒" : String(absIdx + 1).padStart(2, "0")}</div>
           <div class="mobile-level-info">
-            <div class="mobile-level-name">${lvl.n}</div>
+            <div class="mobile-level-name">${transLvl.n}</div>
             <div class="mobile-level-meta">
               <span class="mobile-level-stars">${starsHtml}</span>
               ${isDone ? '<span class="mobile-level-check">✓</span>' : ''}
@@ -2186,10 +2224,10 @@ class GameEngine {
     if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = `Tägliche Schreinprüfung · ${typeof DailyTrial !== "undefined" ? DailyTrial.getFormattedDate() : "Heute"}`;
     if (this.dom.levelTag) this.dom.levelTag.textContent = dailyLevel.t;
     if (this.dom.missionDesc) this.dom.missionDesc.textContent = dailyLevel.d;
-    if (this.dom.missionBadge) this.dom.missionBadge.textContent = "DAILY";
+    if (this.dom.missionBadge) this.dom.missionBadge.textContent = "🔥 DAILY";
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = "Tages-Prüfung";
-    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = "0/0";
+    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = "0/0 🚫";
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-executing");
       document.body.classList.add("is-daily-trial");
@@ -2951,12 +2989,13 @@ class GameEngine {
 
   updateHapticButton() {
     if (!this.dom.btnMobileHapticToggle) return;
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
     if (this.hapticsEnabled) {
       this.dom.btnMobileHapticToggle.classList.add("active");
-      this.dom.btnMobileHapticToggle.textContent = "Haptik An";
+      this.dom.btnMobileHapticToggle.textContent = isEn ? "Haptics On" : "Haptik An";
     } else {
       this.dom.btnMobileHapticToggle.classList.remove("active");
-      this.dom.btnMobileHapticToggle.textContent = "Haptik Aus";
+      this.dom.btnMobileHapticToggle.textContent = isEn ? "Haptics Off" : "Haptik Aus";
     }
   }
 
@@ -3019,16 +3058,22 @@ class GameEngine {
     this.dom.queueContainer.innerHTML = "";
 
     if (this.queue.length === 0) {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       if (this.currentLevelIdx === 0 && !this.isTowerMode && !this.isDailyTrial) {
-        this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tippe auf <strong>Vorwärts</strong> & dann auf <strong>▶ Plan abspielen</strong>!</div>`;
+        this.dom.queueContainer.innerHTML = isEn
+          ? `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tap <strong>Forward</strong> & then <strong>▶ Run Plan</strong>!</div>`
+          : `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tippe auf <strong>Vorwärts</strong> & dann auf <strong>▶ Plan abspielen</strong>!</div>`;
       } else {
-        this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">Dein Plan erscheint hier …</div>`;
+        const hintText = (typeof I18N !== "undefined") ? I18N.t("empty_queue_hint") : "Dein Plan erscheint hier …";
+        this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">${hintText}</div>`;
       }
     } else {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      const tapToDelete = isEn ? "tap to delete" : "antippen zum Löschen";
       this.queue.forEach((cmd, idx) => {
         const slot = document.createElement("button");
         slot.className = "queue-chip" + (idx === this.currentStep - 1 && this.isPlaying ? " active-step" : "");
-        slot.title = `${this.commandMeta[cmd].name} (antippen zum Löschen)`;
+        slot.title = `${this.commandMeta[cmd].name} (${tapToDelete})`;
         const chipIcon = this.commandMeta[cmd].iconSvg || this.commandMeta[cmd].icon;
         slot.innerHTML = `
           <span class="chip-icon">${chipIcon}<span class="sr-only">${this.commandMeta[cmd].icon}</span></span>
@@ -3072,6 +3117,9 @@ class GameEngine {
     LEVELS.forEach((lvl, idx) => {
       if (idx < minIdx || idx > maxIdx) return;
 
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      const transLvl = (typeof I18N !== "undefined") ? I18N.translateLevel(lvl, idx) : lvl;
+
       const isUnlocked = this.isLevelUnlocked(idx);
       const isCompleted = this.completedLevels.has(idx);
       const isActive = idx === this.currentLevelIdx;
@@ -3085,7 +3133,9 @@ class GameEngine {
       
       if (!isUnlocked) {
         btn.setAttribute("aria-disabled", "true");
-        btn.title = `Level ${idx + 1} ist noch gesperrt. Schließe Level ${idx} ab.`;
+        btn.title = isEn 
+          ? `Level ${idx + 1} is locked. Complete level ${idx} first.`
+          : `Level ${idx + 1} ist noch gesperrt. Schließe Level ${idx} ab.`;
       }
 
       const stars = this.levelStars[idx];
@@ -3103,7 +3153,7 @@ class GameEngine {
       const isFujiLvl = idx >= 50;
       btn.innerHTML = `
         <span class="pill-number">${idx + 1}</span>
-        <span class="pill-title">${isFujiLvl ? "🏔️ " : ""}${lvl.n}</span>
+        <span class="pill-title">${isFujiLvl ? "🏔️ " : ""}${transLvl.n}</span>
         ${starMarkup}
         ${!isUnlocked ? '<span class="pill-lock">🔒</span>' : (isCompleted ? '<span class="pill-check">✓</span>' : "")}
       `;
@@ -3125,7 +3175,10 @@ class GameEngine {
 
   setFeedback(text, type = "normal") {
     if (!this.dom.feedbackText) return;
-    this.dom.feedbackText.textContent = text;
+    this.currentFeedbackRaw = text;
+    this.currentFeedbackType = type;
+    const translated = (typeof I18N !== "undefined") ? I18N.translateFeedback(text) : text;
+    this.dom.feedbackText.textContent = translated;
     this.dom.feedbackText.className = "feedback-box " + type;
   }
 

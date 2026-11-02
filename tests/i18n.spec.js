@@ -147,4 +147,86 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     const trophyTitle = await page.locator('#modalTrophiesList .trophy-card:first-child .trophy-title').textContent();
     expect(trophyTitle).toBe('Camera Monk');
   });
+
+  test('Complete bilingual UI overhaul: toggling language changes all in-game deck, drawer, feedback, and modal texts without refresh', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 860 });
+    // Go directly to level 1 gameplay
+    await page.goto('/?skipHome=1&level=1');
+    await page.waitForSelector('canvas');
+
+    // --- 1. German Initial State Verification ---
+    await expect(page.locator('[data-i18n="commands_title"]')).toHaveText('Befehle');
+    await expect(page.locator('[data-i18n="sequence_title"]')).toHaveText('Befehlsfolge');
+    await expect(page.locator('[data-i18n="cmd_forward"]')).toHaveText('Vorwärts');
+    await expect(page.locator('[data-i18n="cmd_left"]')).toHaveText('Links');
+    await expect(page.locator('[data-i18n="cmd_right"]')).toHaveText('Rechts');
+    await expect(page.locator('[data-i18n="cmd_action"]')).toHaveText('Aktion');
+    await expect(page.locator('[data-i18n="cmd_reset"]')).toHaveText('Zurücksetzen');
+    await expect(page.locator('[data-i18n="cmd_undo"]')).toHaveText('Rückgängig');
+    await expect(page.locator('[data-i18n="cmd_clear"]')).toHaveText('Löschen');
+    await expect(page.locator('[data-i18n="cmd_play"]')).toHaveText('Plan abspielen');
+    await expect(page.locator('#levelTitle')).toHaveText('Die erste Lieferung');
+    await expect(page.locator('#feedbackText')).toContainText('Plane deine Befehlsfolge');
+
+    // Check Level Drawer in German
+    await page.click('#btnLevelSelect');
+    await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
+    await expect(page.locator('#levelDrawer .drawer-title')).toHaveText('Levelauswahl');
+    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('Alle (60)');
+    await expect(page.locator('.drawer-tab[data-chapter="1"]')).toHaveText('Kap. 1');
+    const firstPillDe = await page.locator('#levelList .level-pill-btn:first-child .pill-title').textContent();
+    expect(firstPillDe).toContain('Die erste Lieferung');
+    await page.click('#btnCloseDrawer');
+    await expect(page.locator('#levelDrawer')).not.toHaveClass(/open/);
+
+    // --- 2. Switch Language to English In-Place ---
+    await page.evaluate(() => window.I18N?.setLanguage('en'));
+
+    // --- 3. Verify English UI Immediately Updates In-Place ---
+    // Command Deck Titles & Buttons
+    await expect(page.locator('[data-i18n="commands_title"]')).toHaveText('Commands');
+    await expect(page.locator('[data-i18n="sequence_title"]')).toHaveText('Command Sequence');
+    await expect(page.locator('[data-i18n="cmd_forward"]')).toHaveText('Forward');
+    await expect(page.locator('[data-i18n="cmd_left"]')).toHaveText('Turn Left');
+    await expect(page.locator('[data-i18n="cmd_right"]')).toHaveText('Turn Right');
+    await expect(page.locator('[data-i18n="cmd_action"]')).toHaveText('Action');
+    await expect(page.locator('[data-i18n="cmd_reset"]')).toHaveText('Reset');
+    await expect(page.locator('[data-i18n="cmd_undo"]')).toHaveText('Undo');
+    await expect(page.locator('[data-i18n="cmd_clear"]')).toHaveText('Clear');
+    await expect(page.locator('[data-i18n="cmd_play"]')).toHaveText('Run Plan');
+    await expect(page.locator('#levelTitle')).toHaveText('The First Delivery');
+
+    // Dynamic Feedback in English
+    await expect(page.locator('#feedbackText')).toContainText('Plan your command sequence');
+
+    // Add a command and check feedback translation
+    await page.click('[data-cmd="F"]');
+    await expect(page.locator('#feedbackText')).toContainText('Forward added.');
+
+    // Remove command and check feedback
+    await page.click('#btnUndo');
+    await expect(page.locator('#feedbackText')).toContainText('Last command removed.');
+
+    // Level Drawer in English
+    await page.click('#btnLevelSelect');
+    await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
+    await expect(page.locator('#levelDrawer .drawer-title')).toHaveText('Select Level');
+    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('All (60)');
+    await expect(page.locator('.drawer-tab[data-chapter="1"]')).toHaveText('Ch. 1');
+    const firstPillEn = await page.locator('#levelList .level-pill-btn:first-child .pill-title').textContent();
+    expect(firstPillEn).toContain('The First Delivery');
+    await page.click('#btnCloseDrawer');
+
+    // Help Modal in English
+    await page.click('#btnHelp');
+    await expect(page.locator('#modalHelp')).toHaveClass(/active/);
+    await expect(page.locator('.help-modal-title')).toHaveText(/Game Concept/i);
+    await expect(page.locator('.help-tab-btn[data-tab="helpTabStory"]')).toContainText(/Story/i);
+    await expect(page.locator('.help-tab-btn[data-tab="helpTabControls"]')).toContainText(/Controls/i);
+    await expect(page.locator('.help-tab-btn[data-tab="helpTabObstacles"]')).toContainText(/Obstacles/i);
+    await expect(page.locator('.help-tab-btn[data-tab="helpTabStars"]')).toContainText(/Stars/i);
+    await expect(page.locator('#btnDismissHelp')).toHaveText(/Understood/i);
+    await page.click('#btnDismissHelp');
+    await expect(page.locator('#modalHelp')).not.toHaveClass(/active/);
+  });
 });

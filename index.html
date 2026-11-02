@@ -30,7 +30,7 @@
 
   <!-- Progressive Web App (PWA) & Mobile Meta -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#070e1c">
+  <meta name="theme-color" content="#070c14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Spirit Delivery">
@@ -51,7 +51,7 @@
       <span class="pwa-toast-icon">
         <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
       </span>
-      <span id="pwaNetworkText">Offline-Modus aktiv · Bereit zum Spielen</span>
+      <span id="pwaNetworkText" data-i18n="pwa_offline">Offline-Modus aktiv · Bereit zum Spielen</span>
     </div>
 
     <!-- Main Home Screen & 3D Robot Showroom Overlay -->
@@ -69,22 +69,22 @@
         <div class="home-top-bar">
           <!-- Top Left: Daily Challenge Widget + Wardrobe Widget -->
           <div class="home-top-left-widgets">
-            <button id="btnHomeDailyWidget" class="home-pill-widget daily-widget" title="Tägliche Schreinprüfung öffnen" aria-label="Tägliche Prüfung">
+            <button id="btnHomeDailyWidget" class="home-pill-widget daily-widget" title="Tägliche Schreinprüfung öffnen" data-i18n-title="btn_daily_title" aria-label="Tägliche Prüfung">
               <span class="widget-icon">
                 <svg class="svg-icon svg-flame" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px rgba(255,123,0,0.6));" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
               </span>
               <div class="widget-meta">
-                <span class="widget-kicker">TÄGLICH</span>
+                <span class="widget-kicker" data-i18n="widget_daily">TÄGLICH</span>
                 <strong class="widget-value" id="homeDailyBadge">0 Tage</strong>
               </div>
             </button>
 
-            <button id="btnHomeWardrobeWidget" class="home-pill-widget wardrobe-widget" title="Schrein-Garderobe & Skins öffnen" aria-label="Garderobe">
+            <button id="btnHomeWardrobeWidget" class="home-pill-widget wardrobe-widget" title="Schrein-Garderobe & Skins öffnen" data-i18n-title="btn_wardrobe_title" aria-label="Garderobe">
               <span class="widget-icon">
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
               </span>
               <div class="widget-meta">
-                <span class="widget-kicker">GARDEROBE</span>
+                <span class="widget-kicker" data-i18n="widget_wardrobe">GARDEROBE</span>
                 <strong class="widget-value" id="homeActiveSkinLabel">Skins</strong>
               </div>
             </button>
@@ -92,31 +92,31 @@
 
           <!-- Top Right: Stars + Chapters + Audio Toggles -->
           <div class="home-top-right-group">
-            <div class="home-stars-pill" title="Gesammelte Sterne für Kami-Skins">
+            <div class="home-stars-pill" title="Gesammelte Sterne für Kami-Skins" data-i18n-title="stars_pill_title">
               <svg class="svg-icon star-icon-svg filled" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               <strong id="homeTotalStars">0</strong>
               <span class="home-stars-max">/ 180</span>
             </div>
 
-            <button id="btnHomeChapters" class="home-action-pill chapters-pill" title="Levels" aria-label="Levels">
+            <button id="btnHomeChapters" class="home-action-pill chapters-pill" title="Levels" data-i18n-title="btn_levels_title" aria-label="Levels">
               <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
               <span data-i18n="home_chapters_btn">Levels</span>
             </button>
 
-            <button id="btnHomeLang" class="home-action-pill lang-pill" title="Sprache wechseln / Switch Language" aria-label="Language">
+            <button id="btnHomeLang" class="home-action-pill lang-pill" title="Sprache wechseln / Switch Language" data-i18n-title="btn_lang_title" aria-label="Language">
               <span id="homeLangFlag">
                 <svg class="svg-icon svg-globe" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               </span>
               <span id="homeLangLabel">DE</span>
             </button>
 
-            <button id="btnHomeAudioMusic" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Musik umschalten">
+            <button id="btnHomeAudioMusic" class="icon-btn" title="Musik ein- / ausschalten" data-i18n-title="btn_music_toggle" aria-label="Musik umschalten">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
             </button>
-            <button id="btnHomeAudioSound" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">
+            <button id="btnHomeAudioSound" class="icon-btn" title="Ton stummschalten / aktivieren" data-i18n-title="btn_sound_toggle" aria-label="Audio umschalten">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
             </button>
-            <button id="btnHomeHelp" class="icon-btn" title="Spielanleitung" aria-label="Hilfe öffnen">
+            <button id="btnHomeHelp" class="icon-btn" title="Spielanleitung" data-i18n-title="btn_help_title" aria-label="Hilfe öffnen">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/></svg>
             </button>
           </div>
@@ -156,7 +156,7 @@
             <div class="home-secondary-controls">
               <!-- Mode Selector Dropdown Button -->
               <div class="home-mode-dropdown-wrapper">
-                <button class="home-mode-dropdown-btn" id="btnHomeModeDropdown" title="Spielmodus wählen" aria-haspopup="true" aria-expanded="false">
+                <button class="home-mode-dropdown-btn" id="btnHomeModeDropdown" title="Spielmodus wählen" data-i18n-title="mode_dropdown_title" aria-haspopup="true" aria-expanded="false">
                   <span id="homeCurrentModeIcon">
                     <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
                   </span>
@@ -171,8 +171,8 @@
                       <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
                     </span>
                     <div class="mode-item-info">
-                      <strong>Kampagne</strong>
-                      <small>60 Level Progression</small>
+                      <strong data-i18n="mode_campaign">Kampagne</strong>
+                      <small data-i18n="mode_campaign_sub">60 Level Progression</small>
                     </div>
                     <span class="mode-item-check" id="checkModeCampaign">✓</span>
                   </button>
@@ -181,7 +181,7 @@
                       <svg class="svg-icon svg-pagoda" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v2.5M10.5 4.5h3" stroke-width="1.8"/><path d="M5.5 8c2-1 11-1 13 0l-1.5-3H7L5.5 8z" fill="currentColor" fill-opacity="0.25" stroke-width="1.6"/><line x1="8.5" y1="8" x2="8.5" y2="12" stroke-width="1.6"/><line x1="15.5" y1="8" x2="15.5" y2="12" stroke-width="1.6"/><path d="M3.5 13.5c2.5-1 13.5-1 17 0l-2-2H5.5l-2 2z" fill="currentColor" fill-opacity="0.3" stroke-width="1.6"/><line x1="7.5" y1="13.5" x2="7.5" y2="18.5" stroke-width="1.6"/><line x1="16.5" y1="13.5" x2="16.5" y2="18.5" stroke-width="1.6"/><path d="M2 20.5c3.5-1 16.5-1 20 0l-2-2H4l-2 2z" fill="currentColor" fill-opacity="0.35" stroke-width="1.8"/><rect x="10.5" y="15" width="3" height="4" rx="0.5" fill="currentColor" stroke="none"/></svg>
                     </span>
                     <div class="mode-item-info">
-                      <strong>100-Level-Schreinprüfung</strong>
+                      <strong data-i18n="mode_tower">100-Level-Schreinprüfung</strong>
                       <small id="homeTowerBadge">Ebene 1</small>
                     </div>
                     <span class="mode-item-check" id="checkModeTower"></span>
@@ -191,7 +191,7 @@
                       <svg class="svg-icon svg-flame" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px rgba(255,123,0,0.6));" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
                     </span>
                     <div class="mode-item-info">
-                      <strong>Tägliche Prüfung</strong>
+                      <strong data-i18n="mode_daily">Tägliche Prüfung</strong>
                       <small id="menuDailyBadge">0 Tage Streak</small>
                     </div>
                     <span class="mode-item-check" id="checkModeDaily"></span>
@@ -200,7 +200,7 @@
               </div>
 
               <!-- Dedicated Spielprinzip Button -->
-              <button class="home-mode-dropdown-btn home-story-btn" id="btnHomeStory" title="Spielprinzip & Anleitung" aria-label="Spielprinzip">
+              <button class="home-mode-dropdown-btn home-story-btn" id="btnHomeStory" title="Spielprinzip & Anleitung" data-i18n-title="home_story_title" aria-label="Spielprinzip">
                 <span class="home-story-icon">
                   <svg class="svg-icon svg-scroll" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="currentColor" fill-opacity="0.16"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="13" y2="15"/></svg>
                 </span>
@@ -217,11 +217,11 @@
     <!-- Top Navigation Bar -->
     <header class="top-nav">
       <!-- Dedicated Mobile Hub Launcher Button (visible on mobile < 900px) -->
-      <button id="btnMobileHub" class="mobile-hub-btn" title="Schrein-Menü, Garderobe & Levelauswahl öffnen" aria-label="Menü öffnen">
+      <button id="btnMobileHub" class="mobile-hub-btn" title="Schrein-Menü, Garderobe & Levelauswahl öffnen" data-i18n-title="btn_mobile_hub_title" aria-label="Menü öffnen">
         <span class="hub-btn-icon">
           <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
         </span>
-        <span class="hub-btn-text">Menü</span>
+        <span class="hub-btn-text" data-i18n="nav_menu">Menü</span>
       </button>
 
       <!-- Dedicated Mobile Level Status Pill (visible on mobile < 900px) -->
@@ -242,7 +242,7 @@
       </div>
       <div class="top-actions">
         <!-- Return to Home Screen Button -->
-        <button id="btnHome" class="home-header-btn" title="Zum Homescreen zurückkehren" aria-label="Zum Homescreen">
+        <button id="btnHome" class="home-header-btn" title="Zum Homescreen zurückkehren" data-i18n-title="btn_home_title" aria-label="Zum Homescreen">
           <svg class="svg-icon svg-home" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span class="home-btn-label">Home</span>
         </button>
@@ -252,61 +252,61 @@
           <span class="sr-only">App</span>
         </button>
         <div class="camera-actions-group">
-          <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" aria-label="Kamera links drehen">
+          <button id="btnCamRotateLeft" class="icon-btn" title="Kamera 45° nach links schwenken (-1 Credit)" data-i18n-title="btn_cam_left_title" aria-label="Kamera links drehen">
             <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/><path d="M2 3v6h6"/></svg>
             <span class="sr-only">↺</span>
           </button>
-          <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" aria-label="Kamera zurücksetzen">
+          <button id="btnCamReset" class="icon-btn" title="Kamera zentrieren" data-i18n-title="btn_cam_reset_title" aria-label="Kamera zurücksetzen">
             <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>
             <span class="sr-only">Reset</span>
           </button>
-          <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" aria-label="Kamera rechts drehen">
+          <button id="btnCamRotateRight" class="icon-btn" title="Kamera 45° nach rechts schwenken (-1 Credit)" data-i18n-title="btn_cam_right_title" aria-label="Kamera rechts drehen">
             <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L22 9"/><path d="M22 3v6h-6"/></svg>
             <span class="sr-only">↻</span>
           </button>
         </div>
-        <div class="stars-counter-badge" id="headerStarsBadge" title="Insgesamt gesammelte Sterne für Kami-Skins">
+        <div class="stars-counter-badge" id="headerStarsBadge" title="Insgesamt gesammelte Sterne für Kami-Skins" data-i18n-title="header_stars_title">
           <span class="star-icon">
             <svg class="svg-icon star-icon-svg filled" width="15" height="15" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
           </span>
           <span id="headerTotalStars">0</span>
           <span class="star-max">/ 180</span>
         </div>
-        <button id="btnSkins" class="icon-btn" title="Schrein-Garderobe & Kami-Skins" aria-label="Kami-Skins öffnen">
+        <button id="btnSkins" class="icon-btn" title="Schrein-Garderobe & Kami-Skins" data-i18n-title="btn_wardrobe_title" aria-label="Kami-Skins öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
           <span class="sr-only">Garderobe</span>
         </button>
-        <button id="btnTrophies" class="icon-btn" title="Schrein-Erfolge & Trophäen" aria-label="Erfolge öffnen">
+        <button id="btnTrophies" class="icon-btn" title="Schrein-Erfolge & Trophäen" data-i18n-title="btn_trophies_title" aria-label="Erfolge öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
           <span class="sr-only">Erfolge</span>
         </button>
-        <button id="btnMusicToggle" class="icon-btn" title="Musik ein- / ausschalten" aria-label="Hintergrundmusik umschalten">
+        <button id="btnMusicToggle" class="icon-btn" title="Musik ein- / ausschalten" data-i18n-title="btn_music_toggle" aria-label="Hintergrundmusik umschalten">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
           <span class="sr-only">Musik</span>
         </button>
-        <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" aria-label="Audio umschalten">
+        <button id="btnSoundToggle" class="icon-btn" title="Ton stummschalten / aktivieren" data-i18n-title="btn_sound_toggle" aria-label="Audio umschalten">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
           <span class="sr-only">Audio</span>
         </button>
-        <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" aria-label="Hilfe öffnen">
+        <button id="btnHelp" class="icon-btn" title="Spielanleitung & Hilfe" data-i18n-title="btn_help_title" aria-label="Hilfe öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/></svg>
           <span class="sr-only">Hilfe</span>
         </button>
-        <button id="btnDailyTrial" class="daily-header-btn" title="Tägliche Schreinprüfung (Hardcore · 0 Kameraschwenker)" aria-label="Tägliche Prüfung">
+        <button id="btnDailyTrial" class="daily-header-btn" title="Tägliche Schreinprüfung (Hardcore · 0 Kameraschwenker)" data-i18n-title="btn_daily_title" aria-label="Tägliche Prüfung">
           <span class="flame-icon">
             <svg class="svg-icon svg-flame" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
           </span>
           <span class="daily-streak-count" id="headerDailyStreak">0</span>
-          <span class="daily-label">Tages-Prüfung</span>
+          <span class="daily-label" data-i18n="nav_daily">Tages-Prüfung</span>
         </button>
-        <button id="btnTowerMode" class="tower-header-btn" title="Turm der 100 Prüfungen (Endlos-Roguelike-Modus)" aria-label="Turm der 100 Prüfungen">
+        <button id="btnTowerMode" class="tower-header-btn" title="Turm der 100 Prüfungen (Endlos-Roguelike-Modus)" data-i18n-title="btn_tower_title" aria-label="Turm der 100 Prüfungen">
           <span class="tower-icon">
             <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
           </span>
           <span class="tower-badge-stat" id="headerTowerBest">Ebene 1</span>
-          <span class="tower-label">Turm</span>
+          <span class="tower-label" data-i18n="nav_tower">Turm</span>
         </button>
-        <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" aria-label="Levelauswahl öffnen">
+        <button id="btnLevelSelect" class="icon-btn" title="Levelauswahl" data-i18n-title="btn_levels_title" aria-label="Levelauswahl öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
           <span class="sr-only">Level</span>
         </button>
@@ -402,7 +402,7 @@
             </div>
             <div class="koma-status-badge">
               <span class="status-dot"></span>
-              <span>Bereit</span>
+              <span data-i18n="status_ready">Bereit</span>
             </div>
           </div>
         </div>
@@ -412,7 +412,7 @@
       <aside class="panel-right">
         <div class="glass-card">
           <div class="panel-title">
-            <span>Befehle</span>
+            <span data-i18n="commands_title">Befehle</span>
           </div>
 
           <div class="commands-grid">
@@ -421,72 +421,72 @@
                 <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                 <span class="sr-only">↑</span>
               </span>
-              <span>Vorwärts</span>
+              <span data-i18n="cmd_forward">Vorwärts</span>
             </button>
             <button class="cmd-btn" data-cmd="L" title="90° nach links drehen (A / Pfeiltaste Links)">
               <span class="cmd-icon">
                 <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
                 <span class="sr-only">↶</span>
               </span>
-              <span>Links</span>
+              <span data-i18n="cmd_left">Links</span>
             </button>
             <button class="cmd-btn" data-cmd="R" title="90° nach rechts drehen (D / Pfeiltaste Rechts)">
               <span class="cmd-icon">
                 <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
                 <span class="sr-only">↷</span>
               </span>
-              <span>Rechts</span>
+              <span data-i18n="cmd_right">Rechts</span>
             </button>
             <button class="cmd-btn" data-cmd="A" title="Aktion / Schalter aktivieren (E / Taste A)">
               <span class="cmd-icon">
                 <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="currentColor"/><circle cx="10" cy="8.5" r="2.2" fill="#070d18"/></svg>
                 <span class="sr-only">✦</span>
               </span>
-              <span>Aktion</span>
+              <span data-i18n="cmd_action">Aktion</span>
             </button>
           </div>
 
           <div class="panel-title">
-            <span>Befehlsfolge</span>
+            <span data-i18n="sequence_title">Befehlsfolge</span>
             <span id="queueCount">0 / 8</span>
           </div>
 
           <div class="queue-box" id="queueContainer">
-            <div class="empty-queue-hint">Dein Plan erscheint hier …</div>
+            <div class="empty-queue-hint" data-i18n="empty_queue_hint">Dein Plan erscheint hier …</div>
           </div>
 
           <div class="btn-row">
-            <button class="sec-btn" id="btnReset" title="Roboter zurück an den Start setzen">
+            <button class="sec-btn" id="btnReset" title="Roboter zurück an den Start setzen" data-i18n-title="btn_reset_title">
               <span>⟲</span>
-              <span>Zurücksetzen</span>
+              <span data-i18n="cmd_reset">Zurücksetzen</span>
             </button>
-            <button class="sec-btn" id="btnUndo" title="Letzten Befehl entfernen">
+            <button class="sec-btn" id="btnUndo" title="Letzten Befehl entfernen" data-i18n-title="btn_undo_title">
               <span>↶</span>
-              <span>Rückgängig</span>
+              <span data-i18n="cmd_undo">Rückgängig</span>
             </button>
-            <button class="sec-btn" id="btnClear" title="Ganzen Plan löschen">
+            <button class="sec-btn" id="btnClear" title="Ganzen Plan löschen" data-i18n-title="btn_clear_title">
               <span>✕</span>
-              <span>Löschen</span>
+              <span data-i18n="cmd_clear">Löschen</span>
             </button>
           </div>
 
-          <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)">
+          <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)" data-i18n-title="btn_play_title">
             <span>▶</span>
-            <span>Plan abspielen</span>
+            <span data-i18n="cmd_play">Plan abspielen</span>
           </button>
 
           <div class="mobile-exec-bar" id="mobileExecBar">
             <span class="mobile-exec-icon">
               <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4 1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
             </span>
-            <span class="mobile-exec-text">Lieferung läuft …</span>
+            <span class="mobile-exec-text" data-i18n="mobile_exec_text">Lieferung läuft …</span>
           </div>
 
           <div class="progress-container">
             <div class="progress-bar-fill" id="progressBar"></div>
           </div>
 
-          <div class="feedback-box" id="feedbackText" role="status">
+          <div class="feedback-box" id="feedbackText" role="status" data-i18n="feedback_ready">
             Plane deine Befehlsfolge und drücke auf „Plan abspielen“.
           </div>
         </div>
@@ -496,8 +496,8 @@
     <!-- Fly-out Level Selector Drawer -->
     <nav class="level-drawer" id="levelDrawer" aria-label="Levelauswahl">
       <div class="drawer-header">
-        <h2 class="drawer-title">Levelauswahl</h2>
-        <button class="icon-btn" onclick="document.getElementById('levelDrawer').classList.remove('open')">✕</button>
+        <h2 class="drawer-title" data-i18n="drawer_title">Levelauswahl</h2>
+        <button class="icon-btn" id="btnCloseDrawer" onclick="document.getElementById('levelDrawer').classList.remove('open')">✕</button>
       </div>
       <div class="drawer-fuji-shortcut">
         <button class="fuji-jump-btn" id="btnJumpFujiDrawer">
@@ -505,20 +505,20 @@
             <svg class="svg-icon svg-fuji" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg>
           </span>
           <div class="fuji-btn-text">
-            <strong>Kapitel 6: Der Heilige Berg Fuji</strong>
-            <span>Level 51–60 · Schneelandschaft & Windböen</span>
+            <strong data-i18n="fuji_shortcut_title">Kapitel 6: Der Heilige Berg Fuji</strong>
+            <span data-i18n="fuji_shortcut_sub">Level 51–60 · Schneelandschaft & Windböen</span>
           </div>
           <span class="fuji-btn-arrow">→</span>
         </button>
       </div>
       <div class="drawer-chapter-tabs" id="drawerChapterTabs">
-        <button class="drawer-tab active" data-chapter="all">Alle (60)</button>
-        <button class="drawer-tab" data-chapter="1">Kap. 1</button>
-        <button class="drawer-tab" data-chapter="2">Kap. 2</button>
-        <button class="drawer-tab" data-chapter="3">Kap. 3</button>
-        <button class="drawer-tab" data-chapter="4">Kap. 4</button>
-        <button class="drawer-tab" data-chapter="5">Kap. 5</button>
-        <button class="drawer-tab fuji-tab" data-chapter="6">Kap. 6 <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
+        <button class="drawer-tab active" data-chapter="all" data-i18n="tab_all">Alle (60)</button>
+        <button class="drawer-tab" data-chapter="1" data-i18n="tab_ch1">Kap. 1</button>
+        <button class="drawer-tab" data-chapter="2" data-i18n="tab_ch2">Kap. 2</button>
+        <button class="drawer-tab" data-chapter="3" data-i18n="tab_ch3">Kap. 3</button>
+        <button class="drawer-tab" data-chapter="4" data-i18n="tab_ch4">Kap. 4</button>
+        <button class="drawer-tab" data-chapter="5" data-i18n="tab_ch5">Kap. 5</button>
+        <button class="drawer-tab fuji-tab" data-chapter="6"><span data-i18n="tab_ch6">Kap. 6</span> <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
       </div>
       <div class="drawer-list" id="levelList"></div>
     </nav>
@@ -529,18 +529,18 @@
         <div class="modal-emblem">
           <svg class="svg-icon victory-emblem-svg" width="56" height="56" viewBox="0 0 48 48" fill="none" style="filter: drop-shadow(0 0 16px rgba(255, 77, 109, 0.7));" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0b1329" stroke="#ff4d6d" stroke-width="2"/><path d="M24 6c-2 4-5 6-9 7 4 1 6 4 7 9 2-5 5-7 9-8-4-1-6-4-7-8z" fill="#ff70a6" opacity="0.65"/><path d="M24 42c-2-4-5-6-9-7 4-1 6-4 7-9 2 5 5 7 9 8-4 1-6 4-7 8z" fill="#ff70a6" opacity="0.65"/><rect x="14" y="18" width="20" height="15" rx="3" fill="#ffbe0b" stroke="#ffffff" stroke-width="1.8"/><line x1="14" y1="25" x2="34" y2="25" stroke="#ffffff" stroke-width="1.5"/><line x1="24" y1="18" x2="24" y2="33" stroke="#ffffff" stroke-width="1.5"/><path d="M24 18c-3-4-8-4-8 0s8 4 8 0z" fill="#ff4d6d"/><path d="M24 18c3-4 8-4 8 0s-8 4-8 0z" fill="#ff4d6d"/><circle cx="24" cy="18" r="2.2" fill="#ffffff"/><polygon points="10,12 11.5,15.5 15,17 11.5,18.5 10,22 8.5,18.5 5,17 8.5,15.5" fill="#ffbe0b"/><polygon points="38,10 39.5,13.5 43,15 39.5,16.5 38,20 36.5,16.5 33,15 36.5,13.5" fill="#00f5ff"/></svg>
         </div>
-        <h2 class="modal-title" id="modalWinTitle">Lieferung erfolgreich!</h2>
-        <p class="modal-desc" id="modalWinText">Das Paket wurde sicher abgeliefert!</p>
+        <h2 class="modal-title" id="modalWinTitle" data-i18n="win_title_normal">Lieferung erfolgreich!</h2>
+        <p class="modal-desc" id="modalWinText" data-i18n="win_default_text">Das Paket wurde sicher abgeliefert!</p>
         <div id="modalWinStars" class="win-stars-container"></div>
         <div id="modalWinCredits" class="win-credits-sub"></div>
         <div id="modalWinSkinNotice" class="win-skin-notice" style="display: none;"></div>
         <div class="modal-btn-row">
-          <button class="play-btn" id="btnNextLevel">Nächstes Level →</button>
+          <button class="play-btn" id="btnNextLevel" data-i18n="btn_next_level">Nächstes Level →</button>
           <button class="sec-btn hub-shortcut-btn" id="btnWinOpenHub" title="Zum Schrein-Hub (Skins & Level)">
             <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span>Schrein-Hub</span>
+            <span data-i18n="btn_hub">Schrein-Hub</span>
           </button>
-          <button class="sec-btn" id="btnReplayLevel">Noch einmal</button>
+          <button class="sec-btn" id="btnReplayLevel" data-i18n="btn_replay">Noch einmal</button>
         </div>
       </div>
     </div>
@@ -555,12 +555,12 @@
               <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--torii, #ff4d6d)" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="var(--torii, #ff4d6d)" stroke="none"/></svg>
             </span>
             <div>
-              <h2 class="mobile-hub-heading">Spirit Schrein-Hub</h2>
-              <span class="mobile-hub-sub">Garderobe · 60 Level · Erfolge</span>
+              <h2 class="mobile-hub-heading" data-i18n="mobile_hub_title">Spirit Schrein-Hub</h2>
+              <span class="mobile-hub-sub" data-i18n="mobile_hub_sub">Garderobe · 60 Level · Erfolge</span>
             </div>
           </div>
           <div class="mobile-hub-stars" id="mobileHubStarsPill" title="Gesammelte Sterne für Kami-Skins">
-            <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
+            <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
             <strong id="mobileHubTotalStars">0</strong>
             <span class="stars-max">/ 180</span>
           </div>
@@ -573,12 +573,12 @@
             <span class="hub-win-emblem">
               <svg class="svg-icon victory-emblem-svg" width="32" height="32" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#0b1329" stroke="#ff4d6d" stroke-width="2"/><path d="M24 6c-2 4-5 6-9 7 4 1 6 4 7 9 2-5 5-7 9-8-4-1-6-4-7-8z" fill="#ff70a6" opacity="0.65"/><path d="M24 42c-2-4-5-6-9-7 4-1 6-4 7-9 2 5 5 7 9 8-4 1-6 4-7 8z" fill="#ff70a6" opacity="0.65"/><rect x="14" y="18" width="20" height="15" rx="3" fill="#ffbe0b" stroke="#ffffff" stroke-width="1.8"/><circle cx="24" cy="18" r="2.2" fill="#ffffff"/></svg>
             </span>
-            <div class="hub-win-title" id="mobileHubWinTitle">Lieferung erfolgreich!</div>
+            <div class="hub-win-title" id="mobileHubWinTitle" data-i18n="win_title_normal">Lieferung erfolgreich!</div>
           </div>
           <div class="hub-win-stars" id="mobileHubWinStars"></div>
           <div class="hub-win-actions">
-            <button class="play-btn" id="btnMobileHubNextLevel">Nächstes Level ▶</button>
-            <button class="sec-btn" id="btnMobileHubReplayLevel">Nochmal ↺</button>
+            <button class="play-btn" id="btnMobileHubNextLevel" data-i18n="btn_next_level">Nächstes Level ▶</button>
+            <button class="sec-btn" id="btnMobileHubReplayLevel" data-i18n="btn_replay">Nochmal ↺</button>
           </div>
         </div>
 
@@ -589,11 +589,11 @@
               <svg class="svg-icon svg-flame" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2C8 6 6 9.5 6 13.5 6 17.6 9 21 13 21c4.4 0 7-3.4 7-7.5 0-2.8-1.5-5.5-3.5-7.5-.5 2-1.5 3-3 3-1.8 0-2.5-1.5-1.5-4.5z" fill="#ff7b00" fill-opacity="0.3" stroke="#ff7b00" stroke-width="1.8"/><path d="M12 11c-2 2-2 4-2 5 0 2 1.3 3.5 3 3.5s3-1.5 3-3.5c0-1.2-1-2.5-2-3.5-.3.8-.7 1-1.2 1-.6 0-.9-.5-.8-1.5z" fill="#ffbe0b"/></svg>
             </span>
             <div>
-              <div class="mobile-daily-title">Tägliche Schreinprüfung</div>
+              <div class="mobile-daily-title" data-i18n="daily_modal_title">Tägliche Schreinprüfung</div>
               <div class="mobile-daily-sub" id="mobileDailySub">0 Kameraschwenker · Streak: 0</div>
             </div>
           </div>
-          <button class="mobile-daily-btn" id="btnMobileOpenDaily">Prüfen ▶</button>
+          <button class="mobile-daily-btn" id="btnMobileOpenDaily" data-i18n="btn_check">Prüfen ▶</button>
         </div>
 
         <!-- Mobile Tower Mode Banner -->
@@ -603,11 +603,11 @@
               <svg class="svg-icon svg-torii" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
             </span>
             <div>
-              <div class="mobile-tower-title">Turm der 100 Prüfungen</div>
+              <div class="mobile-tower-title" data-i18n="tower_intro_title">Turm der 100 Prüfungen</div>
               <div class="mobile-tower-sub">Endlos-Modus · Rekord: <strong id="mobileTowerBest">Ebene 1</strong></div>
             </div>
           </div>
-          <button class="mobile-tower-btn" id="btnMobileOpenTower">Besteigen ▶</button>
+          <button class="mobile-tower-btn" id="btnMobileOpenTower" data-i18n="btn_ascend">Besteigen ▶</button>
         </div>
 
         <!-- Touch Navigation Tabs -->
@@ -616,31 +616,31 @@
             <span class="tab-icon">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
             </span>
-            <span class="tab-label">Garderobe</span>
+            <span class="tab-label" data-i18n="hub_tab_wardrobe">Garderobe</span>
           </button>
           <button class="mobile-hub-tab" data-tab="levels" id="tabBtnLevels" role="tab" aria-selected="false">
             <span class="tab-icon">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" fill="currentColor" fill-opacity="0.18"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
             </span>
-            <span class="tab-label">60 Level</span>
+            <span class="tab-label" data-i18n="hub_tab_levels">60 Level</span>
           </button>
           <button class="mobile-hub-tab" data-tab="trophies" id="tabBtnTrophies" role="tab" aria-selected="false">
             <span class="tab-icon">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
             </span>
-            <span class="tab-label">Erfolge</span>
+            <span class="tab-label" data-i18n="hub_tab_trophies">Erfolge</span>
           </button>
           <button class="mobile-hub-tab" data-tab="settings" id="tabBtnSettings" role="tab" aria-selected="false">
             <span class="tab-icon">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </span>
-            <span class="tab-label">Optionen</span>
+            <span class="tab-label" data-i18n="hub_tab_settings">Optionen</span>
           </button>
         </div>
 
         <!-- Tab 1: Garderobe (Kami-Skins) -->
         <div class="mobile-hub-panel active" id="hubPanelSkins" role="tabpanel">
-          <p class="mobile-hub-desc">
+          <p class="mobile-hub-desc" data-i18n="wardrobe_desc">
             Wähle dein Kami-Design. Schließe Level mit vollen Credits ab, um seltene mythische Formen freizuschalten!
           </p>
           <div class="wardrobe-ad-banner" id="mobileWardrobeAdBanner">
@@ -649,10 +649,10 @@
                 <svg class="svg-icon star-icon-svg filled" width="20" height="20" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               </span>
               <div class="ad-reward-text">
-                <strong>+3 Kami-Sterne geschenkt</strong>
-                <span>Kurzes Video ansehen & Skins schneller freischalten</span>
+                <strong data-i18n="wardrobe_ad_strong">+3 Kami-Sterne geschenkt</strong>
+                <span data-i18n="wardrobe_ad_sub">Kurzes Video ansehen & Skins schneller freischalten</span>
               </div>
-              <span class="ad-pill">WERBUNG</span>
+              <span class="ad-pill" data-i18n="wardrobe_ad_badge">WERBUNG</span>
             </button>
           </div>
           <div class="mobile-skins-grid" id="mobileSkinsGrid">
@@ -663,18 +663,17 @@
         <!-- Tab 2: Level-Wahl (60 Level in 6 Kapiteln) -->
         <div class="mobile-hub-panel" id="hubPanelLevels" role="tabpanel">
           <div class="mobile-chapter-pills" id="mobileChapterPills">
-            <button class="chapter-pill active" data-chapter="1">Kap. 1</button>
-            <button class="chapter-pill" data-chapter="2">Kap. 2</button>
-            <button class="chapter-pill" data-chapter="3">Kap. 3</button>
-            <button class="chapter-pill" data-chapter="4">Kap. 4</button>
-            <button class="chapter-pill" data-chapter="5">Kap. 5</button>
-            <button class="chapter-pill" data-chapter="6">Kap. 6 <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
+            <button class="chapter-pill active" data-chapter="1" data-i18n="tab_ch1">Kap. 1</button>
+            <button class="chapter-pill" data-chapter="2" data-i18n="tab_ch2">Kap. 2</button>
+            <button class="chapter-pill" data-chapter="3" data-i18n="tab_ch3">Kap. 3</button>
+            <button class="chapter-pill" data-chapter="4" data-i18n="tab_ch4">Kap. 4</button>
+            <button class="chapter-pill" data-chapter="5" data-i18n="tab_ch5">Kap. 5</button>
+            <button class="chapter-pill" data-chapter="6"><span data-i18n="tab_ch6">Kap. 6</span> <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
           </div>
           <div class="mobile-levels-grid" id="mobileLevelsGrid">
             <!-- Dynamically populated 10 levels for current chapter -->
           </div>
         </div>
-
         <!-- Tab 3: Erfolge & Schrein-Trophäen (Achievements) -->
         <div class="mobile-hub-panel" id="hubPanelTrophies" role="tabpanel">
           <div class="mobile-trophies-summary">
@@ -682,8 +681,8 @@
               <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold, #ffb703)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(255,183,3,0.5));" aria-hidden="true"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/></svg>
             </span>
             <div>
-              <div class="trophy-summary-title">Heilige Schrein-Siegel</div>
-              <div class="trophy-summary-sub"><span id="mobileTrophiesCount">0</span> von 6 Errungenschaften gemeistert</div>
+              <div class="trophy-summary-title" data-i18n="trophies_summary_title">Heilige Schrein-Siegel</div>
+              <div class="trophy-summary-sub"><span id="mobileTrophiesCount">0</span> <span data-i18n="trophies_summary_sub">von 6 Errungenschaften gemeistert</span></div>
             </div>
           </div>
           <div class="mobile-trophies-list" id="mobileTrophiesList">
@@ -700,8 +699,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.3"/><circle cx="18" cy="16" r="3" fill="currentColor" fill-opacity="0.3"/></svg>
                 </span>
                 <div>
-                  <div class="setting-item-title">Hintergrundmusik (BGM)</div>
-                  <div class="setting-item-sub">Koto- & Shamisen-Melodien</div>
+                  <div class="setting-item-title" data-i18n="settings_bgm">Hintergrundmusik (BGM)</div>
+                  <div class="setting-item-sub" data-i18n="settings_bgm_sub">Koto- & Shamisen-Melodien</div>
                 </div>
               </div>
               <button class="mobile-hub-toggle" id="btnMobileMusicToggle">Musik starten</button>
@@ -712,8 +711,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" fill-opacity="0.25"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9.5 9.5 0 0 1 0 14"/></svg>
                 </span>
                 <div>
-                  <div class="setting-item-title">Sound-Effekte (SFX)</div>
-                  <div class="setting-item-sub">Schritte, Windböen, Torii-Glocken</div>
+                  <div class="setting-item-title" data-i18n="settings_sfx">Sound-Effekte (SFX)</div>
+                  <div class="setting-item-sub" data-i18n="settings_sfx_sub">Schritte, Windböen, Torii-Glocken</div>
                 </div>
               </div>
               <button class="mobile-hub-toggle active" id="btnMobileSoundToggle">SFX An</button>
@@ -724,8 +723,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><line x1="10" y1="18" x2="14" y2="18"/><path d="M1 9c1 1.5 1 4.5 0 6"/><path d="M23 9c-1 1.5-1 4.5 0 6"/></svg>
                 </span>
                 <div>
-                  <div class="setting-item-title">Mobile Haptik (Vibration)</div>
-                  <div class="setting-item-sub">Taktiles Feedback bei Schritten & Wind</div>
+                  <div class="setting-item-title" data-i18n="settings_haptic">Mobile Haptik (Vibration)</div>
+                  <div class="setting-item-sub" data-i18n="settings_haptic_sub">Taktiles Feedback bei Schritten & Wind</div>
                 </div>
               </div>
               <button class="mobile-hub-toggle active" id="btnMobileHapticToggle">Haptik An</button>
@@ -749,10 +748,10 @@
 
           <div class="mobile-zen-card">
             <div class="zen-card-title">
-              <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 4px;"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4-1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
-              <span>Tipps für 3-Sterne-Meister:</span>
+              <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 4px;"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4 1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
+              <span data-i18n="settings_zen_title">Tipps für 3-Sterne-Meister:</span>
             </div>
-            <div class="zen-card-text">
+            <div class="zen-card-text" data-i18n="settings_zen_body">
               • Halte alle <strong>Kamera-Credits</strong> zurück, um die volle 3-Sterne-Wertung zu erhalten.<br>
               • Plane vorab den Weg durch Tore und aktiviere Schalter mit <strong>✦ Aktion</strong>.<br>
               • Auf dem <strong>Berg Fuji</strong> tragen dich Windböen automatisch in Pfeilrichtung weiter!
@@ -761,7 +760,7 @@
 
           <button class="play-btn mobile-hub-resume-btn" id="btnMobileResume">
             <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span>Zurück zum Spiel</span>
+            <span data-i18n="settings_resume_btn">Zurück zum Spiel</span>
           </button>
         </div>
       </div>
@@ -774,9 +773,9 @@
           <div class="modal-header-left">
             <div class="modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Schrein-Garderobe</span>
+              <span data-i18n="wardrobe_kicker">Schrein-Garderobe</span>
             </div>
-            <h2 class="modal-title" style="margin: 0;">Kami-Skins Garderobe</h2>
+            <h2 class="modal-title" style="margin: 0;" data-i18n="wardrobe_title">Kami-Skins Garderobe</h2>
           </div>
           <div class="modal-header-right">
             <div class="modal-stars-pill">
@@ -787,7 +786,7 @@
             <button class="icon-btn" id="btnCloseSkins" aria-label="Garderobe schließen">✕</button>
           </div>
         </div>
-        <p class="modal-desc" style="text-align: left; margin: 10px 0 14px 0;">
+        <p class="modal-desc" style="text-align: left; margin: 10px 0 14px 0;" data-i18n="wardrobe_desc">
           Schließe die 60 Level mit möglichst vielen Kamera-Credits ab, um Sterne zu sammeln und mystische japanische Kami-Designs freizuschalten.
         </p>
         <div class="wardrobe-ad-banner" id="desktopWardrobeAdBanner">
@@ -796,10 +795,10 @@
               <svg class="svg-icon star-icon-svg filled" width="20" height="20" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
             </span>
             <div class="ad-reward-text">
-              <strong>+3 Kami-Sterne geschenkt</strong>
-              <span>Kurzes Video ansehen & Skins schneller freischalten</span>
+              <strong data-i18n="wardrobe_ad_strong">+3 Kami-Sterne geschenkt</strong>
+              <span data-i18n="wardrobe_ad_sub">Kurzes Video ansehen & Skins schneller freischalten</span>
             </div>
-            <span class="ad-pill">WERBUNG</span>
+            <span class="ad-pill" data-i18n="wardrobe_ad_badge">WERBUNG</span>
           </button>
         </div>
         <div class="skins-grid" id="skinsGrid">
@@ -815,9 +814,9 @@
           <div class="modal-header-left">
             <div class="modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Schrein-Trophäen</span>
+              <span data-i18n="trophies_kicker">Schrein-Trophäen</span>
             </div>
-            <h2 class="modal-title" style="margin: 0;">Heilige Siegel & Erfolge</h2>
+            <h2 class="modal-title" style="margin: 0;" data-i18n="trophies_title">Heilige Siegel & Erfolge</h2>
           </div>
           <div class="modal-header-right">
             <div class="trophies-counter-pill">
@@ -828,7 +827,7 @@
             <button class="icon-btn" id="btnCloseTrophies" aria-label="Erfolge schließen">✕</button>
           </div>
         </div>
-        <p class="modal-desc" style="text-align: left; margin: 10px 0 16px 0;">
+        <p class="modal-desc" style="text-align: left; margin: 10px 0 16px 0;" data-i18n="trophies_desc">
           Erlange heilige Schrein-Siegel durch meisterhaftes Navigieren, Windreiten auf dem Berg Fuji und Sammeln aller Kami-Skins.
         </p>
         <div class="trophies-list" id="modalTrophiesList">
@@ -845,9 +844,9 @@
           <div>
             <div class="help-modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Spirit Delivery · Spielanleitung</span>
+              <span data-i18n="help_header_kicker">Spirit Delivery · Spielanleitung</span>
             </div>
-            <h2 class="help-modal-title">Spielprinzip &amp; Anleitung</h2>
+            <h2 class="help-modal-title" data-i18n="help_header_title">Spielprinzip &amp; Anleitung</h2>
           </div>
           <button class="icon-btn" id="btnCloseHelp" aria-label="Schließen">
             <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -858,19 +857,19 @@
         <div class="help-tabs-bar" role="tablist">
           <button class="help-tab-btn active" id="tabBtnStory" data-tab="helpTabStory" role="tab" aria-selected="true">
             <svg class="svg-icon svg-scroll" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="currentColor" fill-opacity="0.16"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/></svg>
-            <span>Story &amp; Ziel</span>
+            <span data-i18n="help_tab_story">Story &amp; Ziel</span>
           </button>
           <button class="help-tab-btn" id="tabBtnControls" data-tab="helpTabControls" role="tab" aria-selected="false">
             <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-            <span>Steuerung</span>
+            <span data-i18n="help_tab_controls">Steuerung</span>
           </button>
           <button class="help-tab-btn" id="tabBtnObstacles" data-tab="helpTabObstacles" role="tab" aria-selected="false">
             <svg class="svg-icon svg-fuji" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg>
-            <span>Hindernisse</span>
+            <span data-i18n="help_tab_obstacles">Hindernisse</span>
           </button>
           <button class="help-tab-btn" id="tabBtnStars" data-tab="helpTabStars" role="tab" aria-selected="false">
             <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
-            <span>Sterne</span>
+            <span data-i18n="help_tab_stars">Sterne</span>
           </button>
         </div>
 
@@ -892,17 +891,17 @@
                 </div>
               </div>
               <div class="help-story-text">
-                <strong style="color: #ffffff; font-size: 13.5px; display: block; margin-bottom: 3px;">Der kleine Roboter auf Mission</strong>
-                <p style="margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.45;">Du begleitest einen kleinen Roboter auf seinem Weg durch verwunschene Gärten. Seine Aufgabe ist es, Pakete einzusammeln und sicher zu den Schreintoren zu transportieren.</p>
+                <strong style="color: #ffffff; font-size: 13.5px; display: block; margin-bottom: 3px;" data-i18n="help_story_mission_title">Der kleine Roboter auf Mission</strong>
+                <p style="margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.45;" data-i18n="help_story_mission_desc">Du begleitest einen kleinen Roboter auf seinem Weg durch verwunschene Gärten. Seine Aufgabe ist es, Pakete einzusammeln und sicher zu den Schreintoren zu transportieren.</p>
               </div>
             </div>
 
             <div class="help-section-card">
               <div class="help-section-title">
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linejoin="round"><polygon points="12,3 2,21 22,21" fill="var(--cyan)" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="var(--cyan)" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff"/></svg>
-                <span>Der Pfad hinauf zum Berg Fuji</span>
+                <span data-i18n="help_story_fuji_title">Der Pfad hinauf zum Berg Fuji</span>
               </div>
-              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0 0 8px 0;">
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0 0 8px 0;" data-i18n="help_story_fuji_desc">
                 Mit jedem gemeisterten Rätsel reist der kleine Roboter weiter bergauf durch verschiedene Abschnitte bis zur verschneiten Bergspitze des Fuji.
               </p>
             </div>
@@ -910,9 +909,9 @@
             <div class="help-section-card" style="border-color: rgba(192, 132, 252, 0.3); background: rgba(192, 132, 252, 0.05);">
               <div class="help-section-title" style="color: #c084fc;">
                 <svg class="svg-icon svg-dragon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2-4 6-6 10-4 3 1.5 5 5 4 8-1 3-5 3-7 1"/><path d="M12 4l3 3m-1-4l4 2"/><circle cx="16" cy="8" r="1.5" fill="#c084fc"/><path d="M7 17l-3 3m1-4l-3 2"/></svg>
-                <span>Der Eisdrache auf dem Gipfel</span>
+                <span data-i18n="help_story_dragon_title">Der Eisdrache auf dem Gipfel</span>
               </div>
-              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0;">
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0;" data-i18n="help_story_dragon_desc">
                 Oben auf dem frostigen Kraterplateau bewacht der Eisdrache den Schrein. Schiebe Felsen in seinen kalten Windatem, weiche geschickt aus und bringe alle drei Relikte sicher ans Ziel, um ihn zu bezwingen.
               </p>
             </div>
@@ -923,9 +922,9 @@
             <div class="help-section-card" style="margin-bottom: 12px;">
               <div class="help-section-title" style="color: var(--cyan); margin-bottom: 4px;">
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12 6 15 12 12 10 9 12 12 6" fill="currentColor"/></svg>
-                <span>Vorausplanung</span>
+                <span data-i18n="help_ctrl_plan_title">Vorausplanung</span>
               </div>
-              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0;">
+              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0;" data-i18n="help_ctrl_plan_desc">
                 Der kleine Roboter fährt erst los, wenn du deinen Plan abspielst. Lege die einzelnen Schritte in Ruhe fest und starte dann die Bewegung.
               </p>
             </div>
@@ -936,8 +935,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Vorwärts</strong>
-                  <p>Fährt ein Feld in Blickrichtung geradeaus.</p>
+                  <strong data-i18n="help_ctrl_forward">Vorwärts</strong>
+                  <p data-i18n="help_ctrl_forward_desc">Fährt ein Feld in Blickrichtung geradeaus.</p>
                 </div>
               </div>
 
@@ -946,8 +945,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Links drehen</strong>
-                  <p>Dreht den Roboter um 90 Grad nach links auf der Stelle.</p>
+                  <strong data-i18n="help_ctrl_left">Links drehen</strong>
+                  <p data-i18n="help_ctrl_left_desc">Dreht den Roboter um 90 Grad nach links auf der Stelle.</p>
                 </div>
               </div>
 
@@ -956,8 +955,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Rechts drehen</strong>
-                  <p>Dreht den Roboter um 90 Grad nach rechts auf der Stelle.</p>
+                  <strong data-i18n="help_ctrl_right">Rechts drehen</strong>
+                  <p data-i18n="help_ctrl_right_desc">Dreht den Roboter um 90 Grad nach rechts auf der Stelle.</p>
                 </div>
               </div>
 
@@ -966,8 +965,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C7.5 2 4 5.6 4 10c0 4 2.8 7.3 6.6 8.1-.5-1.1-.6-2.4-.2-3.6.5-1.5 1.7-2.6 3.2-3.1 2.3-.7 4.4.9 4.4 3.1 0 1.2-.5 2.3-1.4 3.1 3.2-1.3 5.4-4.4 5.4-8 0-5.3-4.5-9.6-10-9.6z" fill="#c084fc"/><circle cx="10" cy="8.5" r="2.2" fill="#070d18"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Aktion</strong>
-                  <p>Aktiviert Schalter, öffnet Tore, schiebt Felsen oder sammelt Relikte ein.</p>
+                  <strong data-i18n="help_ctrl_action">Aktion</strong>
+                  <p data-i18n="help_ctrl_action_desc">Aktiviert Schalter, öffnet Tore, schiebt Felsen oder sammelt Relikte ein.</p>
                 </div>
               </div>
             </div>
@@ -975,9 +974,9 @@
             <div class="help-section-card">
               <div class="help-section-title">
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
-                <span>Planung und Kamera</span>
+                <span data-i18n="help_ctrl_cam_title">Planung und Kamera</span>
               </div>
-              <ul style="font-size: 11.5px; color: #cbd5e1; line-height: 1.6; margin: 0; padding-left: 18px;">
+              <ul style="font-size: 11.5px; color: #cbd5e1; line-height: 1.6; margin: 0; padding-left: 18px;" data-i18n="help_ctrl_cam_list">
                 <li><strong>Plan abspielen</strong> – Startet die programmierte Fahrt.</li>
                 <li><strong>Rückgängig</strong> – Entfernt den letzten Befehl aus der Reihe.</li>
                 <li><strong>Zurücksetzen</strong> – Leert den Plan und setzt den Roboter an den Anfang.</li>
@@ -994,8 +993,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" fill="currentColor" fill-opacity="0.15"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="8" y1="4" x2="8" y2="12"/><line x1="16" y1="4" x2="16" y2="12"/><line x1="12" y1="12" x2="12" y2="20"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Zäune und Mauern</strong>
-                  <p>Feste Hindernisse, an denen der Roboter stoppt. Du musst deinen Pfad außen herum planen.</p>
+                  <strong data-i18n="help_obs_walls">Zäune und Mauern</strong>
+                  <p data-i18n="help_obs_walls_desc">Feste Hindernisse, an denen der Roboter stoppt. Du musst deinen Pfad außen herum planen.</p>
                 </div>
               </div>
 
@@ -1004,8 +1003,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="4" fill="currentColor" fill-opacity="0.15" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.8"/><circle cx="12" cy="12" r="2" fill="#ffffff"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Schalter und Tore</strong>
-                  <p>Verschlossene Tore versperren den Weg. Fahre auf den Schalter und drücke Aktion, um das Tor zu öffnen.</p>
+                  <strong data-i18n="help_obs_switches">Schalter und Tore</strong>
+                  <p data-i18n="help_obs_switches_desc">Verschlossene Tore versperren den Weg. Fahre auf den Schalter und drücke Aktion, um das Tor zu öffnen.</p>
                 </div>
               </div>
 
@@ -1014,8 +1013,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.8" fill="currentColor" fill-opacity="0.18"/><path d="M3 12h18" stroke-width="2"/><path d="M8 12v4l2-2 2 2v-4" fill="currentColor" fill-opacity="0.5"/><path d="M14 12v4l2-2 2 2v-4" fill="currentColor" fill-opacity="0.5"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Felsblöcke</strong>
-                  <p>Mit der Aktion-Taste schiebt der Roboter schwere Steine vor sich her, um Wege freizuräumen oder Gefahren abzuschirmen.</p>
+                  <strong data-i18n="help_obs_blocks">Felsblöcke</strong>
+                  <p data-i18n="help_obs_blocks_desc">Mit der Aktion-Taste schiebt der Roboter schwere Steine vor sich her, um Wege freizuräumen oder Gefahren abzuschirmen.</p>
                 </div>
               </div>
 
@@ -1024,8 +1023,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.8" fill="currentColor" fill-opacity="0.15"/><path d="M7 5l4 6-3 3 5 5" stroke-width="2"/><path d="M17 5l-4 6 2 3-3 5" stroke-width="1.6" stroke-dasharray="2 2"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Brüchiges Eis</strong>
-                  <p>Diese Felder halten den Roboter nur ein einziges Mal. Sobald du das Feld verlässt, bricht das Eis ein.</p>
+                  <strong data-i18n="help_obs_fragile">Brüchiges Eis</strong>
+                  <p data-i18n="help_obs_fragile_desc">Diese Felder halten den Roboter nur ein einziges Mal. Sobald du das Feld verlässt, bricht das Eis ein.</p>
                 </div>
               </div>
 
@@ -1034,8 +1033,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M2 13h15a3 3 0 1 1-3 3"/><path d="M4 18h8a2.5 2.5 0 1 0-2.5-2.5"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Windböen</strong>
-                  <p>Starke alpine Winde tragen den Roboter automatisch in Pfeilrichtung mit und sparen Schritte.</p>
+                  <strong data-i18n="help_obs_wind">Windböen</strong>
+                  <p data-i18n="help_obs_wind_desc">Starke alpine Winde tragen den Roboter automatisch in Pfeilrichtung mit und sparen Schritte.</p>
                 </div>
               </div>
 
@@ -1044,8 +1043,8 @@
                   <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c3-2 6-2 9 0s6 2 9 0"/><path d="M2 12c3-2 6-2 9 0s6 2 9 0"/><path d="M2 18c3-2 6-2 9 0s6 2 9 0"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Wasser und Abgründe</strong>
-                  <p>Der kleine Roboter kann nicht schwimmen. Wenn er ins Wasser fällt oder die Kante herabfährt, startet das Level neu.</p>
+                  <strong data-i18n="help_obs_water">Wasser und Abgründe</strong>
+                  <p data-i18n="help_obs_water_desc">Der kleine Roboter kann nicht schwimmen. Wenn er ins Wasser fällt oder die Kante herabfährt, startet das Level neu.</p>
                 </div>
               </div>
 
@@ -1054,8 +1053,8 @@
                   <svg class="svg-icon svg-dragon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2-4 6-6 10-4 3 1.5 5 5 4 8-1 3-5 3-7 1"/><path d="M12 4l3 3m-1-4l4 2"/><circle cx="16" cy="8" r="1.5" fill="#c084fc"/><path d="M7 17l-3 3m1-4l-3 2"/><path d="M14 11c1-1 3-1 4 0"/></svg>
                 </div>
                 <div class="help-item-text">
-                  <strong>Der Eisdrache auf dem Gipfel</strong>
-                  <p>Der Drache fegt in regelmäßigen Abständen mit kaltem Atem über das Feld. Nutze Felsblöcke als Deckung und bewege dich im richtigen Moment vorwärts.</p>
+                  <strong data-i18n="help_obs_dragon">Der Eisdrache auf dem Gipfel</strong>
+                  <p data-i18n="help_obs_dragon_desc">Der Drache fegt in regelmäßigen Abständen mit kaltem Atem über das Feld. Nutze Felsblöcke als Deckung und bewege dich im richtigen Moment vorwärts.</p>
                 </div>
               </div>
             </div>
@@ -1066,9 +1065,9 @@
             <div class="help-section-card">
               <div class="help-section-title">
                 <svg class="svg-icon star-icon-svg filled" width="16" height="16" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
-                <span>Kamera-Credits und Sterne</span>
+                <span data-i18n="help_stars_title">Kamera-Credits und Sterne</span>
               </div>
-              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0 0 8px 0;">
+              <p data-i18n="help_stars_desc" style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0 0 8px 0;">
                 In jedem Level hast du eine bestimmte Anzahl an Credits zum Drehen der Kamera.
               </p>
               <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
@@ -1078,20 +1077,20 @@
                     <svg class="svg-icon star-icon-svg filled" width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
                     <svg class="svg-icon star-icon-svg filled" width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
                   </span>
-                  <span><strong>3 Sterne</strong> – Alle Kamera-Credits behalten und das Level direkt gelöst</span>
+                  <span data-i18n="help_stars_3"><strong>3 Sterne</strong> – Alle Kamera-Credits behalten und das Level direkt gelöst</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #cbd5e1;">
                   <span style="display: inline-flex; gap: 2px;">
                     <svg class="svg-icon star-icon-svg filled" width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
                     <svg class="svg-icon star-icon-svg filled" width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
                   </span>
-                  <span><strong>2 Sterne</strong> – Höchstens die Hälfte der Kamera-Credits genutzt</span>
+                  <span data-i18n="help_stars_2"><strong>2 Sterne</strong> – Höchstens die Hälfte der Kamera-Credits genutzt</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #cbd5e1;">
                   <span style="display: inline-flex; gap: 2px;">
                     <svg class="svg-icon star-icon-svg filled" width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/></svg>
                   </span>
-                  <span><strong>1 Stern</strong> – Das Level erfolgreich abgeschlossen</span>
+                  <span data-i18n="help_stars_1"><strong>1 Stern</strong> – Das Level erfolgreich abgeschlossen</span>
                 </div>
               </div>
             </div>
@@ -1099,9 +1098,9 @@
             <div class="help-section-card" style="border-color: rgba(255, 183, 3, 0.35); background: rgba(255, 183, 3, 0.06);">
               <div class="help-section-title" style="color: var(--gold);">
                 <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/></svg>
-                <span>Garderobe und Skins</span>
+                <span data-i18n="help_stars_wardrobe_title">Garderobe und Skins</span>
               </div>
-              <p style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0;">
+              <p data-i18n="help_stars_wardrobe_desc" style="font-size: 12px; color: #cbd5e1; line-height: 1.55; margin: 0;">
                 Mit den gesammelten Sternen schaltest du in der Garderobe neue Skins für den kleinen Roboter frei.
               </p>
             </div>
@@ -1111,9 +1110,9 @@
 
         <!-- Footer -->
         <div class="help-modal-footer">
-          <a href="privacy.html" target="_blank" style="color: var(--text-muted); font-size: 11px; text-decoration: underline;">Datenschutz & Impressum ↗</a>
+          <a href="privacy.html" target="_blank" data-i18n="privacy_imprint" style="color: var(--text-muted); font-size: 11px; text-decoration: underline;">Datenschutz & Impressum ↗</a>
           <button class="play-btn" id="btnDismissHelp" style="width: auto; padding: 10px 22px; font-size: 13.5px;" onclick="document.getElementById('modalHelp').classList.remove('active')">
-            <span>Verstanden</span>
+            <span data-i18n="btn_understood">Verstanden</span>
           </button>
         </div>
       </div>
@@ -1126,7 +1125,7 @@
           <div class="modal-header-left">
             <div class="modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span id="mechanicIntroKicker">Schrein-Geheimnis</span>
+              <span id="mechanicIntroKicker" data-i18n="mechanic_kicker">Schrein-Geheimnis</span>
             </div>
             <h2 class="modal-title" id="mechanicIntroTitle" style="margin: 0;">Neues Spielelement</h2>
           </div>
@@ -1146,7 +1145,7 @@
         <div class="mechanic-rules-card" id="mechanicIntroBullets"></div>
 
         <button class="play-btn" id="btnDismissMechanicIntro" style="margin-top: 18px;">
-          <span>Verstanden · Schrein betreten</span>
+          <span data-i18n="mechanic_btn_understood">Verstanden · Schrein betreten</span>
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
         </button>
       </div>
@@ -1159,9 +1158,9 @@
           <div class="modal-header-left">
             <div class="modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Tägliche Schreinprüfung</span>
+              <span data-i18n="daily_kicker">Tägliche Schreinprüfung</span>
             </div>
-            <h2 class="modal-title" id="dailyModalTitle">Tages-Herausforderung</h2>
+            <h2 class="modal-title" id="dailyModalTitle" data-i18n="daily_modal_title">Tages-Herausforderung</h2>
           </div>
           <div class="modal-header-right">
             <button class="icon-btn" id="btnCloseDailyTrial" aria-label="Schließen">✕</button>
@@ -1184,7 +1183,7 @@
         <div class="daily-week-card">
           <div class="daily-week-title">
             <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span>Wochen-Stempelkarte</span>
+            <span data-i18n="daily_week_title">Wochen-Stempelkarte</span>
           </div>
           <div class="daily-week-grid" id="dailyWeekGrid">
             <!-- Rendered dynamically by DailyTrialManager -->
@@ -1198,8 +1197,8 @@
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
             </span>
             <div>
-              <strong>0 Kameraschwenker:</strong>
-              <span>Blickwinkel fest fixiert. Du musst die gesamte Route aus der Schrein-Perspektive vorausplanen!</span>
+              <strong data-i18n="daily_rule_0cam_title">0 Kameraschwenker:</strong>
+              <span data-i18n="daily_rule_0cam_desc">Blickwinkel fest fixiert. Du musst die gesamte Route aus der Schrein-Perspektive vorausplanen!</span>
             </div>
           </div>
           <div class="daily-rule-item">
@@ -1207,8 +1206,8 @@
               <svg class="svg-icon svg-lightning" width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
             </span>
             <div>
-              <strong>Hardcore-Prüfung:</strong>
-              <span>Täglich wechselnde Schrein-Layouts mit Windböen, Toren, Portalen und Relikten.</span>
+              <strong data-i18n="daily_rule_hardcore_title">Hardcore-Prüfung:</strong>
+              <span data-i18n="daily_rule_hardcore_desc">Täglich wechselnde Schrein-Layouts mit Windböen, Toren, Portalen und Relikten.</span>
             </div>
           </div>
           <div class="daily-rule-item">
@@ -1216,8 +1215,8 @@
               <svg class="svg-icon svg-package" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan, #00f5ff)" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" fill="currentColor" fill-opacity="0.2"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M12 8c-2-3-5-3-5 0s5 3 5 0z" fill="currentColor"/><path d="M12 8c2-3 5-3 5 0s-5 3-5 0z" fill="currentColor"/></svg>
             </span>
             <div>
-              <strong>Tages-Streak:</strong>
-              <span>Ein Sieg heute erhöht deine Flammen-Streak um +1 Tag.</span>
+              <strong data-i18n="daily_rule_streak_title">Tages-Streak:</strong>
+              <span data-i18n="daily_rule_streak_desc">Ein Sieg heute erhöht deine Flammen-Streak um +1 Tag.</span>
             </div>
           </div>
         </div>
@@ -1225,7 +1224,7 @@
         <div class="daily-actions">
           <button class="play-btn daily-start-btn" id="btnStartDailyTrial">
             <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span id="btnStartDailyLabel">Prüfung antreten ▶</span>
+            <span id="btnStartDailyLabel" data-i18n="btn_start_daily">Prüfung antreten ▶</span>
           </button>
         </div>
       </div>
@@ -1238,9 +1237,9 @@
           <div>
             <span class="modal-kicker">
               <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Endlos-Roguelike · 百人鳥居</span>
+              <span data-i18n="tower_kicker">Endlos-Roguelike · 百人鳥居</span>
             </span>
-            <h2 class="modal-title" id="towerIntroTitle">Turm der 100 Prüfungen</h2>
+            <h2 class="modal-title" id="towerIntroTitle" data-i18n="tower_intro_title">Turm der 100 Prüfungen</h2>
           </div>
           <button class="modal-close-btn" id="btnCloseTowerIntro" aria-label="Schließen">×</button>
         </div>
@@ -1249,12 +1248,12 @@
           <!-- Tower Best Stats Hero -->
           <div class="tower-stats-hero">
             <div class="tower-stat-item">
-              <span class="tower-stat-label">Persönlicher Rekord</span>
+              <span class="tower-stat-label" data-i18n="tower_stat_best_floor">Persönlicher Rekord</span>
               <div class="tower-stat-val" id="towerHeroBestFloor">Ebene 1</div>
             </div>
             <div class="tower-stat-divider"></div>
             <div class="tower-stat-item">
-              <span class="tower-stat-label">Bester Score</span>
+              <span class="tower-stat-label" data-i18n="tower_stat_best_score">Bester Score</span>
               <div class="tower-stat-val" id="towerHeroBestScore">0 Pkt.</div>
             </div>
           </div>
@@ -1266,8 +1265,8 @@
                 <svg class="svg-icon svg-lantern lit" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
               </span>
               <div class="tower-rule-text">
-                <strong>3 Spirit-Laternen (Leben):</strong>
-                <span>Jeder Fehler (Kollision, geschlossenes Tor, verpasstes Relikt) löscht 1 Laterne. Bei 0 Laternen bricht die Prüfung ab!</span>
+                <strong data-i18n="tower_rule_lives_title">3 Spirit-Laternen (Leben):</strong>
+                <span data-i18n="tower_rule_lives_desc">Jeder Fehler (Kollision, geschlossenes Tor, verpasstes Relikt) löscht 1 Laterne. Bei 0 Laternen bricht die Prüfung ab!</span>
               </div>
             </div>
             <div class="tower-rule-box">
@@ -1275,8 +1274,8 @@
                 <svg class="svg-icon svg-torii" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
               </span>
               <div class="tower-rule-text">
-                <strong>100 Aufsteigende Etagen:</strong>
-                <span>Jede Ebene steigert sich prozedural in Größe und Komplexität mit Schaltern, Portalen und Windböen.</span>
+                <strong data-i18n="tower_rule_scaling_title">100 Aufsteigende Etagen:</strong>
+                <span data-i18n="tower_rule_scaling_desc">Jede Ebene steigert sich prozedural in Größe und Komplexität mit Schaltern, Portalen und Windböen.</span>
               </div>
             </div>
             <div class="tower-rule-box">
@@ -1284,8 +1283,8 @@
                 <svg class="svg-icon svg-amulet" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sakura, #f472b6)" stroke-width="1.8"><polygon points="8,4 16,4 19,8 19,21 5,21 5,8" fill="currentColor" fill-opacity="0.25"/><circle cx="12" cy="13" r="2.5" fill="currentColor"/></svg>
               </span>
               <div class="tower-rule-text">
-                <strong>Altar der Segnungen (alle 5 Etagen):</strong>
-                <span>Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
+                <strong data-i18n="tower_rule_altar_title">Altar der Segnungen (alle 5 Etagen):</strong>
+                <span data-i18n="tower_rule_altar_desc">Meistere die Große Schrein-Pforte, um geheiligte Gaben zu erhalten: Heile Laternen, erweitere Befehls-Slots oder erhalte Schutz-Amulette.</span>
               </div>
             </div>
             <div class="tower-rule-box">
@@ -1293,8 +1292,8 @@
                 <svg class="svg-icon svg-lightning" width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
               </span>
               <div class="tower-rule-text">
-                <strong>Zen-Effizienz (Minimalzüge):</strong>
-                <span>Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!</span>
+                <strong data-i18n="tower_rule_zen_title">Zen-Effizienz (Minimalzüge):</strong>
+                <span data-i18n="tower_rule_zen_desc">Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!</span>
               </div>
             </div>
           </div>
@@ -1302,7 +1301,7 @@
           <div class="tower-actions-row">
             <button class="play-btn tower-start-btn" id="btnStartTowerRun">
               <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span>Aufstieg beginnen ▶</span>
+              <span data-i18n="tower_btn_start_run">Aufstieg beginnen ▶</span>
             </button>
           </div>
         </div>
@@ -1315,10 +1314,10 @@
         <div class="altar-header">
           <span class="modal-kicker">
             <svg class="svg-icon svg-torii" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span>Große Schrein-Pforte gemeistert!</span>
+            <span data-i18n="tower_altar_kicker">Große Schrein-Pforte gemeistert!</span>
           </span>
-          <h2 class="modal-title" id="towerAltarTitle">Altar der Segnungen</h2>
-          <p class="altar-desc">Wähle eine heilige Gabe der Kitsune-Göttin für deinen weiteren Aufstieg:</p>
+          <h2 class="modal-title" id="towerAltarTitle" data-i18n="tower_altar_title">Altar der Segnungen</h2>
+          <p class="altar-desc" data-i18n="tower_altar_desc">Wähle eine heilige Gabe der Kitsune-Göttin für deinen weiteren Aufstieg:</p>
         </div>
 
         <div class="altar-blessings-grid" id="towerAltarChoices">
@@ -1333,26 +1332,26 @@
         <div class="gameover-emblem">
           <svg class="svg-icon svg-lantern unlit" width="48" height="48" viewBox="0 0 24 24" fill="none" style="opacity: 0.45;"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="rgba(255,255,255,0.1)" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6"/></svg>
         </div>
-        <h2 class="modal-title" id="towerGameOverTitle">Alle Laternen erloschen!</h2>
-        <p class="modal-desc" id="towerGameOverDesc">Die Energie im Turm der 100 Prüfungen ist erloschen.</p>
+        <h2 class="modal-title" id="towerGameOverTitle" data-i18n="tower_gameover_title">Alle Laternen erloschen!</h2>
+        <p class="modal-desc" id="towerGameOverDesc" data-i18n="tower_gameover_desc">Die Energie im Turm der 100 Prüfungen ist erloschen.</p>
 
         <div class="gameover-summary-box">
           <div class="summary-line">
-            <span>Erreichte Ebene:</span>
+            <span data-i18n="tower_summary_floor">Erreichte Ebene:</span>
             <strong id="towerResultFloor">Ebene 7</strong>
           </div>
           <div class="summary-line">
-            <span>Erzielte Punkte:</span>
+            <span data-i18n="tower_summary_score">Erzielte Punkte:</span>
             <strong id="towerResultScore">1.850 Pkt.</strong>
           </div>
           <div class="summary-line" id="towerResultZenRow">
             <span>
               <svg class="svg-icon svg-lightning" width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 3px;"><polygon points="13,2 4,14 12,14 11,22 20,10 12,10" fill="var(--gold, #ffb703)" stroke="var(--gold, #ffb703)" stroke-width="1.2"/></svg>
-              <span>Zen-Meisterzüge:</span>
+              <span data-i18n="tower_summary_zen">Zen-Meisterzüge:</span>
             </span>
             <strong id="towerResultZen" style="color: var(--gold, #ffb703);">0 Ebenen</strong>
           </div>
-          <div class="tower-record-badge" id="towerResultRecord" style="display: none;">
+          <div class="tower-record-badge" id="towerResultRecord" style="display: none;" data-i18n="tower_record_badge">
             NEUER PERSÖNLICHER REKORD!
           </div>
         </div>
@@ -1363,21 +1362,21 @@
               <svg class="svg-icon svg-lantern lit" width="20" height="20" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 8px rgba(255,77,109,0.8));"><path d="M12 1.5v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="8.5" y="4" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M7 6c-2 2.5-2 8.5 0 11h10c2-2.5 2-8.5 0-11H7z" fill="#ff4d6d" fill-opacity="0.4" stroke="currentColor" stroke-width="1.6"/><path d="M6 9.5h12M6 13.5h12" stroke="currentColor" stroke-width="1" stroke-opacity="0.6"/><ellipse cx="12" cy="11.5" rx="2.5" ry="3.5" fill="#ffbe0b"/><ellipse cx="12" cy="11.5" rx="1.2" ry="2" fill="#fff"/><rect x="8.5" y="17" width="7" height="2" rx="0.8" fill="currentColor"/><path d="M12 19v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </span>
             <div class="ad-reward-text">
-              <strong>Zweite Chance: 1 Laterne retten</strong>
-              <span>Kurzes Video ansehen & Ebene fortsetzen</span>
+              <strong data-i18n="tower_btn_revive_strong">Zweite Chance: 1 Laterne retten</strong>
+              <span data-i18n="tower_btn_revive_sub">Kurzes Video ansehen & Ebene fortsetzen</span>
             </div>
-            <span class="ad-pill">WERBUNG</span>
+            <span class="ad-pill" data-i18n="ad_pill">WERBUNG</span>
           </button>
         </div>
 
         <div class="modal-btn-row">
           <button class="primary-btn" id="btnTowerRetry">
             <svg class="svg-icon svg-retry" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
-            <span>Erneut versuchen</span>
+            <span data-i18n="tower_btn_retry">Erneut versuchen</span>
           </button>
           <button class="secondary-btn" id="btnTowerExitToCampaign">
             <svg class="svg-icon svg-torii" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span>Zur Kampagne</span>
+            <span data-i18n="tower_btn_exit">Zur Kampagne</span>
           </button>
         </div>
       </div>
