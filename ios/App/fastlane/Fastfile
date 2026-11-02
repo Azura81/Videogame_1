@@ -4,11 +4,11 @@ default_platform(:ios)
 platform :ios do
   desc "Build and upload to TestFlight / App Store Connect"
   lane :release do
-    # Select Xcode 16+ for iOS 18 SDK App Store compliance
-    xcode_16 = Dir.glob("/Applications/Xcode_16*.app").sort.last || Dir.glob("/Applications/Xcode*.app").sort.last
-    if xcode_16
-      ENV["DEVELOPER_DIR"] = File.join(xcode_16, "Contents/Developer")
-      UI.success("Selected Xcode version for build and upload: #{xcode_16}")
+    # Select Xcode 26+ for iOS App Store compliance
+    xcode_selected = Dir.glob("/Applications/Xcode_26*.app").sort.last || Dir.glob("/Applications/Xcode_16*.app").sort.last || Dir.glob("/Applications/Xcode*.app").sort.last
+    if xcode_selected
+      ENV["DEVELOPER_DIR"] = File.join(xcode_selected, "Contents/Developer")
+      UI.success("Selected Xcode version for build and upload: #{xcode_selected}")
     end
 
     api_key = nil
