@@ -1153,17 +1153,35 @@ class GardenRenderer {
     }
   }
 
-  animateKomainuRoar(isKomaHit = false, onComplete = null) {
-    if (typeof isKomaHit === "function") {
-      onComplete = isKomaHit;
-      isKomaHit = false;
+  animateKomainuRoar(tilesOrIsHit = false, isBlocked = false, isHit = false, blockPos = null, onComplete = null) {
+    let tiles = [];
+    let blocked = false;
+    let hit = false;
+    let bPos = null;
+    let cb = null;
+
+    if (Array.isArray(tilesOrIsHit)) {
+      tiles = tilesOrIsHit;
+      blocked = !!isBlocked;
+      hit = !!isHit;
+      bPos = blockPos;
+      cb = onComplete;
+    } else if (typeof tilesOrIsHit === "function") {
+      cb = tilesOrIsHit;
+      tiles = [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]];
+    } else {
+      hit = !!tilesOrIsHit;
+      cb = (typeof isBlocked === "function") ? isBlocked : onComplete;
+      tiles = [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]];
     }
+
     if (!this.komainuHead) {
-      if (typeof onComplete === "function") onComplete();
+      if (typeof cb === "function") cb();
       return;
     }
+
     this.komainuHead.rotation.x = -0.45;
-    this.triggerScreenShake(isKomaHit ? 18 : 8, 450);
+    this.triggerScreenShake(hit ? 18 : 8, 450);
 
     if (typeof Sound !== "undefined" && typeof Sound.playKomainuRoar === "function") {
       Sound.playKomainuRoar();
@@ -1171,25 +1189,29 @@ class GardenRenderer {
 
     const offsetX = (this.gridWidth - 1) / 2;
     const offsetZ = (this.gridHeight - 1) / 2;
-    const posX = (3 - offsetX) * this.tileSize;
 
-    // Glowing sonic ground wave covering column 3
-    const waveGeo = new THREE.PlaneGeometry(this.tileSize * 0.96, 5.2 * this.tileSize);
+    // Glowing sonic ground wave covering the targeted tiles
+    const waveMeshes = [];
     const waveMat = new THREE.MeshBasicMaterial({
       color: 0xffaa00,
       transparent: true,
       opacity: 0.65,
       side: THREE.DoubleSide
     });
-    const wave = new THREE.Mesh(waveGeo, waveMat);
-    wave.rotation.x = -Math.PI / 2;
-    wave.position.set(posX, 0.08, (3 - offsetZ) * this.tileSize);
-    this.scene.add(wave);
 
-    // Dynamic sonic rings moving down the corridor
+    tiles.forEach(([tx, ty]) => {
+      const tileGeo = new THREE.PlaneGeometry(this.tileSize * 0.94, this.tileSize * 0.94);
+      const tileMesh = new THREE.Mesh(tileGeo, waveMat);
+      tileMesh.rotation.x = -Math.PI / 2;
+      tileMesh.position.set((tx - offsetX) * this.tileSize, 0.08, (ty - offsetZ) * this.tileSize);
+      this.scene.add(tileMesh);
+      waveMeshes.push(tileMesh);
+    });
+
+    // Dynamic sonic rings along the target tiles
     const rings = [];
-    for (let r = 0; r < 3; r++) {
-      const ringGeo = new THREE.RingGeometry(0.2, 0.5, 20);
+    tiles.forEach(([tx, ty], idx) => {
+      const ringGeo = new THREE.RingGeometry(0.15, 0.45, 16);
       const ringMat = new THREE.MeshBasicMaterial({
         color: 0xffdd44,
         transparent: true,
@@ -1198,9 +1220,37 @@ class GardenRenderer {
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.rotation.x = -Math.PI / 2;
-      ring.position.set(posX, 0.12, (0 - offsetZ) * this.tileSize);
+      ring.position.set((tx - offsetX) * this.tileSize, 0.12, (ty - offsetZ) * this.tileSize);
       this.scene.add(ring);
-      rings.push({ mesh: ring, delay: r * 0.12, geo: ringGeo, mat: ringMat });
+      rings.push({ mesh: ring, delay: (idx % 3) * 0.08, geo: ringGeo, mat: ringMat });
+    });
+
+    // If blocked by holy basalt block: spawn deflection flare
+    if (blocked && bPos) {
+      setTimeout(() => {
+        const bwpX = (bPos[0] - offsetX) * this.tileSize;
+        const bwpZ = (bPos[1] - offsetZ) * this.tileSize;
+        const burstGeo = new THREE.RingGeometry(0.2, 0.95, 16);
+        burstGeo.rotateX(-Math.PI / 2);
+        const burstMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+          side: THREE.DoubleSide
+        });
+        const burst = new THREE.Mesh(burstGeo, burstMat);
+        burst.position.set(bwpX, 0.65, bwpZ);
+        this.scene.add(burst);
+        if (typeof Sound !== "undefined" && typeof Sound.playShieldClash === "function") {
+          Sound.playShieldClash();
+        }
+        setTimeout(() => {
+          this.scene.remove(burst);
+          burstGeo.dispose();
+          burstMat.dispose();
+        }, 400);
+      }, 120);
     }
 
     let progress = 0;
@@ -1211,8 +1261,7 @@ class GardenRenderer {
       rings.forEach(({ mesh, delay, mat }) => {
         const ringProg = Math.max(0, (progress - delay) / (1 - delay));
         if (ringProg > 0 && ringProg <= 1) {
-          mesh.position.z = (0 - offsetZ) * this.tileSize + ringProg * (5.2 * this.tileSize);
-          const s = 1.0 + ringProg * 1.6;
+          const s = 1.0 + ringProg * 1.5;
           mesh.scale.set(s, s, 1);
           mat.opacity = Math.max(0, 0.85 * (1 - ringProg));
         }
@@ -1221,8 +1270,10 @@ class GardenRenderer {
       if (progress < 1.05) {
         requestAnimationFrame(animateWave);
       } else {
-        this.scene.remove(wave);
-        waveGeo.dispose();
+        waveMeshes.forEach(m => {
+          this.scene.remove(m);
+          m.geometry.dispose();
+        });
         waveMat.dispose();
         rings.forEach(({ mesh, geo, mat }) => {
           this.scene.remove(mesh);
@@ -1230,7 +1281,7 @@ class GardenRenderer {
           mat.dispose();
         });
         if (this.komainuHead) this.komainuHead.rotation.x = 0;
-        if (typeof onComplete === "function") onComplete();
+        if (typeof cb === "function") cb();
       }
     };
     animateWave();
@@ -1249,24 +1300,34 @@ class GardenRenderer {
     }
   }
 
-  showSonicHazard(tiles) {
+  showSonicHazard(tiles = []) {
     this.clearSonicHazard();
     this.sonicHazardMeshes = [];
+    if (!tiles || tiles.length === 0) return;
     const offsetX = (this.gridWidth - 1) / 2;
     const offsetZ = (this.gridHeight - 1) / 2;
-    const hazardGeo = new THREE.PlaneGeometry(this.tileSize * 0.92, this.tileSize * 0.92);
+    const hazardGeo = new THREE.PlaneGeometry(this.tileSize * 0.94, this.tileSize * 0.94);
     const hazardMat = new THREE.MeshBasicMaterial({
       color: 0xff9900,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.42,
       side: THREE.DoubleSide
     });
     tiles.forEach(([tx, ty]) => {
       const mesh = new THREE.Mesh(hazardGeo, hazardMat);
       mesh.rotation.x = -Math.PI / 2;
-      mesh.position.set((tx - offsetX) * this.tileSize, 0.04, (ty - offsetZ) * this.tileSize);
+      mesh.position.set((tx - offsetX) * this.tileSize, 0.05, (ty - offsetZ) * this.tileSize);
       this.scene.add(mesh);
       this.sonicHazardMeshes.push(mesh);
+
+      // Warning outline border
+      const edgesGeo = new THREE.EdgesGeometry(hazardGeo);
+      const edgesMat = new THREE.LineBasicMaterial({ color: 0xffdd44, transparent: true, opacity: 0.85 });
+      const edges = new THREE.LineSegments(edgesGeo, edgesMat);
+      edges.rotation.x = -Math.PI / 2;
+      edges.position.set((tx - offsetX) * this.tileSize, 0.055, (ty - offsetZ) * this.tileSize);
+      this.scene.add(edges);
+      this.sonicHazardMeshes.push(edges);
     });
   }
 
@@ -1275,7 +1336,7 @@ class GardenRenderer {
       this.sonicHazardMeshes.forEach(m => {
         this.scene.remove(m);
         m.geometry.dispose();
-        m.material.dispose();
+        if (m.material) m.material.dispose();
       });
       this.sonicHazardMeshes = [];
     }

@@ -2541,6 +2541,78 @@ class GameEngine {
     }
   }
 
+  getKomainuHazardTarget(fireStep) {
+    const targets = {
+      3: {
+        type: "col",
+        index: 2,
+        name: "Bambushain-West (Spalte 2)",
+        tiles: [[2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6]]
+      },
+      6: {
+        type: "col",
+        index: 5,
+        name: "Steingarten-Ost (Spalte 5)",
+        tiles: [[5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6]]
+      },
+      9: {
+        type: "row",
+        index: 4,
+        name: "Schrein-Terrasse (Reihe 4)",
+        tiles: [[1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4]],
+        shieldable: true,
+        shieldPos: [3, 4]
+      },
+      12: {
+        type: "col",
+        index: 3,
+        name: "Schrein-Schlucht (Spalte 3)",
+        tiles: [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6]],
+        shieldable: true,
+        shieldPos: [3, 2]
+      },
+      15: {
+        type: "col",
+        index: 2,
+        name: "Bambushain-West (Spalte 2)",
+        tiles: [[2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6]]
+      },
+      18: {
+        type: "col",
+        index: 5,
+        name: "Steingarten-Ost (Spalte 5)",
+        tiles: [[5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6]]
+      },
+      21: {
+        type: "col",
+        index: 6,
+        name: "Östlicher Pfad (Spalte 6)",
+        tiles: [[6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6]]
+      },
+      24: {
+        type: "col",
+        index: 3,
+        name: "Schrein-Schlucht (Spalte 3)",
+        tiles: [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6]],
+        shieldable: true,
+        shieldPos: [3, 2]
+      }
+    };
+
+    if (targets[fireStep]) return targets[fireStep];
+
+    const fallbackCols = [2, 5, 3, 6];
+    const col = fallbackCols[Math.floor(fireStep / 3) % fallbackCols.length];
+    const tiles = [];
+    for (let y = 1; y < 7; y++) tiles.push([col, y]);
+    return {
+      type: "col",
+      index: col,
+      name: `Pfad ${col}`,
+      tiles
+    };
+  }
+
   getBossHazardTarget(fireStep) {
     const targets = {
       3: {
@@ -2627,7 +2699,7 @@ class GameEngine {
         if (this.dom.bossPhaseBadge) {
           if (isTrapped) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Gebrüll gedämpft.";
+            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
           } else {
             this.dom.bossPhaseBadge.className = "boss-phase-badge";
             this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
@@ -2644,13 +2716,14 @@ class GameEngine {
             this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
           }
         } else {
-          const roarLane = [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]];
+          const nextFireStep = step + 1;
+          const target = this.getKomainuHazardTarget(nextFireStep);
           if (this.renderer && typeof this.renderer.showSonicHazard === "function") {
-            this.renderer.showSonicHazard(roarLane);
+            this.renderer.showSonicHazard(target.tiles);
           }
           if (this.dom.bossPhaseBadge) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
-            this.dom.bossPhaseBadge.textContent = "⚠️ GEBRÜLL-ZONE: Schrein-Schlucht (Feuert nächste Runde!)";
+            this.dom.bossPhaseBadge.textContent = `⚠️ GEBRÜLL-ZONE: ${target.name} (Feuert nächste Runde!)`;
           }
           this.triggerHaptic([35, 40]);
         }
@@ -2676,17 +2749,33 @@ class GameEngine {
           return;
         }
 
-        const isKomaInRoar = (this.state.x === 3 && this.state.y >= 1 && this.state.y <= 5);
-        const hasShieldBlock = (this.state.blocks || []).some(b => b[0] === 3 && b[1] < this.state.y && b[1] >= 1);
-        const isKomaHit = isKomaInRoar && !hasShieldBlock;
+        const target = this.getKomainuHazardTarget(step);
+        const isKomaInHazard = target.tiles.some(([tx, ty]) => tx === this.state.x && ty === this.state.y);
+
+        let isBlocked = false;
+        let blockPos = null;
+
+        if (target.shieldable && target.shieldPos) {
+          const [sx, sy] = target.shieldPos;
+          const hasBlock = (this.state.blocks || []).some(b => b[0] === sx && b[1] === sy);
+          if (hasBlock) {
+            isBlocked = true;
+            blockPos = [sx, sy];
+          }
+        }
+
+        const isKomaHit = isKomaInHazard && !isBlocked;
 
         if (this.dom.bossPhaseBadge) {
-          if (isKomaHit) {
+          if (isBlocked) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
+            this.dom.bossPhaseBadge.textContent = "🛡️ Basaltblock schirmt das Gebrüll ab!";
+          } else if (isKomaHit) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
             this.dom.bossPhaseBadge.textContent = "💥 Vom Gebrüll betäubt!";
           } else {
             this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
-            this.dom.bossPhaseBadge.textContent = "🦁 Komainu brüllt!";
+            this.dom.bossPhaseBadge.textContent = `🦁 Komainu brüllt: ${target.name}!`;
           }
         }
 
@@ -2696,15 +2785,19 @@ class GameEngine {
           if (typeof document !== "undefined") {
             document.body.classList.remove("is-executing");
           }
-          this.setFeedback("💥 Vom Gebrüll des Komainu erschüttert! Sperre ihn mit dem Basaltblock auf (3, 2) ein!", "bad");
+          this.setFeedback(`💥 Vom Gebrüll des Komainu in ${target.name} erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!`, "bad");
           this.triggerHaptic([60, 80, 100]);
           this.renderQueue();
         }
 
         if (this.renderer && typeof this.renderer.animateKomainuRoar === "function") {
-          this.renderer.animateKomainuRoar(isKomaHit, () => {
+          this.renderer.animateKomainuRoar(target.tiles, isBlocked, isKomaHit, blockPos, () => {
             if (!isKomaHit) {
-              this.setFeedback("🦁 Das mächtige Brüllen des Schreinwächters hallt durch den Bambuswald!", "normal");
+              if (isBlocked) {
+                this.setFeedback("🛡️ Der massive Basaltblock bricht die Druckwelle des Schreinwächters!", "good");
+              } else {
+                this.setFeedback(`🦁 Das Gebrüll des Komainu erschüttert ${target.name}!`, "normal");
+              }
               if (typeof onComplete === "function") onComplete();
             }
           });

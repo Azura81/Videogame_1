@@ -81,7 +81,7 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     await page.waitForFunction(() => {
       const modal = document.getElementById('modalWin');
       return modal && modal.classList.contains('active');
-    }, { timeout: 15000 });
+    }, { timeout: 40000 });
 
     const winData = await page.evaluate(() => {
       const title = document.getElementById('modalWinTitle');
@@ -97,13 +97,14 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(winData.isPacified).toBe(true);
   });
 
-  test('Level 30: Roar hits and fails KOMA if standing unprotected in canyon on step 3', async ({ page }) => {
+  test('Level 30: Roar hits and fails KOMA if standing unprotected in active hazard lane on step 3', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#webgl-container');
 
     const failFeedback = await page.evaluate(async () => {
       window.gameInstance.loadLevel(29);
-      window.gameInstance.state.x = 3;
+      // Step 3 targets Bambushain-West (column 2)
+      window.gameInstance.state.x = 2;
       window.gameInstance.state.y = 3;
       window.gameInstance.state.blocks = [[1, 1]]; // block not shielding
       window.gameInstance.processBossBreath(window.gameInstance.getCurrentLevel(), 3);

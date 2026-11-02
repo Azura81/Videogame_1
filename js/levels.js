@@ -5610,18 +5610,18 @@ const LEVELS = [
     "n": "Der steinerne Schreinwächter",
     "c": "Kapitel 05 · Bambuswald",
     "t": "Zwischenboss · Iwa-Komainu",
-    "d": "Der uralte Stein-Komainu bewacht das Tor zur Himmelsbrücke mit ohrenbetäubendem Gebrüll! Schiebe den Basaltblock vor seinen Schrein, um ihn einzusperren, aktiviere den Wächterschalter und berge beide Relikte!",
-    "w": 7,
-    "h": 7,
+    "d": "Der uralte Stein-Komainu bewacht das Tor zur Himmelsbrücke mit ohrenbetäubendem Gebrüll! Weiche seinen Angriffen aus, öffne das Schreintor im Bambushain, sperre den Komainu mit dem Basaltblock im Altar (3, 2) ein und berge beide heiligen Relikte!",
+    "w": 8,
+    "h": 8,
     "isBossLevel": true,
     "bossId": "komainu",
     "s": [
-      1,
-      5,
+      3,
+      6,
       "N"
     ],
     "g": [
-      5,
+      6,
       1
     ],
     "blocks": [
@@ -5633,87 +5633,97 @@ const LEVELS = [
     "sw": [
       [
         1,
-        2,
+        5,
         "cyan"
       ]
     ],
     "gates": [
       [
-        5,
-        2,
+        3,
+        3,
         "cyan"
       ]
     ],
     "orbs": [
       [
         1,
-        3
+        2
       ],
       [
-        5,
-        4
+        6,
+        2
       ]
     ],
     "walls": [
-      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0],
-      [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6],
-      [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
-      [6, 1], [6, 2], [6, 3], [6, 4], [6, 5],
-      [3, 1],
-      [2, 1], [2, 2], [2, 3], [2, 4],
-      [4, 1], [4, 2], [4, 4], [4, 5]
+      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
+      [0, 7], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7],
+      [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
+      [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6],
+      [2, 1], [3, 1], [4, 1],
+      [2, 2], [2, 3], [2, 4],
+      [4, 2], [4, 4]
     ],
     "obstacles": {
       "0,0": "wall_h",
-      "1,0": "pine",
+      "1,0": "bamboo",
       "2,0": "house",
       "3,0": "torii",
       "4,0": "house",
-      "5,0": "pine",
-      "6,0": "wall_h",
-      "3,1": "lantern",
+      "5,0": "bamboo",
+      "6,0": "torii",
+      "7,0": "wall_h",
       "0,1": "fence_v",
       "2,1": "wall_v",
+      "3,1": "wall_h",
       "4,1": "wall_v",
-      "6,1": "fence_v",
+      "7,1": "fence_v",
       "0,2": "wall_v",
-      "2,2": "wall_v",
-      "4,2": "wall_v",
-      "6,2": "wall_v",
+      "2,2": "bamboo",
+      "4,2": "lantern",
+      "7,2": "wall_v",
       "0,3": "fence_v",
       "2,3": "wall_v",
-      "6,3": "fence_v",
+      "7,3": "fence_v",
       "0,4": "wall_v",
-      "2,4": "wall_v",
-      "4,4": "wall_v",
-      "6,4": "wall_v",
+      "2,4": "bamboo",
+      "4,4": "lantern",
+      "7,4": "wall_v",
       "0,5": "fence_v",
-      "4,5": "wall_v",
-      "6,5": "fence_v",
-      "0,6": "wall_h",
-      "1,6": "fence_h",
-      "2,6": "wall_h",
-      "3,6": "fence_h",
-      "4,6": "wall_h",
-      "5,6": "fence_h",
-      "6,6": "wall_h"
+      "7,5": "fence_v",
+      "0,6": "wall_v",
+      "7,6": "wall_v",
+      "0,7": "wall_h",
+      "1,7": "fence_h",
+      "2,7": "wall_h",
+      "3,7": "fence_h",
+      "4,7": "wall_h",
+      "5,7": "fence_h",
+      "6,7": "fence_h",
+      "7,7": "wall_h"
     },
     "grass": [
       [1, 1],
-      [5, 5]
+      [1, 6],
+      [5, 4],
+      [6, 3]
     ],
-    "limit": 27,
+    "limit": 29,
     "solution": [
-      "F",
-      "F",
-      "F",
       "L",
-      "L",
+      "F",
+      "F",
+      "R",
+      "F",
       "A",
       "F",
       "F",
       "F",
       "L",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
       "F",
       "F",
       "L",
@@ -5722,11 +5732,8 @@ const LEVELS = [
       "R",
       "F",
       "F",
-      "R",
       "F",
       "L",
-      "L",
-      "F",
       "F",
       "F"
     ]
