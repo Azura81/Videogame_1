@@ -104,58 +104,129 @@ platform :ios do
       end
     end
 
-    # Automatically detect Xcode workspace or SPM project
-    xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
+    # Discover or create external TestFlight beta groups
+    external_groups = ["External Testers"]
+    already_uploaded = false
+    current_build = get_build_number(xcodeproj: "App.xcodeproj").to_s
 
-    profile_name = ENV["SIGH_NAME"] || "com.azura81.spiritdelivery AppStore"
-    profile_uuid = ENV["SIGH_UUID"] || ENV["SIGH_UDID"]
+    if api_key
+      begin
+        require "spaceship"
+        Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.from(hash: api_key)
+        app = Spaceship::ConnectAPI::App.find("com.azura81.spiritdelivery")
+        if app
+          all_groups = app.get_beta_groups || []
+          ext = all_groups.reject(&:is_internal_group).map(&:name).compact
+          if ext.empty?
+            UI.message("No external beta group found. Creating 'External Testers' group...")
+            created = app.create_beta_group(
+              group_name: "External Testers",
+              is_internal_group: false,
+              public_link_enabled: true
+            )
+            external_groups = [created.name]
+          else
+            external_groups = ext
+          end
+          UI.success("Target external TestFlight groups: #{external_groups.join(', ')}")
+        end
 
-    # Configure manual code signing with the downloaded App Store profile
-    begin
-      update_code_signing_settings(
-        path: "App.xcodeproj",
-        use_automatic_signing: false,
-        team_id: team_id,
-        targets: ["App"],
-        build_configurations: ["Release"],
-        code_sign_identity: "Apple Distribution",
-        profile_name: profile_name,
-        profile_uuid: profile_uuid,
-        bundle_identifier: "com.azura81.spiritdelivery"
-      )
-      UI.success("Configured manual code signing with profile: #{profile_name}")
-    rescue => e
-      UI.important("update_code_signing_settings note: #{e.message}")
+        latest_tf_build = latest_testflight_build_number(
+          api_key: api_key,
+          app_identifier: "com.azura81.spiritdelivery",
+          initial_build_number: 0
+        ).to_s
+        UI.message("Local build number: #{current_build} | Latest TestFlight build: #{latest_tf_build}")
+        if latest_tf_build == current_build
+          already_uploaded = true
+          UI.success("Build #{current_build} is already on TestFlight! Proceeding directly to external distribution.")
+        end
+      rescue => e
+        UI.important("TestFlight pre-check note: #{e.message}")
+      end
     end
 
-    # Build native iOS IPA archive
-    build_args = xcode_target.merge({
-      scheme: "App",
-      configuration: "Release",
-      export_method: "app-store",
-      clean: true,
-      output_directory: "./build",
-      output_name: "SpiritDelivery.ipa",
-      export_team_id: team_id,
-      codesigning_identity: "Apple Distribution",
-      export_options: {
-        signingStyle: "manual",
-        provisioningProfiles: {
-          "com.azura81.spiritdelivery" => profile_name
-        }
-      }
-    })
+    review_info = {
+      contact_email: "max.rietsch@gmail.com",
+      contact_first_name: "Max",
+      contact_last_name: "Rietsch",
+      contact_phone: "+4915112345678",
+      demo_account_required: false,
+      notes: "Spirit Delivery is a 3D puzzle game. No login or account is required to play."
+    }
+    changelog_text = "New Level 30 Boss (Iwa-Komainu), full German & English localization, and gameplay improvements."
 
-    build_app(build_args)
-
-    # Upload to TestFlight / App Store Connect if API key is present
-    if api_key
+    if already_uploaded && api_key
       upload_to_testflight(
         api_key: api_key,
-        team_id: team_id,
-        skip_waiting_for_build_processing: true,
-        ipa: "./build/SpiritDelivery.ipa"
+        app_identifier: "com.azura81.spiritdelivery",
+        app_version: "1.0",
+        build_number: current_build,
+        distribute_only: true,
+        distribute_external: true,
+        groups: external_groups,
+        notify_external_testers: true,
+        changelog: changelog_text,
+        beta_app_review_info: review_info
       )
+    else
+      # Automatically detect Xcode workspace or SPM project
+      xcode_target = File.exist?("App.xcworkspace") ? { workspace: "App.xcworkspace" } : { project: "App.xcodeproj" }
+
+      profile_name = ENV["SIGH_NAME"] || "com.azura81.spiritdelivery AppStore"
+      profile_uuid = ENV["SIGH_UUID"] || ENV["SIGH_UDID"]
+
+      # Configure manual code signing with the downloaded App Store profile
+      begin
+        update_code_signing_settings(
+          path: "App.xcodeproj",
+          use_automatic_signing: false,
+          team_id: team_id,
+          targets: ["App"],
+          build_configurations: ["Release"],
+          code_sign_identity: "Apple Distribution",
+          profile_name: profile_name,
+          profile_uuid: profile_uuid,
+          bundle_identifier: "com.azura81.spiritdelivery"
+        )
+        UI.success("Configured manual code signing with profile: #{profile_name}")
+      rescue => e
+        UI.important("update_code_signing_settings note: #{e.message}")
+      end
+
+      # Build native iOS IPA archive
+      build_args = xcode_target.merge({
+        scheme: "App",
+        configuration: "Release",
+        export_method: "app-store",
+        clean: true,
+        output_directory: "./build",
+        output_name: "SpiritDelivery.ipa",
+        export_team_id: team_id,
+        codesigning_identity: "Apple Distribution",
+        export_options: {
+          signingStyle: "manual",
+          provisioningProfiles: {
+            "com.azura81.spiritdelivery" => profile_name
+          }
+        }
+      })
+
+      build_app(build_args)
+
+      # Upload to TestFlight / App Store Connect and distribute to external testers
+      if api_key
+        upload_to_testflight(
+          api_key: api_key,
+          team_id: team_id,
+          ipa: "./build/SpiritDelivery.ipa",
+          distribute_external: true,
+          groups: external_groups,
+          notify_external_testers: true,
+          changelog: changelog_text,
+          beta_app_review_info: review_info
+        )
+      end
     end
   end
 
