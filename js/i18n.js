@@ -76,6 +76,7 @@
       cmd_right: "Rechts",
       cmd_action: "Aktion",
       cmd_play: "Plan abspielen",
+      cmd_abort: "⏹ Abbrechen",
       cmd_stop: "Stopp",
       cmd_undo: "Rückgängig",
       cmd_clear: "Löschen",
@@ -378,6 +379,7 @@
       cmd_right: "Turn Right",
       cmd_action: "Action",
       cmd_play: "Run Plan",
+      cmd_abort: "⏹ Abort",
       cmd_stop: "Stop",
       cmd_undo: "Undo",
       cmd_clear: "Clear",
@@ -1226,12 +1228,19 @@
         "Tipp: Drücke auf „Vorwärts ↑“, um Befehle in deinen Plan einzufügen.": "Tip: Tap “Forward ↑” to insert commands into your plan.",
         "Alle 60 Lieferungen geschafft! 🎉": "All 60 deliveries completed! 🎉",
         "Lieferung erfolgreich!": "Delivery successful!",
-        "Basaltblock blockiert den Schrein!": "Basalt block blocks the shrine!"
+        "Basaltblock blockiert den Schrein!": "Basalt block blocks the shrine!",
+        "⏹ Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.": "⏹ Delivery aborted. The robot is back at the start – adjust your plan.",
+        "KOMA ist wieder am Start. Du kannst deinen Plan anpassen.": "The robot is back at the start. You can adjust your plan.",
+        "Plan gelöscht. Beginne mit einer neuen Befehlsfolge.": "Plan cleared. Start with a new command sequence.",
+        "🦁 Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!": "🦁 The shrine Torii remains sealed! Push the basalt block in front of its shrine (3, 2) to cage the Komainu!"
       };
 
       if (EXACT_MATCHES[text]) return EXACT_MATCHES[text];
 
       let out = text;
+
+      // ⛩️ Ziel noch versiegelt! Sammle noch X Geisterlicht(er).
+      out = out.replace(/⛩️ Ziel noch versiegelt! Sammle noch (\d+) Geisterlicht\(er\)\./g, "⛩️ Goal still sealed! Collect $1 more spirit light(s).");
 
       // 🔒 Kapitel X ist noch gesperrt! Schließe zuerst Kapitel Y (Level Z) ab.
       out = out.replace(/🔒 Kapitel (\d+) ist noch gesperrt! Schließe zuerst Kapitel (\d+) \(Level (\d+)\) ab\./g, "🔒 Chapter $1 is still locked! Complete Chapter $2 (Level $3) first.");

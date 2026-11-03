@@ -118,6 +118,9 @@ class GameEngine {
       feedbackText: document.getElementById("feedbackText"),
       progressBar: document.getElementById("progressBar"),
       btnPlay: document.getElementById("btnPlay"),
+      btnPlayIcon: document.getElementById("btnPlayIcon"),
+      btnPlayText: document.getElementById("btnPlayText"),
+      btnMobileAbort: document.getElementById("btnMobileAbort"),
       btnUndo: document.getElementById("btnUndo"),
       btnClear: document.getElementById("btnClear"),
       btnReset: document.getElementById("btnReset"),
@@ -418,7 +421,18 @@ class GameEngine {
     });
 
     // Control Buttons
-    if (this.dom.btnPlay) this.dom.btnPlay.addEventListener("click", () => this.play());
+    if (this.dom.btnPlay) {
+      this.dom.btnPlay.addEventListener("click", () => {
+        if (this.isPlaying) {
+          this.abortExecution();
+        } else {
+          this.play();
+        }
+      });
+    }
+    if (this.dom.btnMobileAbort) {
+      this.dom.btnMobileAbort.addEventListener("click", () => this.abortExecution());
+    }
     if (this.dom.btnReset) this.dom.btnReset.addEventListener("click", () => this.reset(false));
     if (this.dom.btnUndo) this.dom.btnUndo.addEventListener("click", () => this.undo());
     if (this.dom.btnClear) this.dom.btnClear.addEventListener("click", () => this.reset(true));
@@ -3024,11 +3038,17 @@ class GameEngine {
     this.setFeedback("Letzten Befehl entfernt.", "normal");
   }
 
+  abortExecution() {
+    this.reset(false);
+    this.setFeedback("⏹ Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.", "normal");
+  }
+
   reset(clearQueue = false) {
     this.triggerHaptic(12);
     if (this.playbackTimer) clearTimeout(this.playbackTimer);
     if (this.renderer && this.renderer.komaState) {
       this.renderer.komaState.onLanding = null;
+      this.renderer.komaState.onSlideLanding = null;
     }
     this.isPlaying = false;
     if (typeof document !== "undefined") {
@@ -3096,7 +3116,22 @@ class GameEngine {
     this.dom.cmdButtons.forEach(btn => (btn.disabled = this.isPlaying || atLimit));
     if (this.dom.btnUndo) this.dom.btnUndo.disabled = this.isPlaying || !this.queue.length;
     if (this.dom.btnClear) this.dom.btnClear.disabled = this.isPlaying || !this.queue.length;
-    if (this.dom.btnPlay) this.dom.btnPlay.disabled = this.isPlaying || !this.queue.length;
+    if (this.dom.btnPlay) {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      if (this.isPlaying) {
+        this.dom.btnPlay.disabled = false;
+        this.dom.btnPlay.classList.add("abort-mode");
+        if (this.dom.btnPlayIcon) this.dom.btnPlayIcon.textContent = "⏹";
+        if (this.dom.btnPlayText) this.dom.btnPlayText.textContent = isEn ? "Abort" : "Abbrechen";
+      } else {
+        this.dom.btnPlay.disabled = !this.queue.length;
+        this.dom.btnPlay.classList.remove("abort-mode");
+        if (this.dom.btnPlayIcon) this.dom.btnPlayIcon.textContent = "▶";
+        if (this.dom.btnPlayText) {
+          this.dom.btnPlayText.textContent = typeof I18N !== "undefined" ? I18N.t("cmd_play") : (isEn ? "Run Plan" : "Plan abspielen");
+        }
+      }
+    }
   }
 
   renderLevelDrawer() {
@@ -3205,6 +3240,7 @@ class GameEngine {
   }
 
   executeNextStep() {
+    if (!this.isPlaying) return;
     if (this.currentStep >= this.queue.length) {
       this.isPlaying = false;
       if (typeof document !== "undefined") {
@@ -3594,24 +3630,44 @@ class GameEngine {
 
     // Check Victory
     if (this.state.x === lvl.g[0] && this.state.y === lvl.g[1]) {
-      if (lvl.orbs && this.state.collectedOrbs.size < lvl.orbs.length) {
-        this.setFeedback(`⛩️ Ziel noch versiegelt! Sammle noch ${lvl.orbs.length - this.state.collectedOrbs.size} Geisterlicht(er).`, "bad");
-        Sound.playBump();
-        return;
-      }
-      if (lvl.bossId === "komainu") {
-        const isTrapped = (this.state.blocks || []).some(b => b[0] === 3 && b[1] === 2);
-        if (!isTrapped) {
+      const missingOrbs = lvl.orbs ? (lvl.orbs.length - this.state.collectedOrbs.size) : 0;
+      const komainuNotTrapped = (lvl.bossId === "komainu") && !(this.state.blocks || []).some(b => b[0] === 3 && b[1] === 2);
+
+      if (missingOrbs > 0 || komainuNotTrapped) {
+        if (missingOrbs > 0) {
+          this.setFeedback(`⛩️ Ziel noch versiegelt! Sammle noch ${missingOrbs} Geisterlicht(er).`, "bad");
+          if (this.dom.bossPhaseBadge && (lvl.bossId === "komainu" || lvl.isBossLevel)) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
+            this.dom.bossPhaseBadge.textContent = `⛩️ Ziel versiegelt! Noch ${missingOrbs} Relikt(e) fehlen!`;
+          }
+        } else {
           this.setFeedback("🦁 Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!", "bad");
-          Sound.playBump();
+          if (this.dom.bossPhaseBadge) {
+            this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
+            this.dom.bossPhaseBadge.textContent = "🦁 Torii versiegelt! Sperre erst den Komainu (3, 2) ein!";
+          }
+        }
+        if (this.renderer && typeof this.renderer.animateBump === "function") {
+          this.renderer.animateBump();
+        }
+        Sound.playBump();
+        this.triggerHaptic([40, 30, 45]);
+
+        if (this.currentStep >= this.queue.length) {
+          this.state.isFail = true;
+          this.isPlaying = false;
+          if (typeof document !== "undefined") {
+            document.body.classList.remove("is-executing");
+          }
+          this.renderQueue();
           return;
         }
-      }
-      this.state.isWin = true;
-      this.isPlaying = false;
-      if (typeof document !== "undefined") {
-        document.body.classList.remove("is-executing");
-      }
+      } else {
+        this.state.isWin = true;
+        this.isPlaying = false;
+        if (typeof document !== "undefined") {
+          document.body.classList.remove("is-executing");
+        }
 
       if (this.isTowerMode) {
         const res = (typeof TowerTrial !== "undefined")
@@ -3899,10 +3955,12 @@ class GameEngine {
         }
       }, isBoss ? 1100 : 700);
       return;
+      }
     }
 
     // Next step with crisp, steady rhythm (100ms interval between steps)
     this.processBossBreath(lvl, this.currentStep, () => {
+      if (!this.isPlaying) return;
       this.playbackTimer = setTimeout(() => this.executeNextStep(), 100);
     });
   }

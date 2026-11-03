@@ -471,8 +471,8 @@
           </div>
 
           <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)" data-i18n-title="btn_play_title">
-            <span>▶</span>
-            <span data-i18n="cmd_play">Plan abspielen</span>
+            <span id="btnPlayIcon">▶</span>
+            <span id="btnPlayText" data-i18n="cmd_play">Plan abspielen</span>
           </button>
 
           <div class="mobile-exec-bar" id="mobileExecBar">
@@ -480,6 +480,7 @@
               <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4 1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
             </span>
             <span class="mobile-exec-text" data-i18n="mobile_exec_text">Lieferung läuft …</span>
+            <button type="button" class="mobile-abort-btn" id="btnMobileAbort" title="Lieferung abbrechen" data-i18n="cmd_abort">⏹ Abbrechen</button>
           </div>
 
           <div class="progress-container">

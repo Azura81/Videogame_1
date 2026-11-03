@@ -169,8 +169,8 @@ class GardenRenderer {
       (frustumSize * aspect) / 2,
       frustumSize / 2,
       -frustumSize / 2,
-      -50,
-      100
+      -250,
+      500
     );
     
     // Isometric angle: 45° azimuth, ~35° elevation
@@ -217,6 +217,10 @@ class GardenRenderer {
     // 10. Camera Orbit Controls & Resize Listeners
     this.setupCameraControls();
     window.addEventListener("resize", () => this.onResize());
+    if (typeof ResizeObserver !== "undefined" && this.container) {
+      this._resizeObserver = new ResizeObserver(() => this.onResize());
+      this._resizeObserver.observe(this.container);
+    }
     
     // 11. Start Render Loop
     this.isInitialized = true;
@@ -327,17 +331,20 @@ class GardenRenderer {
     // Pure two-finger pinch-to-zoom (no single-finger drag rotation, prevents camera token exploit)
     const activePointers = new Map();
     let initialPinchDist = 0;
-    let initialOrbitDist = this.orbit.distance;
+    let initialZoom = 1.0;
 
     const onPointerDown = (e) => {
       if (e.button !== undefined && e.button !== 0) return;
+      if (e.isPrimary && activePointers.size > 0) {
+        activePointers.clear();
+      }
       activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
       if (activePointers.size === 2) {
         // Pinch zoom start on mobile touch
         const pts = Array.from(activePointers.values());
         initialPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-        initialOrbitDist = this.orbit.distance;
+        initialZoom = this.camera ? (this.camera.zoom || 1.0) : 1.0;
       }
     };
 
@@ -346,12 +353,13 @@ class GardenRenderer {
         activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       }
 
-      if (activePointers.size === 2 && initialPinchDist > 0) {
-        // Pinch to zoom on mobile
+      if (activePointers.size === 2 && initialPinchDist > 10 && this.camera) {
+        // Pinch to zoom on mobile using OrthographicCamera zoom (prevents near/far frustum clipping distortion)
         const pts = Array.from(activePointers.values());
         const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-        const factor = initialPinchDist / Math.max(currentDist, 1);
-        this.orbit.distance = Math.max(24, Math.min(60, initialOrbitDist * factor));
+        const zoomFactor = currentDist / Math.max(initialPinchDist, 1);
+        this.camera.zoom = Math.max(0.75, Math.min(1.5, initialZoom * zoomFactor));
+        this.camera.updateProjectionMatrix();
       }
     };
 
@@ -397,6 +405,12 @@ class GardenRenderer {
   resetCameraView() {
     this.orbit.targetAzimuth = this.defaultOrbit.azimuth;
     this.orbit.targetElevation = this.defaultOrbit.elevation;
+    this.orbit.distance = this.defaultOrbit.distance;
+    if (this.camera) {
+      this.camera.zoom = 1.0;
+      this.camera.updateProjectionMatrix();
+    }
+    this.updateCameraPosition();
     if (this.renderer && this.renderer.shadowMap) {
       this.renderer.shadowMap.needsUpdate = true;
     }
@@ -1684,11 +1698,17 @@ class GardenRenderer {
   triggerScreenShake(intensity = 14, duration = 450) {
     const target = this.container || document.getElementById("webgl-container");
     if (!target) return;
+    if (this._shakeInterval) {
+      clearInterval(this._shakeInterval);
+      this._shakeInterval = null;
+      target.style.transform = "";
+    }
     const start = performance.now();
-    const shakeInterval = setInterval(() => {
+    this._shakeInterval = setInterval(() => {
       const elapsed = performance.now() - start;
       if (elapsed >= duration) {
-        clearInterval(shakeInterval);
+        clearInterval(this._shakeInterval);
+        this._shakeInterval = null;
         target.style.transform = "";
         return;
       }
@@ -3920,6 +3940,15 @@ class GardenRenderer {
     this.komaState.isBumping = false;
     this.komaState.isCelebrating = false;
     this.komaState.isWindSliding = false;
+    this.komaState.onLanding = null;
+    this.komaState.onSlideLanding = null;
+
+    if (this._shakeInterval) {
+      clearInterval(this._shakeInterval);
+      this._shakeInterval = null;
+    }
+    const shakeTarget = this.container || (typeof document !== "undefined" ? document.getElementById("webgl-container") : null);
+    if (shakeTarget) shakeTarget.style.transform = "";
     
     if (this.komaShadow) {
       this.komaShadow.position.set(worldPos.x, 0.455, worldPos.z);
@@ -3930,6 +3959,8 @@ class GardenRenderer {
     if (this.komaGroup) {
       this.komaGroup.position.copy(worldPos);
       this.komaGroup.rotation.y = rotY;
+      this.komaGroup.rotation.z = 0;
+      this.komaGroup.scale.set(1, 1, 1);
       const existingCube = this.komaGroup.getObjectByName("komaIceCube");
       if (existingCube) this.komaGroup.remove(existingCube);
     }

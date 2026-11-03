@@ -118,4 +118,70 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(failFeedback.isFail).toBe(true);
     expect(failFeedback.feedback).toContain('Gebrüll');
   });
+
+  test('Level 30: Reaching goal without all Spirit Lights does not hang/softlock and exits execution mode', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.loadLevel(29);
+      // Place robot adjacent to goal (6, 2) facing N toward goal (6, 1) with only 1 orb collected
+      window.gameInstance.queue = ['R', 'F', 'F', 'F', 'L', 'F', 'F', 'F', 'F', 'F'];
+      window.gameInstance.renderQueue();
+    });
+
+    await page.locator('#btnPlay').click();
+    await expect(page.locator('body')).toHaveClass(/is-executing/);
+
+    // Wait for execution to complete without hanging
+    await expect(page.locator('body')).not.toHaveClass(/is-executing/, { timeout: 15000 });
+
+    const stateAfter = await page.evaluate(() => ({
+      isPlaying: window.gameInstance.isPlaying,
+      isWin: window.gameInstance.state.isWin,
+      isFail: window.gameInstance.state.isFail,
+      feedback: document.getElementById('feedbackText')?.textContent || ''
+    }));
+
+    expect(stateAfter.isPlaying).toBe(false);
+    expect(stateAfter.isWin).toBe(false);
+    expect(stateAfter.isFail).toBe(true);
+    expect(stateAfter.feedback).toContain('versiegelt');
+  });
+
+  test('Abort button interrupts active delivery and returns robot to start position', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.loadLevel(29);
+      window.gameInstance.queue = ['L', 'F', 'F', 'R', 'F', 'F', 'F'];
+      window.gameInstance.renderQueue();
+    });
+
+    await page.locator('#btnPlay').click();
+    await expect(page.locator('body')).toHaveClass(/is-executing/);
+    await expect(page.locator('#btnPlay')).toHaveClass(/abort-mode/);
+
+    // Click #btnPlay while in abort-mode to cancel delivery mid-run
+    await page.waitForTimeout(500);
+    await page.locator('#btnPlay').click();
+
+    await expect(page.locator('body')).not.toHaveClass(/is-executing/);
+    const abortedState = await page.evaluate(() => ({
+      isPlaying: window.gameInstance.isPlaying,
+      x: window.gameInstance.state.x,
+      y: window.gameInstance.state.y,
+      queueLen: window.gameInstance.queue.length,
+      feedback: document.getElementById('feedbackText')?.textContent || ''
+    }));
+
+    expect(abortedState.isPlaying).toBe(false);
+    expect(abortedState.x).toBe(3);
+    expect(abortedState.y).toBe(6);
+    expect(abortedState.queueLen).toBe(7);
+    expect(abortedState.feedback).toContain('abgebrochen');
+  });
 });
