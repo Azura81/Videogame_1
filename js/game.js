@@ -115,11 +115,25 @@ class GameEngine {
       creditStars: document.getElementById("creditStars"),
       queueContainer: document.getElementById("queueContainer"),
       queueCount: document.getElementById("queueCount"),
+      queueEditBar: document.getElementById("queueEditBar"),
+      queueEditLabel: document.getElementById("queueEditLabel"),
+      queueEditHint: document.getElementById("queueEditHint"),
+      btnQueueInsertBefore: document.getElementById("btnQueueInsertBefore"),
+      btnQueueInsertText: document.getElementById("btnQueueInsertText"),
+      btnQueueMoveLeft: document.getElementById("btnQueueMoveLeft"),
+      btnQueueMoveRight: document.getElementById("btnQueueMoveRight"),
+      btnQueueDeleteStep: document.getElementById("btnQueueDeleteStep"),
+      btnQueueCloseEdit: document.getElementById("btnQueueCloseEdit"),
       feedbackText: document.getElementById("feedbackText"),
       progressBar: document.getElementById("progressBar"),
       btnPlay: document.getElementById("btnPlay"),
       btnPlayIcon: document.getElementById("btnPlayIcon"),
       btnPlayText: document.getElementById("btnPlayText"),
+      btnStep: document.getElementById("btnStep"),
+      btnStepText: document.getElementById("btnStepText"),
+      btnSpeedToggle: document.getElementById("btnSpeedToggle"),
+      btnSpeedText: document.getElementById("btnSpeedText"),
+      btnMobileSpeed: document.getElementById("btnMobileSpeed"),
       btnMobileAbort: document.getElementById("btnMobileAbort"),
       btnUndo: document.getElementById("btnUndo"),
       btnClear: document.getElementById("btnClear"),
@@ -280,6 +294,10 @@ class GameEngine {
 
     this.isDailyTrial = false;
     this.isTowerMode = false;
+    this.isStepMode = false;
+    this.selectedQueueIdx = null;
+    this.queueInsertMode = false;
+    this.playbackSpeed = (typeof localStorage !== "undefined" && localStorage.getItem("koma_playback_speed") === "2") ? 2 : 1;
     this.activeMobileChapter = 1;
     this.activeMobileTab = "skins";
     this.activeDrawerChapter = "all";
@@ -336,8 +354,9 @@ class GameEngine {
     // 2. Setup Events
     this.bindEvents();
     
-    // 3. Update Audio Controls Status
+    // 3. Update Audio & Speed Controls Status
     this.updateAudioButtons();
+    this.updateSpeedButtons();
 
     // 4. Update Stars Counter
     this.updateStarsDisplay();
@@ -430,12 +449,38 @@ class GameEngine {
         }
       });
     }
+    if (this.dom.btnStep) {
+      this.dom.btnStep.addEventListener("click", () => this.stepOnce());
+    }
+    if (this.dom.btnSpeedToggle) {
+      this.dom.btnSpeedToggle.addEventListener("click", () => this.togglePlaybackSpeed());
+    }
+    if (this.dom.btnMobileSpeed) {
+      this.dom.btnMobileSpeed.addEventListener("click", () => this.togglePlaybackSpeed());
+    }
     if (this.dom.btnMobileAbort) {
       this.dom.btnMobileAbort.addEventListener("click", () => this.abortExecution());
     }
     if (this.dom.btnReset) this.dom.btnReset.addEventListener("click", () => this.reset(false));
     if (this.dom.btnUndo) this.dom.btnUndo.addEventListener("click", () => this.undo());
     if (this.dom.btnClear) this.dom.btnClear.addEventListener("click", () => this.reset(true));
+
+    // Inline Queue Edit Bar Controls
+    if (this.dom.btnQueueInsertBefore) {
+      this.dom.btnQueueInsertBefore.addEventListener("click", () => this.toggleQueueInsertMode());
+    }
+    if (this.dom.btnQueueMoveLeft) {
+      this.dom.btnQueueMoveLeft.addEventListener("click", () => this.moveSelectedQueueStep(-1));
+    }
+    if (this.dom.btnQueueMoveRight) {
+      this.dom.btnQueueMoveRight.addEventListener("click", () => this.moveSelectedQueueStep(1));
+    }
+    if (this.dom.btnQueueDeleteStep) {
+      this.dom.btnQueueDeleteStep.addEventListener("click", () => this.deleteSelectedQueueStep());
+    }
+    if (this.dom.btnQueueCloseEdit) {
+      this.dom.btnQueueCloseEdit.addEventListener("click", () => this.clearQueueSelection());
+    }
 
     // Music Toggle (BGM only)
     if (this.dom.btnMusicToggle) {
@@ -1120,9 +1165,21 @@ class GameEngine {
         return;
       }
 
-      if (this.isPlaying) return;
-
       const k = e.key.toUpperCase();
+      if (k === "2" || k === "V") {
+        this.togglePlaybackSpeed();
+        return;
+      }
+
+      if (this.isPlaying) {
+        if (k === "ESCAPE") {
+          this.abortExecution();
+        } else if (k === "S") {
+          this.stepOnce();
+        }
+        return;
+      }
+
       if (k === "ARROWUP" || k === "W" || k === "F") {
         this.addCommand("F");
       } else if (k === "ARROWLEFT" || (k === "A" && e.altKey) || k === "L") {
@@ -1131,6 +1188,8 @@ class GameEngine {
         this.addCommand("R");
       } else if (k === "E" || k === "A") {
         this.addCommand("A");
+      } else if (k === "S") {
+        this.stepOnce();
       } else if (k === "Q") {
         this.renderer.rotateCameraBy(Math.PI / 4);
       } else if (k === "Y" || k === "Z") {
@@ -1140,10 +1199,18 @@ class GameEngine {
       } else if (k === " " || k === "ENTER") {
         e.preventDefault();
         this.play();
-      } else if (k === "BACKSPACE") {
-        this.undo();
+      } else if (k === "BACKSPACE" || k === "DELETE") {
+        if (this.selectedQueueIdx !== null) {
+          this.deleteSelectedQueueStep();
+        } else {
+          this.undo();
+        }
       } else if (k === "ESCAPE") {
-        this.reset(false);
+        if (this.selectedQueueIdx !== null) {
+          this.clearQueueSelection();
+        } else {
+          this.reset(false);
+        }
       }
     });
   }
@@ -2395,6 +2462,7 @@ class GameEngine {
     if (this.isPlaying) return;
     this.isDailyTrial = false;
     this.isTowerMode = false;
+    this.isStepMode = false;
     if (this.dom.towerHudBar) this.dom.towerHudBar.style.display = "none";
     this.maxCameraCredits = 6;
     this.cameraCredits = 6;
@@ -2834,6 +2902,7 @@ class GameEngine {
         if (isKomaHit) {
           this.state.isFail = true;
           this.isPlaying = false;
+          this.isStepMode = false;
           if (typeof document !== "undefined") {
             document.body.classList.remove("is-executing");
           }
@@ -2944,6 +3013,7 @@ class GameEngine {
           } else if (isKomaHit) {
             this.state.isFail = true;
             this.isPlaying = false;
+            this.isStepMode = false;
             if (typeof document !== "undefined") {
               document.body.classList.remove("is-executing");
             }
@@ -3013,10 +3083,205 @@ class GameEngine {
     }
   }
 
+  getStepDelay(baseMs) {
+    const factor = this.playbackSpeed === 2 ? 0.5 : 1;
+    return Math.max(25, Math.round(baseMs * factor));
+  }
+
+  togglePlaybackSpeed() {
+    this.triggerHaptic(14);
+    this.playbackSpeed = this.playbackSpeed === 2 ? 1 : 2;
+    try {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("koma_playback_speed", String(this.playbackSpeed));
+      }
+    } catch (e) {}
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.updateSpeedButtons();
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    if (!this.isPlaying) {
+      this.setFeedback(
+        this.playbackSpeed === 2
+          ? (isEn ? "⚡ 2x Fast-Forward enabled." : "⚡ 2x-Geschwindigkeit aktiviert.")
+          : (isEn ? "1x Normal speed enabled." : "1x-Normalgeschwindigkeit aktiviert."),
+        "normal"
+      );
+    }
+  }
+
+  updateSpeedButtons() {
+    const isFast = this.playbackSpeed === 2;
+    const label = isFast ? "⚡ 2x" : "1x";
+    if (this.dom.btnSpeedToggle) {
+      this.dom.btnSpeedToggle.classList.toggle("speed-fast", isFast);
+      this.dom.btnSpeedToggle.setAttribute("aria-pressed", isFast ? "true" : "false");
+    }
+    if (this.dom.btnSpeedText) {
+      this.dom.btnSpeedText.textContent = label;
+    }
+    if (this.dom.btnMobileSpeed) {
+      this.dom.btnMobileSpeed.textContent = label;
+      this.dom.btnMobileSpeed.classList.toggle("speed-fast", isFast);
+      this.dom.btnMobileSpeed.setAttribute("aria-pressed", isFast ? "true" : "false");
+    }
+  }
+
+  selectQueueStep(idx) {
+    if (this.isPlaying) return;
+    this.triggerHaptic(12);
+    if (this.selectedQueueIdx === idx) {
+      this.selectedQueueIdx = null;
+      this.queueInsertMode = false;
+    } else {
+      this.selectedQueueIdx = idx;
+      this.queueInsertMode = false;
+    }
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.renderQueue();
+    if (this.selectedQueueIdx !== null) {
+      const cmd = this.queue[this.selectedQueueIdx];
+      const cmdName = this.commandMeta[cmd] ? this.commandMeta[cmd].name : cmd;
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      this.setFeedback(
+        isEn
+          ? `Step #${this.selectedQueueIdx + 1} (${cmdName}) selected. Tap a command to replace it.`
+          : `Schritt #${this.selectedQueueIdx + 1} (${cmdName}) ausgewählt. Tippe auf einen Befehl zum Ersetzen.`,
+        "normal"
+      );
+    }
+  }
+
+  clearQueueSelection() {
+    if (this.selectedQueueIdx === null && !this.queueInsertMode) return;
+    this.triggerHaptic(10);
+    this.selectedQueueIdx = null;
+    this.queueInsertMode = false;
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.renderQueue();
+  }
+
+  toggleQueueInsertMode() {
+    if (this.isPlaying || this.selectedQueueIdx === null) return;
+    this.triggerHaptic(12);
+    const lvl = this.getCurrentLevel();
+    if (!this.queueInsertMode && this.queue.length >= lvl.limit) {
+      this.setFeedback("Dein Plan ist voll! Entferne einen Befehl für neue Schritte.", "bad");
+      if (typeof Sound !== "undefined" && typeof Sound.playBump === "function") Sound.playBump();
+      this.triggerHaptic([35, 30, 40]);
+      return;
+    }
+    this.queueInsertMode = !this.queueInsertMode;
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.renderQueue();
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    this.setFeedback(
+      this.queueInsertMode
+        ? (isEn ? `➕ Insert mode: Tap a command to insert before step #${this.selectedQueueIdx + 1}.` : `➕ Einfüge-Modus: Tippe auf einen Befehl, um ihn vor Schritt #${this.selectedQueueIdx + 1} einzufügen.`)
+        : (isEn ? `Replace mode: Tap a command to replace step #${this.selectedQueueIdx + 1}.` : `Ersetzen-Modus: Tippe auf einen Befehl, um Schritt #${this.selectedQueueIdx + 1} zu ersetzen.`),
+      "normal"
+    );
+  }
+
+  moveSelectedQueueStep(delta) {
+    if (this.isPlaying || this.selectedQueueIdx === null) return;
+    const idx = this.selectedQueueIdx;
+    const targetIdx = idx + delta;
+    if (targetIdx < 0 || targetIdx >= this.queue.length) return;
+    this.triggerHaptic(12);
+    const temp = this.queue[idx];
+    this.queue[idx] = this.queue[targetIdx];
+    this.queue[targetIdx] = temp;
+    if (this.isStepMode && Math.min(idx, targetIdx) < this.currentStep) {
+      this.reset(false);
+    }
+    this.selectedQueueIdx = targetIdx;
+    this.queueInsertMode = false;
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.renderQueue();
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    this.setFeedback(
+      isEn ? `Step moved to position #${targetIdx + 1}.` : `Schritt auf Position #${targetIdx + 1} verschoben.`,
+      "normal"
+    );
+  }
+
+  deleteSelectedQueueStep() {
+    if (this.isPlaying || this.selectedQueueIdx === null) return;
+    const idx = this.selectedQueueIdx;
+    if (idx < 0 || idx >= this.queue.length) return;
+    this.triggerHaptic(14);
+    this.queue.splice(idx, 1);
+    this.selectedQueueIdx = null;
+    this.queueInsertMode = false;
+    if (this.isStepMode && idx < this.currentStep) {
+      this.reset(false);
+    }
+    if (typeof Sound !== "undefined" && typeof Sound.playClick === "function") {
+      Sound.playClick();
+    }
+    this.renderQueue();
+    this.setFeedback("Befehl entfernt.", "normal");
+  }
+
   addCommand(cmd) {
     if (this.isPlaying) return;
     this.triggerHaptic(14);
     const lvl = this.getCurrentLevel();
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+
+    // Inline Edit / Insert Mode when a queue chip is selected
+    if (this.selectedQueueIdx !== null && this.selectedQueueIdx >= 0 && this.selectedQueueIdx < this.queue.length) {
+      const idx = this.selectedQueueIdx;
+      if (this.queueInsertMode) {
+        if (this.queue.length >= lvl.limit) {
+          this.setFeedback("Dein Plan ist voll! Entferne einen Befehl für neue Schritte.", "bad");
+          Sound.playBump();
+          this.triggerHaptic([35, 30, 40]);
+          return;
+        }
+        this.queue.splice(idx, 0, cmd);
+        this.queueInsertMode = false;
+        if (this.isStepMode && idx < this.currentStep) {
+          this.reset(false);
+        }
+        this.selectedQueueIdx = idx;
+        Sound.playClick();
+        this.renderQueue();
+        this.setFeedback(
+          isEn
+            ? `➕ ${this.commandMeta[cmd].name} inserted at step #${idx + 1}.`
+            : `➕ ${this.commandMeta[cmd].name} bei Schritt #${idx + 1} eingefügt.`,
+          "normal"
+        );
+        return;
+      } else {
+        this.queue[idx] = cmd;
+        if (this.isStepMode && idx < this.currentStep) {
+          this.reset(false);
+        }
+        this.selectedQueueIdx = idx;
+        Sound.playClick();
+        this.renderQueue();
+        this.setFeedback(
+          isEn
+            ? `🔄 Step #${idx + 1} replaced with ${this.commandMeta[cmd].name}.`
+            : `🔄 Schritt #${idx + 1} durch ${this.commandMeta[cmd].name} ersetzt.`,
+          "normal"
+        );
+        return;
+      }
+    }
+
     if (this.queue.length >= lvl.limit) {
       this.setFeedback("Dein Plan ist voll! Entferne einen Befehl für neue Schritte.", "bad");
       Sound.playBump();
@@ -3032,7 +3297,15 @@ class GameEngine {
   undo() {
     if (this.isPlaying || !this.queue.length) return;
     this.triggerHaptic(12);
+    const removedIdx = this.queue.length - 1;
     this.queue.pop();
+    if (this.selectedQueueIdx !== null && this.selectedQueueIdx >= this.queue.length) {
+      this.selectedQueueIdx = this.queue.length ? this.queue.length - 1 : null;
+      this.queueInsertMode = false;
+    }
+    if (this.isStepMode && removedIdx < this.currentStep) {
+      this.reset(false);
+    }
     Sound.playClick();
     this.renderQueue();
     this.setFeedback("Letzten Befehl entfernt.", "normal");
@@ -3051,12 +3324,17 @@ class GameEngine {
       this.renderer.komaState.onSlideLanding = null;
     }
     this.isPlaying = false;
+    this.isStepMode = false;
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-executing");
     }
     this.currentStep = 0;
     this.resetState();
-    if (clearQueue) this.queue = [];
+    if (clearQueue) {
+      this.queue = [];
+      this.selectedQueueIdx = null;
+      this.queueInsertMode = false;
+    }
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     this.renderQueue();
     this.setFeedback(
@@ -3074,11 +3352,19 @@ class GameEngine {
       this.dom.queueCount.textContent = `${this.queue.length} / ${lvl.limit}`;
     }
 
+    if (this.isPlaying || this.selectedQueueIdx === null || this.selectedQueueIdx >= this.queue.length || this.selectedQueueIdx < 0) {
+      if (this.isPlaying || this.selectedQueueIdx >= this.queue.length || this.selectedQueueIdx < 0) {
+        this.selectedQueueIdx = null;
+        this.queueInsertMode = false;
+      }
+    }
+
     if (!this.dom.queueContainer) return;
     this.dom.queueContainer.innerHTML = "";
 
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+
     if (this.queue.length === 0) {
-      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       if (this.currentLevelIdx === 0 && !this.isTowerMode && !this.isDailyTrial) {
         this.dom.queueContainer.innerHTML = isEn
           ? `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tap <strong>Forward</strong> & then <strong>▶ Run Plan</strong>!</div>`
@@ -3088,12 +3374,17 @@ class GameEngine {
         this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">${hintText}</div>`;
       }
     } else {
-      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
-      const tapToDelete = isEn ? "tap to delete" : "antippen zum Löschen";
+      const tapToEdit = isEn ? "tap to edit" : "antippen zum Bearbeiten";
       this.queue.forEach((cmd, idx) => {
         const slot = document.createElement("button");
-        slot.className = "queue-chip" + (idx === this.currentStep - 1 && this.isPlaying ? " active-step" : "");
-        slot.title = `${this.commandMeta[cmd].name} (${tapToDelete})`;
+        const isCurrentChip = idx === this.currentStep - 1 && (this.isPlaying || this.isStepMode);
+        const isSelectedEdit = !this.isPlaying && idx === this.selectedQueueIdx;
+        slot.className =
+          "queue-chip" +
+          (isCurrentChip ? " active-step" : "") +
+          (isSelectedEdit ? " selected-edit" : "") +
+          (isSelectedEdit && this.queueInsertMode ? " insert-before-target" : "");
+        slot.title = `${this.commandMeta[cmd].name} (${tapToEdit})`;
         const chipIcon = this.commandMeta[cmd].iconSvg || this.commandMeta[cmd].icon;
         slot.innerHTML = `
           <span class="chip-icon">${chipIcon}<span class="sr-only">${this.commandMeta[cmd].icon}</span></span>
@@ -3101,21 +3392,63 @@ class GameEngine {
         `;
         slot.onclick = () => {
           if (!this.isPlaying) {
-            this.queue.splice(idx, 1);
-            Sound.playClick();
-            this.renderQueue();
-            this.setFeedback("Befehl entfernt.", "normal");
+            this.selectQueueStep(idx);
           }
         };
         this.dom.queueContainer.appendChild(slot);
       });
     }
 
-    // Disable buttons if at limit or during playback
+    // Update Inline Queue Edit Bar
+    if (this.dom.queueEditBar) {
+      const showEditBar = !this.isPlaying && this.selectedQueueIdx !== null && this.selectedQueueIdx < this.queue.length;
+      this.dom.queueEditBar.classList.toggle("active", showEditBar);
+      this.dom.queueEditBar.classList.toggle("insert-mode", showEditBar && this.queueInsertMode);
+      if (showEditBar) {
+        const selCmd = this.queue[this.selectedQueueIdx];
+        const selName = this.commandMeta[selCmd] ? this.commandMeta[selCmd].name : selCmd;
+        if (this.dom.queueEditLabel) {
+          this.dom.queueEditLabel.textContent = isEn
+            ? `Step #${this.selectedQueueIdx + 1} · ${selName}`
+            : `Schritt #${this.selectedQueueIdx + 1} · ${selName}`;
+        }
+        if (this.dom.queueEditHint) {
+          this.dom.queueEditHint.textContent = this.queueInsertMode
+            ? (typeof I18N !== "undefined" ? I18N.t("queue_edit_hint_insert") : (isEn ? "Tap command to insert before" : "Tippe Befehl zum Einfügen davor"))
+            : (typeof I18N !== "undefined" ? I18N.t("queue_edit_hint_replace") : (isEn ? "Tap command to replace" : "Tippe Befehl zum Ersetzen"));
+        }
+        if (this.dom.btnQueueInsertBefore) {
+          this.dom.btnQueueInsertBefore.classList.toggle("active", this.queueInsertMode);
+          this.dom.btnQueueInsertBefore.disabled = !this.queueInsertMode && this.queue.length >= lvl.limit;
+        }
+        if (this.dom.btnQueueMoveLeft) {
+          this.dom.btnQueueMoveLeft.disabled = this.selectedQueueIdx <= 0;
+        }
+        if (this.dom.btnQueueMoveRight) {
+          this.dom.btnQueueMoveRight.disabled = this.selectedQueueIdx >= this.queue.length - 1;
+        }
+      }
+    }
+
+    // Disable buttons if at limit (unless replacing an existing step!) or during playback
     const atLimit = this.queue.length >= lvl.limit;
-    this.dom.cmdButtons.forEach(btn => (btn.disabled = this.isPlaying || atLimit));
+    const isReplacing = !this.isPlaying && this.selectedQueueIdx !== null && !this.queueInsertMode;
+    this.dom.cmdButtons.forEach(btn => (btn.disabled = this.isPlaying || (atLimit && !isReplacing)));
     if (this.dom.btnUndo) this.dom.btnUndo.disabled = this.isPlaying || !this.queue.length;
     if (this.dom.btnClear) this.dom.btnClear.disabled = this.isPlaying || !this.queue.length;
+    if (this.dom.btnStep) {
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      this.dom.btnStep.disabled = !this.queue.length || (this.isPlaying && this.isStepMode);
+      const isPausedMidStep = this.isStepMode && !this.isPlaying && this.currentStep > 0 && this.currentStep < this.queue.length;
+      this.dom.btnStep.classList.toggle("step-active", isPausedMidStep);
+      if (this.dom.btnStepText) {
+        if (isPausedMidStep) {
+          this.dom.btnStepText.textContent = `${this.currentStep}/${this.queue.length}`;
+        } else {
+          this.dom.btnStepText.textContent = typeof I18N !== "undefined" ? I18N.t("cmd_step") : (isEn ? "Step" : "Schritt");
+        }
+      }
+    }
     if (this.dom.btnPlay) {
       const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       if (this.isPlaying) {
@@ -3128,7 +3461,11 @@ class GameEngine {
         this.dom.btnPlay.classList.remove("abort-mode");
         if (this.dom.btnPlayIcon) this.dom.btnPlayIcon.textContent = "▶";
         if (this.dom.btnPlayText) {
-          this.dom.btnPlayText.textContent = typeof I18N !== "undefined" ? I18N.t("cmd_play") : (isEn ? "Run Plan" : "Plan abspielen");
+          if (this.isStepMode && this.currentStep > 0 && this.currentStep < this.queue.length && !this.state.isWin && !this.state.isFail) {
+            this.dom.btnPlayText.textContent = isEn ? "Resume" : "Weiter";
+          } else {
+            this.dom.btnPlayText.textContent = typeof I18N !== "undefined" ? I18N.t("cmd_play") : (isEn ? "Run Plan" : "Plan abspielen");
+          }
         }
       }
     }
@@ -3227,6 +3564,20 @@ class GameEngine {
       return;
     }
 
+    // If paused mid-route in single-step mode, resume continuous playback from currentStep
+    if (this.isStepMode && this.currentStep > 0 && this.currentStep < this.queue.length && !this.state.isWin && !this.state.isFail) {
+      this.isStepMode = false;
+      this.isPlaying = true;
+      if (typeof document !== "undefined") {
+        document.body.classList.add("is-executing");
+      }
+      this.setFeedback("Los geht's! KOMA führt deinen Plan aus …", "normal");
+      this.renderQueue();
+      this.playbackTimer = setTimeout(() => this.executeNextStep(), this.getStepDelay(100));
+      return;
+    }
+
+    this.isStepMode = false;
     this.resetKomaPosition();
     this.currentStep = 0;
     this.isPlaying = true;
@@ -3236,13 +3587,69 @@ class GameEngine {
     this.setFeedback("Los geht's! KOMA führt deinen Plan aus …", "normal");
     this.renderQueue();
 
-    this.playbackTimer = setTimeout(() => this.executeNextStep(), 350);
+    this.playbackTimer = setTimeout(() => this.executeNextStep(), this.getStepDelay(350));
+  }
+
+  stepOnce() {
+    this.triggerHaptic(18);
+    if (!this.queue.length) {
+      this.setFeedback("Füge zuerst mindestens einen Befehl hinzu.", "bad");
+      Sound.playBump();
+      this.triggerHaptic([35, 30, 40]);
+      return;
+    }
+
+    // If currently running continuous playback, switch to step mode so it pauses after current step
+    if (this.isPlaying) {
+      if (!this.isStepMode) {
+        this.isStepMode = true;
+        this.renderQueue();
+      }
+      return;
+    }
+
+    // If starting from the beginning or after a finished/failed run, reset KOMA to start first
+    if (!this.isStepMode || this.currentStep <= 0 || this.currentStep >= this.queue.length || this.state.isWin || this.state.isFail) {
+      this.resetKomaPosition();
+      this.currentStep = 0;
+    }
+
+    this.isStepMode = true;
+    this.isPlaying = true;
+    this.renderQueue();
+    this.executeNextStep();
+  }
+
+  finishCurrentStep() {
+    if (!this.isPlaying) return;
+    if (this.isStepMode) {
+      if (this.currentStep >= this.queue.length) {
+        this.isStepMode = false;
+        this.executeNextStep();
+        return;
+      }
+      this.isPlaying = false;
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("is-executing");
+      }
+      this.renderQueue();
+      const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+      this.setFeedback(
+        isEn
+          ? `⏸ Step ${this.currentStep} / ${this.queue.length} executed. Tap ⏭ for next step or ▶ to continue.`
+          : `⏸ Schritt ${this.currentStep} / ${this.queue.length} ausgeführt. Tippe auf ⏭ für den nächsten Schritt oder ▶ zum Weiterlaufen.`,
+        "normal"
+      );
+      return;
+    }
+    this.executeNextStep();
   }
 
   executeNextStep() {
     if (!this.isPlaying) return;
     if (this.currentStep >= this.queue.length) {
       this.isPlaying = false;
+      this.isStepMode = false;
       if (typeof document !== "undefined") {
         document.body.classList.remove("is-executing");
       }
@@ -3285,10 +3692,10 @@ class GameEngine {
     if (cmd === "L") {
       const turnMap = { N: "W", W: "S", S: "E", E: "N" };
       this.state.dir = turnMap[this.state.dir];
-      this.renderer.animateRotate(this.state.dir, 220);
+      this.renderer.animateRotate(this.state.dir, this.getStepDelay(220));
       Sound.playTurn();
       this.processBossBreath(lvl, this.currentStep, () => {
-        this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+        this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(250));
       });
       return;
     }
@@ -3297,10 +3704,10 @@ class GameEngine {
     if (cmd === "R") {
       const turnMap = { N: "E", E: "S", S: "W", W: "N" };
       this.state.dir = turnMap[this.state.dir];
-      this.renderer.animateRotate(this.state.dir, 220);
+      this.renderer.animateRotate(this.state.dir, this.getStepDelay(220));
       Sound.playTurn();
       this.processBossBreath(lvl, this.currentStep, () => {
-        this.playbackTimer = setTimeout(() => this.executeNextStep(), 250);
+        this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(250));
       });
       return;
     }
@@ -3337,7 +3744,7 @@ class GameEngine {
         this.setFeedback("Hier gibt es keinen Schalter zum Aktivieren.", "normal");
       }
       this.processBossBreath(lvl, this.currentStep, () => {
-        this.playbackTimer = setTimeout(() => this.executeNextStep(), 300);
+        this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(300));
       });
       return;
     }
@@ -3395,6 +3802,7 @@ class GameEngine {
         if (pushOOB || pushWall || pushOtherBlock || pushBlockedGate) {
           this.state.isFail = true;
           this.isPlaying = false;
+          this.isStepMode = false;
           if (typeof document !== "undefined") document.body.classList.remove("is-executing");
           this.renderer.animateBump();
           Sound.playBump();
@@ -3411,6 +3819,7 @@ class GameEngine {
       if (isOutOfBounds || isWall || isBlockedGate || isCollapsedTile || isWaterHazard) {
         this.state.isFail = true;
         this.isPlaying = false;
+        this.isStepMode = false;
         if (typeof document !== "undefined") {
           document.body.classList.remove("is-executing");
         }
@@ -3451,7 +3860,7 @@ class GameEngine {
           this.state.waterTiles.delete(`${pushTargetX},${pushTargetY}`);
           this.state.blocks.splice(blockIdx, 1);
           Sound.playStoneSlide();
-          setTimeout(() => Sound.playSplash(), 160);
+          setTimeout(() => Sound.playSplash(), this.getStepDelay(160));
           this.setFeedback("Platsch! Der Felsblock versinkt im Wasser und bildet eine neue Trittstein-Brücke!", "good");
         } else {
           this.state.blocks[blockIdx] = [pushTargetX, pushTargetY];
@@ -3459,15 +3868,15 @@ class GameEngine {
           this.setFeedback("Rumpel! KOMA schiebt den heiligen Steinblock vor sich her.", "normal");
         }
         if (this.renderer && typeof this.renderer.animateBlockPush === "function") {
-          this.renderer.animateBlockPush(nx, ny, pushTargetX, pushTargetY, isPushIntoWater);
+          this.renderer.animateBlockPush(nx, ny, pushTargetX, pushTargetY, isPushIntoWater, null, this.getStepDelay(220));
         }
       }
 
-      // Valid step: Hop forward (300ms) and trigger audio & events on exact touchdown
+      // Valid step: Hop forward and trigger audio & events on exact touchdown
       this.state.x = nx;
       this.state.y = ny;
 
-      this.renderer.animateMove(nx, ny, 300, () => {
+      this.renderer.animateMove(nx, ny, this.getStepDelay(300), () => {
         if (!this.isPlaying) return; // In case reset was pressed during animation
 
         // If KOMA stepped off a fragile tile, collapse it now!
@@ -3523,7 +3932,7 @@ class GameEngine {
             this.triggerHaptic([20, 35, 20, 35, 40]);
             this.renderer.animateTeleport(destPortal[0], destPortal[1]);
             this.setFeedback("🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
-            this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, () => this.handlePostMoveChecks(lvl)), 180);
+            this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, () => this.handlePostMoveChecks(lvl)), this.getStepDelay(180));
             return;
           }
         }
@@ -3579,9 +3988,10 @@ class GameEngine {
     this.triggerHaptic([25, 30, 40]);
     this.setFeedback("💨 Eine kräftige Bergwindböe trägt KOMA mit sich!", "good");
 
+    const slideDur = this.getStepDelay(260);
     const slideFn = typeof this.renderer.animateWindSlide === "function"
-      ? (tx, ty, d, cb) => this.renderer.animateWindSlide(tx, ty, d, cb)
-      : (tx, ty, d, cb) => this.renderer.animateMove(tx, ty, 260, cb);
+      ? (tx, ty, d, cb) => this.renderer.animateWindSlide(tx, ty, d, cb, slideDur)
+      : (tx, ty, d, cb) => this.renderer.animateMove(tx, ty, slideDur, cb);
 
     slideFn(wx, wy, wdir, () => {
       if (!this.isPlaying) return;
@@ -3615,7 +4025,7 @@ class GameEngine {
           Sound.playPortal();
           this.renderer.animateTeleport(dest[0], dest[1]);
           this.setFeedback("🌀 Vom Wind direkt ins Kitsune-Portal getragen!", "normal");
-          this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, onComplete, chainCount + 1), 180);
+          this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, onComplete, chainCount + 1), this.getStepDelay(180));
           return;
         }
       }
@@ -3656,6 +4066,7 @@ class GameEngine {
         if (this.currentStep >= this.queue.length) {
           this.state.isFail = true;
           this.isPlaying = false;
+          this.isStepMode = false;
           if (typeof document !== "undefined") {
             document.body.classList.remove("is-executing");
           }
@@ -3665,6 +4076,7 @@ class GameEngine {
       } else {
         this.state.isWin = true;
         this.isPlaying = false;
+        this.isStepMode = false;
         if (typeof document !== "undefined") {
           document.body.classList.remove("is-executing");
         }
@@ -3958,10 +4370,10 @@ class GameEngine {
       }
     }
 
-    // Next step with crisp, steady rhythm (100ms interval between steps)
+    // Next step with crisp, steady rhythm (100ms interval between steps, scaled by playbackSpeed)
     this.processBossBreath(lvl, this.currentStep, () => {
       if (!this.isPlaying) return;
-      this.playbackTimer = setTimeout(() => this.executeNextStep(), 100);
+      this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(100));
     });
   }
 

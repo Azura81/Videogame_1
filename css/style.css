@@ -467,6 +467,18 @@ html, body {
   background: linear-gradient(135deg, #3d3419, #231e0f);
 }
 
+.queue-chip.selected-edit {
+  border-color: var(--cyan);
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.28), rgba(14, 28, 52, 0.95));
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.65), inset 0 0 6px rgba(0, 240, 255, 0.25);
+  transform: translateY(-2px) scale(1.06);
+}
+
+.queue-chip.selected-edit.insert-before-target {
+  border-left: 3px solid var(--gold);
+  box-shadow: -3px 0 10px var(--gold-glow), 0 0 14px rgba(0, 240, 255, 0.55);
+}
+
 .chip-icon {
   font-size: 17px;
   font-weight: 800;
@@ -483,6 +495,112 @@ html, body {
   right: 4px;
   font-size: 9px;
   font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* Inline Queue Edit Bar */
+.queue-edit-bar {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  margin-top: -4px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(14, 26, 48, 0.92));
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.queue-edit-bar.active {
+  display: flex;
+}
+
+.queue-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.queue-edit-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--cyan);
+  letter-spacing: 0.3px;
+}
+
+.queue-edit-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.queue-edit-bar.insert-mode .queue-edit-hint {
+  color: var(--gold);
+}
+
+.queue-edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.queue-edit-btn {
+  padding: 5px 8px;
+  background: rgba(18, 34, 58, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  border-radius: 7px;
+  color: #e2e8f0;
+  font-family: var(--font);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.16s ease;
+}
+
+.queue-edit-btn:hover:not(:disabled) {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: var(--cyan);
+  color: #fff;
+}
+
+.queue-edit-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.queue-edit-btn.active {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.18));
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+.queue-edit-btn.icon-only {
+  padding: 5px 9px;
+  min-width: 30px;
+}
+
+.queue-edit-btn.danger {
+  border-color: rgba(255, 94, 126, 0.35);
+  color: #fda4af;
+  margin-left: auto;
+}
+
+.queue-edit-btn.danger:hover:not(:disabled) {
+  background: rgba(255, 94, 126, 0.2);
+  border-color: #ff5e7e;
+  color: #fff;
+}
+
+.queue-edit-btn.close {
+  padding: 5px 8px;
+  border-color: rgba(255, 255, 255, 0.15);
   color: var(--text-muted);
 }
 
@@ -522,9 +640,17 @@ html, body {
   cursor: not-allowed;
 }
 
-/* Big Play Button */
-.play-btn {
+/* Big Play Button + Step & Speed Controls Row */
+.play-controls-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
   width: 100%;
+}
+
+.play-btn {
+  flex: 1;
+  min-width: 0;
   padding: 14px;
   background: linear-gradient(135deg, #00f0ff, #00b4d8);
   border: none;
@@ -571,8 +697,69 @@ html, body {
   box-shadow: 0 10px 28px rgba(255, 77, 109, 0.65);
 }
 
-.mobile-abort-btn {
+.step-btn,
+.speed-btn {
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  background: rgba(16, 30, 52, 0.85);
+  color: #e2e8f0;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.step-btn:hover:not(:disabled),
+.speed-btn:hover:not(:disabled) {
+  background: rgba(26, 48, 82, 0.95);
+  border-color: rgba(0, 240, 255, 0.65);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.step-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.step-btn.step-active {
+  border-color: var(--gold);
+  background: rgba(255, 190, 11, 0.2);
+  color: var(--gold);
+  box-shadow: 0 0 14px rgba(255, 190, 11, 0.35);
+}
+
+.speed-btn.speed-fast,
+.mobile-speed-btn.speed-fast {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(255, 190, 11, 0.28), rgba(251, 133, 0, 0.22));
+  color: #ffd166;
+  box-shadow: 0 0 14px rgba(255, 190, 11, 0.35);
+}
+
+.mobile-speed-btn {
   margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  background: rgba(16, 30, 52, 0.75);
+  color: #e2e8f0;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.mobile-abort-btn {
+  margin-left: 6px;
   padding: 5px 12px;
   border-radius: 8px;
   border: 1px solid rgba(255, 90, 120, 0.7);
@@ -585,9 +772,9 @@ html, body {
   transition: all 0.18s ease;
 }
 
-.mobile-abort-btn:active {
+.mobile-abort-btn:active,
+.mobile-speed-btn:active {
   transform: scale(0.96);
-  background: rgba(255, 50, 90, 0.48);
 }
 
 /* Progress Bar */
@@ -1010,6 +1197,20 @@ html, body {
     white-space: nowrap;
   }
 
+  .queue-edit-bar {
+    padding: 6px 8px;
+    margin-top: 0;
+    margin-bottom: 6px;
+    gap: 5px;
+    border-radius: 10px;
+  }
+
+  .queue-edit-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-height: 30px;
+  }
+
   /* Commands Grid: 4 columns single-row for instant thumb reach */
   .commands-grid {
     display: grid;
@@ -1066,15 +1267,29 @@ html, body {
     height: 15px;
   }
 
+  .play-controls-row {
+    gap: 6px;
+    margin-top: 6px;
+  }
+
   .play-btn {
     min-height: 44px;
     height: 44px;
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-size: 13.5px;
     font-weight: 800;
     border-radius: 10px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     margin: 0;
+  }
+
+  .step-btn,
+  .speed-btn {
+    min-height: 44px;
+    height: 44px;
+    padding: 0 10px;
+    font-size: 12px;
+    border-radius: 10px;
   }
 
   .play-btn .svg-icon {
@@ -1101,7 +1316,8 @@ html, body {
 
   /* In-game execution mode: collapse buttons so 3D view has 90%+ space */
   body.is-executing .commands-grid,
-  body.is-executing .btn-row {
+  body.is-executing .btn-row,
+  body.is-executing .queue-edit-bar {
     max-height: 0;
     opacity: 0;
     margin: 0;

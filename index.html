@@ -455,6 +455,26 @@
             <div class="empty-queue-hint" data-i18n="empty_queue_hint">Dein Plan erscheint hier …</div>
           </div>
 
+          <div class="queue-edit-bar" id="queueEditBar" role="region" aria-label="Schritt bearbeiten">
+            <div class="queue-edit-header">
+              <span class="queue-edit-badge" id="queueEditLabel">Schritt #1</span>
+              <span class="queue-edit-hint" id="queueEditHint" data-i18n="queue_edit_hint_replace">Tippe Befehl zum Ersetzen</span>
+            </div>
+            <div class="queue-edit-actions">
+              <button type="button" class="queue-edit-btn" id="btnQueueInsertBefore" title="Neuen Befehl vor diesem Schritt einfügen" data-i18n-title="btn_queue_insert_title">
+                <span>➕</span>
+                <span id="btnQueueInsertText" data-i18n="queue_insert_before">Davor</span>
+              </button>
+              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveLeft" title="Schritt nach links verschieben" data-i18n-title="btn_queue_left_title" aria-label="Links verschieben">◀</button>
+              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveRight" title="Schritt nach rechts verschieben" data-i18n-title="btn_queue_right_title" aria-label="Rechts verschieben">▶</button>
+              <button type="button" class="queue-edit-btn danger" id="btnQueueDeleteStep" title="Diesen Schritt löschen" data-i18n-title="btn_queue_delete_title">
+                <span>🗑️</span>
+                <span data-i18n="queue_delete_step">Löschen</span>
+              </button>
+              <button type="button" class="queue-edit-btn close" id="btnQueueCloseEdit" title="Bearbeitung schließen" aria-label="Schließen">✕</button>
+            </div>
+          </div>
+
           <div class="btn-row">
             <button class="sec-btn" id="btnReset" title="Roboter zurück an den Start setzen" data-i18n-title="btn_reset_title">
               <span>⟲</span>
@@ -470,16 +490,26 @@
             </button>
           </div>
 
-          <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)" data-i18n-title="btn_play_title">
-            <span id="btnPlayIcon">▶</span>
-            <span id="btnPlayText" data-i18n="cmd_play">Plan abspielen</span>
-          </button>
+          <div class="play-controls-row">
+            <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)" data-i18n-title="btn_play_title">
+              <span id="btnPlayIcon">▶</span>
+              <span id="btnPlayText" data-i18n="cmd_play">Plan abspielen</span>
+            </button>
+            <button type="button" class="step-btn" id="btnStep" title="Einzelschritt ausführen (Taste S)" data-i18n-title="btn_step_title">
+              <span class="step-btn-icon">⏭</span>
+              <span class="step-btn-label" id="btnStepText" data-i18n="cmd_step">Schritt</span>
+            </button>
+            <button type="button" class="speed-btn" id="btnSpeedToggle" title="Geschwindigkeit umschalten (1x / 2x)" data-i18n-title="btn_speed_title" aria-pressed="false">
+              <span id="btnSpeedText">1x</span>
+            </button>
+          </div>
 
           <div class="mobile-exec-bar" id="mobileExecBar">
             <span class="mobile-exec-icon">
               <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4 1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
             </span>
             <span class="mobile-exec-text" data-i18n="mobile_exec_text">Lieferung läuft …</span>
+            <button type="button" class="mobile-speed-btn" id="btnMobileSpeed" title="Geschwindigkeit (1x / 2x)" aria-pressed="false">1x</button>
             <button type="button" class="mobile-abort-btn" id="btnMobileAbort" title="Lieferung abbrechen" data-i18n="cmd_abort">⏹ Abbrechen</button>
           </div>
 

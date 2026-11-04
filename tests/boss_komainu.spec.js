@@ -184,4 +184,128 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(abortedState.queueLen).toBe(7);
     expect(abortedState.feedback).toContain('abgebrochen');
   });
+
+  test('2x Speed toggle and Single-Step (⏭ Schritt) debug mode work cleanly', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.loadLevel(0); // Level 1: solution is ['F', 'F', 'F', 'F', 'R', 'F']
+      window.gameInstance.queue = ['F', 'F', 'F', 'F', 'R', 'F'];
+      window.gameInstance.renderQueue();
+    });
+
+    // 1. Test 1x / 2x Speed Toggle
+    await expect(page.locator('#btnSpeedText')).toHaveText('1x');
+    await page.locator('#btnSpeedToggle').click();
+    await expect(page.locator('#btnSpeedText')).toHaveText('⚡ 2x');
+    await expect(page.locator('#btnSpeedToggle')).toHaveClass(/speed-fast/);
+
+    const speedState = await page.evaluate(() => ({
+      speed: window.gameInstance.playbackSpeed,
+      stored: localStorage.getItem('koma_playback_speed'),
+      delay300: window.gameInstance.getStepDelay(300)
+    }));
+    expect(speedState.speed).toBe(2);
+    expect(speedState.stored).toBe('2');
+    expect(speedState.delay300).toBe(150);
+
+    // 2. Test Single-Step (⏭ Schritt) execution: Step 1 of 6 (moves East from x=0 to x=1)
+    const startX = await page.evaluate(() => window.gameInstance.state.x);
+    await page.locator('#btnStep').click();
+
+    await page.waitForFunction(() => !window.gameInstance.isPlaying && window.gameInstance.currentStep === 1);
+
+    const step1State = await page.evaluate(() => ({
+      isPlaying: window.gameInstance.isPlaying,
+      isStepMode: window.gameInstance.isStepMode,
+      currentStep: window.gameInstance.currentStep,
+      x: window.gameInstance.state.x,
+      stepText: document.getElementById('btnStepText')?.textContent,
+      playText: document.getElementById('btnPlayText')?.textContent
+    }));
+    expect(step1State.isPlaying).toBe(false);
+    expect(step1State.isStepMode).toBe(true);
+    expect(step1State.currentStep).toBe(1);
+    expect(step1State.x).toBe(startX + 1);
+    expect(step1State.stepText).toBe('1/6');
+    expect(step1State.playText).toBe('Weiter');
+
+    // 3. Click #btnStep again -> advances to Step 2 of 6 without resetting
+    await page.locator('#btnStep').click();
+    await page.waitForFunction(() => !window.gameInstance.isPlaying && window.gameInstance.currentStep === 2);
+
+    const step2State = await page.evaluate(() => ({
+      currentStep: window.gameInstance.currentStep,
+      x: window.gameInstance.state.x,
+      stepText: document.getElementById('btnStepText')?.textContent
+    }));
+    expect(step2State.currentStep).toBe(2);
+    expect(step2State.x).toBe(startX + 2);
+    expect(step2State.stepText).toBe('2/6');
+
+    // 4. Click #btnPlay ('Weiter') -> resumes from Step 2 and wins Level 1
+    await page.locator('#btnPlay').click();
+    await page.waitForFunction(() => window.gameInstance.state.isWin === true);
+
+    const winState = await page.evaluate(() => ({
+      isWin: window.gameInstance.state.isWin,
+      isPlaying: window.gameInstance.isPlaying,
+      isStepMode: window.gameInstance.isStepMode,
+      currentStep: window.gameInstance.currentStep
+    }));
+    expect(winState.isWin).toBe(true);
+    expect(winState.isPlaying).toBe(false);
+    expect(winState.isStepMode).toBe(false);
+    expect(winState.currentStep).toBe(6);
+  });
+
+  test('Inline queue editing allows replacing, inserting before, moving, and deleting steps', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.loadLevel(0); // limit = 8
+      window.gameInstance.queue = ['F', 'L', 'F'];
+      window.gameInstance.renderQueue();
+    });
+
+    const editBar = page.locator('#queueEditBar');
+    await expect(editBar).not.toHaveClass(/active/);
+
+    // 1. Click step #2 ('L') to select it for editing
+    const chips = page.locator('.queue-chip');
+    await chips.nth(1).click();
+    await expect(editBar).toHaveClass(/active/);
+    await expect(chips.nth(1)).toHaveClass(/selected-edit/);
+    await expect(page.locator('#queueEditLabel')).toContainText('Schritt #2');
+
+    // 2. Tap 'Rechts' ([data-cmd="R"]) to replace step #2 in-place ('L' -> 'R')
+    await page.locator('button[data-cmd="R"]').click();
+    let queueNow = await page.evaluate(() => [...window.gameInstance.queue]);
+    expect(queueNow).toEqual(['F', 'R', 'F']);
+    await expect(page.locator('#queueCount')).toHaveText('3 / 8');
+
+    // 3. Click '➕ Davor' (#btnQueueInsertBefore) and tap 'Aktion' ([data-cmd="A"]) to insert before step #2
+    await page.locator('#btnQueueInsertBefore').click();
+    await expect(editBar).toHaveClass(/insert-mode/);
+    await page.locator('button[data-cmd="A"]').click();
+    queueNow = await page.evaluate(() => [...window.gameInstance.queue]);
+    expect(queueNow).toEqual(['F', 'A', 'R', 'F']);
+    await expect(page.locator('#queueCount')).toHaveText('4 / 8');
+
+    // 4. Move selected step (#2 'A') right via #btnQueueMoveRight (▶) -> swaps with 'R'
+    await page.locator('#btnQueueMoveRight').click();
+    queueNow = await page.evaluate(() => [...window.gameInstance.queue]);
+    expect(queueNow).toEqual(['F', 'R', 'A', 'F']);
+    await expect(page.locator('#queueEditLabel')).toContainText('Schritt #3');
+
+    // 5. Delete selected step (#3 'A') via #btnQueueDeleteStep (🗑️)
+    await page.locator('#btnQueueDeleteStep').click();
+    queueNow = await page.evaluate(() => [...window.gameInstance.queue]);
+    expect(queueNow).toEqual(['F', 'R', 'F']);
+    await expect(editBar).not.toHaveClass(/active/);
+  });
 });

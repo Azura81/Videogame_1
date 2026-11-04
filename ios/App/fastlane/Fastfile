@@ -154,7 +154,7 @@ platform :ios do
       demo_account_required: false,
       notes: "Spirit Delivery is a 3D puzzle game. No login or account is required to play."
     }
-    changelog_text = "New Level 30 Boss (Iwa-Komainu), full German & English localization, and gameplay improvements."
+    changelog_text = "1x/2x Speed Toggle, Single-Step Debug Mode (Schritt), Inline Command Queue Editing (Replace, Insert, Move, Delete), and Level 30 Boss fixes."
 
     if already_uploaded && api_key
       upload_to_testflight(

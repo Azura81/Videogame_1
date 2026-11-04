@@ -1267,9 +1267,31 @@ class GardenRenderer {
       }, 120);
     }
 
-    let progress = 0;
+    const startTime = performance.now();
+    const roarDuration = 360;
+    let finished = false;
+    const finishRoar = () => {
+      if (finished) return;
+      finished = true;
+      waveMeshes.forEach(m => {
+        this.scene.remove(m);
+        m.geometry.dispose();
+      });
+      waveMat.dispose();
+      rings.forEach(({ mesh, geo, mat }) => {
+        this.scene.remove(mesh);
+        geo.dispose();
+        mat.dispose();
+      });
+      if (this.komainuHead) this.komainuHead.rotation.x = 0;
+      if (typeof cb === "function") cb();
+    };
+
+    const fallbackTimer = setTimeout(finishRoar, roarDuration + 60);
+
     const animateWave = () => {
-      progress += 0.045;
+      if (finished) return;
+      const progress = Math.min(1.06, (performance.now() - startTime) / roarDuration);
       waveMat.opacity = Math.max(0, 0.65 * (1 - progress));
 
       rings.forEach(({ mesh, delay, mat }) => {
@@ -1284,18 +1306,8 @@ class GardenRenderer {
       if (progress < 1.05) {
         requestAnimationFrame(animateWave);
       } else {
-        waveMeshes.forEach(m => {
-          this.scene.remove(m);
-          m.geometry.dispose();
-        });
-        waveMat.dispose();
-        rings.forEach(({ mesh, geo, mat }) => {
-          this.scene.remove(mesh);
-          geo.dispose();
-          mat.dispose();
-        });
-        if (this.komainuHead) this.komainuHead.rotation.x = 0;
-        if (typeof cb === "function") cb();
+        clearTimeout(fallbackTimer);
+        finishRoar();
       }
     };
     animateWave();
@@ -3492,7 +3504,7 @@ class GardenRenderer {
     requestAnimationFrame(animateCollapse);
   }
 
-  animateBlockPush(fromX, fromY, toX, toY, isWaterDestination, onComplete) {
+  animateBlockPush(fromX, fromY, toX, toY, isWaterDestination, onComplete, duration = 220) {
     const item = this.blockMeshes[`${fromX},${fromY}`];
     if (!item) {
       if (typeof onComplete === "function") onComplete();
@@ -3509,7 +3521,7 @@ class GardenRenderer {
     );
 
     const startTime = performance.now();
-    const slideDuration = 220;
+    const slideDuration = duration;
 
     const animateSlide = () => {
       const elapsed = performance.now() - startTime;
@@ -3528,7 +3540,7 @@ class GardenRenderer {
         if (isWaterDestination) {
           // Phase 2: Splash plunge down into water canal so top surface sits flush with walking path (y = 0.45)
           const sinkStartTime = performance.now();
-          const sinkDuration = 220;
+          const sinkDuration = duration;
           const startY = 0.45;
           const targetY = -0.31; // Top of stone will be exactly at -0.31 + 0.76 = 0.45
 
@@ -3967,6 +3979,10 @@ class GardenRenderer {
   }
 
   animateMove(gx, gy, duration = 300, onLanding = null) {
+    if (this._moveFallbackTimer) {
+      clearTimeout(this._moveFallbackTimer);
+      this._moveFallbackTimer = null;
+    }
     const target = this.gridToWorld(gx, gy);
     this.komaState.gridX = gx;
     this.komaState.gridY = gy;
@@ -3977,9 +3993,24 @@ class GardenRenderer {
     this.komaState.moveStartTime = performance.now();
     this.komaState.moveDuration = duration;
     this.komaState.onLanding = onLanding;
+    if (typeof onLanding === "function") {
+      this._moveFallbackTimer = setTimeout(() => {
+        this._moveFallbackTimer = null;
+        if (this.komaState.isMoving && this.komaState.onLanding === onLanding) {
+          this.komaState.isMoving = false;
+          if (this.komaGroup) this.komaGroup.position.copy(this.komaState.targetPos);
+          this.komaState.onLanding = null;
+          onLanding();
+        }
+      }, duration + 40);
+    }
   }
 
-  animateWindSlide(gx, gy, dir, onLanding = null) {
+  animateWindSlide(gx, gy, dir, onLanding = null, duration = 260) {
+    if (this._slideFallbackTimer) {
+      clearTimeout(this._slideFallbackTimer);
+      this._slideFallbackTimer = null;
+    }
     const target = this.gridToWorld(gx, gy);
     this.komaState.gridX = gx;
     this.komaState.gridY = gy;
@@ -3988,9 +4019,20 @@ class GardenRenderer {
     this.komaState.isWindSliding = true;
     this.komaState.isMoving = false;
     this.komaState.slideStartTime = performance.now();
-    this.komaState.slideDuration = 260;
+    this.komaState.slideDuration = duration;
     this.komaState.slideDir = dir;
     this.komaState.onSlideLanding = onLanding;
+    if (typeof onLanding === "function") {
+      this._slideFallbackTimer = setTimeout(() => {
+        this._slideFallbackTimer = null;
+        if (this.komaState.isWindSliding && this.komaState.onSlideLanding === onLanding) {
+          this.komaState.isWindSliding = false;
+          if (this.komaGroup) this.komaGroup.position.copy(this.komaState.targetPos);
+          this.komaState.onSlideLanding = null;
+          onLanding();
+        }
+      }, duration + 40);
+    }
 
     this.spawnWindTrail(this.komaState.startPos, target);
   }
