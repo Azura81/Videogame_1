@@ -186,6 +186,7 @@ class SoundEngine {
   constructor() {
     this.ctx = null;
     this.masterMuted = false; // Master Mute (mutes both SFX and BGM)
+    this.sfxMuted = false;    // Independent SFX Mute (mutes sound effects while keeping BGM independent)
     this.bgmPlaying = false;
     this.bgmEnabled = true; // User preference for BGM
     this.bgmVolume = 0.16;  // Balanced cozy background volume
@@ -217,6 +218,14 @@ class SoundEngine {
       if (savedMute === "true") {
         this.masterMuted = true;
       }
+      const savedSfxMute = localStorage.getItem("koma_sfx_muted");
+      if (savedSfxMute === "true") {
+        this.sfxMuted = true;
+      } else if (savedSfxMute === "false") {
+        this.sfxMuted = false;
+      } else if (this.masterMuted) {
+        this.sfxMuted = true;
+      }
     }
 
     // Auto-resume AudioContext and optionally start BGM on first user interaction
@@ -224,7 +233,17 @@ class SoundEngine {
       const startOnGesture = (e) => {
         this.init();
         // If clicking directly on sound or music toggle buttons, let their dedicated click handlers manage state
-        if (e && e.target && typeof e.target.closest === "function" && (e.target.closest("#btnMusicToggle") || e.target.closest("#btnSoundToggle"))) {
+        if (
+          e &&
+          e.target &&
+          typeof e.target.closest === "function" &&
+          (e.target.closest("#btnMusicToggle") ||
+            e.target.closest("#btnSoundToggle") ||
+            e.target.closest("#btnMobileMusicToggle") ||
+            e.target.closest("#btnMobileSoundToggle") ||
+            e.target.closest("#btnHomeAudioMusic") ||
+            e.target.closest("#btnHomeAudioSound"))
+        ) {
           window.removeEventListener("pointerdown", startOnGesture);
           window.removeEventListener("keydown", startOnGesture);
           return;
@@ -240,11 +259,16 @@ class SoundEngine {
     }
   }
 
+  isSfxMuted() {
+    return Boolean(this.masterMuted || this.sfxMuted);
+  }
+
   get muted() {
-    return this.masterMuted;
+    return this.isSfxMuted();
   }
 
   set muted(val) {
+    this.sfxMuted = !!val;
     this.masterMuted = !!val;
   }
 
@@ -266,7 +290,7 @@ class SoundEngine {
 
     // SFX Master Bus (full volume, crisp presence)
     this.sfxGain = this.ctx.createGain();
-    this.sfxGain.gain.setValueAtTime(this.masterMuted ? 0 : this.sfxVolume, this.ctx.currentTime);
+    this.sfxGain.gain.setValueAtTime(this.isSfxMuted() ? 0 : this.sfxVolume, this.ctx.currentTime);
     this.sfxGain.connect(this.ctx.destination);
 
     // BGM Master Bus
@@ -284,19 +308,60 @@ class SoundEngine {
     }
   }
 
-  // --- Master & Audio Controls ---
+  // --- Master & SFX Audio Controls ---
 
-  toggleMasterMute() {
+  toggleSfx() {
     this.init();
-    this.masterMuted = !this.masterMuted;
+    const nextMuted = !this.isSfxMuted();
+    this.sfxMuted = nextMuted;
+    if (!nextMuted && this.masterMuted) {
+      this.masterMuted = false;
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("koma_master_muted_v2", "false");
+      }
+    }
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem("koma_master_muted_v2", this.masterMuted ? "true" : "false");
+      localStorage.setItem("koma_sfx_muted", this.sfxMuted ? "true" : "false");
     }
 
     const t = this.ctx ? this.ctx.currentTime : 0;
     if (this.sfxGain && this.ctx) {
       this.sfxGain.gain.cancelScheduledValues(0);
-      this.sfxGain.gain.setValueAtTime(this.masterMuted ? 0 : this.sfxVolume, t);
+      this.sfxGain.gain.setValueAtTime(this.isSfxMuted() ? 0 : this.sfxVolume, t);
+    }
+
+    if (!this.isSfxMuted()) {
+      this.playClick();
+    }
+
+    if (window.gameInstance && typeof window.gameInstance.updateAudioButtons === "function") {
+      window.gameInstance.updateAudioButtons();
+    }
+
+    return this.sfxMuted;
+  }
+
+  toggleSound() {
+    return this.toggleSfx();
+  }
+
+  toggleMaster() {
+    return this.toggleSfx();
+  }
+
+  toggleMasterMute() {
+    this.init();
+    this.masterMuted = !this.masterMuted;
+    this.sfxMuted = this.masterMuted;
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("koma_master_muted_v2", this.masterMuted ? "true" : "false");
+      localStorage.setItem("koma_sfx_muted", this.sfxMuted ? "true" : "false");
+    }
+
+    const t = this.ctx ? this.ctx.currentTime : 0;
+    if (this.sfxGain && this.ctx) {
+      this.sfxGain.gain.cancelScheduledValues(0);
+      this.sfxGain.gain.setValueAtTime(this.isSfxMuted() ? 0 : this.sfxVolume, t);
     }
 
     if (this.bgmGain && this.ctx) {
@@ -328,9 +393,10 @@ class SoundEngine {
 
   setMuted(muted) {
     this.masterMuted = !!muted;
+    this.sfxMuted = !!muted;
     if (this.sfxGain && this.ctx) {
       this.sfxGain.gain.cancelScheduledValues(0);
-      this.sfxGain.gain.setValueAtTime(this.masterMuted ? 0 : this.sfxVolume, this.ctx.currentTime);
+      this.sfxGain.gain.setValueAtTime(this.isSfxMuted() ? 0 : this.sfxVolume, this.ctx.currentTime);
     }
     if (this.bgmGain && this.ctx) {
       this.bgmGain.gain.cancelScheduledValues(0);
@@ -348,10 +414,10 @@ class SoundEngine {
     this.init();
     if (!this.ctx) return;
 
-    // If master was muted, unmute so user gets the music they requested
+    // If master was muted, unmute master so user gets the music they requested (keep sfxMuted preference intact)
     if (this.masterMuted) {
       this.masterMuted = false;
-      if (this.sfxGain) this.sfxGain.gain.setValueAtTime(this.sfxVolume, this.ctx.currentTime);
+      if (this.sfxGain) this.sfxGain.gain.setValueAtTime(this.isSfxMuted() ? 0 : this.sfxVolume, this.ctx.currentTime);
       if (typeof localStorage !== "undefined") {
         localStorage.setItem("koma_master_muted_v2", "false");
       }
@@ -415,6 +481,10 @@ class SoundEngine {
       this.startBgm();
       return true;
     }
+  }
+
+  toggleMusic() {
+    return this.toggleBgm();
   }
 
   killActiveBgmNodes() {
@@ -1079,7 +1149,7 @@ class SoundEngine {
   // --- Sound Effects (SFX) Controls & Triggers (Crisp, High Presence) ---
 
   playStep() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === "suspended") this.ctx.resume();
@@ -1132,7 +1202,7 @@ class SoundEngine {
   }
 
   playTurn() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === "suspended") this.ctx.resume();
@@ -1170,7 +1240,7 @@ class SoundEngine {
   playWin() {
     this.duckBgm(0.03, 2.8); // Smoothly duck background music during victory fanfare
 
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === "suspended") this.ctx.resume();
@@ -1218,7 +1288,7 @@ class SoundEngine {
   }
 
   playOrb() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === "suspended") this.ctx.resume();
@@ -1252,7 +1322,7 @@ class SoundEngine {
   }
 
   playSwitch() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1286,7 +1356,7 @@ class SoundEngine {
   }
 
   playGateOpen() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1306,7 +1376,7 @@ class SoundEngine {
   }
 
   playBump() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1326,7 +1396,7 @@ class SoundEngine {
   }
 
   playClick() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1346,7 +1416,7 @@ class SoundEngine {
   }
 
   playCameraSwivel() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1367,7 +1437,7 @@ class SoundEngine {
   }
 
   playStarChime(starIdx = 0) {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1389,7 +1459,7 @@ class SoundEngine {
   }
 
   playPortal() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1425,7 +1495,7 @@ class SoundEngine {
   }
 
   playSkinEquip() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1448,7 +1518,7 @@ class SoundEngine {
   }
 
   playWind() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     if (this.ctx.state === "suspended") this.ctx.resume();
@@ -1496,7 +1566,7 @@ class SoundEngine {
   }
 
   playCrack() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1519,7 +1589,7 @@ class SoundEngine {
   }
 
   playSplash() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1542,7 +1612,7 @@ class SoundEngine {
   }
 
   playStoneSlide() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1567,7 +1637,7 @@ class SoundEngine {
   }
 
   playDragonRoar() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1609,7 +1679,7 @@ class SoundEngine {
   }
 
   playKomainuRoar() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1651,7 +1721,7 @@ class SoundEngine {
   }
 
   playKomainuPacified() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1675,7 +1745,7 @@ class SoundEngine {
   }
 
   playTaikoDrum() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1697,7 +1767,7 @@ class SoundEngine {
   }
 
   playMagatamaShatter() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1722,7 +1792,7 @@ class SoundEngine {
   }
 
   playDragonVictory() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1747,7 +1817,7 @@ class SoundEngine {
   }
 
   playFrostBlast() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1789,7 +1859,7 @@ class SoundEngine {
   }
 
   playFreeze() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -1813,7 +1883,7 @@ class SoundEngine {
   }
 
   playShieldClash() {
-    if (this.masterMuted) return;
+    if (this.isSfxMuted()) return;
     this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;

@@ -497,6 +497,22 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  skinMidoriKami: (size = 24, color = "#10b981") => `
+    <svg class="svg-icon skin-svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <!-- Sacred Golden Halo (Heiliger Schein) -->
+      <ellipse cx="12" cy="3.2" rx="6.5" ry="1.8" stroke="#ffd700" stroke-width="1.8" fill="#ffd700" fill-opacity="0.22"/>
+      <circle cx="5.5" cy="3.2" r="0.9" fill="#00f5d4" stroke="none"/>
+      <circle cx="12" cy="1.5" r="1.1" fill="#ffd700" stroke="none"/>
+      <circle cx="18.5" cy="3.2" r="0.9" fill="#00f5d4" stroke="none"/>
+      <!-- Original Shiro Usagi Single Curved Ear & Chassis in Green -->
+      <path d="M8 10V5.2a2 2 0 0 1 4 0V10"/>
+      <rect x="4" y="10" width="16" height="11" rx="5.5" fill="${color}" fill-opacity="0.22"/>
+      <path d="M7 15h10" stroke-width="2.2" stroke="${color}"/>
+      <circle cx="9.5" cy="15" r="1" fill="#a7f3d0" stroke="none"/>
+      <circle cx="14.5" cy="15" r="1" fill="#a7f3d0" stroke="none"/>
+    </svg>
+  `,
+
   // Helper to fetch skin SVG by id
   getSkinIcon: (skinId, size = 24, color = "currentColor") => {
     switch (skinId) {
@@ -507,6 +523,7 @@ const KOMA_ICONS = {
       case "shinobi": return KOMA_ICONS.skinTsukuyomi(size, color);
       case "kami": return KOMA_ICONS.skinGoldKami(size, color);
       case "ryujin": return KOMA_ICONS.skinRyujinDragon(size, color);
+      case "pagoda": return KOMA_ICONS.skinMidoriKami(size, color);
       default: return KOMA_ICONS.skinShiroUsagi(size, color);
     }
   },

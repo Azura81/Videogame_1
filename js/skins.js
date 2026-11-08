@@ -172,6 +172,33 @@ const KOMA_SKINS = {
     },
     dustType: "ice",
     accessories: ["dragonHorns", "celestialRibbon"]
+  },
+  // 8. Jade Kami (Midori no Kami) - Exclusive Unlock for Conquering the Tower of 100 Trials
+  // Uses the original Shiro Usagi model in sacred emerald green + the golden Torii Halo ("heiliger Schein")
+  pagoda: {
+    id: "pagoda",
+    name: "Midori Kami",
+    jpName: "翠神",
+    subtitle: "Smaragd-Bote · Herrscher der 100 Ebenen",
+    desc: "Exklusives Gewand für die Bezwinger des Turms der 100 Prüfungen. Das klassische Original-Chassis in edlem Schrein-Smaragdgrün, gekrönt vom heiligen goldenen Schein.",
+    starsRequired: 0,
+    specialUnlock: "tower_100",
+    icon: "🏯",
+    accentColor: "#10b981",
+    tag: "Turm-Trophäe",
+    materials: {
+      body: { color: 0x10b981, metalness: 0.25, roughness: 0.22 },
+      visor: { color: 0x041f18, metalness: 0.85, roughness: 0.14 },
+      base: { color: 0x064e3b, metalness: 0.65, roughness: 0.28 },
+      eye: { color: 0xa7f3d0 },
+      glow: { color: 0x34d399, emissive: 0x10b981, emissiveIntensity: 1.25 },
+      pack: { color: 0x065f46, metalness: 0.3, roughness: 0.42 },
+      packStrap: { color: 0xffd700, emissive: 0xffb700, emissiveIntensity: 1.15 },
+      light: 0x10b981,
+      dustColor: 0x34d399
+    },
+    dustType: "gold",
+    accessories: ["singleEar", "kamiHalo"]
   }
 };
 

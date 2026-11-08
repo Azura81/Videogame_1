@@ -230,7 +230,7 @@
       trophies_title: "Heilige Siegel & Erfolge",
       trophies_desc: "Meistere besondere Prüfungen in den 6 Kapiteln, um uralte Schrein-Siegel zu erwecken.",
       trophies_summary_title: "Heilige Schrein-Siegel",
-      trophies_summary_sub: "von 6 Errungenschaften gemeistert",
+      trophies_summary_sub: "von 7 Errungenschaften gemeistert",
 
       // Settings
       settings_kicker: "EINSTELLUNGEN",
@@ -544,7 +544,7 @@
       trophies_title: "Sacred Seals & Achievements",
       trophies_desc: "Master special trials across the 6 chapters to awaken ancient shrine seals.",
       trophies_summary_title: "Sacred Shrine Seals",
-      trophies_summary_sub: "of 6 achievements mastered",
+      trophies_summary_sub: "of 7 achievements mastered",
 
       // Settings
       settings_kicker: "SETTINGS",
@@ -759,6 +759,10 @@
     "minimalist": {
         "name": "Minimalist",
         "desc": "Clear 5 levels with the perfect minimum number of commands."
+    },
+    "tower_conqueror": {
+        "name": "Tower Conqueror",
+        "desc": "Conquer all 100 floors in the Tower of 100 Trials."
     }
 };
 
@@ -797,6 +801,11 @@
         "subtitle": "Dragon Tamer · Ruler of Fuji",
         "desc": "Bestowed by the liberated Sky Dragon of Mount Fuji. Pearlescent white chassis with imperial dragon horns, floating celestial ribbons, and frost glide.",
         "tag": "Boss Trophy"
+    },
+    "pagoda": {
+        "subtitle": "Emerald Messenger · Sovereign of 100 Floors",
+        "desc": "Exclusive garment for conquerors of the Tower of 100 Trials. The classic original chassis in sacred emerald green, crowned by the golden divine halo.",
+        "tag": "Tower Trophy"
     }
 };
 

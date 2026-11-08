@@ -308,4 +308,109 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(queueNow).toEqual(['F', 'R', 'F']);
     await expect(editBar).not.toHaveClass(/active/);
   });
+
+  test('SFX Settings button toggles SFX cleanly and all 60 levels have zero overlaps', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.openMobileHub('settings', false);
+    });
+
+    const sfxBtn = page.locator('#btnMobileSoundToggle');
+    await expect(sfxBtn).toBeVisible();
+    await expect(sfxBtn).toHaveClass(/active/);
+    await expect(sfxBtn).toContainText('SFX Aktiv');
+
+    // Click SFX button in settings -> mutes SFX
+    await sfxBtn.click();
+    await expect(sfxBtn).not.toHaveClass(/active/);
+    await expect(sfxBtn).toContainText('Stumm');
+    let sfxMuted = await page.evaluate(() => Sound.isSfxMuted());
+    expect(sfxMuted).toBe(true);
+
+    // Click SFX button again -> unmutes SFX
+    await sfxBtn.click();
+    await expect(sfxBtn).toHaveClass(/active/);
+    await expect(sfxBtn).toContainText('SFX Aktiv');
+    sfxMuted = await page.evaluate(() => Sound.isSfxMuted());
+    expect(sfxMuted).toBe(false);
+
+    // Verify all 60 levels have no switches/gates/orbs on walls or obstacles, and Level 35 solves cleanly
+    const audit = await page.evaluate(() => {
+      const bad = [];
+      LEVELS.forEach((lvl, idx) => {
+        const wallSet = new Set((lvl.walls || []).map(w => `${w[0]},${w[1]}`));
+        const obsKeys = new Set(Object.keys(lvl.obstacles || {}));
+        (lvl.sw || []).forEach(s => {
+          const k = `${s[0]},${s[1]}`;
+          if (wallSet.has(k) || obsKeys.has(k)) bad.push(`L${idx + 1}:sw@${k}`);
+        });
+        (lvl.gates || lvl.gate || []).forEach(g => {
+          const k = `${g[0]},${g[1]}`;
+          if (wallSet.has(k) || obsKeys.has(k)) bad.push(`L${idx + 1}:gate@${k}`);
+        });
+      });
+      return bad;
+    });
+    expect(audit).toEqual([]);
+  });
+
+  test('Conquering Tower Floor 100 unlocks tower_conqueror achievement and pagoda skin', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    const beforeState = await page.evaluate(() => {
+      localStorage.removeItem('koma_conquered_tower');
+      return {
+        pagodaUnlocked: window.gameInstance.isSkinUnlocked('pagoda'),
+        hasAchievement: window.gameInstance.unlockedAchievements.has('tower_conqueror')
+      };
+    });
+    expect(beforeState.pagodaUnlocked).toBe(false);
+    expect(beforeState.hasAchievement).toBe(false);
+
+    const afterState = await page.evaluate(() => {
+      window.TowerTrial.startNewRun();
+      window.TowerTrial.floor = 100;
+      window.TowerTrial.currentLevel = window.TowerTrial.generateFloorLevel(100);
+      const res = window.TowerTrial.handleFloorClear(window.TowerTrial.currentLevel.solution.length);
+      window.gameInstance.checkAchievements();
+      return {
+        resType: res.type,
+        pagodaUnlocked: window.gameInstance.isSkinUnlocked('pagoda'),
+        hasAchievement: window.gameInstance.unlockedAchievements.has('tower_conqueror'),
+        towerConqueredFlag: localStorage.getItem('koma_conquered_tower')
+      };
+    });
+
+    expect(afterState.resType).toBe('tower_victory');
+    expect(afterState.pagodaUnlocked).toBe(true);
+    expect(afterState.hasAchievement).toBe(true);
+    expect(afterState.towerConqueredFlag).toBe('true');
+
+    // Equip the new green Midori Kami skin and verify 3D model has singleEar + kamiHalo
+    const skinCheck = await page.evaluate(() => {
+      window.gameInstance.equipSkin('pagoda');
+      const skinDef = window.KOMA_SKINS.pagoda;
+      const lvl20 = window.TowerTrial.generateFloorLevel(20);
+      return {
+        equipped: window.gameInstance.equippedSkin,
+        bodyColor: skinDef.materials.body.color,
+        accessories: skinDef.accessories,
+        hasHaloMesh: Boolean(window.gameInstance.renderer && window.gameInstance.renderer.komaHalo),
+        earCount: window.gameInstance.renderer ? window.gameInstance.renderer.komaEarMeshes.length : 0,
+        lvl20Solved: lvl20.solverSolution.solved,
+        lvl20Steps: lvl20.solution.length
+      };
+    });
+    expect(skinCheck.equipped).toBe('pagoda');
+    expect(skinCheck.bodyColor).toBe(0x10b981);
+    expect(skinCheck.accessories).toEqual(['singleEar', 'kamiHalo']);
+    expect(skinCheck.hasHaloMesh).toBe(true);
+    expect(skinCheck.earCount).toBe(1);
+    expect(skinCheck.lvl20Solved).toBe(true);
+    expect(skinCheck.lvl20Steps).toBeGreaterThanOrEqual(11);
+  });
 });

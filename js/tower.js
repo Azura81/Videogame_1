@@ -92,6 +92,7 @@
       this.totalZenBonus = 0;
       this.runSeed = 1337;
       this.currentLevel = null;
+      this.usedFloorSignatures = new Set();
 
       this.pendingAltarChoices = [];
     }
@@ -108,8 +109,14 @@
         bestScore: 0,
         totalRuns: 0,
         totalFloorsCleared: 0,
-        bestZenCount: 0
+        bestZenCount: 0,
+        towerCleared: false
       };
+    }
+
+    isTowerConquered() {
+      const lsConquered = typeof localStorage !== "undefined" && localStorage.getItem("koma_conquered_tower") === "true";
+      return Boolean(this.data.towerCleared || (this.data.bestFloor >= 100) || lsConquered);
     }
 
     saveData() {
@@ -142,6 +149,7 @@
       this.totalZenBonus = 0;
       this.runSeed = Math.floor(Math.random() * 900000) + 100000;
       this.hasRevived = false;
+      this.usedFloorSignatures = new Set();
       this.data.totalRuns += 1;
       this.saveData();
 
@@ -166,7 +174,7 @@
       const TURN_LEFT = { "N": "W", "W": "S", "S": "E", "E": "N" };
       const TURN_RIGHT = { "N": "E", "E": "S", "S": "W", "W": "N" };
 
-      function solveTowerLevel(lvl, maxDepth = 38) {
+      function solveTowerLevel(lvl, maxDepth = 32, maxStates = 1800) {
         const [sx, sy, sd] = lvl.s;
         const w = lvl.w, h = lvl.h;
         const walls = new Set((lvl.walls || []).map(pt => `${pt[0]},${pt[1]}`));
@@ -188,12 +196,16 @@
           collapsed: new Set(),
           blocks: initialBlocks.map(b => [b[0], b[1]]),
           bridges: new Set(),
+          pushedBlock: false,
+          usedWind: false,
+          usedPortal: false,
           path: []
         }];
         const visited = new Set([initState]);
+        let head = 0;
 
-        while (queue.length > 0) {
-          const cur = queue.shift();
+        while (head < queue.length && visited.size < maxStates) {
+          const cur = queue[head++];
           if (cur.path.length >= maxDepth) continue;
 
           for (const cmd of ["F", "L", "R", "A"]) {
@@ -211,6 +223,9 @@
                   collapsed: new Set(cur.collapsed),
                   blocks: cur.blocks.map(b => [b[0], b[1]]),
                   bridges: new Set(cur.bridges),
+                  pushedBlock: cur.pushedBlock,
+                  usedWind: cur.usedWind,
+                  usedPortal: cur.usedPortal,
                   path: [...cur.path, "L"]
                 });
               }
@@ -228,6 +243,9 @@
                   collapsed: new Set(cur.collapsed),
                   blocks: cur.blocks.map(b => [b[0], b[1]]),
                   bridges: new Set(cur.bridges),
+                  pushedBlock: cur.pushedBlock,
+                  usedWind: cur.usedWind,
+                  usedPortal: cur.usedPortal,
                   path: [...cur.path, "R"]
                 });
               }
@@ -250,6 +268,9 @@
                     collapsed: new Set(cur.collapsed),
                     blocks: cur.blocks.map(b => [b[0], b[1]]),
                     bridges: new Set(cur.bridges),
+                    pushedBlock: cur.pushedBlock,
+                    usedWind: cur.usedWind,
+                    usedPortal: cur.usedPortal,
                     path: [...cur.path, "A"]
                   });
                 }
@@ -264,12 +285,18 @@
               // Pushable blocks check
               let newBlocks = cur.blocks.map(b => [b[0], b[1]]);
               let newBridges = new Set(cur.bridges);
+              let didPushBlock = cur.pushedBlock;
               const bIdx = newBlocks.findIndex(b => b[0] === nx && b[1] === ny);
               if (bIdx !== -1) {
                 const nnx = nx + dx;
                 const nny = ny + dy;
                 if (nnx < 0 || nny < 0 || nnx >= w || nny >= h) continue;
                 if (walls.has(`${nnx},${nny}`)) continue;
+                if (fragile.has(`${nnx},${nny}`)) continue;
+                if (nnx === lvl.g[0] && nny === lvl.g[1]) continue;
+                if (sws.some(s => s[0] === nnx && s[1] === nny)) continue;
+                if (orbs.includes(`${nnx},${nny}`)) continue;
+                if (portals.some(p => p[0] === nnx && p[1] === nny)) continue;
                 if (newBlocks.some(b => b[0] === nnx && b[1] === nny)) continue;
                 const bgMatch = gates.find(g => g[0] === nnx && g[1] === nny);
                 if (bgMatch) {
@@ -282,6 +309,7 @@
                 } else {
                   newBlocks[bIdx] = [nnx, nny];
                 }
+                didPushBlock = true;
               }
 
               // Collapsed fragile tile or open water collision
@@ -302,20 +330,25 @@
 
               let cx = nx;
               let cy = ny;
+              let didUsePortal = cur.usedPortal;
+              let didUseWind = cur.usedWind;
               const newOrbs = new Set(cur.orbs);
 
               // Kitsune Portals
               if (portals.length === 2) {
                 if (cx === portals[0][0] && cy === portals[0][1]) {
                   cx = portals[1][0]; cy = portals[1][1];
+                  didUsePortal = true;
                 } else if (cx === portals[1][0] && cy === portals[1][1]) {
                   cx = portals[0][0]; cy = portals[0][1];
+                  didUsePortal = true;
                 }
               }
               if (orbs.includes(`${cx},${cy}`)) newOrbs.add(`${cx},${cy}`);
 
               // Wind currents
               let pushes = 0;
+              let windInvalid = false;
               while (pushes < 10) {
                 const wm = winds.find(w => w[0] === cx && w[1] === cy);
                 if (!wm) break;
@@ -329,23 +362,39 @@
                   const color = wGate[2] || "magenta";
                   if (!cur.gates.has(color) && !(gates.length === 1 && cur.gates.size > 0)) break;
                 }
+                if (water.has(`${wx},${wy}`) || fragile.has(`${wx},${wy}`) || newBlocks.some(b => b[0] === wx && b[1] === wy)) {
+                  windInvalid = true;
+                  break;
+                }
                 cx = wx;
                 cy = wy;
                 pushes++;
+                didUseWind = true;
                 if (orbs.includes(`${cx},${cy}`)) newOrbs.add(`${cx},${cy}`);
                 if (portals.length === 2) {
                   if (cx === portals[0][0] && cy === portals[0][1]) {
                     cx = portals[1][0]; cy = portals[1][1];
+                    didUsePortal = true;
                   } else if (cx === portals[1][0] && cy === portals[1][1]) {
                     cx = portals[0][0]; cy = portals[0][1];
+                    didUsePortal = true;
                   }
                 }
               }
+              if (windInvalid) continue;
 
               // Torii Goal
               if (cx === lvl.g[0] && cy === lvl.g[1]) {
                 if (newOrbs.size === orbs.length) {
-                  return { solved: true, steps: cur.path.length + 1, path: [...cur.path, "F"] };
+                  return {
+                    solved: true,
+                    steps: cur.path.length + 1,
+                    path: [...cur.path, "F"],
+                    pushedBlock: didPushBlock,
+                    usedWind: didUseWind,
+                    usedPortal: didUsePortal,
+                    usedFragile: newCollapsed.size > 0
+                  };
                 }
               }
 
@@ -361,6 +410,9 @@
                   collapsed: newCollapsed,
                   blocks: newBlocks,
                   bridges: newBridges,
+                  pushedBlock: didPushBlock,
+                  usedWind: didUseWind,
+                  usedPortal: didUsePortal,
                   path: [...cur.path, "F"]
                 });
               }
@@ -418,188 +470,286 @@
       if (floor >= 45) { w = 8; h = 8; }
 
       const baseWalls = buildOuterWalls(w, h);
-      const seed = ((this.runSeed * 47) + (floor * 1013) + (floor * floor * 31)) >>> 0;
-      const rng = mulberry32(seed);
-
-      const reserved = new Set();
-
-      // 4 Rotational Orientations (S->N, W->E, E->W, N->S)
-      const orientation = floor % 4;
-      let s, g;
-      if (orientation === 1) {
-        // S -> N
-        s = [1 + (floor % 2), h - 2, "N"];
-        g = [w - 2 - ((floor + 1) % 2), 1];
-      } else if (orientation === 2) {
-        // W -> E
-        s = [1, 1 + (floor % 2), "E"];
-        g = [w - 2, h - 2 - ((floor + 1) % 2)];
-      } else if (orientation === 3) {
-        // E -> W
-        s = [w - 2, h - 2 - (floor % 2), "W"];
-        g = [1, 1 + ((floor + 1) % 2)];
-      } else {
-        // N -> S
-        s = [w - 2 - (floor % 2), 1, "S"];
-        g = [1 + ((floor + 1) % 2), h - 2];
+      if (!this.usedFloorSignatures) {
+        this.usedFloorSignatures = new Set();
       }
 
-      reserved.add(`${s[0]},${s[1]}`);
-      reserved.add(`${g[0]},${g[1]}`);
+      const solverFn = solveTowerLevel;
 
-      // Feature toggles scaled progressively
-      const hasDualGates = (floor >= 10 && (floor % 4 === 0 || isBossFloor));
-      const hasRelic = (floor >= 3 && (floor % 3 !== 2 || isBossFloor));
-      const hasPortal = (floor >= 4 && (floor % 2 === 0 || isBossFloor));
-      const hasWind = (floor >= 7 && (floor % 3 === 1 || isFujiBiome));
-      const hasFragile = (floor >= 6 && (floor % 4 === 1 || (isBossFloor && floor >= 15)));
-      const hasBlock = (floor >= 8 && (floor % 4 === 3 || (isBossFloor && floor >= 20)));
+      const hasDualGates = (floor >= 10 && (floor % 3 === 0 || isBossFloor || (floor >= 20 && floor % 2 === 0)));
+      const hasRelic = (floor >= 3);
+      const relicCount = (floor >= 40 && (isBossFloor || floor % 3 === 0)) ? 3 : (floor >= 15 ? 2 : 1);
+      const hasPortal = (floor >= 4 && (floor % 3 === 1 || isBossFloor || (floor >= 18 && floor % 2 === 1)));
+      const hasWind = (floor >= 7 && (floor >= 15 || floor % 2 === 1 || isFujiBiome));
+      const windCount = floor >= 45 ? 3 : (floor >= 15 ? 2 : 1);
+      const hasFragile = (floor >= 6 && (floor % 3 === 0 || (floor >= 16 && floor % 2 === 0) || isBossFloor));
+      const fragileCount = floor >= 25 ? 2 : 1;
+      const hasBlock = (floor >= 8 && (floor % 3 === 2 || floor >= 15));
+      const minStepsRequired = floor >= 45 ? 15 : (floor >= 20 ? 13 : (floor >= 15 ? 11 : (floor >= 8 ? 8 : 5)));
 
-      // 1. Primary Switch & Gate (Cyan)
-      const sw = [];
-      const gates = [];
-      const orbs = [];
-      let portals = undefined;
-      let winds = undefined;
-      let fragileTiles = undefined;
-      let waterTiles = undefined;
-      let blockTiles = undefined;
+      let bestCandidate = null;
 
-      const [swX, swY] = getFreeTile(reserved, rng, w, h);
-      sw.push([swX, swY, "cyan"]);
+      for (let attempt = 0; attempt < 65; attempt++) {
+        const seed = ((this.runSeed * 47) + (floor * 1013) + (floor * floor * 31) + (attempt * 7919)) >>> 0;
+        const rng = mulberry32(seed);
+        const reserved = new Set();
 
-      const [gateX, gateY] = getFreeTile(reserved, rng, w, h);
-      gates.push([gateX, gateY, "cyan"]);
+        const orientation = (floor + attempt) % 4;
+        const innerSpanW = Math.max(1, w - 2);
+        const innerSpanH = Math.max(1, h - 2);
+        const offsetA = (floor + attempt) % innerSpanW;
+        const offsetB = (floor * 3 + attempt) % innerSpanW;
+        const offsetYA = (floor + attempt) % innerSpanH;
+        const offsetYB = (floor * 3 + attempt) % innerSpanH;
 
-      // 2. Secondary Switch & Gate (Magenta)
-      if (hasDualGates) {
-        const [sw2X, sw2Y] = getFreeTile(reserved, rng, w, h);
-        sw.push([sw2X, sw2Y, "magenta"]);
+        let s, g;
+        if (orientation === 1) {
+          s = [1 + offsetA, h - 2, "N"];
+          g = [1 + offsetB, 1];
+        } else if (orientation === 2) {
+          s = [1, 1 + offsetYA, "E"];
+          g = [w - 2, 1 + offsetYB];
+        } else if (orientation === 3) {
+          s = [w - 2, 1 + offsetYA, "W"];
+          g = [1, 1 + offsetYB];
+        } else {
+          s = [1 + offsetA, 1, "S"];
+          g = [1 + offsetB, h - 2];
+        }
 
-        const [gate2X, gate2Y] = getFreeTile(reserved, rng, w, h);
-        gates.push([gate2X, gate2Y, "magenta"]);
-      }
+        if (Math.abs(s[0] - g[0]) + Math.abs(s[1] - g[1]) < 3) {
+          g = [w - 1 - s[0], h - 1 - s[1]];
+        }
 
-      // 3. Relics (Orbs)
-      if (hasRelic) {
-        const [rx, ry] = getFreeTile(reserved, rng, w, h);
-        orbs.push([rx, ry]);
-        if (isBossFloor && floor >= 15) {
-          const [rx2, ry2] = getFreeTile(reserved, rng, w, h);
-          orbs.push([rx2, ry2]);
+        reserved.add(`${s[0]},${s[1]}`);
+        reserved.add(`${g[0]},${g[1]}`);
+
+        const sw = [];
+        const gates = [];
+        const orbs = [];
+        let portals = undefined;
+        let winds = undefined;
+        const fragileList = [];
+        const waterList = [];
+        const blockList = [];
+        const innerWalls = [];
+
+        const getOrthNeighbors = (tx, ty) => [
+          [tx + 1, ty],
+          [tx - 1, ty],
+          [tx, ty + 1],
+          [tx, ty - 1]
+        ].filter(([nx, ny]) => nx >= 1 && nx < w - 1 && ny >= 1 && ny < h - 1 && !(nx === s[0] && ny === s[1]));
+
+        // 1. Enclose Goal g with primary cyan gate on one interior neighbor and walls on the others
+        const gNeighbors = getOrthNeighbors(g[0], g[1]);
+        const [swX, swY] = getFreeTile(reserved, rng, w, h);
+        sw.push([swX, swY, "cyan"]);
+
+        if (gNeighbors.length > 0) {
+          const openNeighbors = gNeighbors.filter(([nx, ny]) => !reserved.has(`${nx},${ny}`));
+          const gateChoices = openNeighbors.length > 0 ? openNeighbors : gNeighbors;
+          const gatePos = gateChoices[Math.floor(rng() * gateChoices.length)];
+          gates.push([gatePos[0], gatePos[1], "cyan"]);
+          reserved.add(`${gatePos[0]},${gatePos[1]}`);
+          for (const [nx, ny] of gNeighbors) {
+            if (nx === gatePos[0] && ny === gatePos[1]) continue;
+            if (!reserved.has(`${nx},${ny}`)) {
+              innerWalls.push([nx, ny]);
+              reserved.add(`${nx},${ny}`);
+            }
+          }
+        } else {
+          const [gateX, gateY] = getFreeTile(reserved, rng, w, h);
+          gates.push([gateX, gateY, "cyan"]);
+        }
+
+        // 2. Secondary Switch & Gate (Magenta) enclosing sw[0] on early attempts so BOTH gates must be opened
+        if (hasDualGates && attempt < 30) {
+          const [sw2X, sw2Y] = getFreeTile(reserved, rng, w, h);
+          const sw0Neighbors = getOrthNeighbors(swX, swY).filter(([nx, ny]) => !reserved.has(`${nx},${ny}`));
+          if (sw0Neighbors.length >= 2) {
+            sw.push([sw2X, sw2Y, "magenta"]);
+            const g2Pos = sw0Neighbors[Math.floor(rng() * sw0Neighbors.length)];
+            gates.push([g2Pos[0], g2Pos[1], "magenta"]);
+            reserved.add(`${g2Pos[0]},${g2Pos[1]}`);
+            for (const [nx, ny] of sw0Neighbors) {
+              if (nx === g2Pos[0] && ny === g2Pos[1]) continue;
+              if (!reserved.has(`${nx},${ny}`)) {
+                innerWalls.push([nx, ny]);
+                reserved.add(`${nx},${ny}`);
+              }
+            }
+          }
+        }
+
+        // 3. Relics (Orbs: 1 to 3)
+        if (hasRelic) {
+          const targetOrbs = attempt < 40 ? relicCount : 1;
+          for (let oi = 0; oi < targetOrbs; oi++) {
+            const [rx, ry] = getFreeTile(reserved, rng, w, h);
+            orbs.push([rx, ry]);
+          }
+        }
+
+        // 4. Pushable Sacred Stone Boulder (Block) + optional Water Bridge setup
+        if (hasBlock && attempt < 45) {
+          let placedInteractiveBlock = false;
+          // Try placing a pushable block in front of a water tile or along the start/orb line so KOMA pushes it
+          const [dxS, dyS] = DELTA[s[2]];
+          const frontX = s[0] + dxS;
+          const frontY = s[1] + dyS;
+          const pushDestX = frontX + dxS;
+          const pushDestY = frontY + dyS;
+          if (
+            attempt % 2 === 0 &&
+            frontX >= 1 && frontX < w - 1 && frontY >= 1 && frontY < h - 1 &&
+            pushDestX >= 1 && pushDestX < w - 1 && pushDestY >= 1 && pushDestY < h - 1 &&
+            !reserved.has(`${frontX},${frontY}`) && !reserved.has(`${pushDestX},${pushDestY}`)
+          ) {
+            reserved.add(`${frontX},${frontY}`);
+            blockList.push([frontX, frontY]);
+            if (floor >= 15 && attempt % 4 === 0) {
+              reserved.add(`${pushDestX},${pushDestY}`);
+              waterList.push([pushDestX, pushDestY]);
+            }
+            placedInteractiveBlock = true;
+          }
+          if (!placedInteractiveBlock) {
+            const [bx, by] = getFreeTile(reserved, rng, w, h);
+            blockList.push([bx, by]);
+          }
+        }
+
+        // 5. Fragile Stepping Stones over Water
+        if (hasFragile && attempt < 45) {
+          const count = attempt < 30 ? fragileCount : 1;
+          for (let fi = 0; fi < count; fi++) {
+            const [fx, fy] = getFreeTile(reserved, rng, w, h);
+            fragileList.push([fx, fy]);
+            waterList.push([fx, fy]);
+          }
+        }
+
+        // 6. Kitsune Portals
+        if (hasPortal && attempt < 40) {
+          const p1 = getFreeTile(reserved, rng, w, h);
+          const p2 = getFreeTile(reserved, rng, w, h);
+          portals = [p1, p2];
+        }
+
+        // 7. Wind Currents (1 to 3 directional gusts)
+        if (hasWind && attempt < 45) {
+          const windDirs = ["N", "E", "S", "W"];
+          const count = attempt < 30 ? windCount : 1;
+          winds = [];
+          for (let wi = 0; wi < count; wi++) {
+            const wdir = windDirs[(floor + attempt + wi) % 4];
+            const [wx, wy] = getFreeTile(reserved, rng, w, h);
+            winds.push([wx, wy, wdir]);
+          }
+        }
+
+        // 8. Labyrinth Inner Walls (scales up from Floor 15-20+)
+        const baseWallTarget = floor >= 45 ? 5 : (floor >= 20 ? 4 : (floor >= 15 ? 3 : Math.min(2, Math.floor(floor / 6))));
+        const extraWallCount = Math.max(0, baseWallTarget - Math.floor(attempt / 15));
+        for (let i = 0; i < extraWallCount; i++) {
+          const tile = getFreeTile(reserved, rng, w, h);
+          innerWalls.push(tile);
+        }
+
+        const candidate = {
+          n: isBossFloor ? `Große Schrein-Pforte · Ebene ${floor}` : `Turm-Ebene ${floor}`,
+          c: isBossFloor ? `Turm-Meilenstein · Prüfung ${floor}` : `Turm der 100 Prüfungen`,
+          t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte ⛩️" : "Aufstieg"}`,
+          d: isBossFloor
+            ? `Meilenstein-Prüfung! Alle heiligen Schrein-Mechaniken fordern höchste Konzentration.`
+            : `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
+          w, h,
+          s, g,
+          sw, gates,
+          walls: [...baseWalls, ...innerWalls],
+          orbs: orbs.length > 0 ? orbs : undefined,
+          portals,
+          winds: winds && winds.length > 0 ? winds : undefined,
+          fragile: fragileList.length > 0 ? fragileList : undefined,
+          blocks: blockList.length > 0 ? blockList : undefined,
+          water: waterList.length > 0 ? waterList : undefined,
+          maxCredits: Math.max(2, (isBossFloor ? 4 : 3) + this.extraCredits)
+        };
+
+        if (isFujiBiome) {
+          candidate.isSnow = true;
+          candidate.theme = "fuji";
+        }
+
+        const sol = solverFn(candidate);
+        if (!sol || !sol.solved) continue;
+
+        // If dual gates were generated but only 1 switch was used, prune the unused second switch/gate
+        const actionsUsed = sol.path.filter(c => c === "A").length;
+        if (candidate.sw.length > 1 && actionsUsed === 1) {
+          candidate.sw = [candidate.sw[0]];
+          candidate.gates = [candidate.gates[0]];
+        }
+        if (actionsUsed < candidate.sw.length) continue;
+
+        // Enforce progressive difficulty (minimum solution steps) and active obstacle usage on early attempts
+        const reqSteps = Math.max(5, minStepsRequired - Math.floor(attempt / 12) * 2);
+        if (sol.steps < reqSteps) continue;
+
+        if (hasBlock && candidate.blocks && attempt < 22 && !sol.pushedBlock) continue;
+        if (hasWind && candidate.winds && attempt < 18 && !sol.usedWind) continue;
+
+        const pathSig = `PATH:${sol.path.join("")}`;
+        const layoutSig = `LAYOUT:${w}x${h}|${s.join(",")}->${g.join(",")}|sw:${candidate.sw.map(x => x.join(",")).join(";")}|gt:${candidate.gates.map(x => x.join(",")).join(";")}`;
+
+        candidate.solverSolution = sol;
+        candidate.solution = sol.path;
+        candidate.limit = Math.max(16, Math.min(36, (sol.steps || 10) + 4)) + this.extraSlots;
+        candidate.isTower = true;
+        candidate.towerFloor = floor;
+        candidate.isBossFloor = isBossFloor;
+
+        if (!bestCandidate) {
+          bestCandidate = candidate;
+        }
+
+        if (!this.usedFloorSignatures.has(pathSig) && !this.usedFloorSignatures.has(layoutSig)) {
+          this.usedFloorSignatures.add(pathSig);
+          this.usedFloorSignatures.add(layoutSig);
+          return candidate;
         }
       }
 
-      // 4. Kitsune Portals
-      if (hasPortal) {
-        const p1 = getFreeTile(reserved, rng, w, h);
-        const p2 = getFreeTile(reserved, rng, w, h);
-        portals = [p1, p2];
+      if (bestCandidate) {
+        return bestCandidate;
       }
 
-      // 5. Winds
-      if (hasWind) {
-        const windDirs = ["N", "E", "S", "W"];
-        const wdir = windDirs[floor % 4];
-        const [wx, wy] = getFreeTile(reserved, rng, w, h);
-        winds = [[wx, wy, wdir]];
-      }
-
-      // 6. Fragile Stepping Stones
-      if (hasFragile) {
-        const [fx, fy] = getFreeTile(reserved, rng, w, h);
-        fragileTiles = [[fx, fy]];
-        waterTiles = [[fx, fy]];
-      }
-
-      // 7. Pushable Sacred Boulder
-      if (hasBlock) {
-        const [bx, by] = getFreeTile(reserved, rng, w, h);
-        blockTiles = [[bx, by]];
-      }
-
-      // 8. Floor-specific inner obstacle walls (1 to 5 walls)
-      const wallCount = Math.min(5, 1 + Math.floor(floor / 20));
-      const innerWalls = [];
-      for (let i = 0; i < wallCount; i++) {
-        const tile = getFreeTile(reserved, rng, w, h);
-        innerWalls.push(tile);
-      }
-
-      const lvl = {
+      // Guaranteed fallback if all random candidates were exhausted
+      const fallbackS = [1, h - 2, "N"];
+      const fallbackG = [w - 2, 1];
+      const fallbackLvl = {
         n: isBossFloor ? `Große Schrein-Pforte · Ebene ${floor}` : `Turm-Ebene ${floor}`,
         c: isBossFloor ? `Turm-Meilenstein · Prüfung ${floor}` : `Turm der 100 Prüfungen`,
         t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte ⛩️" : "Aufstieg"}`,
-        d: isBossFloor 
-          ? `Meilenstein-Prüfung! Alle heiligen Schrein-Mechaniken fordern höchste Konzentration.`
-          : `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
+        d: `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
         w, h,
-        s, g,
-        sw, gates,
-        walls: [...baseWalls, ...innerWalls],
-        orbs: orbs.length > 0 ? orbs : undefined,
-        portals, winds,
-        fragile: fragileTiles,
-        blocks: blockTiles,
-        water: waterTiles,
+        s: fallbackS,
+        g: fallbackG,
+        sw: [[1, 1, "cyan"]],
+        gates: [[w - 3, 1, "cyan"]],
+        walls: [...baseWalls, [w - 2, 2]],
         maxCredits: Math.max(2, (isBossFloor ? 4 : 3) + this.extraCredits)
       };
-
-      if (isFujiBiome) {
-        lvl.isSnow = true;
-        lvl.theme = "fuji";
-      }
-
-      // Solvability check & iterative fallback
-      const solverFn = (window.KomaSolver && window.KomaSolver.solveLevel) || window.solveLevel || solveTowerLevel;
-      let sol = solverFn(lvl);
-
-      while (!sol.solved && innerWalls.length > 0) {
-        innerWalls.pop();
-        lvl.walls = [...baseWalls, ...innerWalls];
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved && lvl.blocks) {
-        lvl.blocks = undefined;
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved && lvl.fragile) {
-        lvl.fragile = undefined;
-        if (!lvl.blocks) lvl.water = undefined;
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved && lvl.winds) {
-        lvl.winds = undefined;
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved && lvl.portals) {
-        lvl.portals = undefined;
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved && lvl.gates.length > 1) {
-        lvl.gates = [lvl.gates[0]];
-        lvl.sw = [lvl.sw[0]];
-        sol = solverFn(lvl);
-      }
-
-      if (!sol.solved) {
-        lvl.walls = baseWalls;
-        sol = solverFn(lvl);
-      }
-
-      lvl.solverSolution = sol;
-      lvl.solution = sol.path;
-      lvl.limit = Math.max(16, Math.min(36, (sol.steps || 10) + 4)) + this.extraSlots;
-      lvl.isTower = true;
-      lvl.towerFloor = floor;
-      lvl.isBossFloor = isBossFloor;
-
-      return lvl;
+      const fallbackSol = solverFn(fallbackLvl);
+      fallbackLvl.solverSolution = fallbackSol;
+      fallbackLvl.solution = fallbackSol.path;
+      fallbackLvl.limit = Math.max(16, Math.min(36, (fallbackSol.steps || 10) + 4)) + this.extraSlots;
+      fallbackLvl.isTower = true;
+      fallbackLvl.towerFloor = floor;
+      fallbackLvl.isBossFloor = isBossFloor;
+      return fallbackLvl;
     }
 
     /**
@@ -652,9 +802,36 @@
       if (this.zenPerfectCount > (this.data.bestZenCount || 0)) {
         this.data.bestZenCount = this.zenPerfectCount;
       }
-      this.saveData();
 
       const clearedFloor = this.floor;
+
+      if (clearedFloor >= 100) {
+        this.data.towerCleared = true;
+        this.isActive = false;
+        this.saveData();
+        if (typeof localStorage !== "undefined") {
+          try {
+            localStorage.setItem("koma_conquered_tower", "true");
+          } catch (e) {}
+        }
+        this.updateUI();
+        return {
+          type: "tower_victory",
+          floor: clearedFloor,
+          score: this.score,
+          floorScore,
+          basePoints,
+          lanternBonus,
+          zenBonus,
+          zenTier,
+          zenLabel,
+          stepsUsed,
+          optimalSteps,
+          isNewBestFloor
+        };
+      }
+
+      this.saveData();
       const isBoss = (clearedFloor % 5 === 0);
 
       if (isBoss) {

@@ -61,7 +61,7 @@ const ACHIEVEMENTS = [
     getProgress: (game) => {
       if (typeof window === "undefined" || !window.KOMA_SKINS) return 1;
       const totalStars = game.getTotalStars();
-      return Object.values(window.KOMA_SKINS).filter(s => totalStars >= s.starsRequired).length;
+      return Object.values(window.KOMA_SKINS).filter(s => !s.specialUnlock && totalStars >= s.starsRequired).length;
     }
   },
   {
@@ -73,6 +73,24 @@ const ACHIEVEMENTS = [
     desc: "Löse 5 Level mit der perfekten Mindestanzahl an Befehlen.",
     goal: 5,
     getProgress: (game) => game.stats.minimalWins || 0
+  },
+  {
+    id: "tower_conqueror",
+    name: "Turm-Bezwinger",
+    jpName: "百層制覇",
+    icon: "🏯",
+    iconKey: "pagoda",
+    desc: "Bezwinge alle 100 Ebenen im Turm der 100 Prüfungen.",
+    goal: 100,
+    getProgress: () => {
+      const conquered = typeof localStorage !== "undefined" && localStorage.getItem("koma_conquered_tower") === "true";
+      if (conquered) return 100;
+      if (typeof TowerTrial !== "undefined") {
+        if (typeof TowerTrial.isTowerConquered === "function" && TowerTrial.isTowerConquered()) return 100;
+        return Math.min(100, TowerTrial.getBestFloor() || 0);
+      }
+      return 0;
+    }
   }
 ];
 
@@ -491,11 +509,11 @@ class GameEngine {
       });
     }
 
-    // Sound Toggle (Master Mute / Unmute)
+    // Sound Toggle (SFX Mute / Unmute)
     if (this.dom.btnSoundToggle) {
       this.dom.btnSoundToggle.addEventListener("click", () => {
         Sound.init();
-        Sound.toggleMasterMute();
+        Sound.toggleSfx();
         this.updateAudioButtons();
       });
     }
@@ -1084,6 +1102,7 @@ class GameEngine {
     // Mobile Hub Audio Toggles
     if (this.dom.btnMobileMusicToggle) {
       this.dom.btnMobileMusicToggle.addEventListener("click", () => {
+        this.triggerHaptic(15);
         if (typeof Sound !== "undefined" && typeof Sound.toggleBgm === "function") {
           Sound.toggleBgm();
           this.updateAudioButtons();
@@ -1092,8 +1111,13 @@ class GameEngine {
     }
     if (this.dom.btnMobileSoundToggle) {
       this.dom.btnMobileSoundToggle.addEventListener("click", () => {
-        if (typeof Sound !== "undefined" && typeof Sound.toggleMaster === "function") {
-          Sound.toggleMaster();
+        this.triggerHaptic(15);
+        if (typeof Sound !== "undefined") {
+          if (typeof Sound.toggleSfx === "function") {
+            Sound.toggleSfx();
+          } else if (typeof Sound.toggleMasterMute === "function") {
+            Sound.toggleMasterMute();
+          }
           this.updateAudioButtons();
         }
       });
@@ -1217,18 +1241,18 @@ class GameEngine {
 
   updateAudioButtons() {
     const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    const isSfxMuted = typeof Sound.isSfxMuted === "function" ? Sound.isSfxMuted() : Boolean(Sound.sfxMuted || Sound.masterMuted);
 
-    // 1. Update Master Sound Toggle Button
+    // 1. Update SFX Sound Toggle Button
     if (this.dom.btnSoundToggle) {
-      const isMuted = Sound.masterMuted;
-      const sfxSvg = isMuted 
+      const sfxSvg = isSfxMuted 
         ? (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.soundOff(18) : "🔇")
         : (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.soundOn(18) : "🔊");
-      this.dom.btnSoundToggle.innerHTML = `${sfxSvg}<span class="sr-only">${isMuted ? "🔇" : "🔊"}</span>`;
-      this.dom.btnSoundToggle.title = isMuted 
-        ? (isEn ? "Unmute all audio (Sound on)" : "Gesamten Ton aktivieren (Ton an)")
-        : (isEn ? "Mute all audio (Mute)" : "Gesamten Ton stummschalten (Mute)");
-      this.dom.btnSoundToggle.classList.toggle("muted", isMuted);
+      this.dom.btnSoundToggle.innerHTML = `${sfxSvg}<span class="sr-only">${isSfxMuted ? "🔇" : "🔊"}</span>`;
+      this.dom.btnSoundToggle.title = isSfxMuted 
+        ? (isEn ? "Unmute sound effects (SFX on)" : "Sound-Effekte aktivieren (SFX an)")
+        : (isEn ? "Mute sound effects (SFX off)" : "Sound-Effekte stummschalten (SFX aus)");
+      this.dom.btnSoundToggle.classList.toggle("muted", isSfxMuted);
     }
 
     // 2. Update BGM Music Toggle Button
@@ -1264,15 +1288,14 @@ class GameEngine {
       this.dom.btnMobileMusicToggle.classList.toggle("active", isMusicActive);
     }
     if (this.dom.btnMobileSoundToggle) {
-      const isMuted = Sound.masterMuted;
       const sIcon = typeof KOMA_ICONS !== "undefined"
-        ? (isMuted ? KOMA_ICONS.soundOff(16) : KOMA_ICONS.soundOn(16))
+        ? (isSfxMuted ? KOMA_ICONS.soundOff(16) : KOMA_ICONS.soundOn(16))
         : "";
-      const sText = isMuted 
+      const sText = isSfxMuted 
         ? (isEn ? "Muted" : "Stumm")
         : (isEn ? "SFX On" : "SFX Aktiv");
       this.dom.btnMobileSoundToggle.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${sIcon} <span>${sText}</span></span>`;
-      this.dom.btnMobileSoundToggle.classList.toggle("active", !isMuted);
+      this.dom.btnMobileSoundToggle.classList.toggle("active", !isSfxMuted);
     }
 
     // 4. Update Main Home Screen Audio Buttons
@@ -1285,11 +1308,10 @@ class GameEngine {
       this.dom.btnHomeAudioMusic.classList.toggle("playing", isMusicActive);
     }
     if (this.dom.btnHomeAudioSound) {
-      const isMuted = Sound.masterMuted;
       this.dom.btnHomeAudioSound.innerHTML = typeof KOMA_ICONS !== "undefined"
-        ? (isMuted ? KOMA_ICONS.soundOff(18) : KOMA_ICONS.soundOn(18))
+        ? (isSfxMuted ? KOMA_ICONS.soundOff(18) : KOMA_ICONS.soundOn(18))
         : "";
-      this.dom.btnHomeAudioSound.classList.toggle("muted", isMuted);
+      this.dom.btnHomeAudioSound.classList.toggle("muted", isSfxMuted);
     }
   }
 
@@ -1396,6 +1418,19 @@ class GameEngine {
     if (skin.specialUnlock === "boss_fuji") {
       try {
         return typeof localStorage !== "undefined" && localStorage.getItem("koma_defeated_ryujin") === "true";
+      } catch (e) {
+        return false;
+      }
+    }
+    if (skin.specialUnlock === "tower_100") {
+      try {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("koma_conquered_tower") === "true") {
+          return true;
+        }
+        if (typeof TowerTrial !== "undefined" && typeof TowerTrial.isTowerConquered === "function") {
+          return TowerTrial.isTowerConquered();
+        }
+        return false;
       } catch (e) {
         return false;
       }
@@ -2027,6 +2062,17 @@ class GameEngine {
             <span class="mobile-skin-prog-txt">${bossTxt}</span>
           </div>
         `;
+      } else if (origSkin.specialUnlock === "tower_100") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const towerBadge = isEn ? "Tower" : "Turm";
+        const towerTxt = isEn ? "🏯 Conquer Tower Floor 100" : "🏯 Turm Ebene 100 bezwingen";
+        statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} ${towerBadge}</span>`;
+        actionBtn = `
+          <div class="mobile-skin-progress">
+            <span class="mobile-skin-prog-txt">${towerTxt}</span>
+          </div>
+        `;
       } else {
         const starSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(11, "var(--gold)", false) : "⭐";
         const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
@@ -2166,6 +2212,17 @@ class GameEngine {
         actionButton = `
           <div class="skin-progress-container">
             <span class="skin-progress-text">${bossText}</span>
+          </div>
+        `;
+      } else if (origSkin.specialUnlock === "tower_100") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const towerVictory = isEn ? "Tower 100" : "Turm 100";
+        const towerText = isEn ? "🏯 Conquer Floor 100 in the Tower of 100 Trials" : "🏯 Bezwinge Ebene 100 im Turm der 100 Prüfungen";
+        statusBadge = `<span class="skin-badge locked">${lockSvg} ${towerVictory}</span>`;
+        actionButton = `
+          <div class="skin-progress-container">
+            <span class="skin-progress-text">${towerText}</span>
           </div>
         `;
       } else {
@@ -4097,7 +4154,65 @@ class GameEngine {
         const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         const ptsWord = isEn ? "Pts." : "Pkt.";
 
-        if (res.type === "altar") {
+        if (res.type === "tower_victory") {
+          const vicMsg = isEn
+            ? `🏯 TOWER OF 100 TRIALS CONQUERED!${zenFeedback} (+${earnedPts} ${ptsWord})!`
+            : `🏯 TURM DER 100 PRÜFUNGEN BEZWUNGEN!${zenFeedback} (+${earnedPts} Pkt.)!`;
+          this.setFeedback(vicMsg, "good");
+          this.checkAchievements();
+          this.renderSkinsModal();
+          this.renderMobileSkins();
+          this.updateHomeScreen();
+          if (typeof Sound !== "undefined" && typeof Sound.playBossVictoryFanfare === "function") {
+            Sound.playBossVictoryFanfare();
+          }
+          setTimeout(() => {
+            if (this.dom.modalWinTitle) {
+              this.dom.modalWinTitle.textContent = isEn
+                ? "🏯 Tower of 100 Trials Conquered!"
+                : "🏯 Turm der 100 Prüfungen bezwungen!";
+            }
+            if (this.dom.modalWinText) {
+              this.dom.modalWinText.textContent = isEn
+                ? `Legendary mastery! You conquered all 100 floors with a total score of ${res.score} points!`
+                : `Legendäre Meisterschaft! Du hast alle 100 Ebenen mit insgesamt ${res.score} Punkten bezwungen!`;
+            }
+            if (this.dom.modalWinCredits) {
+              this.dom.modalWinCredits.textContent = isEn
+                ? "Trophy 'Tower Conqueror' & Exclusive Skin unlocked!"
+                : "Errungenschaft 'Turm-Bezwinger' & exklusiver Turm-Skin freigeschaltet!";
+            }
+            if (this.dom.modalWinSkinNotice && window.KOMA_SKINS && window.KOMA_SKINS.pagoda) {
+              const pagodaSkin = window.KOMA_SKINS.pagoda;
+              const transPagoda = typeof I18N !== "undefined" ? I18N.getSkin("pagoda", pagodaSkin) : pagodaSkin;
+              const towerKicker = isEn ? "EXCLUSIVE TOWER 100 SKIN UNLOCKED!" : "EXKLUSIVER TURM-100-SKIN FREIGESCHALTET!";
+              const equipBtnTxt = typeof I18N !== "undefined" ? I18N.t("wardrobe_equip_btn") : "Ausrüsten";
+              this.dom.modalWinSkinNotice.innerHTML = `
+                <div class="win-skin-banner boss-skin-banner">
+                  <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("pagoda", 32, pagodaSkin.accentColor || "#ff9e00") : "🏯"}</span>
+                  <div class="win-skin-info">
+                    <span class="win-skin-kicker">${towerKicker}</span>
+                    <strong class="win-skin-name">${transPagoda.name} (${transPagoda.jpName})</strong>
+                    <div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">${transPagoda.subtitle}</div>
+                  </div>
+                  <button class="win-skin-btn" id="btnWinOpenSkins">${equipBtnTxt}</button>
+                </div>
+              `;
+              this.dom.modalWinSkinNotice.style.display = "block";
+              const btnNotice = document.getElementById("btnWinOpenSkins");
+              if (btnNotice) {
+                btnNotice.addEventListener("click", () => {
+                  if (this.dom.modalWin) this.dom.modalWin.classList.remove("active");
+                  this.equipSkin("pagoda");
+                  this.openSkinsModal();
+                });
+              }
+            }
+            if (this.dom.modalWin) {
+              this.dom.modalWin.classList.add("active");
+            }
+          }, 650);
+        } else if (res.type === "altar") {
           const altarMsg = isEn 
             ? `⛩️ GREAT SHRINE GATE CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Altar opening...`
             : `⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`;
