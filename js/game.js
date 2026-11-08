@@ -1687,6 +1687,20 @@ class GameEngine {
     this.updateHomeScreen();
   }
 
+  syncAdBannerVisibility() {
+    if (typeof window === "undefined" || !window.adManager || typeof window.adManager.updateBannerForLevel !== "function") {
+      return;
+    }
+    const isHomeActive = typeof document !== "undefined" && document.body && document.body.classList.contains("home-active");
+    const isSpecialMode = Boolean(this.isTowerMode || this.isDailyTrial);
+    const levelNumber = (this.currentLevelIdx >= 0 ? this.currentLevelIdx + 1 : 1);
+    window.adManager.updateBannerForLevel({
+      levelNumber,
+      isHomeActive,
+      isSpecialMode
+    });
+  }
+
   showHomeScreen() {
     this.updateHomeScreen();
     if (this.dom.homeScreen) {
@@ -1698,6 +1712,7 @@ class GameEngine {
     if (this.renderer && typeof this.renderer.enterHomeScreenMode === "function") {
       this.renderer.enterHomeScreenMode();
     }
+    this.syncAdBannerVisibility();
   }
 
   hideHomeScreen() {
@@ -1710,6 +1725,7 @@ class GameEngine {
     if (this.renderer && typeof this.renderer.exitHomeScreenMode === "function") {
       this.renderer.exitHomeScreenMode();
     }
+    this.syncAdBannerVisibility();
   }
 
   updateHomeScreen() {
@@ -2385,6 +2401,7 @@ class GameEngine {
     this.renderQueue();
     this.renderLevelDrawer();
     this.renderCameraCredits();
+    this.syncAdBannerVisibility();
   }
 
   loadTowerFloor(towerLevel = null) {
@@ -2441,6 +2458,7 @@ class GameEngine {
     this.renderQueue();
     this.renderLevelDrawer();
     this.renderCameraCredits();
+    this.syncAdBannerVisibility();
   }
 
   showTowerAltar(choices, floor) {
@@ -2607,6 +2625,7 @@ class GameEngine {
     this.renderLevelDrawer();
     this.renderCameraCredits();
     this.updateHomeScreen();
+    this.syncAdBannerVisibility();
 
     // Check for new mechanic introductions (Erklär-Box)
     const urlParams = (typeof window !== "undefined" && window.location) ? new URLSearchParams(window.location.search) : new URLSearchParams();
@@ -4478,7 +4497,7 @@ class GameEngine {
         }
         if (this.dom.modalWin) this.dom.modalWin.classList.add("active");
         if (typeof window !== "undefined" && window.adManager && typeof window.adManager.showInterstitialAd === "function") {
-          window.adManager.showInterstitialAd();
+          window.adManager.showInterstitialAd(this.currentLevelIdx + 1);
         }
       }, isBoss ? 1100 : 700);
       return;

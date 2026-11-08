@@ -5148,4 +5148,79 @@ body.home-active .ui-overlay {
   font-size: 13px;
 }
 
+/* ==========================================================================
+   Reserved Bottom Banner Ad Bar (Active from Level 6+, hidden on Home & Lvl 1-5)
+   ========================================================================== */
+.bottom-ad-banner-slot {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(50px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(5, 10, 20, 0.96);
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  z-index: 15;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.55);
+}
+
+body.has-banner-ad:not(.home-active) .bottom-ad-banner-slot {
+  display: flex;
+}
+
+body.native-banner-active .bottom-ad-banner-inner {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bottom-ad-banner-inner {
+  width: 320px;
+  max-width: 94vw;
+  height: 44px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(15, 25, 45, 0.95) 0%, rgba(10, 20, 38, 0.95) 100%);
+  border: 1px dashed rgba(0, 240, 255, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.bottom-ad-pill {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 183, 3, 0.2);
+  border: 1px solid rgba(255, 183, 3, 0.5);
+  color: #ffbe0b;
+}
+
+.bottom-ad-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Shift game controls up when bottom banner is active so zero buttons are covered */
+body.has-banner-ad:not(.home-active) .ui-overlay {
+  padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (max-width: 900px) {
+  body.has-banner-ad:not(.home-active) .panel-right {
+    margin-bottom: 6px !important;
+  }
+}
+
+
 

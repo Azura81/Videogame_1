@@ -413,4 +413,56 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
     expect(skinCheck.lvl20Solved).toBe(true);
     expect(skinCheck.lvl20Steps).toBeGreaterThanOrEqual(11);
   });
+
+  test('Bottom Banner Ad is hidden on Levels 1-5 & Home Screen, active from Level 6+, and Interstitials trigger from Level 10 every 4 levels', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#webgl-container');
+
+    // 1. On Home Screen -> Banner hidden
+    let bannerSlot = page.locator('#bottomAdBannerSlot');
+    await expect(bannerSlot).toBeHidden();
+
+    // 2. Enter Level 1 -> Banner hidden (Levels 1-5 are ad-free)
+    await page.evaluate(() => {
+      window.gameInstance.hideHomeScreen();
+      window.gameInstance.loadLevel(0);
+    });
+    await expect(bannerSlot).toBeHidden();
+
+    // Check Level 5 (idx 4) -> still hidden
+    await page.evaluate(() => window.gameInstance.loadLevel(4));
+    await expect(bannerSlot).toBeHidden();
+
+    // 3. Enter Level 6 (idx 5) -> Banner visible!
+    await page.evaluate(() => window.gameInstance.loadLevel(5));
+    await expect(bannerSlot).toBeVisible();
+
+    // 4. Test Interstitial rules (none on Lvl 1-9, first on Lvl 10, then every 4 levels)
+    const interstitialAudit = await page.evaluate(async () => {
+      const mgr = window.adManager;
+      mgr.minInterstitialIntervalMs = 0; // disable time cooldown for unit test check
+      mgr.levelsSinceLastInterstitial = 0;
+      mgr.hasShownFirstInterstitial = false;
+      mgr.lastInterstitialTime = 0;
+
+      const r1 = await mgr.showInterstitialAd(1);
+      const r5 = await mgr.showInterstitialAd(5);
+      const r9 = await mgr.showInterstitialAd(9);
+      const r10 = await mgr.showInterstitialAd(10);
+      const r11 = await mgr.showInterstitialAd(11);
+      const r12 = await mgr.showInterstitialAd(12);
+      const r13 = await mgr.showInterstitialAd(13);
+      const r14 = await mgr.showInterstitialAd(14);
+      return { r1, r5, r9, r10, r11, r12, r13, r14 };
+    });
+
+    expect(interstitialAudit.r1.shown).toBe(false);
+    expect(interstitialAudit.r5.shown).toBe(false);
+    expect(interstitialAudit.r9.shown).toBe(false);
+    expect(interstitialAudit.r10.shown).toBe(true);
+    expect(interstitialAudit.r11.shown).toBe(false);
+    expect(interstitialAudit.r12.shown).toBe(false);
+    expect(interstitialAudit.r13.shown).toBe(false);
+    expect(interstitialAudit.r14.shown).toBe(true);
+  });
 });
