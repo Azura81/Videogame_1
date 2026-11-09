@@ -135,11 +135,16 @@ platform :ios do
           api_key: api_key,
           app_identifier: "com.azura81.spiritdelivery",
           initial_build_number: 0
-        ).to_s
+        ).to_i
         UI.message("Local build number: #{current_build} | Latest TestFlight build: #{latest_tf_build}")
-        if latest_tf_build == current_build
-          already_uploaded = true
-          UI.success("Build #{current_build} is already on TestFlight! Proceeding directly to external distribution.")
+        if latest_tf_build >= current_build.to_i
+          next_build = (latest_tf_build + 1).to_s
+          increment_build_number(
+            build_number: next_build,
+            xcodeproj: "App.xcodeproj"
+          )
+          current_build = next_build
+          UI.success("Automatically incremented build number to #{current_build} for new TestFlight upload!")
         end
       rescue => e
         UI.important("TestFlight pre-check note: #{e.message}")
@@ -154,7 +159,7 @@ platform :ios do
       demo_account_required: false,
       notes: "Spirit Delivery is a 3D puzzle game. No login or account is required to play."
     }
-    changelog_text = "1x/2x Speed Toggle, Single-Step Debug Mode (Schritt), Inline Command Queue Editing (Replace, Insert, Move, Delete), and Level 30 Boss fixes."
+    changelog_text = "Tower of 100 Trials obstacles & progressive difficulty, exclusive Midori Kami skin, custom SVG icons (no iOS emojis), single abort button, SFX toggle fix, and reserved ad banner."
 
     if already_uploaded && api_key
       upload_to_testflight(
