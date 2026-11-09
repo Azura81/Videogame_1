@@ -12,8 +12,8 @@
       // General
       app_title: "Spirit Delivery",
       app_tagline: "Zen-Logikrätsel im Shinto-Schrein",
-      lang_de: "🇩🇪 Deutsch",
-      lang_en: "🇬🇧 English",
+      lang_de: "DE · Deutsch",
+      lang_en: "EN · English",
       pwa_offline: "Offline-Modus aktiv · Bereit zum Spielen",
 
       // Top Header & Nav
@@ -51,8 +51,8 @@
       home_daily_title: "Tägliche Prüfung",
       home_daily_badge: "Blind-Challenge",
       home_daily_desc: "Jeden Tag ein neues Rätsel ohne Kameraschwenker. Halte deine Streak!",
-      home_play_btn: "SPIELEN ▶",
-      home_resume_btn: "FORTSETZEN ▶",
+      home_play_btn: "SPIELEN",
+      home_resume_btn: "FORTSETZEN",
       home_wardrobe_btn: "Garderobe & Skins",
       home_trophies_btn: "Schrein-Siegel",
       home_chapters_btn: "Levels",
@@ -77,7 +77,7 @@
       cmd_action: "Aktion",
       cmd_play: "Plan abspielen",
       cmd_step: "Schritt",
-      cmd_abort: "⏹ Abbrechen",
+      cmd_abort: "Abbrechen",
       cmd_stop: "Stopp",
       cmd_undo: "Rückgängig",
       cmd_clear: "Löschen",
@@ -165,8 +165,8 @@
       hub_tab_levels: "60 Level",
       hub_tab_trophies: "Erfolge",
       hub_tab_settings: "Optionen",
-      btn_check: "Prüfen ▶",
-      btn_ascend: "Besteigen ▶",
+      btn_check: "Prüfen →",
+      btn_ascend: "Besteigen →",
 
       // Boss & Tower HUD
       boss_seals_title: "3 Heilige Relikt-Siegel",
@@ -199,7 +199,7 @@
       tower_rule_zen_title: "Zen-Effizienz (Minimalzüge):",
       tower_rule_zen_desc: "Schließe Ebenen mit der perfekten Mindestschrittzahl ab für den <strong>Zen-Bonus (+50% Punkte)</strong> oder nah am Minimum für <strong>+25% Punkte</strong>!",
       tower_btn_start: "Aufstieg beginnen (Ebene 1)",
-      tower_btn_start_run: "Aufstieg beginnen ▶",
+      tower_btn_start_run: "Aufstieg beginnen",
       tower_gameover_title: "Alle Laternen erloschen!",
       tower_gameover_desc: "Die Energie im Turm der 100 Prüfungen ist erloschen.",
       tower_summary_floor: "Erreichte Ebene:",
@@ -312,7 +312,7 @@
       daily_rule_hardcore_desc: "Täglich wechselnde Schrein-Layouts mit Windböen, Toren, Portalen und Relikten.",
       daily_rule_streak_title: "Tages-Streak:",
       daily_rule_streak_desc: "Ein Sieg heute erhöht deine Flammen-Streak um +1 Tag.",
-      btn_start_daily: "Prüfung antreten ▶",
+      btn_start_daily: "Prüfung antreten",
 
       // Extra Modals
       tower_kicker: "Endlos-Roguelike · 百人鳥居",
@@ -326,8 +326,8 @@
       // General
       app_title: "Spirit Delivery",
       app_tagline: "Zen Logic Puzzles in a Shinto Shrine",
-      lang_de: "🇩🇪 Deutsch",
-      lang_en: "🇬🇧 English",
+      lang_de: "DE · Deutsch",
+      lang_en: "EN · English",
       pwa_offline: "Offline mode active · Ready to play",
 
       // Top Header & Nav
@@ -365,8 +365,8 @@
       home_daily_title: "Daily Trial",
       home_daily_badge: "Blind Challenge",
       home_daily_desc: "A new puzzle every day with zero camera credits. Keep your streak!",
-      home_play_btn: "PLAY ▶",
-      home_resume_btn: "RESUME ▶",
+      home_play_btn: "PLAY",
+      home_resume_btn: "RESUME",
       home_wardrobe_btn: "Wardrobe & Skins",
       home_trophies_btn: "Shrine Seals",
       home_chapters_btn: "Levels",
@@ -391,7 +391,7 @@
       cmd_action: "Action",
       cmd_play: "Run Plan",
       cmd_step: "Step",
-      cmd_abort: "⏹ Abort",
+      cmd_abort: "Abort",
       cmd_stop: "Stop",
       cmd_undo: "Undo",
       cmd_clear: "Clear",
@@ -479,8 +479,8 @@
       hub_tab_levels: "60 Levels",
       hub_tab_trophies: "Achievements",
       hub_tab_settings: "Options",
-      btn_check: "Check ▶",
-      btn_ascend: "Ascend ▶",
+      btn_check: "Check →",
+      btn_ascend: "Ascend →",
 
       // Boss & Tower HUD
       boss_seals_title: "3 Sacred Relic Seals",
@@ -513,7 +513,7 @@
       tower_rule_zen_title: "Zen Efficiency (Minimum Steps):",
       tower_rule_zen_desc: "Clear floors with the perfect minimum step count for the <strong>Zen Bonus (+50% score)</strong> or near minimum for <strong>+25% score</strong>!",
       tower_btn_start: "Begin Ascent (Floor 1)",
-      tower_btn_start_run: "Begin Ascent ▶",
+      tower_btn_start_run: "Begin Ascent",
       tower_gameover_title: "All Lanterns Extinguished!",
       tower_gameover_desc: "The sacred energy in the Tower of 100 Trials has faded.",
       tower_summary_floor: "Floor Reached:",
@@ -626,7 +626,7 @@
       daily_rule_hardcore_desc: "Daily procedural shrine layouts with wind gusts, gates, portals, and relics.",
       daily_rule_streak_title: "Daily Streak:",
       daily_rule_streak_desc: "Winning today increases your flame streak by +1 day.",
-      btn_start_daily: "Enter Trial ▶",
+      btn_start_daily: "Enter Trial",
 
       // Extra Modals
       tower_kicker: "Endless Roguelike · Hyakunin Torii",
@@ -1235,20 +1235,20 @@
         "Platsch! Der Felsblock versinkt im Wasser und bildet eine neue Trittstein-Brücke!": "Splash! The stone block sinks into the water and creates a new bridge!",
         "Rumpel! KOMA schiebt den heiligen Steinblock vor sich her.": "Rumble! The robot pushes the sacred stone block.",
         "Knacks! Der morsche Trittstein bekommt Risse und versinkt gleich!": "Crack! The weathered stepping stone cracks and will sink soon!",
-        "🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.": "🌀 Kitsune Portal entered! The robot teleports to the destination portal.",
-        "💨 Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!": "💨 A wind gust catches the robot, but an obstacle halts the gust!",
-        "💨 Eine kräftige Bergwindböe trägt KOMA mit sich!": "💨 A powerful mountain wind gust carries the robot forward!",
+        "Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.": "Kitsune Portal entered! The robot teleports to the destination portal.",
+        "Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!": "A wind gust catches the robot, but an obstacle halts the gust!",
+        "Eine kräftige Bergwindböe trägt KOMA mit sich!": "A powerful mountain wind gust carries the robot forward!",
         "1. Heiliges Schrein-Relikt geborgen!": "1st Sacred Shrine Relic recovered!",
         "2. Heiliges Schrein-Relikt geborgen!": "2nd Sacred Shrine Relic recovered!",
         "Alle Schrein-Relikte geborgen! Das Tor ist frei!": "All shrine relics recovered! The gate is open!",
         "1. Magatama-Siegel zerborsten! Der Himmelsdrache tobt!": "1st Magatama Seal shattered! The Sky Dragon rages!",
         "2. Magatama-Siegel zerborsten! Drachen-Aura pulsiert!": "2nd Magatama Seal shattered! Dragon aura pulses!",
         "Alle 3 Siegel gebrochen! Das Gipfel-Torii erstrahlt!": "All 3 seals broken! The summit Torii shines!",
-        "🛡️ Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.": "🛡️ The heavy basalt block seals the shrine! The roar deflects harmlessly.",
-        "🛡️ Der massive Basaltblock bricht die Druckwelle des Schreinwächters!": "🛡️ The massive basalt block breaks the guardian's shockwave!",
-        "🛡️ Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!": "🛡️ The basalt block catches the frost breath! The robot remains unharmed!",
-        "❄️ Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!": "❄️ Frozen! Ryūjin's frost breath engulfed the robot. Dodge the marked zones!",
-        "💥 Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.": "💥 Ryūjin's frost breath strikes the crater! The robot narrowly escapes.",
+        "Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.": "The heavy basalt block seals the shrine! The roar deflects harmlessly.",
+        "Der massive Basaltblock bricht die Druckwelle des Schreinwächters!": "The massive basalt block breaks the guardian's shockwave!",
+        "Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!": "The basalt block catches the frost breath! The robot remains unharmed!",
+        "Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!": "Frozen! Ryūjin's frost breath engulfed the robot. Dodge the marked zones!",
+        "Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.": "Ryūjin's frost breath strikes the crater! The robot narrowly escapes.",
         "In der täglichen Schreinprüfung sind Kameraschwenker verboten!": "Camera rotations are disabled in the Daily Shrine Trial!",
         "Tägliche Schreinprüfung geladen! Kameraschwenker sind deaktiviert (0 Credits). Plane deine Befehle vorab.": "Daily Shrine Trial loaded! Camera rotations are disabled (0 credits). Plan your commands in advance.",
         "Kamera-Credits aufgebraucht (0 Sterne möglich – Level kann trotzdem abgeschlossen werden).": "Camera credits depleted (0 stars possible – level can still be completed).",
@@ -1257,30 +1257,30 @@
         "Platsch! Der Roboter ist ins Wasser gefallen – passe deinen Plan an.": "Splash! The robot fell into the water – adjust your plan.",
         "Plopp! Der Weg ist versperrt – passe deinen Plan an.": "Clack! The path is blocked – adjust your plan.",
         "Tipp: Drücke auf „Vorwärts ↑“, um Befehle in deinen Plan einzufügen.": "Tip: Tap “Forward ↑” to insert commands into your plan.",
-        "Alle 60 Lieferungen geschafft! 🎉": "All 60 deliveries completed! 🎉",
+        "Alle 60 Lieferungen geschafft!": "All 60 deliveries completed!",
         "Lieferung erfolgreich!": "Delivery successful!",
         "Basaltblock blockiert den Schrein!": "Basalt block blocks the shrine!",
-        "⏹ Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.": "⏹ Delivery aborted. The robot is back at the start – adjust your plan.",
+        "Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.": "Delivery aborted. The robot is back at the start – adjust your plan.",
         "KOMA ist wieder am Start. Du kannst deinen Plan anpassen.": "The robot is back at the start. You can adjust your plan.",
         "Plan gelöscht. Beginne mit einer neuen Befehlsfolge.": "Plan cleared. Start with a new command sequence.",
-        "🦁 Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!": "🦁 The shrine Torii remains sealed! Push the basalt block in front of its shrine (3, 2) to cage the Komainu!"
+        "Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!": "The shrine Torii remains sealed! Push the basalt block in front of its shrine (3, 2) to cage the Komainu!"
       };
 
       if (EXACT_MATCHES[text]) return EXACT_MATCHES[text];
 
       let out = text;
 
-      // ⛩️ Ziel noch versiegelt! Sammle noch X Geisterlicht(er).
-      out = out.replace(/⛩️ Ziel noch versiegelt! Sammle noch (\d+) Geisterlicht\(er\)\./g, "⛩️ Goal still sealed! Collect $1 more spirit light(s).");
+      // Ziel noch versiegelt! Sammle noch X Geisterlicht(er).
+      out = out.replace(/Ziel noch versiegelt! Sammle noch (\d+) Geisterlicht\(er\)\./g, "Goal still sealed! Collect $1 more spirit light(s).");
 
-      // 🔒 Kapitel X ist noch gesperrt! Schließe zuerst Kapitel Y (Level Z) ab.
-      out = out.replace(/🔒 Kapitel (\d+) ist noch gesperrt! Schließe zuerst Kapitel (\d+) \(Level (\d+)\) ab\./g, "🔒 Chapter $1 is still locked! Complete Chapter $2 (Level $3) first.");
+      // Kapitel X ist noch gesperrt! Schließe zuerst Kapitel Y (Level Z) ab.
+      out = out.replace(/Kapitel (\d+) ist noch gesperrt! Schließe zuerst Kapitel (\d+) \(Level (\d+)\) ab\./g, "Chapter $1 is still locked! Complete Chapter $2 (Level $3) first.");
 
-      // 🏔️ Kapitel X: Der Heilige Berg Fuji geladen!
-      out = out.replace(/🏔️ Kapitel (\d+): Der Heilige Berg Fuji geladen!/g, "🏔️ Chapter $1: Sacred Mount Fuji loaded!");
+      // Kapitel X: Der Heilige Berg Fuji geladen!
+      out = out.replace(/Kapitel (\d+): Der Heilige Berg Fuji geladen!/g, "Chapter $1: Sacred Mount Fuji loaded!");
 
-      // 🔒 Level X ist noch gesperrt! Schließe zuerst Level Y ab.
-      out = out.replace(/🔒 Level (\d+) ist noch gesperrt! Schließe zuerst Level (\d+) ab\./g, "🔒 Level $1 is still locked! Complete Level $2 first.");
+      // Level X ist noch gesperrt! Schließe zuerst Level Y ab.
+      out = out.replace(/Level (\d+) ist noch gesperrt! Schließe zuerst Level (\d+) ab\./g, "Level $1 is still locked! Complete Level $2 first.");
 
       // Level X geschafft!
       out = out.replace(/Level (\d+) geschafft!/g, "Level $1 cleared!");
@@ -1288,8 +1288,8 @@
       // Skin "..." ausgerüstet!
       out = out.replace(/Skin "([^"]+)" ausgerüstet!/g, 'Skin "$1" equipped!');
 
-      // 🏆 Heiliges Siegel erlangt: ...
-      out = out.replace(/🏆 Heiliges Siegel erlangt: ([^!]+)!/g, "🏆 Sacred Seal unlocked: $1!");
+      // Heiliges Siegel erlangt: ...
+      out = out.replace(/Heiliges Siegel erlangt: ([^!]+)!/g, "Sacred Seal unlocked: $1!");
 
       // Kamera geschwenkt (-1 Credit, noch X übrig).
       out = out.replace(/Kamera geschwenkt \(-1 Credit, noch (\d+) übrig\)\./g, "Camera rotated (-1 credit, $1 remaining).");
@@ -1297,14 +1297,14 @@
       // Turm-Ebene X geladen! Plane den Weg zum heiligen Schrein-Torii.
       out = out.replace(/Turm-Ebene (\d+) geladen! Plane den Weg zum heiligen Schrein-Torii\./g, "Tower Floor $1 loaded! Plan the path to the sacred shrine Torii.");
 
-      // 💥 Vom Gebrüll des Komainu in ... erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!
-      out = out.replace(/💥 Vom Gebrüll des Komainu in ([^ ]+) erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!/g, "💥 Stunned by Komainu's roar in $1! Dodge the roar zone or shield yourself!");
+      // Vom Gebrüll des Komainu in ... erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!
+      out = out.replace(/Vom Gebrüll des Komainu in ([^ ]+) erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!/g, "Stunned by Komainu's roar in $1! Dodge the roar zone or shield yourself!");
 
-      // 🦁 Das Gebrüll des Komainu erschüttert ...!
-      out = out.replace(/🦁 Das Gebrüll des Komainu erschüttert ([^!]+)!/g, "🦁 The roar of the Komainu shakes $1!");
+      // Das Gebrüll des Komainu erschüttert ...!
+      out = out.replace(/Das Gebrüll des Komainu erschüttert ([^!]+)!/g, "The roar of the Komainu shakes $1!");
 
-      // 💥 Absturz! Alle Laternen erloschen auf Ebene X.
-      out = out.replace(/💥 Absturz! Alle Laternen erloschen auf Ebene (\d+)\./g, "💥 Crash! All lanterns extinguished on Floor $1.");
+      // Absturz! Alle Laternen erloschen auf Ebene X.
+      out = out.replace(/Absturz! Alle Laternen erloschen auf Ebene (\d+)\./g, "Crash! All lanterns extinguished on Floor $1.");
 
       // ✦ ...-Schalter aktiviert! Das zugehörige Tor öffnet sich.
       out = out.replace(/✦ ([^ -]+)-Schalter aktiviert! Das zugehörige Tor öffnet sich\./g, (m, col) => {
@@ -1317,8 +1317,7 @@
       out = out.replace(/Plopp! ([^ ]+) KOMA bleibt stehen – passe deinen Plan an\./g, "Clack! The path is blocked. The robot stops – adjust your plan.");
       out = out.replace(/Plopp! (.*) – passe deinen Plan an\./g, "Clack! $1 – adjust your plan.");
 
-      // 🌸 Geisterlicht eingesammelt! (X / Y)
-      out = out.replace(/🌸 Geisterlicht eingesammelt! \((\d+) \/ (\d+)\)/g, "🌸 Spirit light collected! ($1 / $2)");
+      // Geisterlicht eingesammelt! (X / Y)
       out = out.replace(/Geisterlicht eingesammelt! \((\d+) \/ (\d+)\)/g, "Spirit light collected! ($1 / $2)");
 
       // ... hinzugefügt.

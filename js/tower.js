@@ -661,7 +661,7 @@
         const candidate = {
           n: isBossFloor ? `Große Schrein-Pforte · Ebene ${floor}` : `Turm-Ebene ${floor}`,
           c: isBossFloor ? `Turm-Meilenstein · Prüfung ${floor}` : `Turm der 100 Prüfungen`,
-          t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte ⛩️" : "Aufstieg"}`,
+          t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte" : "Aufstieg"}`,
           d: isBossFloor
             ? `Meilenstein-Prüfung! Alle heiligen Schrein-Mechaniken fordern höchste Konzentration.`
             : `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
@@ -732,7 +732,7 @@
       const fallbackLvl = {
         n: isBossFloor ? `Große Schrein-Pforte · Ebene ${floor}` : `Turm-Ebene ${floor}`,
         c: isBossFloor ? `Turm-Meilenstein · Prüfung ${floor}` : `Turm der 100 Prüfungen`,
-        t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte ⛩️" : "Aufstieg"}`,
+        t: `Ebene ${floor} · ${isBossFloor ? "Boss-Pforte" : "Aufstieg"}`,
         d: `Erklimme Ebene ${floor} des Turms der 100 Prüfungen. Plane den Weg zum Torii.`,
         w, h,
         s: fallbackS,
@@ -774,16 +774,16 @@
       if (optimalSteps > 0 && typeof stepsUsed === "number" && stepsUsed > 0) {
         const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         if (stepsUsed <= optimalSteps) {
-          // ⚡ Perfekte Pfadführung / Zen-Meisterschaft (+50% der Ebenenpunkte)
+          // Perfekte Pfadführung / Zen-Meisterschaft (+50% der Ebenenpunkte)
           zenBonus = Math.round(basePoints * 0.5);
           zenTier = "perfect";
-          zenLabel = isEn ? `⚡ Perfect Elegance (+${zenBonus} Zen Bonus)` : `⚡ Perfekte Eleganz (+${zenBonus} Zen-Bonus)`;
+          zenLabel = isEn ? `Perfect Elegance (+${zenBonus} Zen Bonus)` : `Perfekte Eleganz (+${zenBonus} Zen-Bonus)`;
           this.zenPerfectCount = (this.zenPerfectCount || 0) + 1;
         } else if (stepsUsed <= optimalSteps + 2) {
-          // ✨ Fließender Geist (+25% der Ebenenpunkte)
+          // Fließender Geist (+25% der Ebenenpunkte)
           zenBonus = Math.round(basePoints * 0.25);
           zenTier = "great";
-          zenLabel = isEn ? `✨ Flowing Spirit (+${zenBonus} Efficiency Bonus)` : `✨ Fließender Geist (+${zenBonus} Effizienz-Bonus)`;
+          zenLabel = isEn ? `Flowing Spirit (+${zenBonus} Efficiency Bonus)` : `Fließender Geist (+${zenBonus} Effizienz-Bonus)`;
         }
       }
 
@@ -919,8 +919,8 @@
           lanterns: this.lanterns,
           gameOver: false,
           message: isEn
-            ? "🌸 Your Kitsune Amulet shattered and saved the lantern!"
-            : "🌸 Dein Kitsune-Amulett ist zerbrochen und hat die Laterne gerettet!"
+            ? "Your Kitsune Amulet shattered and saved the lantern!"
+            : "Dein Kitsune-Amulett ist zerbrochen und hat die Laterne gerettet!"
         };
       }
 
@@ -953,8 +953,8 @@
         lanterns: this.lanterns,
         gameOver: false,
         message: isEn
-          ? `🏮 A lantern was extinguished! ${this.lanterns} lantern(s) remaining.`
-          : `🏮 Eine Laterne ist erloschen! Noch ${this.lanterns} Laterne(n) übrig.`
+          ? `A lantern was extinguished! ${this.lanterns} lantern(s) remaining.`
+          : `Eine Laterne ist erloschen! Noch ${this.lanterns} Laterne(n) übrig.`
       };
     }
 

@@ -647,7 +647,7 @@ class GameEngine {
             if (typeof TowerTrial !== "undefined") {
               this.loadTowerFloor(TowerTrial.getCurrentLevel());
             }
-            this.showNetworkToast("🏮 1 Laterne neu entzündet! Dein Aufstieg geht weiter.");
+            this.showNetworkToast("1 Laterne neu entzündet! Dein Aufstieg geht weiter.");
           }
         }
       });
@@ -937,14 +937,14 @@ class GameEngine {
         if (!this.isLevelUnlocked(50)) {
           Sound.playBump();
           this.triggerHaptic([35, 30, 40]);
-          this.setFeedback("🔒 Kapitel 6 ist noch gesperrt! Schließe zuerst Kapitel 5 (Level 50) ab.", "bad");
+          this.setFeedback("Kapitel 6 ist noch gesperrt! Schließe zuerst Kapitel 5 (Level 50) ab.", "bad");
           return;
         }
         this.triggerHaptic(25);
         if (this.dom.levelDrawer) this.dom.levelDrawer.classList.remove("open");
         this.hideHomeScreen();
         this.loadLevel(50); // Level 51
-        this.setFeedback("🏔️ Kapitel 6: Der Heilige Berg Fuji geladen!", "good");
+        this.setFeedback("Kapitel 6: Der Heilige Berg Fuji geladen!", "good");
       });
     }
 
@@ -1394,7 +1394,7 @@ class GameEngine {
     if (typeof Sound !== "undefined" && typeof Sound.playStarDing === "function") {
       Sound.playStarDing(3);
     }
-    this.showNetworkToast(`✨ +${count} Kami-Sterne geschenkt erhalten!`);
+    this.showNetworkToast(`+${count} Kami-Sterne geschenkt erhalten!`);
   }
 
   updateStarsDisplay() {
@@ -1865,7 +1865,7 @@ class GameEngine {
         this.dom.mobileHubWinBanner.style.display = "block";
         if (this.dom.mobileHubWinTitle) {
           this.dom.mobileHubWinTitle.textContent =
-            this.currentLevelIdx === LEVELS.length - 1 ? "Alle 60 Lieferungen geschafft! 🎉" : `Level ${this.currentLevelIdx + 1} geschafft! 🌸`;
+            this.currentLevelIdx === LEVELS.length - 1 ? "Alle 60 Lieferungen geschafft!" : `Level ${this.currentLevelIdx + 1} geschafft!`;
         }
         if (this.dom.mobileHubWinStars) {
           const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
@@ -1946,7 +1946,7 @@ class GameEngine {
         if (typeof Sound !== "undefined" && typeof Sound.playSkinEquip === "function") {
           Sound.playSkinEquip();
         }
-        this.setFeedback(`🏆 Heiliges Siegel erlangt: ${ach.name} (${ach.jpName})!`, "good");
+        this.setFeedback(`Heiliges Siegel erlangt: ${ach.name} (${ach.jpName})!`, "good");
       });
     }
   }
@@ -2070,8 +2070,9 @@ class GameEngine {
         statusBadge = `<span class="mobile-skin-badge unlocked">${freeTxt}</span>`;
         actionBtn = `<button class="mobile-skin-btn equip" data-mobile-skin="${skin.id}">${equipTxt}</button>`;
       } else if (origSkin.specialUnlock === "boss_fuji") {
-        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
-        const bossTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "🐉 Defeat Lvl 60 Boss" : "🐉 Lvl 60 Boss besiegen";
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "";
+        const dragonSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.dragon(13) : "";
+        const bossTxt = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? `${dragonSvg} Defeat Lvl 60 Boss` : `${dragonSvg} Lvl 60 Boss besiegen`;
         statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} Boss</span>`;
         actionBtn = `
           <div class="mobile-skin-progress">
@@ -2079,10 +2080,11 @@ class GameEngine {
           </div>
         `;
       } else if (origSkin.specialUnlock === "tower_100") {
-        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "🔒";
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "";
+        const pagodaSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.pagoda(13) : "";
         const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         const towerBadge = isEn ? "Tower" : "Turm";
-        const towerTxt = isEn ? "🏯 Conquer Tower Floor 100" : "🏯 Turm Ebene 100 bezwingen";
+        const towerTxt = isEn ? `${pagodaSvg} Conquer Tower Floor 100` : `${pagodaSvg} Turm Ebene 100 bezwingen`;
         statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} ${towerBadge}</span>`;
         actionBtn = `
           <div class="mobile-skin-progress">
@@ -2148,19 +2150,20 @@ class GameEngine {
       const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       const transLvl = (typeof I18N !== "undefined") ? I18N.translateLevel(lvl, absIdx) : lvl;
 
+      const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "";
       let starsHtml = "";
       if (isUnlocked && stars !== undefined && stars > 0) {
         starsHtml = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getStarsRow(stars, stars, 11) : "⭐".repeat(stars);
       } else if (isUnlocked) {
         starsHtml = `<span style="opacity:0.3; font-size:11px;">–</span>`;
       } else {
-        const lockedLabel = isEn ? "🔒 Locked" : "🔒 Gesperrt";
-        starsHtml = `<span style="opacity:0.5; font-size:10px; font-weight:700;">${lockedLabel}</span>`;
+        const lockedLabel = isEn ? `${lockSvg} Locked` : `${lockSvg} Gesperrt`;
+        starsHtml = `<span style="opacity:0.5; font-size:10px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">${lockedLabel}</span>`;
       }
 
       return `
         <button class="mobile-level-card ${isActive ? "active" : ""} ${isDone ? "done" : ""} ${!isUnlocked ? "locked" : ""}" data-level-idx="${absIdx}" ${!isUnlocked ? 'aria-disabled="true"' : ""}>
-          <div class="mobile-level-num">${!isUnlocked ? "🔒" : String(absIdx + 1).padStart(2, "0")}</div>
+          <div class="mobile-level-num">${!isUnlocked ? (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(14) : "") : String(absIdx + 1).padStart(2, "0")}</div>
           <div class="mobile-level-info">
             <div class="mobile-level-name">${transLvl.n}</div>
             <div class="mobile-level-meta">
@@ -2180,7 +2183,7 @@ class GameEngine {
           if (!this.isLevelUnlocked(idx)) {
             Sound.playBump();
             this.triggerHaptic([35, 30, 40]);
-            this.setFeedback(`🔒 Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
+            this.setFeedback(`Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
             return;
           }
           this.closeMobileHub();
@@ -2221,9 +2224,10 @@ class GameEngine {
         statusBadge = `<span class="skin-badge unlocked">${unlockedTxt}</span>`;
         actionButton = `<button class="skin-action-btn equip" data-skin-id="${skin.id}">${equipTxt}</button>`;
       } else if (origSkin.specialUnlock === "boss_fuji") {
-        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
+        const dragonSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.dragon(13) : "";
         const bossVictory = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "Boss Victory" : "Boss-Sieg";
-        const bossText = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? "🐉 Defeat Ryūjin in Level 60" : "🐉 Besiege Ryūjin in Level 60";
+        const bossText = (typeof I18N !== "undefined" && I18N.getLanguage() === "en") ? `${dragonSvg} Defeat Ryūjin in Level 60` : `${dragonSvg} Besiege Ryūjin in Level 60`;
         statusBadge = `<span class="skin-badge locked">${lockSvg} ${bossVictory}</span>`;
         actionButton = `
           <div class="skin-progress-container">
@@ -2231,10 +2235,11 @@ class GameEngine {
           </div>
         `;
       } else if (origSkin.specialUnlock === "tower_100") {
-        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "🔒";
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
+        const pagodaSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.pagoda(13) : "";
         const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
         const towerVictory = isEn ? "Tower 100" : "Turm 100";
-        const towerText = isEn ? "🏯 Conquer Floor 100 in the Tower of 100 Trials" : "🏯 Bezwinge Ebene 100 im Turm der 100 Prüfungen";
+        const towerText = isEn ? `${pagodaSvg} Conquer Floor 100 in the Tower of 100 Trials` : `${pagodaSvg} Bezwinge Ebene 100 im Turm der 100 Prüfungen`;
         statusBadge = `<span class="skin-badge locked">${lockSvg} ${towerVictory}</span>`;
         actionButton = `
           <div class="skin-progress-container">
@@ -2306,11 +2311,13 @@ class GameEngine {
         this.dom.creditBadge.textContent = isEn ? "0 / 0 (Locked)" : "0 / 0 (Gesperrt)";
       }
       if (this.dom.creditStars) {
-        const trialLabel = isEn ? "🔥 Master Trial" : "🔥 Meister-Prüfung";
-        this.dom.creditStars.innerHTML = `<span style="color: #f97316; font-weight: 700;">${trialLabel}</span>`;
+        const flameSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(14) : "";
+        const trialLabel = isEn ? "Master Trial" : "Meister-Prüfung";
+        this.dom.creditStars.innerHTML = `<span style="color: #f97316; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">${flameSvg} ${trialLabel}</span>`;
       }
       if (this.dom.mobileLvlCredits) {
-        this.dom.mobileLvlCredits.textContent = "0/0 🚫";
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
+        this.dom.mobileLvlCredits.innerHTML = `0/0 ${lockSvg}<span class="sr-only">🚫</span>`;
       }
       if (this.dom.btnCamRotateLeft) {
         this.dom.btnCamRotateLeft.classList.add("disabled");
@@ -2378,10 +2385,16 @@ class GameEngine {
     if (this.dom.chapterTitle) this.dom.chapterTitle.textContent = `Tägliche Schreinprüfung · ${typeof DailyTrial !== "undefined" ? DailyTrial.getFormattedDate() : "Heute"}`;
     if (this.dom.levelTag) this.dom.levelTag.textContent = dailyLevel.t;
     if (this.dom.missionDesc) this.dom.missionDesc.textContent = dailyLevel.d;
-    if (this.dom.missionBadge) this.dom.missionBadge.textContent = "🔥 DAILY";
+    if (this.dom.missionBadge) {
+      const flameSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.flame(13) : "";
+      this.dom.missionBadge.innerHTML = `${flameSvg}<span class="sr-only">🔥 </span>DAILY`;
+    }
     if (this.dom.progressBar) this.dom.progressBar.style.width = "0%";
     if (this.dom.mobileLvlTitle) this.dom.mobileLvlTitle.textContent = "Tages-Prüfung";
-    if (this.dom.mobileLvlCredits) this.dom.mobileLvlCredits.textContent = "0/0 🚫";
+    if (this.dom.mobileLvlCredits) {
+      const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
+      this.dom.mobileLvlCredits.innerHTML = `0/0 ${lockSvg}<span class="sr-only">🚫</span>`;
+    }
     if (typeof document !== "undefined") {
       document.body.classList.remove("is-executing");
       document.body.classList.add("is-daily-trial");
@@ -2576,7 +2589,7 @@ class GameEngine {
       if (this.dom.seal3) { this.dom.seal3.style.display = "none"; }
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
-        this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+        this.dom.bossPhaseBadge.textContent = "Komainu-Gebrüll lädt (1/3)";
       }
       if (typeof Sound !== "undefined" && typeof Sound.playTaikoDrum === "function") {
         setTimeout(() => Sound.playTaikoDrum(), 250);
@@ -2587,7 +2600,7 @@ class GameEngine {
       if (this.dom.seal3) { this.dom.seal3.style.display = ""; this.dom.seal3.className = "boss-seal lit"; this.dom.seal3.title = "Relikt 3: Magatama-Juwel"; }
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
-        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+        this.dom.bossPhaseBadge.textContent = "Frost-Odem lädt (1/3)";
       }
       if (typeof Sound !== "undefined" && typeof Sound.playTaikoDrum === "function") {
         setTimeout(() => Sound.playTaikoDrum(), 250);
@@ -2675,7 +2688,7 @@ class GameEngine {
       if (this.dom.seal2) this.dom.seal2.className = "boss-seal lit";
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
-        this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+        this.dom.bossPhaseBadge.textContent = "Komainu-Gebrüll lädt (1/3)";
       }
       if (this.renderer && typeof this.renderer.clearSonicHazard === "function") {
         this.renderer.clearSonicHazard();
@@ -2686,7 +2699,7 @@ class GameEngine {
       if (this.dom.seal3) this.dom.seal3.className = "boss-seal lit";
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
-        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+        this.dom.bossPhaseBadge.textContent = "Frost-Odem lädt (1/3)";
       }
       if (this.renderer && typeof this.renderer.clearFrostHazard === "function") {
         this.renderer.clearFrostHazard();
@@ -2895,10 +2908,10 @@ class GameEngine {
         if (this.dom.bossPhaseBadge) {
           if (isTrapped) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
+            this.dom.bossPhaseBadge.textContent = "Komainu eingesperrt! Schrein verriegelt.";
           } else {
             this.dom.bossPhaseBadge.className = "boss-phase-badge";
-            this.dom.bossPhaseBadge.textContent = "🦁 Komainu-Gebrüll lädt (1/3)";
+            this.dom.bossPhaseBadge.textContent = "Komainu-Gebrüll lädt (1/3)";
           }
         }
         if (typeof onComplete === "function") onComplete();
@@ -2909,7 +2922,7 @@ class GameEngine {
         if (isTrapped) {
           if (this.dom.bossPhaseBadge) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Schrein verriegelt.";
+            this.dom.bossPhaseBadge.textContent = "Komainu eingesperrt! Schrein verriegelt.";
           }
         } else {
           const nextFireStep = step + 1;
@@ -2919,7 +2932,7 @@ class GameEngine {
           }
           if (this.dom.bossPhaseBadge) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
-            this.dom.bossPhaseBadge.textContent = `⚠️ GEBRÜLL-ZONE: ${target.name} (Feuert nächste Runde!)`;
+            this.dom.bossPhaseBadge.textContent = `GEBRÜLL-ZONE: ${target.name} (Feuert nächste Runde!)`;
           }
           this.triggerHaptic([35, 40]);
         }
@@ -2935,12 +2948,12 @@ class GameEngine {
         if (isTrapped) {
           if (this.dom.bossPhaseBadge) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-            this.dom.bossPhaseBadge.textContent = "🛡️ Komainu eingesperrt! Gebrüll gedämpft.";
+            this.dom.bossPhaseBadge.textContent = "Komainu eingesperrt! Gebrüll gedämpft.";
           }
           if (this.renderer && typeof this.renderer.animateKomainuPacified === "function") {
             this.renderer.animateKomainuPacified();
           }
-          this.setFeedback("🛡️ Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.", "good");
+          this.setFeedback("Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.", "good");
           if (typeof onComplete === "function") onComplete();
           return;
         }
@@ -2965,13 +2978,13 @@ class GameEngine {
         if (this.dom.bossPhaseBadge) {
           if (isBlocked) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-            this.dom.bossPhaseBadge.textContent = "🛡️ Basaltblock schirmt das Gebrüll ab!";
+            this.dom.bossPhaseBadge.textContent = "Basaltblock schirmt das Gebrüll ab!";
           } else if (isKomaHit) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
-            this.dom.bossPhaseBadge.textContent = "💥 Vom Gebrüll betäubt!";
+            this.dom.bossPhaseBadge.textContent = "Vom Gebrüll betäubt!";
           } else {
             this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
-            this.dom.bossPhaseBadge.textContent = `🦁 Komainu brüllt: ${target.name}!`;
+            this.dom.bossPhaseBadge.textContent = `Komainu brüllt: ${target.name}!`;
           }
         }
 
@@ -2982,7 +2995,7 @@ class GameEngine {
           if (typeof document !== "undefined") {
             document.body.classList.remove("is-executing");
           }
-          this.setFeedback(`💥 Vom Gebrüll des Komainu in ${target.name} erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!`, "bad");
+          this.setFeedback(`Vom Gebrüll des Komainu in ${target.name} erschüttert! Weiche der Gebrüll-Zone aus oder schirme dich ab!`, "bad");
           this.triggerHaptic([60, 80, 100]);
           this.renderQueue();
         }
@@ -2991,9 +3004,9 @@ class GameEngine {
           this.renderer.animateKomainuRoar(target.tiles, isBlocked, isKomaHit, blockPos, () => {
             if (!isKomaHit) {
               if (isBlocked) {
-                this.setFeedback("🛡️ Der massive Basaltblock bricht die Druckwelle des Schreinwächters!", "good");
+                this.setFeedback("Der massive Basaltblock bricht die Druckwelle des Schreinwächters!", "good");
               } else {
-                this.setFeedback(`🦁 Das Gebrüll des Komainu erschüttert ${target.name}!`, "normal");
+                this.setFeedback(`Das Gebrüll des Komainu erschüttert ${target.name}!`, "normal");
               }
               if (typeof onComplete === "function") onComplete();
             }
@@ -3022,7 +3035,7 @@ class GameEngine {
       }
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge";
-        this.dom.bossPhaseBadge.textContent = "⚡ Frost-Odem lädt (1/3)";
+        this.dom.bossPhaseBadge.textContent = "Frost-Odem lädt (1/3)";
       }
       if (typeof onComplete === "function") onComplete();
       return;
@@ -3036,7 +3049,7 @@ class GameEngine {
       }
       if (this.dom.bossPhaseBadge) {
         this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
-        this.dom.bossPhaseBadge.textContent = `⚠️ ZIELVISIER: ${target.name} (Feuert nächste Runde!)`;
+        this.dom.bossPhaseBadge.textContent = `ZIELVISIER: ${target.name} (Feuert nächste Runde!)`;
       }
       this.triggerHaptic([35, 40]);
       if (typeof onComplete === "function") onComplete();
@@ -3068,13 +3081,13 @@ class GameEngine {
       if (this.dom.bossPhaseBadge) {
         if (isBlocked) {
           this.dom.bossPhaseBadge.className = "boss-phase-badge shielded";
-          this.dom.bossPhaseBadge.textContent = "🛡️ Frost-Odem abgewehrt!";
+          this.dom.bossPhaseBadge.textContent = "Frost-Odem abgewehrt!";
         } else if (isKomaHit) {
           this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
-          this.dom.bossPhaseBadge.textContent = "❄️ KOMA eingefroren!";
+          this.dom.bossPhaseBadge.textContent = "KOMA eingefroren!";
         } else {
           this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
-          this.dom.bossPhaseBadge.textContent = "💥 Frost-Odem feuert!";
+          this.dom.bossPhaseBadge.textContent = "Frost-Odem feuert!";
         }
       }
 
@@ -3085,7 +3098,7 @@ class GameEngine {
           }
 
           if (isBlocked) {
-            this.setFeedback("🛡️ Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!", "good");
+            this.setFeedback("Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!", "good");
           } else if (isKomaHit) {
             this.state.isFail = true;
             this.isPlaying = false;
@@ -3093,12 +3106,12 @@ class GameEngine {
             if (typeof document !== "undefined") {
               document.body.classList.remove("is-executing");
             }
-            this.setFeedback("❄️ Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!", "bad");
+            this.setFeedback("Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!", "bad");
             this.triggerHaptic([60, 80, 100]);
             this.renderQueue();
             return;
           } else {
-            this.setFeedback("💥 Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.", "normal");
+            this.setFeedback("Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.", "normal");
           }
 
           if (typeof onComplete === "function") {
@@ -3180,7 +3193,7 @@ class GameEngine {
     if (!this.isPlaying) {
       this.setFeedback(
         this.playbackSpeed === 2
-          ? (isEn ? "⚡ 2x Fast-Forward enabled." : "⚡ 2x-Geschwindigkeit aktiviert.")
+          ? (isEn ? "2x Fast-Forward enabled." : "2x-Geschwindigkeit aktiviert.")
           : (isEn ? "1x Normal speed enabled." : "1x-Normalgeschwindigkeit aktiviert."),
         "normal"
       );
@@ -3189,7 +3202,7 @@ class GameEngine {
 
   updateSpeedButtons() {
     const isFast = this.playbackSpeed === 2;
-    const label = isFast ? "⚡ 2x" : "1x";
+    const label = isFast ? "2x" : "1x";
     if (this.dom.btnSpeedToggle) {
       this.dom.btnSpeedToggle.classList.toggle("speed-fast", isFast);
       this.dom.btnSpeedToggle.setAttribute("aria-pressed", isFast ? "true" : "false");
@@ -3260,7 +3273,7 @@ class GameEngine {
     const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
     this.setFeedback(
       this.queueInsertMode
-        ? (isEn ? `➕ Insert mode: Tap a command to insert before step #${this.selectedQueueIdx + 1}.` : `➕ Einfüge-Modus: Tippe auf einen Befehl, um ihn vor Schritt #${this.selectedQueueIdx + 1} einzufügen.`)
+        ? (isEn ? `Insert mode: Tap a command to insert before step #${this.selectedQueueIdx + 1}.` : `Einfüge-Modus: Tippe auf einen Befehl, um ihn vor Schritt #${this.selectedQueueIdx + 1} einzufügen.`)
         : (isEn ? `Replace mode: Tap a command to replace step #${this.selectedQueueIdx + 1}.` : `Ersetzen-Modus: Tippe auf einen Befehl, um Schritt #${this.selectedQueueIdx + 1} zu ersetzen.`),
       "normal"
     );
@@ -3335,8 +3348,8 @@ class GameEngine {
         this.renderQueue();
         this.setFeedback(
           isEn
-            ? `➕ ${this.commandMeta[cmd].name} inserted at step #${idx + 1}.`
-            : `➕ ${this.commandMeta[cmd].name} bei Schritt #${idx + 1} eingefügt.`,
+            ? `${this.commandMeta[cmd].name} inserted at step #${idx + 1}.`
+            : `${this.commandMeta[cmd].name} bei Schritt #${idx + 1} eingefügt.`,
           "normal"
         );
         return;
@@ -3350,8 +3363,8 @@ class GameEngine {
         this.renderQueue();
         this.setFeedback(
           isEn
-            ? `🔄 Step #${idx + 1} replaced with ${this.commandMeta[cmd].name}.`
-            : `🔄 Schritt #${idx + 1} durch ${this.commandMeta[cmd].name} ersetzt.`,
+            ? `Step #${idx + 1} replaced with ${this.commandMeta[cmd].name}.`
+            : `Schritt #${idx + 1} durch ${this.commandMeta[cmd].name} ersetzt.`,
           "normal"
         );
         return;
@@ -3389,7 +3402,7 @@ class GameEngine {
 
   abortExecution() {
     this.reset(false);
-    this.setFeedback("⏹ Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.", "normal");
+    this.setFeedback("Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.", "normal");
   }
 
   reset(clearQueue = false) {
@@ -3442,9 +3455,11 @@ class GameEngine {
 
     if (this.queue.length === 0) {
       if (this.currentLevelIdx === 0 && !this.isTowerMode && !this.isDailyTrial) {
+        const fwdSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.cmdForward(13) : "";
+        const playSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.play(11) : "";
         this.dom.queueContainer.innerHTML = isEn
-          ? `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tap <strong>Forward</strong> & then <strong>▶ Run Plan</strong>!</div>`
-          : `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">👆 Tippe auf <strong>Vorwärts</strong> & dann auf <strong>▶ Plan abspielen</strong>!</div>`;
+          ? `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">Tap <strong>${fwdSvg} Forward</strong> & then <strong>${playSvg} Run Plan</strong>!</div>`
+          : `<div class="empty-queue-hint" style="color: var(--cyan); font-weight: 600;">Tippe auf <strong>${fwdSvg} Vorwärts</strong> & dann auf <strong>${playSvg} Plan abspielen</strong>!</div>`;
       } else {
         const hintText = (typeof I18N !== "undefined") ? I18N.t("empty_queue_hint") : "Dein Plan erscheint hier …";
         this.dom.queueContainer.innerHTML = `<div class="empty-queue-hint">${hintText}</div>`;
@@ -3530,12 +3545,16 @@ class GameEngine {
       if (this.isPlaying) {
         this.dom.btnPlay.disabled = false;
         this.dom.btnPlay.classList.add("abort-mode");
-        if (this.dom.btnPlayIcon) this.dom.btnPlayIcon.textContent = "⏹";
+        if (this.dom.btnPlayIcon) {
+          this.dom.btnPlayIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.stop(15) : "■";
+        }
         if (this.dom.btnPlayText) this.dom.btnPlayText.textContent = isEn ? "Abort" : "Abbrechen";
       } else {
         this.dom.btnPlay.disabled = !this.queue.length;
         this.dom.btnPlay.classList.remove("abort-mode");
-        if (this.dom.btnPlayIcon) this.dom.btnPlayIcon.textContent = "▶";
+        if (this.dom.btnPlayIcon) {
+          this.dom.btnPlayIcon.innerHTML = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.play(15) : "›";
+        }
         if (this.dom.btnPlayText) {
           if (this.isStepMode && this.currentStep > 0 && this.currentStep < this.queue.length && !this.state.isWin && !this.state.isFail) {
             this.dom.btnPlayText.textContent = isEn ? "Resume" : "Weiter";
@@ -3599,17 +3618,19 @@ class GameEngine {
       }
 
       const isFujiLvl = idx >= 50;
+      const fujiSvg = isFujiLvl && typeof KOMA_ICONS !== "undefined" ? `${KOMA_ICONS.fuji(13)} ` : "";
+      const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
       btn.innerHTML = `
         <span class="pill-number">${idx + 1}</span>
-        <span class="pill-title">${isFujiLvl ? "🏔️ " : ""}${transLvl.n}</span>
+        <span class="pill-title">${fujiSvg}${transLvl.n}</span>
         ${starMarkup}
-        ${!isUnlocked ? '<span class="pill-lock">🔒</span>' : (isCompleted ? '<span class="pill-check">✓</span>' : "")}
+        ${!isUnlocked ? `<span class="pill-lock">${lockSvg}</span>` : (isCompleted ? '<span class="pill-check">✓</span>' : "")}
       `;
       btn.onclick = () => {
         if (!isUnlocked) {
           Sound.playBump();
           this.triggerHaptic([35, 30, 40]);
-          this.setFeedback(`🔒 Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
+          this.setFeedback(`Level ${idx + 1} ist noch gesperrt! Schließe zuerst Level ${idx} ab.`, "bad");
           return;
         }
         this.triggerHaptic(14);
@@ -3712,8 +3733,8 @@ class GameEngine {
       const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
       this.setFeedback(
         isEn
-          ? `⏸ Step ${this.currentStep} / ${this.queue.length} executed. Tap ⏭ for next step or ▶ to continue.`
-          : `⏸ Schritt ${this.currentStep} / ${this.queue.length} ausgeführt. Tippe auf ⏭ für den nächsten Schritt oder ▶ zum Weiterlaufen.`,
+          ? `Step ${this.currentStep} / ${this.queue.length} executed. Tap Step for next step or Resume to continue.`
+          : `Schritt ${this.currentStep} / ${this.queue.length} ausgeführt. Tippe auf Schritt für den nächsten Schritt oder Weiter zum Weiterlaufen.`,
         "normal"
       );
       return;
@@ -3734,7 +3755,7 @@ class GameEngine {
         if (this.isTowerMode && typeof TowerTrial !== "undefined") {
           const failRes = TowerTrial.handleFail();
           if (failRes.gameOver) {
-            this.setFeedback(`💥 Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
+            this.setFeedback(`Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
             Sound.playBump();
             this.triggerHaptic([50, 60, 80]);
             setTimeout(() => this.showTowerGameOver(failRes), 500);
@@ -3906,7 +3927,7 @@ class GameEngine {
         if (this.isTowerMode && typeof TowerTrial !== "undefined") {
           const failRes = TowerTrial.handleFail();
           if (failRes.gameOver) {
-            this.setFeedback(`💥 Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
+            this.setFeedback(`Absturz! Alle Laternen erloschen auf Ebene ${failRes.floor}.`, "bad");
             setTimeout(() => this.showTowerGameOver(failRes), 550);
             return;
           } else {
@@ -3989,7 +4010,7 @@ class GameEngine {
             Sound.playOrb();
             this.triggerHaptic([15, 30, 25]);
             this.renderer.collectOrb(this.state.x, this.state.y);
-            this.setFeedback(`🌸 Geisterlicht eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
+            this.setFeedback(`Geisterlicht eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
             this.onOrbCollected(lvl);
           }
         }
@@ -4007,7 +4028,7 @@ class GameEngine {
             Sound.playPortal();
             this.triggerHaptic([20, 35, 20, 35, 40]);
             this.renderer.animateTeleport(destPortal[0], destPortal[1]);
-            this.setFeedback("🌀 Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
+            this.setFeedback("Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
             this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, () => this.handlePostMoveChecks(lvl)), this.getStepDelay(180));
             return;
           }
@@ -4049,7 +4070,7 @@ class GameEngine {
       Sound.playWind();
       this.renderer.animateBump();
       this.triggerHaptic([40, 25, 40]);
-      this.setFeedback("💨 Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!", "normal");
+      this.setFeedback("Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!", "normal");
       if (typeof onComplete === "function") onComplete();
       return;
     }
@@ -4062,7 +4083,7 @@ class GameEngine {
     this.checkAchievements();
     Sound.playWind();
     this.triggerHaptic([25, 30, 40]);
-    this.setFeedback("💨 Eine kräftige Bergwindböe trägt KOMA mit sich!", "good");
+    this.setFeedback("Eine kräftige Bergwindböe trägt KOMA mit sich!", "good");
 
     const slideDur = this.getStepDelay(260);
     const slideFn = typeof this.renderer.animateWindSlide === "function"
@@ -4083,7 +4104,7 @@ class GameEngine {
           this.checkAchievements();
           Sound.playOrb();
           this.renderer.collectOrb(wx, wy);
-          this.setFeedback(`🌸 Geisterlicht im Flug eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
+          this.setFeedback(`Geisterlicht im Flug eingesammelt! (${this.state.collectedOrbs.size} / ${lvl.orbs.length})`, "good");
           this.onOrbCollected(lvl);
         }
       }
@@ -4100,7 +4121,7 @@ class GameEngine {
           this.state.y = dest[1];
           Sound.playPortal();
           this.renderer.animateTeleport(dest[0], dest[1]);
-          this.setFeedback("🌀 Vom Wind direkt ins Kitsune-Portal getragen!", "normal");
+          this.setFeedback("Vom Wind direkt ins Kitsune-Portal getragen!", "normal");
           this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, onComplete, chainCount + 1), this.getStepDelay(180));
           return;
         }
@@ -4121,16 +4142,16 @@ class GameEngine {
 
       if (missingOrbs > 0 || komainuNotTrapped) {
         if (missingOrbs > 0) {
-          this.setFeedback(`⛩️ Ziel noch versiegelt! Sammle noch ${missingOrbs} Geisterlicht(er).`, "bad");
+          this.setFeedback(`Ziel noch versiegelt! Sammle noch ${missingOrbs} Geisterlicht(er).`, "bad");
           if (this.dom.bossPhaseBadge && (lvl.bossId === "komainu" || lvl.isBossLevel)) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
-            this.dom.bossPhaseBadge.textContent = `⛩️ Ziel versiegelt! Noch ${missingOrbs} Relikt(e) fehlen!`;
+            this.dom.bossPhaseBadge.textContent = `Ziel versiegelt! Noch ${missingOrbs} Relikt(e) fehlen!`;
           }
         } else {
-          this.setFeedback("🦁 Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!", "bad");
+          this.setFeedback("Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!", "bad");
           if (this.dom.bossPhaseBadge) {
             this.dom.bossPhaseBadge.className = "boss-phase-badge warning";
-            this.dom.bossPhaseBadge.textContent = "🦁 Torii versiegelt! Sperre erst den Komainu (3, 2) ein!";
+            this.dom.bossPhaseBadge.textContent = "Torii versiegelt! Sperre erst den Komainu (3, 2) ein!";
           }
         }
         if (this.renderer && typeof this.renderer.animateBump === "function") {
@@ -4175,8 +4196,8 @@ class GameEngine {
 
         if (res.type === "tower_victory") {
           const vicMsg = isEn
-            ? `🏯 TOWER OF 100 TRIALS CONQUERED!${zenFeedback} (+${earnedPts} ${ptsWord})!`
-            : `🏯 TURM DER 100 PRÜFUNGEN BEZWUNGEN!${zenFeedback} (+${earnedPts} Pkt.)!`;
+            ? `TOWER OF 100 TRIALS CONQUERED!${zenFeedback} (+${earnedPts} ${ptsWord})!`
+            : `TURM DER 100 PRÜFUNGEN BEZWUNGEN!${zenFeedback} (+${earnedPts} Pkt.)!`;
           this.setFeedback(vicMsg, "good");
           this.checkAchievements();
           this.renderSkinsModal();
@@ -4188,8 +4209,8 @@ class GameEngine {
           setTimeout(() => {
             if (this.dom.modalWinTitle) {
               this.dom.modalWinTitle.textContent = isEn
-                ? "🏯 Tower of 100 Trials Conquered!"
-                : "🏯 Turm der 100 Prüfungen bezwungen!";
+                ? "Tower of 100 Trials Conquered!"
+                : "Turm der 100 Prüfungen bezwungen!";
             }
             if (this.dom.modalWinText) {
               this.dom.modalWinText.textContent = isEn
@@ -4233,8 +4254,8 @@ class GameEngine {
           }, 650);
         } else if (res.type === "altar") {
           const altarMsg = isEn 
-            ? `⛩️ GREAT SHRINE GATE CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Altar opening...`
-            : `⛩️ GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`;
+            ? `GREAT SHRINE GATE CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Altar opening...`
+            : `GROSSE SCHREIN-PFORTE GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Altar öffnet sich...`;
           this.setFeedback(altarMsg, "good");
           if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
             setTimeout(() => Sound.playStarChime(3), 200);
@@ -4244,8 +4265,8 @@ class GameEngine {
           }, 700);
         } else {
           const floorMsg = isEn
-            ? `⛩️ FLOOR ${res.floor - 1} CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Ascending to floor ${res.floor}...`
-            : `⛩️ EBENE ${res.floor - 1} GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Aufstieg zu Ebene ${res.floor}...`;
+            ? `FLOOR ${res.floor - 1} CLEARED!${zenFeedback} (+${earnedPts} ${ptsWord}) Ascending to floor ${res.floor}...`
+            : `EBENE ${res.floor - 1} GEMEISTERT!${zenFeedback} (+${earnedPts} Pkt.) Aufstieg zu Ebene ${res.floor}...`;
           this.setFeedback(floorMsg, "good");
           if (res.zenTier === "perfect" && typeof Sound !== "undefined" && typeof Sound.playStarChime === "function") {
             setTimeout(() => Sound.playStarChime(3), 200);
@@ -4540,7 +4561,7 @@ class GameEngine {
         this.deferredInstallPrompt.prompt();
         const choice = await this.deferredInstallPrompt.userChoice;
         if (choice && choice.outcome === "accepted") {
-          this.showNetworkToast("⛩️ KOMA wird installiert...", false);
+          this.showNetworkToast("KOMA wird installiert...", false);
         }
         this.deferredInstallPrompt = null;
         this.dom.btnInstallPwa.classList.add("hidden");
@@ -4552,16 +4573,16 @@ class GameEngine {
       if (this.dom.btnInstallPwa) {
         this.dom.btnInstallPwa.classList.add("hidden");
       }
-      this.showNetworkToast("🎉 KOMA erfolgreich als App installiert!", false);
+      this.showNetworkToast("KOMA erfolgreich als App installiert!", false);
     });
 
     // 3. Network Online / Offline Detection
     window.addEventListener("offline", () => {
-      this.showNetworkToast("⛩️ Offline-Modus aktiv · Schreine bereit!", true);
+      this.showNetworkToast("Offline-Modus aktiv · Schreine bereit!", true);
     });
 
     window.addEventListener("online", () => {
-      this.showNetworkToast("🌐 Wieder online · Verbindung synchronisiert", false);
+      this.showNetworkToast("Wieder online · Verbindung synchronisiert", false);
     });
   }
 

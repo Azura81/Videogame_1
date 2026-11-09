@@ -209,12 +209,12 @@ class AdManager {
       overlay.innerHTML = `
         <div class="ad-modal-card">
           <div class="ad-header">
-            <span class="ad-badge">📢 ANZEIGE · TEST-WERBUNG</span>
+            <span class="ad-badge">ANZEIGE · TEST-WERBUNG</span>
             <span class="ad-timer" id="adTimerText">Noch ${remainingSec}s …</span>
           </div>
           <div class="ad-video-mockup">
             <div class="ad-pulse-ring"></div>
-            <div class="ad-sponsor-icon">⛩️</div>
+            <div class="ad-sponsor-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.torii(40, "var(--cyan)") : ""}</div>
             <h3>${title}</h3>
             <p>${rewardDescription}</p>
             <div class="ad-progress-bar">

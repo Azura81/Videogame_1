@@ -196,10 +196,12 @@ test.describe('Intermediate Boss: Iwa-Komainu · Steinerner Schreinwächter (Lev
       window.gameInstance.renderQueue();
     });
 
-    // 1. Test 1x / 2x Speed Toggle
+    // 1. Test 1x / 2x Speed Toggle (using custom SVG icon, no iOS emoji, and single abort button)
+    await expect(page.locator('#btnMobileAbort')).toHaveCount(0);
+    await expect(page.locator('#btnSpeedIcon svg')).toBeVisible();
     await expect(page.locator('#btnSpeedText')).toHaveText('1x');
     await page.locator('#btnSpeedToggle').click();
-    await expect(page.locator('#btnSpeedText')).toHaveText('⚡ 2x');
+    await expect(page.locator('#btnSpeedText')).toHaveText('2x');
     await expect(page.locator('#btnSpeedToggle')).toHaveClass(/speed-fast/);
 
     const speedState = await page.evaluate(() => ({

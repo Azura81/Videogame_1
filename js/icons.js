@@ -206,6 +206,58 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  // 19b. Stop / Abort Square
+  stop: (size = 15, color = "currentColor") => `
+    <svg class="svg-icon svg-stop" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="5" y="5" width="14" height="14" rx="2.5" fill="${color}"/>
+    </svg>
+  `,
+
+  // 19c. Single-Step Forward
+  stepForward: (size = 15, color = "currentColor") => `
+    <svg class="svg-icon svg-step-forward" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="5 4 15 12 5 20 5 4" fill="${color}"/>
+      <line x1="19" y1="5" x2="19" y2="19"/>
+    </svg>
+  `,
+
+  // 19d. Fast-Forward (2x Speed)
+  fastForward: (size = 15, color = "currentColor") => `
+    <svg class="svg-icon svg-fast-forward" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="2,5 12,12 2,19" fill="${color}"/>
+      <polygon points="12,5 22,12 12,19" fill="${color}"/>
+    </svg>
+  `,
+
+  // 19e. Plus / Insert Step
+  plus: (size = 14, color = "currentColor") => `
+    <svg class="svg-icon svg-plus" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  `,
+
+  // 19f. Trash / Delete Step
+  trash: (size = 14, color = "currentColor") => `
+    <svg class="svg-icon svg-trash" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="3 6 5 6 21 6"/>
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </svg>
+  `,
+
+  // 19g. Chevrons Left / Right
+  chevronLeft: (size = 14, color = "currentColor") => `
+    <svg class="svg-icon svg-chevron-left" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  `,
+
+  chevronRight: (size = 14, color = "currentColor") => `
+    <svg class="svg-icon svg-chevron-right" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  `,
+
   // 20. Circular Tomoe Reset / Retry (🔄 / ⟲)
   retry: (size = 16, color = "currentColor") => `
     <svg class="svg-icon svg-retry" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

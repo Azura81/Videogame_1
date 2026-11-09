@@ -462,44 +462,57 @@
             </div>
             <div class="queue-edit-actions">
               <button type="button" class="queue-edit-btn" id="btnQueueInsertBefore" title="Neuen Befehl vor diesem Schritt einfügen" data-i18n-title="btn_queue_insert_title">
-                <span>➕</span>
+                <svg class="svg-icon svg-plus" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 <span id="btnQueueInsertText" data-i18n="queue_insert_before">Davor</span>
               </button>
-              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveLeft" title="Schritt nach links verschieben" data-i18n-title="btn_queue_left_title" aria-label="Links verschieben">◀</button>
-              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveRight" title="Schritt nach rechts verschieben" data-i18n-title="btn_queue_right_title" aria-label="Rechts verschieben">▶</button>
+              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveLeft" title="Schritt nach links verschieben" data-i18n-title="btn_queue_left_title" aria-label="Links verschieben">
+                <svg class="svg-icon svg-chevron-left" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button type="button" class="queue-edit-btn icon-only" id="btnQueueMoveRight" title="Schritt nach rechts verschieben" data-i18n-title="btn_queue_right_title" aria-label="Rechts verschieben">
+                <svg class="svg-icon svg-chevron-right" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
               <button type="button" class="queue-edit-btn danger" id="btnQueueDeleteStep" title="Diesen Schritt löschen" data-i18n-title="btn_queue_delete_title">
-                <span>🗑️</span>
+                <svg class="svg-icon svg-trash" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                 <span data-i18n="queue_delete_step">Löschen</span>
               </button>
-              <button type="button" class="queue-edit-btn close" id="btnQueueCloseEdit" title="Bearbeitung schließen" aria-label="Schließen">✕</button>
+              <button type="button" class="queue-edit-btn close" id="btnQueueCloseEdit" title="Bearbeitung schließen" aria-label="Schließen">
+                <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
             </div>
           </div>
 
           <div class="btn-row">
             <button class="sec-btn" id="btnReset" title="Roboter zurück an den Start setzen" data-i18n-title="btn_reset_title">
-              <span>⟲</span>
+              <svg class="svg-icon svg-retry" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
               <span data-i18n="cmd_reset">Zurücksetzen</span>
             </button>
             <button class="sec-btn" id="btnUndo" title="Letzten Befehl entfernen" data-i18n-title="btn_undo_title">
-              <span>↶</span>
+              <svg class="svg-icon cmd-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
               <span data-i18n="cmd_undo">Rückgängig</span>
             </button>
             <button class="sec-btn" id="btnClear" title="Ganzen Plan löschen" data-i18n-title="btn_clear_title">
-              <span>✕</span>
+              <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               <span data-i18n="cmd_clear">Löschen</span>
             </button>
           </div>
 
           <div class="play-controls-row">
             <button class="play-btn" id="btnPlay" title="Plan abspielen (Leertaste)" data-i18n-title="btn_play_title">
-              <span id="btnPlayIcon">▶</span>
+              <span id="btnPlayIcon">
+                <svg class="svg-icon svg-play" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polygon points="6,3 20,12 6,21" fill="currentColor"/></svg>
+              </span>
               <span id="btnPlayText" data-i18n="cmd_play">Plan abspielen</span>
             </button>
             <button type="button" class="step-btn" id="btnStep" title="Einzelschritt ausführen (Taste S)" data-i18n-title="btn_step_title">
-              <span class="step-btn-icon">⏭</span>
+              <span class="step-btn-icon">
+                <svg class="svg-icon svg-step-forward" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4" fill="currentColor"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+              </span>
               <span class="step-btn-label" id="btnStepText" data-i18n="cmd_step">Schritt</span>
             </button>
             <button type="button" class="speed-btn" id="btnSpeedToggle" title="Geschwindigkeit umschalten (1x / 2x)" data-i18n-title="btn_speed_title" aria-pressed="false">
+              <span class="speed-btn-icon" id="btnSpeedIcon">
+                <svg class="svg-icon svg-fast-forward" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><polygon points="2,5 12,12 2,19" fill="currentColor"/><polygon points="12,5 22,12 12,19" fill="currentColor"/></svg>
+              </span>
               <span id="btnSpeedText">1x</span>
             </button>
           </div>
@@ -509,8 +522,6 @@
               <svg class="svg-icon svg-sakura" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12C11 8.5 8 7 8 5c0-2 2-3 4-1 2-2 4-1 4 1 0 2-3 3.5-4 7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C8.5 11 7 8 5 8c-2 0-3 2-1 4-2 2-1 4 1 4 2 0 3.5-3 7-4z" fill="var(--sakura, #f472b6)"/><path d="M12 12C13 15.5 16 17 16 19c0 2-2 3-4 1-2 2-4 1-4-1 0-2 3-3.5 4-7z" fill="var(--sakura, #f472b6)"/><path d="M12 12C15.5 13 17 16 19 16c2 0 3-2 1-4 2-2 1-4 1-4-2 0-3.5 3-7 4z" fill="var(--sakura, #f472b6)"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>
             </span>
             <span class="mobile-exec-text" data-i18n="mobile_exec_text">Lieferung läuft …</span>
-            <button type="button" class="mobile-speed-btn" id="btnMobileSpeed" title="Geschwindigkeit (1x / 2x)" aria-pressed="false">1x</button>
-            <button type="button" class="mobile-abort-btn" id="btnMobileAbort" title="Lieferung abbrechen" data-i18n="cmd_abort">⏹ Abbrechen</button>
           </div>
 
           <div class="progress-container">
@@ -616,8 +627,8 @@
           </div>
           <div class="hub-win-stars" id="mobileHubWinStars"></div>
           <div class="hub-win-actions">
-            <button class="play-btn" id="btnMobileHubNextLevel" data-i18n="btn_next_level">Nächstes Level ▶</button>
-            <button class="sec-btn" id="btnMobileHubReplayLevel" data-i18n="btn_replay">Nochmal ↺</button>
+            <button class="play-btn" id="btnMobileHubNextLevel" data-i18n="btn_next_level">Nächstes Level →</button>
+            <button class="sec-btn" id="btnMobileHubReplayLevel" data-i18n="btn_replay">Noch einmal</button>
           </div>
         </div>
 
@@ -632,7 +643,7 @@
               <div class="mobile-daily-sub" id="mobileDailySub">0 Kameraschwenker · Streak: 0</div>
             </div>
           </div>
-          <button class="mobile-daily-btn" id="btnMobileOpenDaily" data-i18n="btn_check">Prüfen ▶</button>
+          <button class="mobile-daily-btn" id="btnMobileOpenDaily" data-i18n="btn_check">Prüfen →</button>
         </div>
 
         <!-- Mobile Tower Mode Banner -->
@@ -646,7 +657,7 @@
               <div class="mobile-tower-sub">Endlos-Modus · Rekord: <strong id="mobileTowerBest">Ebene 1</strong></div>
             </div>
           </div>
-          <button class="mobile-tower-btn" id="btnMobileOpenTower" data-i18n="btn_ascend">Besteigen ▶</button>
+          <button class="mobile-tower-btn" id="btnMobileOpenTower" data-i18n="btn_ascend">Besteigen →</button>
         </div>
 
         <!-- Touch Navigation Tabs -->
@@ -1263,7 +1274,7 @@
         <div class="daily-actions">
           <button class="play-btn daily-start-btn" id="btnStartDailyTrial">
             <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-            <span id="btnStartDailyLabel" data-i18n="btn_start_daily">Prüfung antreten ▶</span>
+            <span id="btnStartDailyLabel" data-i18n="btn_start_daily">Prüfung antreten</span>
           </button>
         </div>
       </div>
@@ -1340,7 +1351,7 @@
           <div class="tower-actions-row">
             <button class="play-btn tower-start-btn" id="btnStartTowerRun">
               <svg class="svg-icon svg-torii" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/><line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/><line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/><line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/><line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/><rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/></svg>
-              <span data-i18n="tower_btn_start_run">Aufstieg beginnen ▶</span>
+              <span data-i18n="tower_btn_start_run">Aufstieg beginnen</span>
             </button>
           </div>
         </div>
