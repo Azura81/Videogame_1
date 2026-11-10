@@ -69,4 +69,59 @@ test.describe('Autumn Theme & Patrolling Shrine Ghosts (Levels 61–100)', () =>
     expect(result.x).toBe(result.goal[0]);
     expect(result.y).toBe(result.goal[1]);
   });
+
+  test('Momiji Autumn Skin unlocks with autumn stars and renders leaf accessory', async ({ page }) => {
+    const skinInfo = await page.evaluate(() => {
+      const skin = window.KOMA_SKINS && window.KOMA_SKINS.momiji;
+      const iconSvg = window.KOMA_ICONS && window.KOMA_ICONS.getSkinIcon('momiji', 24, '#f97316');
+      return {
+        exists: !!skin,
+        id: skin?.id,
+        starsRequired: skin?.starsRequired,
+        accessories: skin?.accessories,
+        dustType: skin?.dustType,
+        iconSvg: iconSvg
+      };
+    });
+
+    expect(skinInfo.exists).toBe(true);
+    expect(skinInfo.id).toBe('momiji');
+    expect(skinInfo.starsRequired).toBe(185);
+    expect(skinInfo.accessories).toContain('autumnLeaf');
+    expect(skinInfo.dustType).toBe('autumn');
+    expect(skinInfo.iconSvg).toContain('svg');
+    expect(skinInfo.iconSvg).toContain('skin-svg');
+
+    // Star unlock check
+    const unlockStatus = await page.evaluate(() => {
+      // Mock getTotalStars
+      const origGetStars = window.gameInstance.getTotalStars;
+      
+      window.gameInstance.getTotalStars = () => 180; // completed level 1-60
+      const lockedBefore = window.gameInstance.isSkinUnlocked('momiji');
+
+      window.gameInstance.getTotalStars = () => 185; // completed level 61+62
+      const unlockedAfter = window.gameInstance.isSkinUnlocked('momiji');
+
+      // Equip skin and inspect 3D renderer
+      window.gameInstance.equipSkin('momiji');
+      const equippedId = window.gameInstance.equippedSkin;
+      const leafAccessory = window.gameInstance.renderer.komaEarMeshes.find(e => e.type === 'leaf');
+
+      // Restore
+      window.gameInstance.getTotalStars = origGetStars;
+
+      return {
+        lockedBefore,
+        unlockedAfter,
+        equippedId,
+        hasLeafAccessory: !!leafAccessory
+      };
+    });
+
+    expect(unlockStatus.lockedBefore).toBe(false);
+    expect(unlockStatus.unlockedAfter).toBe(true);
+    expect(unlockStatus.equippedId).toBe('momiji');
+    expect(unlockStatus.hasLeafAccessory).toBe(true);
+  });
 });

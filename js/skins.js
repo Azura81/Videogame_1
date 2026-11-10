@@ -199,6 +199,30 @@ const KOMA_SKINS = {
     },
     dustType: "gold",
     accessories: ["singleEar", "kamiHalo"]
+  },
+  momiji: {
+    id: "momiji",
+    name: "Momiji Kitsune",
+    jpName: "紅葉",
+    subtitle: "Herbstbote · Geist des Momiji-Waldes",
+    desc: "Im goldenen Herbstlaub von Arashiyama geweiht. Warmer Bernstein- & Terracotta-Lack, leuchtende goldene Visor-Augen und ein schwebendes Ahornblatt auf dem Kopf.",
+    starsRequired: 185,
+    icon: "🍁",
+    accentColor: "#f97316",
+    tag: "185 Sterne",
+    materials: {
+      body: { color: 0xea580c, metalness: 0.25, roughness: 0.22 },
+      visor: { color: 0x1f1107, metalness: 0.85, roughness: 0.14 },
+      base: { color: 0x291508, metalness: 0.65, roughness: 0.28 },
+      eye: { color: 0xffbe0b },
+      glow: { color: 0xf59e0b, emissive: 0xea580c, emissiveIntensity: 1.25 },
+      pack: { color: 0x78350f, metalness: 0.3, roughness: 0.42 },
+      packStrap: { color: 0xffb703, emissive: 0xffb703, emissiveIntensity: 1.1 },
+      light: 0xf97316,
+      dustColor: 0xf59e0b
+    },
+    dustType: "autumn",
+    accessories: ["singleEar", "autumnLeaf"]
   }
 };
 

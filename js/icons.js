@@ -575,6 +575,21 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  skinMomiji: (size = 24, color = "#f97316") => `
+    <svg class="svg-icon skin-svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <!-- Autumn Maple Leaf (Momiji) on Head -->
+      <path d="M12 9V5.5" stroke="#9a3412" stroke-width="1.5"/>
+      <path d="M12 2l1.6 3 3.2-.8-1.5 2.8 2.7 1.8-3.2.4-.8 2.8-.8-2.8-3.2-.4 2.7-1.8-1.5-2.8 3.2.8z" fill="#ea580c" stroke="#dc2626" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M12 3.8v4" stroke="#fef08a" stroke-width="0.8"/>
+      <!-- KOMA Chassis & Ear -->
+      <path d="M6.5 10.5V6a1.8 1.8 0 0 1 3.5.5v4"/>
+      <rect x="4" y="10.5" width="16" height="11" rx="5.5" fill="${color}" fill-opacity="0.22"/>
+      <path d="M7 15.5h10" stroke-width="2.2" stroke="${color}"/>
+      <circle cx="9.5" cy="15.5" r="1" fill="#ffbe0b" stroke="none"/>
+      <circle cx="14.5" cy="15.5" r="1" fill="#ffbe0b" stroke="none"/>
+    </svg>
+  `,
+
   // Helper to fetch skin SVG by id
   getSkinIcon: (skinId, size = 24, color = "currentColor") => {
     switch (skinId) {
@@ -586,6 +601,7 @@ const KOMA_ICONS = {
       case "kami": return KOMA_ICONS.skinGoldKami(size, color);
       case "ryujin": return KOMA_ICONS.skinRyujinDragon(size, color);
       case "pagoda": return KOMA_ICONS.skinMidoriKami(size, color);
+      case "momiji": return KOMA_ICONS.skinMomiji(size, color);
       default: return KOMA_ICONS.skinShiroUsagi(size, color);
     }
   },

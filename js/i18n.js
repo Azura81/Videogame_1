@@ -814,6 +814,11 @@
         "subtitle": "Emerald Messenger · Sovereign of 100 Floors",
         "desc": "Exclusive garment for conquerors of the Tower of 100 Trials. The classic original chassis in sacred emerald green, crowned by the golden divine halo.",
         "tag": "Tower Trophy"
+    },
+    "momiji": {
+        "subtitle": "Autumn Herald · Spirit of the Momiji Forest",
+        "desc": "Consecrated in the golden autumn foliage of Arashiyama. Warm amber & terracotta coat, glowing golden visor eyes, and a floating maple leaf atop its head.",
+        "tag": "185 Stars"
     }
 };
 

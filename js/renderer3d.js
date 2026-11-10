@@ -2660,6 +2660,79 @@ class GardenRenderer {
       ribbon.rotation.x = Math.PI * 0.65;
       this.komaGroup.add(ribbon);
     }
+
+    // (h) Autumn Maple Leaf Ornament (Momiji Kitsune)
+    if (accessories.includes("autumnLeaf")) {
+      const leafGroup = new THREE.Group();
+
+      const leafMat = new THREE.MeshStandardMaterial({
+        color: 0xea580c,
+        emissive: 0x9a3412,
+        emissiveIntensity: 0.35,
+        roughness: 0.35,
+        metalness: 0.15,
+        side: THREE.DoubleSide
+      });
+      const veinMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+      const stemMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.6 });
+
+      // Stem
+      const stemGeo = new THREE.CylinderGeometry(0.008, 0.012, 0.12, 6);
+      const stemMesh = new THREE.Mesh(stemGeo, stemMat);
+      stemMesh.position.set(0, -0.04, 0);
+      stemMesh.rotation.z = 0.15;
+      leafGroup.add(stemMesh);
+
+      // Central stem vein
+      const veinGeo = new THREE.CylinderGeometry(0.005, 0.006, 0.14, 4);
+      const veinMesh = new THREE.Mesh(veinGeo, veinMat);
+      veinMesh.position.set(0, 0.05, 0.006);
+      leafGroup.add(veinMesh);
+
+      // 5 Maple leaf lobes (characteristic Japanese Momiji form)
+      const centerLobeGeo = new THREE.ConeGeometry(0.045, 0.14, 5);
+      centerLobeGeo.scale(1.0, 1.0, 0.18);
+      const centerLobe = new THREE.Mesh(centerLobeGeo, leafMat);
+      centerLobe.position.set(0, 0.06, 0);
+      leafGroup.add(centerLobe);
+
+      const uLeftGeo = new THREE.ConeGeometry(0.038, 0.12, 5);
+      uLeftGeo.scale(1.0, 1.0, 0.18);
+      const uLeft = new THREE.Mesh(uLeftGeo, leafMat);
+      uLeft.position.set(-0.04, 0.045, 0);
+      uLeft.rotation.z = 0.55;
+      leafGroup.add(uLeft);
+
+      const uRightGeo = new THREE.ConeGeometry(0.038, 0.12, 5);
+      uRightGeo.scale(1.0, 1.0, 0.18);
+      const uRight = new THREE.Mesh(uRightGeo, leafMat);
+      uRight.position.set(0.04, 0.045, 0);
+      uRight.rotation.z = -0.55;
+      leafGroup.add(uRight);
+
+      const lLeftGeo = new THREE.ConeGeometry(0.03, 0.09, 5);
+      lLeftGeo.scale(1.0, 1.0, 0.18);
+      const lLeft = new THREE.Mesh(lLeftGeo, leafMat);
+      lLeft.position.set(-0.06, 0.015, 0);
+      lLeft.rotation.z = 1.15;
+      leafGroup.add(lLeft);
+
+      const lRightGeo = new THREE.ConeGeometry(0.03, 0.09, 5);
+      lRightGeo.scale(1.0, 1.0, 0.18);
+      const lRight = new THREE.Mesh(lRightGeo, leafMat);
+      lRight.position.set(0.06, 0.015, 0);
+      lRight.rotation.z = -1.15;
+      leafGroup.add(lRight);
+
+      // Position leaf atop KOMA's head, tilted gracefully
+      leafGroup.position.set(0.08, 0.74, 0.04);
+      leafGroup.rotation.x = -0.22;
+      leafGroup.rotation.z = 0.28;
+      leafGroup.rotation.y = 0.15;
+      this.komaGroup.add(leafGroup);
+
+      this.komaEarMeshes.push({ mesh: leafGroup, baseRotZ: 0.28, baseRotX: -0.22, type: "leaf", side: 1 });
+    }
     
     // 5. Delivery Backpack / Spirit Parcel
     const packGeo = new THREE.BoxGeometry(0.26, 0.28, 0.2);
@@ -4561,6 +4634,39 @@ class GardenRenderer {
             pMesh.position.y += vy;
             pMesh.position.z += vz;
             pMesh.material.opacity = 0.95 * (1 - p);
+          }
+        });
+      }
+    } else if (dustType === "autumn") {
+      // 3 floating autumn maple leaf motes in warm amber & crimson
+      for (let i = 0; i < 3; i++) {
+        const leafGeo = new THREE.SphereGeometry(0.038, 6, 6);
+        leafGeo.scale(1.3, 0.25, 0.85);
+        const leafColor = i % 2 === 0 ? 0xea580c : 0xf59e0b;
+        const pMat = new THREE.MeshBasicMaterial({ color: leafColor, transparent: true, opacity: 0.88 });
+        const pLeaf = new THREE.Mesh(leafGeo, pMat);
+        pLeaf.position.set(worldX + (Math.random() - 0.5) * 0.35, 0.48, worldZ + (Math.random() - 0.5) * 0.35);
+        pLeaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+        this.effectsGroup.add(pLeaf);
+
+        const vx = (Math.random() - 0.5) * 0.024;
+        const vy = 0.025 + Math.random() * 0.025;
+        const vz = (Math.random() - 0.5) * 0.024;
+        const rotSpeed = (Math.random() - 0.5) * 0.12;
+
+        this.dynamicEffects.push({
+          mesh: pLeaf,
+          disposeGeo: true,
+          disposeMat: true,
+          startTime: performance.now(),
+          duration: 480,
+          update: (p) => {
+            pLeaf.position.x += vx;
+            pLeaf.position.y += vy;
+            pLeaf.position.z += vz;
+            pLeaf.rotation.y += rotSpeed;
+            pLeaf.rotation.z += rotSpeed * 0.5;
+            pLeaf.material.opacity = 0.88 * (1 - p);
           }
         });
       }
