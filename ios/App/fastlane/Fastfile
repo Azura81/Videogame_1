@@ -159,7 +159,7 @@ platform :ios do
       demo_account_required: false,
       notes: "Spirit Delivery is a 3D puzzle game. No login or account is required to play."
     }
-    changelog_text = "Tower of 100 Trials obstacles & progressive difficulty, exclusive Midori Kami skin, custom SVG icons (no iOS emojis), single abort button, SFX toggle fix, and reserved ad banner."
+    changelog_text = "40 new Autumn Levels (Momiji theme & patrolling shrine ghosts), Momiji Kitsune autumn skin with 3D maple leaf accessory, pure SVG vector icons, and progressive difficulty tuning."
 
     if already_uploaded && api_key
       upload_to_testflight(
