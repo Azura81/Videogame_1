@@ -88,6 +88,8 @@ class GardenRenderer {
     this.snowParticles = null;
     this.fragileMeshes = {};
     this.blockMeshes = {};
+    this.ghostMeshes = [];
+    this.isAutumnThemeActive = false;
     
     // Lighting
     this.ambientLight = null;
@@ -982,6 +984,260 @@ class GardenRenderer {
     if (this.renderer && this.renderer.shadowMap) {
       this.renderer.shadowMap.needsUpdate = true;
     }
+  }
+
+  // ==========================================================================
+  // AUTUMN THEME: HERBSTWALD (MOMIJI) – LEVEL 61–100
+  // ==========================================================================
+
+  setAutumnTheme(enabled) {
+    this.isAutumnThemeActive = !!enabled;
+
+    // Recolor drifting petals into red/orange/golden maple leaves
+    if (this.sakuraParticles) {
+      const colorAttr = this.sakuraParticles.geometry.attributes.color;
+      if (colorAttr) {
+        if (!this._sakuraOriginalColors) {
+          this._sakuraOriginalColors = new Float32Array(colorAttr.array);
+        }
+        if (enabled) {
+          const leafPalette = [
+            new THREE.Color(0xdc2626),
+            new THREE.Color(0xea580c),
+            new THREE.Color(0xf59e0b),
+            new THREE.Color(0xb91c1c),
+            new THREE.Color(0xfbbf24)
+          ];
+          const count = colorAttr.count;
+          for (let i = 0; i < count; i++) {
+            const c = leafPalette[i % leafPalette.length];
+            colorAttr.array[i * 3 + 0] = c.r;
+            colorAttr.array[i * 3 + 1] = c.g;
+            colorAttr.array[i * 3 + 2] = c.b;
+          }
+        } else {
+          colorAttr.array.set(this._sakuraOriginalColors);
+        }
+        colorAttr.needsUpdate = true;
+      }
+      if (enabled) this.sakuraParticles.visible = true;
+    }
+
+    // Warm amber dusk atmosphere
+    if (this.scene && enabled) {
+      this.scene.background.setHex(0x1a0f12);
+      if (this.scene.fog) this.scene.fog.color.setHex(0x1a0f12);
+    }
+    if (this.waterMesh && this.waterMesh.material && enabled) {
+      this.waterMesh.material.color.setHex(0x1f1a14);
+    }
+    if (this.sunLight) {
+      this.sunLight.color.setHex(enabled ? 0xffc48a : 0xa5c4f2);
+    }
+    if (this.ambientLight) {
+      this.ambientLight.color.setHex(enabled ? 0x4a3328 : 0x283b58);
+    }
+
+    if (enabled && !this.sharedAutumnStoneMat) {
+      this.sharedAutumnStoneMat = new THREE.MeshStandardMaterial({
+        map: this.textures.stone,
+        color: 0xd9b89a,
+        roughness: 0.65,
+        metalness: 0.08
+      });
+      this.sharedAutumnStoneMat.userData.isShared = true;
+
+      this.sharedAutumnGrassMat = new THREE.MeshStandardMaterial({
+        map: this.textures.moss,
+        color: 0xe0904a,
+        roughness: 0.85,
+        metalness: 0.02
+      });
+      this.sharedAutumnGrassMat.userData.isShared = true;
+
+      this.sharedLeafMat = new THREE.MeshBasicMaterial({
+        map: this.textures.petal,
+        color: 0xff7a1a,
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false
+      });
+      this.sharedLeafMat.userData.isShared = true;
+    }
+  }
+
+  // ==========================================================================
+  // WANDELNDE SCHREIN-GEISTER (Patrolling Shrine Ghosts)
+  // ==========================================================================
+
+  static getGhostPath(ghostDef) {
+    if (!ghostDef) return [];
+    if (Array.isArray(ghostDef)) return ghostDef;
+    return ghostDef.path || [];
+  }
+
+  buildGhostMesh(colorHex = 0xb8f2ff) {
+    const group = new THREE.Group();
+
+    const bodyMat = new THREE.MeshStandardMaterial({
+      color: colorHex,
+      emissive: colorHex,
+      emissiveIntensity: 0.55,
+      transparent: true,
+      opacity: 0.78,
+      roughness: 0.3
+    });
+
+    // Rounded spectral hood
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 14), bodyMat);
+    head.position.y = 0.72;
+    group.add(head);
+
+    // Flowing robe (open cone)
+    const robe = new THREE.Mesh(new THREE.ConeGeometry(0.27, 0.5, 18, 1, true), bodyMat);
+    robe.rotation.x = Math.PI;
+    robe.position.y = 0.48;
+    group.add(robe);
+
+    // Wispy tail
+    const tailMat = new THREE.MeshBasicMaterial({
+      color: colorHex,
+      transparent: true,
+      opacity: 0.4,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const tail = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.32, 12), tailMat);
+    tail.rotation.x = Math.PI;
+    tail.position.y = 0.12;
+    group.add(tail);
+
+    // Glowing eyes
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff3355 });
+    [-0.09, 0.09].forEach(ex => {
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), eyeMat);
+      eye.position.set(ex, 0.76, 0.22);
+      group.add(eye);
+    });
+
+    // Hitodama spirit flame orbiting the ghost
+    const flameMat = new THREE.MeshBasicMaterial({
+      color: 0x7dd3fc,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+    const flame = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), flameMat);
+    flame.position.set(0.34, 0.8, 0);
+    group.add(flame);
+
+    group.userData = { bodyMat, flame, tail };
+    return group;
+  }
+
+  buildGhostPathMarker(colorHex = 0x7dd3fc) {
+    const mat = new THREE.MeshBasicMaterial({
+      color: colorHex,
+      transparent: true,
+      opacity: 0.42,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.2, 0.27, 20), mat);
+    ring.rotation.x = -Math.PI / 2;
+    return ring;
+  }
+
+  spawnGhosts(levelData) {
+    this.ghostMeshes = [];
+    const ghosts = (levelData && levelData.ghosts) || [];
+    if (!ghosts.length) return;
+
+    const palette = [0xb8f2ff, 0xd8b4fe, 0xfde68a, 0xfca5a5];
+    const offsetX = (this.gridWidth - 1) / 2;
+    const offsetZ = (this.gridHeight - 1) / 2;
+
+    ghosts.forEach((gDef, idx) => {
+      const path = GardenRenderer.getGhostPath(gDef);
+      if (!path.length) return;
+      const color = palette[idx % palette.length];
+
+      // Visible patrol route so players can plan their timing
+      const seen = new Set();
+      path.forEach(([px, py]) => {
+        const key = `${px},${py}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        const marker = this.buildGhostPathMarker(color);
+        marker.position.set((px - offsetX) * this.tileSize, 0.47 + idx * 0.004, (py - offsetZ) * this.tileSize);
+        this.decorGroup.add(marker);
+      });
+
+      const mesh = this.buildGhostMesh(color);
+      const start = this.gridToWorld(path[0][0], path[0][1]);
+      mesh.position.copy(start);
+      this.decorGroup.add(mesh);
+
+      this.ghostMeshes.push({
+        obj: mesh,
+        path,
+        from: start.clone(),
+        to: start.clone(),
+        startTime: 0,
+        duration: 1,
+        phase: idx * 1.7
+      });
+    });
+  }
+
+  animateGhostsStep(positions, duration = 300) {
+    if (!this.ghostMeshes || !positions) return;
+    const now = performance.now();
+    this.ghostMeshes.forEach((g, i) => {
+      const p = positions[i];
+      if (!p) return;
+      g.from.copy(g.obj.position);
+      g.from.y = 0.45;
+      g.to.copy(this.gridToWorld(p[0], p[1]));
+      g.startTime = now;
+      g.duration = Math.max(60, duration);
+      const dx = g.to.x - g.from.x;
+      const dz = g.to.z - g.from.z;
+      if (Math.abs(dx) + Math.abs(dz) > 0.01) {
+        g.obj.rotation.y = Math.atan2(dx, dz);
+      }
+    });
+  }
+
+  resetGhosts() {
+    if (!this.ghostMeshes) return;
+    this.ghostMeshes.forEach(g => {
+      const start = this.gridToWorld(g.path[0][0], g.path[0][1]);
+      g.from.copy(start);
+      g.to.copy(start);
+      g.startTime = 0;
+      g.obj.position.copy(start);
+      g.obj.rotation.y = 0;
+    });
+  }
+
+  updateGhosts(time) {
+    if (!this.ghostMeshes || !this.ghostMeshes.length) return;
+    const now = performance.now();
+    this.ghostMeshes.forEach(g => {
+      const p = g.startTime ? Math.min(1, (now - g.startTime) / g.duration) : 1;
+      const ease = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      g.obj.position.x = g.from.x + (g.to.x - g.from.x) * ease;
+      g.obj.position.z = g.from.z + (g.to.z - g.from.z) * ease;
+      g.obj.position.y = 0.45 + Math.sin(time * 2.4 + g.phase) * 0.06;
+      const u = g.obj.userData;
+      if (u.flame) {
+        const a = time * 2.8 + g.phase;
+        u.flame.position.set(Math.cos(a) * 0.34, 0.8 + Math.sin(a * 1.3) * 0.06, Math.sin(a) * 0.34);
+      }
+      if (u.bodyMat) u.bodyMat.emissiveIntensity = 0.45 + Math.sin(time * 3 + g.phase) * 0.15;
+      if (u.tail) u.tail.rotation.z = Math.sin(time * 3.2 + g.phase) * 0.25;
+    });
   }
 
   // ==========================================================================
@@ -2505,7 +2761,9 @@ class GardenRenderer {
     treeGroup.add(b2);
     
     // Fluffy Multi-Tier Sakura Canopy
-    const pinkColors = [0xff8eb8, 0xff6b9d, 0xffa5c5, 0xff4f87, 0xffd2e4];
+    const pinkColors = this.isAutumnThemeActive
+      ? [0xdc2626, 0xea580c, 0xf59e0b, 0xb91c1c, 0xf97316] // Momiji maple foliage
+      : [0xff8eb8, 0xff6b9d, 0xffa5c5, 0xff4f87, 0xffd2e4];
     const baseColor = pinkColors[seed % pinkColors.length];
     const foliageMat = new THREE.MeshStandardMaterial({
       color: baseColor,
@@ -3619,6 +3877,7 @@ class GardenRenderer {
 
     this.clearFrostHazard();
     this.clearSonicHazard();
+    this.resetGhosts();
     if (this.komainuGroup) {
       this.isKomainuPacified = false;
       if (this.komainuEyeMat) this.komainuEyeMat.color.setHex(0xffaa00);
@@ -3651,6 +3910,7 @@ class GardenRenderer {
     this.windMeshes = [];
     this.fragileMeshes = {};
     this.blockMeshes = {};
+    this.ghostMeshes = [];
     this.goalMesh = null;
 
     // Boss fight: Spawn Komainu for Level 30 or Ryūjin Dragon for Level 60
@@ -3668,6 +3928,8 @@ class GardenRenderer {
     // Apply Mount Fuji scenic background and alpine snowfall for Fuji levels
     const isFuji = (levelData.c && (levelData.c.includes("Fuji") || levelData.c.includes("Berg"))) || levelData.theme === "fuji";
     this.setFujiTheme(isFuji);
+    const isAutumn = !isFuji && levelData.theme === "autumn";
+    this.setAutumnTheme(isAutumn);
     
     // 2. Center offset: World origin (0,0) is center of grid
     const offsetX = (this.gridWidth - 1) / 2;
@@ -3710,10 +3972,13 @@ class GardenRenderer {
           } else if (isGrass(x, y)) {
             // Lush Green Moss / Alpine Frost Meadow Tile
             const grass = this.buildGrassTile(posX, posZ, isFuji);
+            if (isAutumn && this.sharedAutumnGrassMat && grass.children[0]) {
+              grass.children[0].material = this.sharedAutumnGrassMat;
+            }
             this.tilesGroup.add(grass);
           } else {
             // Standard Stone Path Slab (reusing shared geometry & material, frosty stone on Fuji)
-            const tileMat = isFuji ? this.sharedSnowStoneMat : this.sharedStoneMat;
+            const tileMat = isFuji ? this.sharedSnowStoneMat : (isAutumn ? this.sharedAutumnStoneMat : this.sharedStoneMat);
             const tile = new THREE.Mesh(this.sharedStoneGeo, tileMat);
             tile.position.set(posX, 0.22, posZ);
             tile.receiveShadow = true;
@@ -3728,8 +3993,8 @@ class GardenRenderer {
               }
             } else {
               // Fallen Petals on random path tiles in summer levels
-              if ((x * 3 + y * 7) % 5 === 0) {
-                const petalMesh = new THREE.Mesh(this.sharedPetalGeo, this.sharedPetalMat);
+              if ((x * 3 + y * 7) % 5 === 0 || (isAutumn && (x * 5 + y * 3) % 4 === 0)) {
+                const petalMesh = new THREE.Mesh(this.sharedPetalGeo, isAutumn ? this.sharedLeafMat : this.sharedPetalMat);
                 petalMesh.rotation.x = -Math.PI / 2;
                 petalMesh.position.set(posX + 0.12, 0.46, posZ - 0.1);
                 this.tilesGroup.add(petalMesh);
@@ -3806,7 +4071,7 @@ class GardenRenderer {
               const stoneWall = this.buildStoneWall(dir);
               stoneWall.position.set(posX, 0.22, posZ);
               this.decorGroup.add(stoneWall);
-            } else if (seed < 86) {
+            } else if (seed < 86 && !(isAutumn && seed % 2 === 1)) {
               // Sculpted Cloud Pine (Niwaki, snow on Fuji)
               const pine = this.buildPineTree(x + y, isFuji);
               pine.position.set(posX, 0, posZ);
@@ -3908,6 +4173,9 @@ class GardenRenderer {
     
     // 5. Position KOMA at start location
     this.setKomaInitialState(levelData.s[0], levelData.s[1], levelData.s[2]);
+
+    // 5b. Patrolling Shrine Ghosts (Herbst-Kapitel)
+    this.spawnGhosts(levelData);
     
     // 6. Adjust Camera Zoom for grid size
     this.onResize();
@@ -4913,6 +5181,7 @@ class GardenRenderer {
     });
 
     // 5c. Spirit Lotus Orb Animations
+    this.updateGhosts(time);
     this.orbMeshes.forEach((o, idx) => {
       if (o.obj.visible) {
         const u = o.obj.userData;

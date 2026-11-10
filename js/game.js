@@ -1622,6 +1622,32 @@ class GameEngine {
           </div>
         `;
       }
+    } else if (type === "ghosts") {
+      if (this.dom.mechanicIntroTitle) this.dom.mechanicIntroTitle.textContent = isEn ? "New Threat" : "Neue Gefahr";
+      if (this.dom.mechanicIntroSubtitle) this.dom.mechanicIntroSubtitle.textContent = isEn ? "Wandering Shrine Ghosts (Yūrei)" : "Wandelnde Schrein-Geister (Yūrei)";
+      if (this.dom.mechanicIntroDesc) this.dom.mechanicIntroDesc.textContent = isEn
+        ? "Restless spirits patrol the autumn forest in a fixed rhythm."
+        : "Ruhelose Geister patrouillieren im festen Takt durch den Herbstwald.";
+      if (this.dom.mechanicIntroIcon && typeof KOMA_ICONS !== "undefined" && KOMA_ICONS.ghost) {
+        this.dom.mechanicIntroIcon.innerHTML = KOMA_ICONS.ghost(32, "var(--cyan)");
+      }
+      if (this.dom.mechanicIntroBullets) {
+        this.dom.mechanicIntroBullets.innerHTML = isEn ? `
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>One beat per command:</strong> Every command (forward, turn, action) moves each ghost one tile along its glowing route.</div></div>
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>Don't get caught:</strong> If KOMA ends on a ghost's tile or walks straight through it, the delivery fails.</div></div>
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>Wait for the moment:</strong> Action on an empty tile makes KOMA wait one beat – perfect for timing!</div></div>
+        ` : `
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>Ein Takt pro Befehl:</strong> Jeder Befehl (Vorwärts, Drehen, Aktion) bewegt jeden Geist ein Feld weiter entlang seiner leuchtenden Spur.</div></div>
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>Nicht erwischen lassen:</strong> Landet KOMA auf dem Feld eines Geistes oder läuft frontal durch ihn hindurch, scheitert die Lieferung.</div></div>
+          <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
+            <div><strong>Auf den Moment warten:</strong> Aktion auf einem leeren Feld lässt KOMA einen Takt warten – perfekt fürs Timing!</div></div>
+        `;
+      }
     }
 
     this.dom.modalMechanicIntro.classList.add("active");
@@ -2645,7 +2671,10 @@ class GameEngine {
     const isTestSkipped = (typeof navigator !== "undefined" && navigator.webdriver) && !urlParams.has("testMechanic");
 
     if (!isTestSkipped) {
-      if (lvl && lvl.fragile && lvl.fragile.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_fragile_intro"))) {
+      if (lvl && lvl.ghosts && lvl.ghosts.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_ghosts_intro"))) {
+        this.showMechanicIntro("ghosts");
+        localStorage.setItem("koma_seen_ghosts_intro", "true");
+      } else if (lvl && lvl.fragile && lvl.fragile.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_fragile_intro"))) {
         this.showMechanicIntro("fragile");
         localStorage.setItem("koma_seen_fragile_intro", "true");
       } else if (lvl && lvl.blocks && lvl.blocks.length > 0 && (typeof localStorage !== "undefined" && !localStorage.getItem("koma_seen_blocks_intro"))) {
@@ -2670,6 +2699,8 @@ class GameEngine {
       collapsedFragileTiles: new Set(),
       blocks: (lvl.blocks || []).map(b => [b[0], b[1]]),
       waterTiles: new Set((lvl.water || []).map(w => `${w[0]},${w[1]}`)),
+      ghostStep: 0,
+      stepPrev: null,
       isWin: false,
       isFail: false
     };
@@ -3791,6 +3822,7 @@ class GameEngine {
       this.state.dir = turnMap[this.state.dir];
       this.renderer.animateRotate(this.state.dir, this.getStepDelay(220));
       Sound.playTurn();
+      if (this.stepGhosts(lvl, this.state.x, this.state.y)) return;
       this.processBossBreath(lvl, this.currentStep, () => {
         this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(250));
       });
@@ -3803,6 +3835,7 @@ class GameEngine {
       this.state.dir = turnMap[this.state.dir];
       this.renderer.animateRotate(this.state.dir, this.getStepDelay(220));
       Sound.playTurn();
+      if (this.stepGhosts(lvl, this.state.x, this.state.y)) return;
       this.processBossBreath(lvl, this.currentStep, () => {
         this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(250));
       });
@@ -3836,10 +3869,14 @@ class GameEngine {
         const colorNames = { cyan: "Türkis", magenta: "Violett", gold: "Gold", green: "Smaragd" };
         const colorName = colorNames[swColor] || swColor;
         this.setFeedback(`✦ ${colorName}-Schalter aktiviert! Das zugehörige Tor öffnet sich.`, "good");
+      } else if (lvl.ghosts && lvl.ghosts.length > 0) {
+        Sound.playTurn();
+        this.setFeedback("KOMA hält inne und wartet einen Takt ab ...", "normal");
       } else {
         Sound.playBump();
         this.setFeedback("Hier gibt es keinen Schalter zum Aktivieren.", "normal");
       }
+      if (this.stepGhosts(lvl, this.state.x, this.state.y)) return;
       this.processBossBreath(lvl, this.currentStep, () => {
         this.playbackTimer = setTimeout(() => this.finishCurrentStep(), this.getStepDelay(300));
       });
@@ -3970,6 +4007,7 @@ class GameEngine {
       }
 
       // Valid step: Hop forward and trigger audio & events on exact touchdown
+      this.state.stepPrev = [prevX, prevY];
       this.state.x = nx;
       this.state.y = ny;
 
@@ -4132,8 +4170,78 @@ class GameEngine {
     });
   }
 
+  getGhostPositions(lvl, t) {
+    const ghosts = (lvl && lvl.ghosts) || [];
+    return ghosts.map(g => {
+      const path = Array.isArray(g) ? g : (g.path || []);
+      if (!path.length) return null;
+      return path[((t % path.length) + path.length) % path.length];
+    });
+  }
+
+  /**
+   * Advance all patrolling shrine ghosts by one beat and check for a collision.
+   * Ghost i stands on path[t % path.length] after t executed commands.
+   * Returns true when KOMA was caught (level failed).
+   */
+  stepGhosts(lvl, prevX, prevY) {
+    if (!lvl || !lvl.ghosts || lvl.ghosts.length === 0) return false;
+    const t = (this.state.ghostStep || 0) + 1;
+    const oldPos = this.getGhostPositions(lvl, t - 1);
+    const newPos = this.getGhostPositions(lvl, t);
+    this.state.ghostStep = t;
+    this.state.stepPrev = null;
+    if (this.renderer && typeof this.renderer.animateGhostsStep === "function") {
+      this.renderer.animateGhostsStep(newPos, this.getStepDelay(280));
+    }
+
+    const kx = this.state.x;
+    const ky = this.state.y;
+    const caught = newPos.some((p, i) => {
+      if (!p) return false;
+      if (p[0] === kx && p[1] === ky) return true;
+      const o = oldPos[i];
+      // Head-on swap: KOMA and ghost pass through each other
+      return o && p[0] === prevX && p[1] === prevY && o[0] === kx && o[1] === ky;
+    });
+    if (!caught) return false;
+
+    this.state.isFail = true;
+    this.isPlaying = false;
+    this.isStepMode = false;
+    if (typeof document !== "undefined") document.body.classList.remove("is-executing");
+    if (this.renderer && typeof this.renderer.animateBump === "function") this.renderer.animateBump();
+    Sound.playBump();
+    this.triggerHaptic([60, 40, 80]);
+
+    if (this.isTowerMode && typeof TowerTrial !== "undefined") {
+      const failRes = TowerTrial.handleFail();
+      if (failRes.gameOver) {
+        setTimeout(() => this.showTowerGameOver(failRes), 550);
+      } else {
+        this.reset(false);
+        this.setFeedback(failRes.message, failRes.absorbed ? "normal" : "bad");
+      }
+      return true;
+    }
+
+    const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+    this.setFeedback(
+      isEn
+        ? "Caught by a shrine ghost! Watch its glowing patrol route and time your moves – Action (A) on an empty tile lets KOMA wait one beat."
+        : "Vom Schrein-Geist erfasst! Beobachte seine leuchtende Patrouillen-Spur und plane dein Timing – Aktion (A) auf einem leeren Feld lässt KOMA einen Takt warten.",
+      "bad"
+    );
+    this.renderQueue();
+    return true;
+  }
+
   handlePostMoveChecks(lvl) {
     if (!this.isPlaying) return;
+
+    // Patrolling Shrine Ghosts advance after KOMA's move resolves (incl. wind & portals)
+    const prev = this.state.stepPrev || [this.state.x, this.state.y];
+    if (this.stepGhosts(lvl, prev[0], prev[1])) return;
 
     // Check Victory
     if (this.state.x === lvl.g[0] && this.state.y === lvl.g[1]) {

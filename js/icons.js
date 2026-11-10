@@ -142,6 +142,16 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  // 12b. Yūrei Shrine Ghost (Wandelnder Schrein-Geist)
+  ghost: (size = 18, color = "currentColor") => `
+    <svg class="svg-icon svg-ghost" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(125,211,252,0.6));" aria-hidden="true">
+      <path d="M5 20V10a7 7 0 0 1 14 0v10l-2.3-1.8L14.3 20 12 18.2 9.7 20l-2.4-1.8L5 20z" fill="${color}" fill-opacity="0.2"/>
+      <circle cx="9.3" cy="10.5" r="1.3" fill="#ff3355" stroke="none"/>
+      <circle cx="14.7" cy="10.5" r="1.3" fill="#ff3355" stroke="none"/>
+      <path d="M10 14.5c1.2.8 2.8.8 4 0" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+  `,
+
   // 13. Folded Realm Map / 60 Levels (🗺️)
   map: (size = 18, color = "currentColor") => `
     <svg class="svg-icon svg-map" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
