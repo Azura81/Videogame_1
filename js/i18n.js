@@ -43,8 +43,8 @@
       // Homescreen
       home_kicker: "TORII DER 1000 SCHREINE",
       home_campaign_title: "Schrein-Pfad",
-      home_campaign_badge: "60 Level",
-      home_campaign_desc: "Reise durch 6 heilige Kapitel bis zum Gipfel des Fuji.",
+      home_campaign_badge: "100 Level",
+      home_campaign_desc: "Reise durch 10 heilige Kapitel vom Laternenviertel bis zum Ewigen Heiligtum.",
       home_tower_title: "Turm der 100 Prüfungen",
       home_tower_badge: "Roguelike",
       home_tower_desc: "100 zufällige Schrein-Ebenen, 3 Laternen-Leben & heilige Altäre.",
@@ -64,7 +64,7 @@
       stars_pill_title: "Gesammelte Sterne für Kami-Skins",
       mode_dropdown_title: "Spielmodus wählen",
       mode_campaign: "Kampagne",
-      mode_campaign_sub: "60 Level Progression",
+      mode_campaign_sub: "100 Level Progression",
       mode_tower: "100-Level-Schreinprüfung",
       mode_daily: "Tägliche Prüfung",
 
@@ -133,13 +133,17 @@
       drawer_title: "Levelauswahl",
       fuji_shortcut_title: "Kapitel 6: Der Heilige Berg Fuji",
       fuji_shortcut_sub: "Level 51–60 · Schneelandschaft & Windböen",
-      tab_all: "Alle (60)",
+      tab_all: "Alle (100)",
       tab_ch1: "Kap. 1",
       tab_ch2: "Kap. 2",
       tab_ch3: "Kap. 3",
       tab_ch4: "Kap. 4",
       tab_ch5: "Kap. 5",
       tab_ch6: "Kap. 6",
+      tab_ch7: "Kap. 7",
+      tab_ch8: "Kap. 8",
+      tab_ch9: "Kap. 9",
+      tab_ch10: "Kap. 10",
 
       // Win Modal
       win_title_normal: "Lieferung erfolgreich!",
@@ -160,9 +164,9 @@
 
       // Mobile Shrine Hub
       mobile_hub_title: "Spirit Schrein-Hub",
-      mobile_hub_sub: "Garderobe · 60 Level · Erfolge",
+      mobile_hub_sub: "Garderobe · 100 Level · Erfolge",
       hub_tab_wardrobe: "Garderobe",
-      hub_tab_levels: "60 Level",
+      hub_tab_levels: "100 Level",
       hub_tab_trophies: "Erfolge",
       hub_tab_settings: "Optionen",
       btn_check: "Prüfen →",
@@ -357,8 +361,8 @@
       // Homescreen
       home_kicker: "TORII OF 1000 SHRINES",
       home_campaign_title: "Shrine Path",
-      home_campaign_badge: "60 Levels",
-      home_campaign_desc: "Journey through 6 sacred chapters to the summit of Mount Fuji.",
+      home_campaign_badge: "100 Levels",
+      home_campaign_desc: "Journey across 10 sacred chapters from the Lantern Quarter to the Eternal Sanctuary.",
       home_tower_title: "Tower of 100 Trials",
       home_tower_badge: "Roguelike",
       home_tower_desc: "100 procedural shrine floors, 3 lantern lives & divine altars.",
@@ -378,7 +382,7 @@
       stars_pill_title: "Collected stars for Kami skins",
       mode_dropdown_title: "Select game mode",
       mode_campaign: "Campaign",
-      mode_campaign_sub: "60 Levels Progression",
+      mode_campaign_sub: "100 Levels Progression",
       mode_tower: "100-Floor Shrine Trial",
       mode_daily: "Daily Trial",
 
@@ -447,13 +451,17 @@
       drawer_title: "Select Level",
       fuji_shortcut_title: "Chapter 6: Sacred Mount Fuji",
       fuji_shortcut_sub: "Levels 51–60 · Snowscapes & Wind Gusts",
-      tab_all: "All (60)",
+      tab_all: "All (100)",
       tab_ch1: "Ch. 1",
       tab_ch2: "Ch. 2",
       tab_ch3: "Ch. 3",
       tab_ch4: "Ch. 4",
       tab_ch5: "Ch. 5",
       tab_ch6: "Ch. 6",
+      tab_ch7: "Ch. 7",
+      tab_ch8: "Ch. 8",
+      tab_ch9: "Ch. 9",
+      tab_ch10: "Ch. 10",
 
       // Win Modal
       win_title_normal: "Delivery Successful!",
@@ -474,9 +482,9 @@
 
       // Mobile Shrine Hub
       mobile_hub_title: "Spirit Shrine Hub",
-      mobile_hub_sub: "Wardrobe · 60 Levels · Achievements",
+      mobile_hub_sub: "Wardrobe · 100 Levels · Achievements",
       hub_tab_wardrobe: "Wardrobe",
-      hub_tab_levels: "60 Levels",
+      hub_tab_levels: "100 Levels",
       hub_tab_trophies: "Achievements",
       hub_tab_settings: "Options",
       btn_check: "Check →",

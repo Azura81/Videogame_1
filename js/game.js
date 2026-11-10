@@ -1891,7 +1891,7 @@ class GameEngine {
         this.dom.mobileHubWinBanner.style.display = "block";
         if (this.dom.mobileHubWinTitle) {
           this.dom.mobileHubWinTitle.textContent =
-            this.currentLevelIdx === LEVELS.length - 1 ? "Alle 60 Lieferungen geschafft!" : `Level ${this.currentLevelIdx + 1} geschafft!`;
+            this.currentLevelIdx === LEVELS.length - 1 ? `Alle ${LEVELS.length} Lieferungen geschafft!` : `Level ${this.currentLevelIdx + 1} geschafft!`;
         }
         if (this.dom.mobileHubWinStars) {
           const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
@@ -3606,7 +3606,7 @@ class GameEngine {
     let maxIdx = LEVELS.length - 1;
     if (this.activeDrawerChapter && this.activeDrawerChapter !== "all") {
       const ch = parseInt(this.activeDrawerChapter, 10);
-      if (!isNaN(ch) && ch >= 1 && ch <= 6) {
+      if (!isNaN(ch) && ch >= 1 && ch <= 10) {
         minIdx = (ch - 1) * 10;
         maxIdx = Math.min(ch * 10 - 1, LEVELS.length - 1);
       }

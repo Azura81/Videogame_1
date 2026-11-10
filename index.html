@@ -95,7 +95,7 @@
             <div class="home-stars-pill" title="Gesammelte Sterne für Kami-Skins" data-i18n-title="stars_pill_title">
               <svg class="svg-icon star-icon-svg filled" width="16" height="16" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               <strong id="homeTotalStars">0</strong>
-              <span class="home-stars-max">/ 180</span>
+              <span class="home-stars-max">/ 300</span>
             </div>
 
             <button id="btnHomeChapters" class="home-action-pill chapters-pill" title="Levels" data-i18n-title="btn_levels_title" aria-label="Levels">
@@ -172,7 +172,7 @@
                     </span>
                     <div class="mode-item-info">
                       <strong data-i18n="mode_campaign">Kampagne</strong>
-                      <small data-i18n="mode_campaign_sub">60 Level Progression</small>
+                      <small data-i18n="mode_campaign_sub">100 Level Progression</small>
                     </div>
                     <span class="mode-item-check" id="checkModeCampaign">✓</span>
                   </button>
@@ -270,7 +270,7 @@
             <svg class="svg-icon star-icon-svg filled" width="15" height="15" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
           </span>
           <span id="headerTotalStars">0</span>
-          <span class="star-max">/ 180</span>
+          <span class="star-max">/ 300</span>
         </div>
         <button id="btnSkins" class="icon-btn" title="Schrein-Garderobe & Kami-Skins" data-i18n-title="btn_wardrobe_title" aria-label="Kami-Skins öffnen">
           <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L6 6.5v4l3.5-1.5v12h5V9l3.5 1.5v-4L12 2.5z"/><path d="M9.5 5.5l2.5 3.5 2.5-3.5"/><path d="M9.5 13h5"/><path d="M10.5 15.5h3"/></svg>
@@ -562,13 +562,17 @@
         </button>
       </div>
       <div class="drawer-chapter-tabs" id="drawerChapterTabs">
-        <button class="drawer-tab active" data-chapter="all" data-i18n="tab_all">Alle (60)</button>
+        <button class="drawer-tab active" data-chapter="all" data-i18n="tab_all">Alle (100)</button>
         <button class="drawer-tab" data-chapter="1" data-i18n="tab_ch1">Kap. 1</button>
         <button class="drawer-tab" data-chapter="2" data-i18n="tab_ch2">Kap. 2</button>
         <button class="drawer-tab" data-chapter="3" data-i18n="tab_ch3">Kap. 3</button>
         <button class="drawer-tab" data-chapter="4" data-i18n="tab_ch4">Kap. 4</button>
         <button class="drawer-tab" data-chapter="5" data-i18n="tab_ch5">Kap. 5</button>
         <button class="drawer-tab fuji-tab" data-chapter="6"><span data-i18n="tab_ch6">Kap. 6</span> <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
+        <button class="drawer-tab autumn-tab" data-chapter="7" data-i18n="tab_ch7">Kap. 7</button>
+        <button class="drawer-tab autumn-tab" data-chapter="8" data-i18n="tab_ch8">Kap. 8</button>
+        <button class="drawer-tab autumn-tab" data-chapter="9" data-i18n="tab_ch9">Kap. 9</button>
+        <button class="drawer-tab autumn-tab finale-tab" data-chapter="10" data-i18n="tab_ch10">Kap. 10</button>
       </div>
       <div class="drawer-list" id="levelList"></div>
     </nav>
@@ -606,13 +610,13 @@
             </span>
             <div>
               <h2 class="mobile-hub-heading" data-i18n="mobile_hub_title">Spirit Schrein-Hub</h2>
-              <span class="mobile-hub-sub" data-i18n="mobile_hub_sub">Garderobe · 60 Level · Erfolge</span>
+              <span class="mobile-hub-sub" data-i18n="mobile_hub_sub">Garderobe · 100 Level · Erfolge</span>
             </div>
           </div>
           <div class="mobile-hub-stars" id="mobileHubStarsPill" title="Gesammelte Sterne für Kami-Skins">
             <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
             <strong id="mobileHubTotalStars">0</strong>
-            <span class="stars-max">/ 180</span>
+            <span class="stars-max">/ 300</span>
           </div>
           <button class="icon-btn mobile-hub-close-btn" id="btnCloseMobileHub" aria-label="Schrein-Hub schließen">✕</button>
         </div>
@@ -672,7 +676,7 @@
             <span class="tab-icon">
               <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" fill="currentColor" fill-opacity="0.18"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
             </span>
-            <span class="tab-label" data-i18n="hub_tab_levels">60 Level</span>
+            <span class="tab-label" data-i18n="hub_tab_levels">100 Level</span>
           </button>
           <button class="mobile-hub-tab" data-tab="trophies" id="tabBtnTrophies" role="tab" aria-selected="false">
             <span class="tab-icon">
@@ -710,7 +714,7 @@
           </div>
         </div>
 
-        <!-- Tab 2: Level-Wahl (60 Level in 6 Kapiteln) -->
+        <!-- Tab 2: Level-Wahl (100 Level in 10 Kapiteln) -->
         <div class="mobile-hub-panel" id="hubPanelLevels" role="tabpanel">
           <div class="mobile-chapter-pills" id="mobileChapterPills">
             <button class="chapter-pill active" data-chapter="1" data-i18n="tab_ch1">Kap. 1</button>
@@ -719,6 +723,10 @@
             <button class="chapter-pill" data-chapter="4" data-i18n="tab_ch4">Kap. 4</button>
             <button class="chapter-pill" data-chapter="5" data-i18n="tab_ch5">Kap. 5</button>
             <button class="chapter-pill" data-chapter="6"><span data-i18n="tab_ch6">Kap. 6</span> <svg class="svg-icon svg-fuji" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align: middle; margin-left: 2px;"><polygon points="12,3 2,21 22,21" fill="currentColor" fill-opacity="0.2"/><path d="M8.5 10.5L10 12l2-1.5 2 1.5 1.5-1.5" stroke="currentColor" stroke-width="1.6"/><polygon points="12,3 8.5,10.5 10,12 12,10.5 14,12 15.5,10.5" fill="#ffffff" fill-opacity="0.95"/></svg></button>
+            <button class="chapter-pill" data-chapter="7" data-i18n="tab_ch7">Kap. 7</button>
+            <button class="chapter-pill" data-chapter="8" data-i18n="tab_ch8">Kap. 8</button>
+            <button class="chapter-pill" data-chapter="9" data-i18n="tab_ch9">Kap. 9</button>
+            <button class="chapter-pill" data-chapter="10" data-i18n="tab_ch10">Kap. 10</button>
           </div>
           <div class="mobile-levels-grid" id="mobileLevelsGrid">
             <!-- Dynamically populated 10 levels for current chapter -->
@@ -831,13 +839,13 @@
             <div class="modal-stars-pill">
               <svg class="svg-icon star-icon-svg filled" width="14" height="14" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 0 6px var(--gold-glow));"><polygon points="12,1.5 15.2,8.2 22.5,9.2 17.2,14.4 18.5,21.7 12,18.2 5.5,21.7 6.8,14.4 1.5,9.2 8.8,8.2" fill="var(--gold)"/><polygon points="12,4.8 13.9,9.2 18.7,9.9 15.2,13.4 16,18.1 12,15.8 8,18.1 8.8,13.4 5.3,9.9 10.1,9.2" fill="#ffffff" opacity="0.38"/></svg>
               <strong id="modalTotalStars">0</strong>
-              <span class="modal-stars-max">/ 180</span>
+              <span class="modal-stars-max">/ 300</span>
             </div>
             <button class="icon-btn" id="btnCloseSkins" aria-label="Garderobe schließen">✕</button>
           </div>
         </div>
         <p class="modal-desc" style="text-align: left; margin: 10px 0 14px 0;" data-i18n="wardrobe_desc">
-          Schließe die 60 Level mit möglichst vielen Kamera-Credits ab, um Sterne zu sammeln und mystische japanische Kami-Designs freizuschalten.
+          Schließe die 100 Level mit möglichst vielen Kamera-Credits ab, um Sterne zu sammeln und mystische japanische Kami-Designs freizuschalten.
         </p>
         <div class="wardrobe-ad-banner" id="desktopWardrobeAdBanner">
           <button class="ad-reward-btn" id="btnDesktopWardrobeAd" title="+3 Kami-Sterne durch kurzes Werbevideo erhalten">

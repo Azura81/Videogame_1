@@ -26,6 +26,8 @@ function simulateLevel(lvl, solution) {
 
   for (let i = 0; i < solution.length; i++) {
     const cmd = solution[i];
+    const prevX = state.x;
+    const prevY = state.y;
     if (cmd === "L") {
       state.dir = turnLeft[state.dir];
     } else if (cmd === "R") {
@@ -150,8 +152,27 @@ function simulateLevel(lvl, solution) {
         if (allGates.length === 1) {
           state.openGates.add(allGates[0][2] || "magenta");
         }
+      } else if (lvl.ghosts && lvl.ghosts.length > 0) {
+        // Valid wait command on empty tile in ghost levels
       } else {
         return { success: false, error: `Step ${i+1} (${cmd}): Pressed action with no switch at (${state.x}, ${state.y})` };
+      }
+    }
+
+    // Ghost movement & collision check
+    if (lvl.ghosts && lvl.ghosts.length > 0) {
+      const t = i + 1;
+      for (const g of lvl.ghosts) {
+        const path = Array.isArray(g) ? g : (g.path || []);
+        if (!path.length) continue;
+        const cur = path[t % path.length];
+        const old = path[(t - 1) % path.length];
+        if (cur[0] === state.x && cur[1] === state.y) {
+          return { success: false, error: `Step ${i+1} (${cmd}): Caught by ghost at (${state.x}, ${state.y})` };
+        }
+        if (cur[0] === prevX && cur[1] === prevY && old[0] === state.x && old[1] === state.y) {
+          return { success: false, error: `Step ${i+1} (${cmd}): Head-on ghost swap at (${state.x}, ${state.y})` };
+        }
       }
     }
   }
