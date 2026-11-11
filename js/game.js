@@ -3736,7 +3736,7 @@ class GameEngine {
         }
       }
 
-      const isFujiLvl = idx >= 50;
+      const isFujiLvl = idx >= 50 && idx < 60;
       const fujiSvg = isFujiLvl && typeof KOMA_ICONS !== "undefined" ? `${KOMA_ICONS.fuji(13)} ` : "";
       const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
       btn.innerHTML = `

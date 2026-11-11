@@ -685,7 +685,15 @@
     "Himmelsbrücke": "Celestial Bridge",
     "Palast der Kami": "Palace of the Kami",
     "Der Heilige Berg Fuji": "Sacred Mount Fuji",
-    "Der Heilige Berg Fuji (富士山)": "Sacred Mount Fuji (富士山)"
+    "Der Heilige Berg Fuji (富士山)": "Sacred Mount Fuji (富士山)",
+    "Kapitel 07 · Herbstwald von Arashiyama": "Chapter 07 · Autumn Forest of Arashiyama",
+    "Kapitel 08 · Nebelschrein der Yōkai": "Chapter 08 · Mist Shrine of the Yōkai",
+    "Kapitel 09 · Blutmond-Ahorntal": "Chapter 09 · Blood Moon Maple Valley",
+    "Kapitel 10 · Heiligtum der 100 Prüfungen": "Chapter 10 · Sanctuary of 100 Trials",
+    "Herbstwald von Arashiyama": "Autumn Forest of Arashiyama",
+    "Nebelschrein der Yōkai": "Mist Shrine of the Yōkai",
+    "Blutmond-Ahorntal": "Blood Moon Maple Valley",
+    "Heiligtum der 100 Prüfungen": "Sanctuary of 100 Trials"
 };
 
   const TAGS_EN = {
@@ -713,6 +721,46 @@
     "Portal-Netz": "Portal Network",
     "Portal & Dual-Tore": "Portal & Dual Gates",
     "Labyrinth": "Labyrinth",
+    "Schrein-Geister": "Shrine Spirits",
+    "Geister-Patrouille": "Ghost Patrol",
+    "Timing & Geduld": "Timing & Patience",
+    "Schalter & Geister": "Switches & Ghosts",
+    "Geisterlicht-Bergung": "Spirit Light Recovery",
+    "Schalter-Rätsel": "Switch Puzzle",
+    "Gekreuzte Geister": "Crossing Spirits",
+    "Verzögerte Pfade": "Delayed Paths",
+    "Zwei Schrein-Geister": "Two Shrine Spirits",
+    "Meister-Patrouille": "Master Patrol",
+    "Brüchige Trittsteine": "Fragile Stepping Stones",
+    "Felsblock & Geister": "Boulder & Ghosts",
+    "Portal-Flucht": "Portal Escape",
+    "Wasser-Überquerung": "Water Crossing",
+    "Zwei Geister & Trittsteine": "Two Ghosts & Stepping Stones",
+    "Felsenbrücke bauen": "Building Stone Bridge",
+    "Teleportation & Geister": "Teleportation & Ghosts",
+    "Einweg-Trittsteine": "One-Way Stepping Stones",
+    "Felsblock & Portal": "Boulder & Portal",
+    "Meisterprüfung des Nebels": "Master Trial of the Mist",
+    "Bergwinde & Geister": "Mountain Winds & Ghosts",
+    "Wind-Gleiten": "Wind Gliding",
+    "Gegenwind & Patrouille": "Headwind & Patrol",
+    "Dual-Tore im Wind": "Dual Gates in the Wind",
+    "Windstoß & Geister": "Wind Gust & Ghosts",
+    "Timing im Fūjin-Sturm": "Timing in Fūjin's Storm",
+    "Windböen-Weiche": "Wind Switch",
+    "Gleitpfad-Rätsel": "Glide Path Puzzle",
+    "Doppel-Geist & Wind": "Double Ghost & Wind",
+    "Die Sturm-Prüfung": "The Storm Trial",
+    "Drei Geister": "Three Ghosts",
+    "Präzises Timing": "Precise Timing",
+    "Blöcke, Winde & 3 Geister": "Blocks, Winds & 3 Ghosts",
+    "Brüchige Flucht": "Fragile Escape",
+    "Portal-Labyrinth": "Portal Labyrinth",
+    "Drei Wächter-Geister": "Three Guardian Spirits",
+    "Tore, Blöcke, Winde": "Gates, Blocks, Winds",
+    "Drei Geister & Relikte": "Three Ghosts & Relics",
+    "Meister-Herausforderung": "Master Challenge",
+    "Das Große Finale": "The Grand Finale",
     "Bambusteich-Brücke": "Bamboo Pond Bridge",
     "Zwei Lichter": "Two Spirit Lights",
     "Tor & Licht": "Gate & Light",
@@ -1115,6 +1163,166 @@
     "Der Geist des Fuji (富士の神)": {
         "name": "Spirit of Mount Fuji (富士の神)",
         "desc": "Dragon Ryūjin rages over the crater of Mount Fuji! Push the basalt block into his frost breath, cross fragile ice floes, and deliver all three imperial relics to redeem the dragon!"
+    },
+    "Die Momiji-Allee": {
+        "name": "Momiji Avenue",
+        "desc": "First encounter with the wandering spirits of Arashiyama. Use action on empty tiles to pause and wait out a beat!"
+    },
+    "Pfad der tanzenden Blätter": {
+        "name": "Path of Dancing Leaves",
+        "desc": "The spirits follow a fixed circular route through the maple grove. Observe their patrol before setting out."
+    },
+    "Laternen im Abendrot": {
+        "name": "Lanterns in the Sunset",
+        "desc": "Two spirits cross your delivery route. Synchronize your advance precisely with their rhythm."
+    },
+    "Das verfluchte Bambus-Tor": {
+        "name": "The Cursed Bamboo Gate",
+        "desc": "Activate the shrine switch and pass through the unsealed gate before the spirit circles back."
+    },
+    "Schrein-Glocke von Sagano": {
+        "name": "Shrine Bell of Sagano",
+        "desc": "Collect the radiant shrine relic while restless spirits circle the sanctuary."
+    },
+    "Ahorn-Labyrinth": {
+        "name": "Maple Labyrinth",
+        "desc": "Golden autumn foliage blankets the alleyways. Find the safe route navigating around the patrol."
+    },
+    "Wächter des Steingartens": {
+        "name": "Guardians of the Rock Garden",
+        "desc": "Two guardian spirits patrol parallel corridors. Patient waiting reveals the safe crossing window."
+    },
+    "Flüsternder Bambushain": {
+        "name": "Whispering Bamboo Grove",
+        "desc": "Sometimes the longer path around the stone wall is the safest route past the spirit."
+    },
+    "Dämmerung am Orakel-Schrein": {
+        "name": "Twilight at the Oracle Shrine",
+        "desc": "Twin guardians narrow your corridor. Plan your entire sequence carefully in advance."
+    },
+    "Kapitel-Finale · Pforte von Arashiyama": {
+        "name": "Chapter Finale · Gate of Arashiyama",
+        "desc": "Conquer the grand shrine gate at the heart of the autumn forest despite vigilant Yōkai!"
+    },
+    "Der versunkene Moosweg": {
+        "name": "The Sunken Moss Path",
+        "desc": "Ancient stepping stones across the water basin support the robot only once — and spirits haunt the shore!"
+    },
+    "Opferstein des Berggeistes": {
+        "name": "Sacrificial Stone of the Mountain Spirit",
+        "desc": "Push the sacred stone block ahead of you to bridge the water and open a crossing."
+    },
+    "Kitsune-Nebelpforte": {
+        "name": "Kitsune Mist Gate",
+        "desc": "Step into the glowing portal amidst thick mist to slip past the patrolling spirits."
+    },
+    "Kanal der verlorenen Seelen": {
+        "name": "Channel of Lost Souls",
+        "desc": "Combine stone bridges and precise timing to navigate the water channel safely."
+    },
+    "Brüchige Brücken": {
+        "name": "Fragile Bridges",
+        "desc": "Step onto the crumbling stones only after the spirit on the far side has drifted away."
+    },
+    "Yōkai-Spiegelteich": {
+        "name": "Yōkai Mirror Pond",
+        "desc": "A single stone block decides your path. Submerge it into the water at the exact right spot."
+    },
+    "Schattensprung durchs Portal": {
+        "name": "Shadow Leap Through the Portal",
+        "desc": "The destination portal sits right beside the patrol lane. Timing your emergence is vital."
+    },
+    "Zerbrechlicher Pfad": {
+        "name": "Fragile Pathway",
+        "desc": "No turning back: Every step across rotten stones breaks your retreat. Plan flawlessly!"
+    },
+    "Das versiegelte Felsengrab": {
+        "name": "The Sealed Stone Tomb",
+        "desc": "Use the boulder as a bridge and the portal as a shortcut to reach the golden shrine."
+    },
+    "Kapitel-Finale · Nebelschrein der Yōkai": {
+        "name": "Chapter Finale · Mist Shrine of the Yōkai",
+        "desc": "Conquer the mist shrine through masterful mastery of blocks, portals, and ghost evasion!"
+    },
+    "Tal des Blutmonds": {
+        "name": "Valley of the Blood Moon",
+        "desc": "Powerful Fūjin wind gusts sweep the ravine, carrying KOMA directly past patrolling spirits!"
+    },
+    "Fūjin-Böen im Ahornwald": {
+        "name": "Fūjin Gusts in the Maple Forest",
+        "desc": "Harness the tailwind to glide swiftly through the hazard zone of the patrol."
+    },
+    "Scharlachrote Wirbel": {
+        "name": "Scarlet Vortices",
+        "desc": "Tempestuous winds alter your step count. Calculate every gust into your plan."
+    },
+    "Die zwei Schrein-Tore": {
+        "name": "The Two Shrine Gates",
+        "desc": "Open the colored gate and let the wind gust carry you safely through."
+    },
+    "Klippen-Sturm": {
+        "name": "Cliffside Gale",
+        "desc": "A strong gust of wind carries you safely over the patrol path of the shrine guardian."
+    },
+    "Blutrote Laubdriften": {
+        "name": "Blood-Red Leaf Drifts",
+        "desc": "When the wind catches you, you move at lightning speed. Time your entry point precisely."
+    },
+    "Kamm des Berggeistes": {
+        "name": "Ridge of the Mountain Spirit",
+        "desc": "Navigate the wind vents like a transit network to outmaneuver the roaming spirits."
+    },
+    "Schlucht der flüsternden Winde": {
+        "name": "Canyon of Whispering Winds",
+        "desc": "The spirit light floats in a wind tunnel. Let yourself be carried at the perfect moment!"
+    },
+    "Auge des Herbststurms": {
+        "name": "Eye of the Autumn Storm",
+        "desc": "Two spirits cross the valley while conflicting winds blow in opposite directions."
+    },
+    "Kapitel-Finale · Schrein des Blutmondes": {
+        "name": "Chapter Finale · Shrine of the Blood Moon",
+        "desc": "Prove your complete mastery over wind, gates, and spirits beneath the blood moon!"
+    },
+    "Pforte der hundert Seelen": {
+        "name": "Gate of a Hundred Souls",
+        "desc": "Three spirits patrol simultaneously. Space is tight — every single beat must be flawless!"
+    },
+    "Der dreifache Geisterkreis": {
+        "name": "The Triple Spirit Circle",
+        "desc": "Their patrol lanes overlap. Find the tiny time window to slip through unharmed."
+    },
+    "Das vergessene Sanktuarium": {
+        "name": "The Forgotten Sanctuary",
+        "desc": "Push the boulder into a bridge while three phantoms guard the sacred water basin."
+    },
+    "Trittsteine der Ewigkeit": {
+        "name": "Stepping Stones of Eternity",
+        "desc": "Escape across fragile ground under the watchful gaze of three shrine spirits."
+    },
+    "Kitsune-Astralportal": {
+        "name": "Kitsune Astral Portal",
+        "desc": "Use teleportation portals to slip out of a three-way spirit pincer trap."
+    },
+    "Halle der tanzenden Phantome": {
+        "name": "Hall of Dancing Phantoms",
+        "desc": "All sacred relics must be recovered before the golden Torii gate unseals."
+    },
+    "Prüfung der vier Elemente": {
+        "name": "Trial of the Four Elements",
+        "desc": "Boulders, wind gusts, and three wandering spirits demand peak planning precision."
+    },
+    "Das große Schrein-Sanctum": {
+        "name": "The Great Shrine Sanctum",
+        "desc": "Two spirit lights must be gathered under the strict watch of three patrolling phantoms."
+    },
+    "Vorhof der Erleuchtung": {
+        "name": "Forecourt of Enlightenment",
+        "desc": "The penultimate trial before the eternal sanctuary — tests the entirety of your skills!"
+    },
+    "Das Ewige Heiligtum der 100 Geister": {
+        "name": "The Eternal Sanctuary of 100 Spirits",
+        "desc": "The legendary finale of KOMA: Master the ultimate shrine trial and become a legend!"
     }
 };
 

@@ -172,7 +172,7 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     await page.click('#btnLevelSelect');
     await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
     await expect(page.locator('#levelDrawer .drawer-title')).toHaveText('Levelauswahl');
-    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('Alle (60)');
+    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('Alle (100)');
     await expect(page.locator('.drawer-tab[data-chapter="1"]')).toHaveText('Kap. 1');
     const firstPillDe = await page.locator('#levelList .level-pill-btn:first-child .pill-title').textContent();
     expect(firstPillDe).toContain('Die erste Lieferung');
@@ -211,7 +211,7 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     await page.click('#btnLevelSelect');
     await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
     await expect(page.locator('#levelDrawer .drawer-title')).toHaveText('Select Level');
-    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('All (60)');
+    await expect(page.locator('.drawer-tab[data-chapter="all"]')).toHaveText('All (100)');
     await expect(page.locator('.drawer-tab[data-chapter="1"]')).toHaveText('Ch. 1');
     const firstPillEn = await page.locator('#levelList .level-pill-btn:first-child .pill-title').textContent();
     expect(firstPillEn).toContain('The First Delivery');
