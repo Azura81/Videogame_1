@@ -111,7 +111,7 @@ test.describe('Tower of 100 Trials (Roguelike Endless Mode)', () => {
     await page.locator('#btnTowerExitToCampaign').click();
     await expect(gameOverModal).not.toHaveClass(/active/);
     await expect(hudBar).not.toBeVisible();
-    await expect(page.locator('#missionBadge')).toHaveText('01 / 60');
+    await expect(page.locator('#missionBadge')).toHaveText('01 / 100');
   });
 
   test('All 100 tower floors are unique and 100% solvable via browser TowerManager', async ({ page }) => {

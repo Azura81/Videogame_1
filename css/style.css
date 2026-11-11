@@ -1931,6 +1931,88 @@ html, body {
   margin-bottom: 20px;
 }
 
+/* 3-Star Mastery Criteria Checklist */
+.win-star-criteria {
+  width: 100%;
+  max-width: 330px;
+  margin: 10px auto 4px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(11, 19, 43, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+.win-criteria-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.2s ease;
+}
+
+.win-criteria-item.achieved {
+  color: #f1f5f9;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.win-criteria-item.missed {
+  color: var(--text-muted);
+  opacity: 0.55;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.win-criteria-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.win-criteria-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.win-criteria-item.achieved .win-criteria-check {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+}
+
+.win-criteria-item.missed .win-criteria-check {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+}
+
+.win-criteria-label {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-criteria-star {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 /* Pill stars in level drawer */
 .pill-stars {
   font-size: 11px;

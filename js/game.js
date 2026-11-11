@@ -112,11 +112,13 @@ class GameEngine {
       isFail: false
     };
     
-    // Camera Credits & Star Rating System
+    // Camera Credits & Star Rating System (Concept 2: Success + Zen Efficiency + Spatial Planning)
     this.maxCameraCredits = 6;
     this.cameraCredits = 6;
     this.levelStars = {};
     this.bonusStars = 0;
+    this.levelEverRotatedCamera = false;
+    this.lastStarEvaluation = null;
     
     // Save completed levels
     this.completedLevels = new Set();
@@ -1031,6 +1033,8 @@ class GameEngine {
     if (this.dom.btnReplayLevel) {
       this.dom.btnReplayLevel.addEventListener("click", () => {
         this.dom.modalWin.classList.remove("active");
+        this.levelEverRotatedCamera = false;
+        this.lastStarEvaluation = null;
         this.reset(false);
       });
     }
@@ -1070,6 +1074,8 @@ class GameEngine {
     if (this.dom.btnMobileHubReplayLevel) {
       this.dom.btnMobileHubReplayLevel.addEventListener("click", () => {
         this.closeMobileHub();
+        this.levelEverRotatedCamera = false;
+        this.lastStarEvaluation = null;
         this.reset(false);
       });
     }
@@ -1363,6 +1369,39 @@ class GameEngine {
       localStorage.setItem("koma_stats", JSON.stringify(this.stats));
       localStorage.setItem("koma_achievements", JSON.stringify(Array.from(this.unlockedAchievements)));
     } catch (e) {}
+  }
+
+  evaluateLevelStars(lvl, stepsTaken = null, cameraRotated = null) {
+    if (!lvl) {
+      return {
+        stars: 1,
+        delivery: true,
+        zen: false,
+        camera: false,
+        optSteps: 0,
+        stepsTaken: 0
+      };
+    }
+    const optSteps = (lvl.solution && Array.isArray(lvl.solution)) ? lvl.solution.length : (lvl.limit || 10);
+    const actualSteps = (stepsTaken !== null && stepsTaken !== undefined) ? stepsTaken : (this.currentStep || (this.queue ? this.queue.length : 0));
+    const rotated = (cameraRotated !== null && cameraRotated !== undefined) ? cameraRotated : !!this.levelEverRotatedCamera;
+
+    const delivery = true; // Star 1: Always awarded upon reaching the shrine Torii
+    const zen = actualSteps <= optSteps; // Star 2: Zen efficiency (commands/steps <= par)
+    const camera = !rotated; // Star 3: Pure spatial planning (0 camera swivels during attempt)
+
+    let stars = 1;
+    if (zen) stars++;
+    if (camera) stars++;
+
+    return {
+      stars,
+      delivery,
+      zen,
+      camera,
+      optSteps,
+      stepsTaken: actualSteps
+    };
   }
 
   calculateStars(credits, maxCredits) {
@@ -1894,7 +1933,11 @@ class GameEngine {
             this.currentLevelIdx === LEVELS.length - 1 ? `Alle ${LEVELS.length} Lieferungen geschafft!` : `Level ${this.currentLevelIdx + 1} geschafft!`;
         }
         if (this.dom.mobileHubWinStars) {
-          const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
+          const lvl = this.getCurrentLevel();
+          const evalRes = (this.lastStarEvaluation && isPostWin)
+            ? this.lastStarEvaluation
+            : this.evaluateLevelStars(lvl, this.currentStep, this.levelEverRotatedCamera);
+          const stars = evalRes.stars;
           let starHtml = "";
           for (let i = 1; i <= 3; i++) {
             const isFilled = i <= stars;
@@ -1903,7 +1946,45 @@ class GameEngine {
               : (typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starEmpty(28, "rgba(255,255,255,0.3)") : "☆");
             starHtml += `<span class="win-star ${isFilled ? "filled" : "empty"}">${svgStar}</span>`;
           }
-          this.dom.mobileHubWinStars.innerHTML = `<div class="stars-row">${starHtml}</div>`;
+
+          const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+          const checkSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.check(14, "#38bdf8") : "✓";
+          const crossSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.close(14, "var(--text-muted)") : "✕";
+          const starGold = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(14, "var(--gold)", false) : "★";
+          const starDim = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starEmpty(14, "rgba(255,255,255,0.25)") : "☆";
+
+          const labelDelivery = typeof I18N !== "undefined" ? I18N.t("criteria_delivery") : "Paket abgeliefert";
+          const labelZen = typeof I18N !== "undefined"
+            ? I18N.t("criteria_zen", { opt: evalRes.optSteps, steps: evalRes.stepsTaken })
+            : `Zen-Effizienz (≤ ${evalRes.optSteps} Schritte: ${evalRes.stepsTaken})`;
+          const labelCamera = typeof I18N !== "undefined" ? I18N.t("criteria_camera") : "Reines Raumdenken (0 Kameraschwenks)";
+
+          this.dom.mobileHubWinStars.innerHTML = `
+            <div class="stars-row">${starHtml}</div>
+            <div class="win-star-criteria">
+              <div class="win-criteria-item ${evalRes.delivery ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalRes.delivery ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelDelivery}</span>
+                </div>
+                <span class="win-criteria-star">${evalRes.delivery ? starGold : starDim}</span>
+              </div>
+              <div class="win-criteria-item ${evalRes.zen ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalRes.zen ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelZen}</span>
+                </div>
+                <span class="win-criteria-star">${evalRes.zen ? starGold : starDim}</span>
+              </div>
+              <div class="win-criteria-item ${evalRes.camera ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalRes.camera ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelCamera}</span>
+                </div>
+                <span class="win-criteria-star">${evalRes.camera ? starGold : starDim}</span>
+              </div>
+            </div>
+          `;
         }
       } else {
         this.dom.mobileHubWinBanner.style.display = "none";
@@ -2318,6 +2399,7 @@ class GameEngine {
   }
 
   useCameraCredit() {
+    this.levelEverRotatedCamera = true;
     if (this.cameraCredits > 0) {
       this.cameraCredits--;
       Sound.playCameraSwivel();
@@ -2396,6 +2478,8 @@ class GameEngine {
     this.currentLevelIdx = -1;
     this.queue = [];
     this.currentStep = 0;
+    this.levelEverRotatedCamera = false;
+    this.lastStarEvaluation = null;
     
     // Strict Hardcore rule: Zero camera credits (swivels disabled)
     this.cameraCredits = 0;
@@ -2455,6 +2539,8 @@ class GameEngine {
     this.currentLevelIdx = -2;
     this.queue = [];
     this.currentStep = 0;
+    this.levelEverRotatedCamera = false;
+    this.lastStarEvaluation = null;
 
     this.maxCameraCredits = lvl.maxCredits || 4;
     this.cameraCredits = this.maxCameraCredits;
@@ -2590,6 +2676,8 @@ class GameEngine {
     this.currentLevelIdx = idx;
     this.queue = [];
     this.currentStep = 0;
+    this.levelEverRotatedCamera = false;
+    this.lastStarEvaluation = null;
     
     const lvl = this.getCurrentLevel();
     this.resetState();
@@ -4452,11 +4540,13 @@ class GameEngine {
 
       this.completedLevels.add(this.currentLevelIdx);
       
-      const stars = this.calculateStars(this.cameraCredits, this.maxCameraCredits);
+      const evalResult = this.evaluateLevelStars(lvl, this.currentStep, this.levelEverRotatedCamera);
+      const stars = evalResult.stars;
+      this.lastStarEvaluation = evalResult;
       this.levelStars[this.currentLevelIdx] = Math.max(this.levelStars[this.currentLevelIdx] || 0, stars);
       
       this.stats.threeStarCount = Object.values(this.levelStars).filter(s => s === 3).length;
-      if (lvl.solution && this.currentStep <= lvl.solution.length) {
+      if (evalResult.zen) {
         this.stats.minimalWins = (this.stats.minimalWins || 0) + 1;
       }
 
@@ -4534,20 +4624,52 @@ class GameEngine {
           }
           let starLabel = "";
           if (isEn) {
-            if (stars === 3) starLabel = "3 Stars · Full Camera Credits preserved (Perfect!)";
-            else if (stars === 2) starLabel = "2 Stars · At least half Credits preserved (Great!)";
-            else if (stars === 1) starLabel = "1 Star · Few Credits remaining (Good!)";
-            else starLabel = "0 Stars · All Camera Credits depleted (Delivered!)";
+            if (stars === 3) starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_3") : "3 Stars · Perfect Master Delivery!";
+            else if (stars === 2) starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_2") : "2 Stars · Great Run!";
+            else starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_1") : "1 Star · Package Delivered!";
           } else {
-            if (stars === 3) starLabel = "3 Sterne · Volle Kamera-Credits erhalten (Perfekt!)";
-            else if (stars === 2) starLabel = "2 Sterne · Mindestens halbe Credits erhalten (Sehr gut!)";
-            else if (stars === 1) starLabel = "1 Stern · Wenig Credits übrig (Gut!)";
-            else starLabel = "0 Sterne · Alle Kamera-Credits aufgebraucht (Erfolgreich geliefert)";
+            if (stars === 3) starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_3") : "3 Sterne · Perfekte Meister-Lieferung!";
+            else if (stars === 2) starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_2") : "2 Sterne · Sehr gute Leistung!";
+            else starLabel = typeof I18N !== "undefined" ? I18N.t("win_stars_1") : "1 Stern · Paket erfolgreich abgeliefert!";
           }
+
+          const checkSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.check(14, "#38bdf8") : "✓";
+          const crossSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.close(14, "var(--text-muted)") : "✕";
+          const starGold = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starFilled(14, "var(--gold)", false) : "★";
+          const starDim = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.starEmpty(14, "rgba(255,255,255,0.25)") : "☆";
+
+          const labelDelivery = typeof I18N !== "undefined" ? I18N.t("criteria_delivery") : "Paket abgeliefert";
+          const labelZen = typeof I18N !== "undefined"
+            ? I18N.t("criteria_zen", { opt: evalResult.optSteps, steps: evalResult.stepsTaken })
+            : `Zen-Effizienz (≤ ${evalResult.optSteps} Schritte: ${evalResult.stepsTaken})`;
+          const labelCamera = typeof I18N !== "undefined" ? I18N.t("criteria_camera") : "Reines Raumdenken (0 Kameraschwenks)";
           
           this.dom.modalWinStars.innerHTML = `
             <div class="stars-row">${starHtml}</div>
             <div class="stars-caption">${starLabel}</div>
+            <div class="win-star-criteria">
+              <div class="win-criteria-item ${evalResult.delivery ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalResult.delivery ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelDelivery}</span>
+                </div>
+                <span class="win-criteria-star">${evalResult.delivery ? starGold : starDim}</span>
+              </div>
+              <div class="win-criteria-item ${evalResult.zen ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalResult.zen ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelZen}</span>
+                </div>
+                <span class="win-criteria-star">${evalResult.zen ? starGold : starDim}</span>
+              </div>
+              <div class="win-criteria-item ${evalResult.camera ? 'achieved' : 'missed'}">
+                <div class="win-criteria-left">
+                  <span class="win-criteria-check">${evalResult.camera ? checkSvg : crossSvg}</span>
+                  <span class="win-criteria-label">${labelCamera}</span>
+                </div>
+                <span class="win-criteria-star">${evalResult.camera ? starGold : starDim}</span>
+              </div>
+            </div>
           `;
           
           // Play star chimes
@@ -4556,9 +4678,15 @@ class GameEngine {
           }
         }
         if (this.dom.modalWinCredits) {
-          this.dom.modalWinCredits.textContent = typeof I18N !== "undefined"
-            ? I18N.t("win_credits_normal", { credits: this.cameraCredits, max: this.maxCameraCredits })
-            : `Übrige Kamera-Credits: ${this.cameraCredits} / ${this.maxCameraCredits}`;
+          if (evalResult.camera) {
+            this.dom.modalWinCredits.textContent = typeof I18N !== "undefined"
+              ? I18N.t("win_credits_zero")
+              : "0 Kameraschwenker verwendet · Reine Vorab-Planung!";
+          } else {
+            this.dom.modalWinCredits.textContent = typeof I18N !== "undefined"
+              ? I18N.t("win_credits_swiveled", { credits: this.cameraCredits, max: this.maxCameraCredits })
+              : `${this.cameraCredits} / ${this.maxCameraCredits} Kamera-Credits verwendet (Kamera geschwenkt)`;
+          }
         }
 
         // Check if any new Kami skin was unlocked
