@@ -5240,5 +5240,54 @@ body.has-banner-ad:not(.home-active) .ui-overlay {
   }
 }
 
+/* Prominent Top Action Buttons in Modals (immune to bottom ad banner) */
+.tower-actions-top, .daily-actions-top {
+  margin: 12px 0 16px 0 !important;
+  display: flex;
+  justify-content: center;
+}
+
+.tower-actions-top .tower-start-btn,
+.daily-actions-top .daily-start-btn {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(230, 57, 70, 0.45);
+}
+
+/* Ensure ALL modals, bottom sheets, cards, and scroll containers stay strictly above the bottom ad banner */
+body.has-banner-ad:not(.home-active) .modal-backdrop {
+  padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box;
+}
+
+body.has-banner-ad:not(.home-active) .modal-card {
+  max-height: calc(100dvh - 96px - env(safe-area-inset-bottom, 0px)) !important;
+  max-height: calc(100vh - 96px - env(safe-area-inset-bottom, 0px)) !important;
+  overflow-y: auto;
+}
+
+body.has-banner-ad:not(.home-active) .mobile-hub-card {
+  max-height: calc(85dvh - 60px) !important;
+  margin-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+  border-radius: 24px !important;
+  border-bottom: 1px solid var(--panel-border) !important;
+}
+
+body.has-banner-ad:not(.home-active) .mobile-hub-panel {
+  padding-bottom: 50px !important;
+}
+
+body.has-banner-ad:not(.home-active) .modal-body-scroll {
+  padding-bottom: 40px !important;
+}
+
+body.has-banner-ad:not(.home-active) .modal-btn-row {
+  margin-bottom: 6px !important;
+}
+
+
 
 

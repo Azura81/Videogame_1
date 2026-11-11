@@ -4011,8 +4011,18 @@ class GameEngine {
       this.state.x = nx;
       this.state.y = ny;
 
-      this.renderer.animateMove(nx, ny, this.getStepDelay(300), () => {
+      // Start ghost step animation SIMULTANEOUSLY with KOMA's hop!
+      const hopDuration = this.getStepDelay(300);
+      const ghostCaughtOnHop = this.stepGhosts(lvl, prevX, prevY, hopDuration, /* delayFail */ true);
+
+      this.renderer.animateMove(nx, ny, hopDuration, () => {
         if (!this.isPlaying) return; // In case reset was pressed during animation
+
+        // If KOMA collided with a ghost, trigger fail on exact touchdown!
+        if (ghostCaughtOnHop) {
+          this.triggerGhostFail(lvl);
+          return;
+        }
 
         // If KOMA stepped off a fragile tile, collapse it now!
         if (isSteppingOffFragile) {
@@ -4184,15 +4194,21 @@ class GameEngine {
    * Ghost i stands on path[t % path.length] after t executed commands.
    * Returns true when KOMA was caught (level failed).
    */
-  stepGhosts(lvl, prevX, prevY) {
+  /**
+   * Advance all patrolling shrine ghosts by one beat and check for a collision.
+   * Ghost i stands on path[t % path.length] after t executed commands.
+   * When delayFail is true, returns true immediately without triggering fail UI/state (for concurrent move).
+   */
+  stepGhosts(lvl, prevX, prevY, duration = null, delayFail = false) {
     if (!lvl || !lvl.ghosts || lvl.ghosts.length === 0) return false;
     const t = (this.state.ghostStep || 0) + 1;
     const oldPos = this.getGhostPositions(lvl, t - 1);
     const newPos = this.getGhostPositions(lvl, t);
     this.state.ghostStep = t;
     this.state.stepPrev = null;
+    const animDur = duration || this.getStepDelay(280);
     if (this.renderer && typeof this.renderer.animateGhostsStep === "function") {
-      this.renderer.animateGhostsStep(newPos, this.getStepDelay(280));
+      this.renderer.animateGhostsStep(newPos, animDur);
     }
 
     const kx = this.state.x;
@@ -4205,7 +4221,12 @@ class GameEngine {
       return o && p[0] === prevX && p[1] === prevY && o[0] === kx && o[1] === ky;
     });
     if (!caught) return false;
+    if (delayFail) return true;
 
+    return this.triggerGhostFail(lvl);
+  }
+
+  triggerGhostFail(lvl) {
     this.state.isFail = true;
     this.isPlaying = false;
     this.isStepMode = false;
@@ -4238,10 +4259,6 @@ class GameEngine {
 
   handlePostMoveChecks(lvl) {
     if (!this.isPlaying) return;
-
-    // Patrolling Shrine Ghosts advance after KOMA's move resolves (incl. wind & portals)
-    const prev = this.state.stepPrev || [this.state.x, this.state.y];
-    if (this.stepGhosts(lvl, prev[0], prev[1])) return;
 
     // Check Victory
     if (this.state.x === lvl.g[0] && this.state.y === lvl.g[1]) {
