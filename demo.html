@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Spirit Delivery — Playable Demo</title>
+  <title>Spirit Delivery — 3-Level Playable Demo</title>
   
   <!-- MRAID Standard Compatibility for Mobile Ad Networks -->
   <script>
-    // Polyfill MRAID if in standard browser
     if (typeof mraid === 'undefined') {
       window.mraid = {
         getState: function() { return 'ready'; },
@@ -75,7 +74,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(10, 20, 36, 0.85);
+      background: rgba(10, 20, 36, 0.88);
       border: 1.5px solid rgba(0, 245, 255, 0.45);
       border-radius: 999px;
       padding: 6px 14px;
@@ -85,8 +84,8 @@
     }
 
     .ad-brand-icon {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       color: #00f5ff;
     }
 
@@ -96,6 +95,48 @@
       letter-spacing: 1px;
       color: #fff;
       text-transform: uppercase;
+    }
+
+    /* Level Indicator Progress Pill */
+    .level-progress-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1.5px solid rgba(255, 183, 3, 0.45);
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 183, 3, 0.2);
+    }
+
+    .level-pill-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: #ffb703;
+      letter-spacing: 0.5px;
+    }
+
+    .level-dots-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .level-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .level-dot.active {
+      background: #ffb703;
+      box-shadow: 0 0 8px #ffb703;
+    }
+
+    .level-dot.done {
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
     }
 
     .ad-cta-mini {
@@ -124,24 +165,64 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
-      background: rgba(14, 25, 45, 0.92);
-      border: 1px solid rgba(0, 245, 255, 0.35);
-      border-radius: 18px;
-      padding: 6px 16px;
-      font-size: 12.5px;
+      background: rgba(14, 25, 45, 0.94);
+      border: 1px solid rgba(0, 245, 255, 0.4);
+      border-radius: 20px;
+      padding: 7px 18px;
+      font-size: 13px;
       font-weight: 700;
       color: #e2e8f0;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
       pointer-events: none;
       display: flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
+      transition: all 0.25s ease;
     }
 
     .mission-pill span.highlight {
       color: #00f5ff;
+    }
+
+    /* Level Transition Banner Toast */
+    .level-toast {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      z-index: 80;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.98) 100%);
+      border: 1.5px solid #a7f3d0;
+      border-radius: 24px;
+      padding: 18px 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 35px rgba(16, 185, 129, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .level-toast.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .level-toast-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .level-toast-sub {
+      font-size: 13px;
+      color: #d1fae5;
+      font-weight: 700;
     }
 
     /* Bottom Control Deck */
@@ -390,12 +471,12 @@
     }
 
     .end-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: #fff;
       text-transform: uppercase;
-      line-height: 1.1;
+      line-height: 1.15;
     }
 
     .end-subtitle {
@@ -502,8 +583,18 @@
         <span class="ad-brand-title">Spirit Delivery</span>
       </div>
 
+      <!-- Level Progression Indicator -->
+      <div class="level-progress-pill">
+        <span class="level-pill-text" id="levelPillText">Level 1 / 3</span>
+        <div class="level-dots-row">
+          <span class="level-dot active" id="dot1"></span>
+          <span class="level-dot" id="dot2"></span>
+          <span class="level-dot" id="dot3"></span>
+        </div>
+      </div>
+
       <button class="ad-cta-mini" id="btnAdCtaMini" onclick="onAppStoreClick()">
-        <span id="txtInstallMini">INSTALLIEREN</span>
+        <span id="txtInstallMini">APP STORE</span>
       </button>
     </div>
 
@@ -516,6 +607,12 @@
     <div class="hand-hint" id="handHint">
       <span class="hand-icon">👆</span>
       <span class="hand-text" id="txtHandHint">Hier tippen</span>
+    </div>
+
+    <!-- Level Advance Toast -->
+    <div class="level-toast" id="levelToast">
+      <div class="level-toast-title" id="toastTitle">LEVEL 1 GESCHAFFT! ⭐⭐⭐</div>
+      <div class="level-toast-sub" id="toastSub">Weiter zu Level 2: Das Neon-Tor...</div>
     </div>
 
     <!-- Bottom Controls Deck -->
@@ -564,12 +661,12 @@
       </button>
     </div>
 
-    <!-- Victory End Card Overlay -->
+    <!-- Victory End Card Overlay (After Level 3) -->
     <div class="end-card-overlay" id="endCardOverlay">
       <div class="end-card-box">
         <div class="end-stars-row">⭐ ⭐ ⭐</div>
-        <h2 class="end-title" id="txtEndTitle">LIEFERUNG ERFOLGREICH!</h2>
-        <p class="end-subtitle" id="txtEndSubtitle">Kannst du alle 100 Schrein-Rätsel lösen und den Geist befreien?</p>
+        <h2 class="end-title" id="txtEndTitle">DEMO VOLLSTÄNDIG GEMEISTERT!</h2>
+        <p class="end-subtitle" id="txtEndSubtitle">Du hast alle 3 Demo-Prüfungen bestanden. Kannst du auch alle 100 Schrein-Rätsel lösen?</p>
 
         <div class="end-app-preview">
           <div class="end-app-icon">
@@ -582,16 +679,16 @@
           </div>
           <div class="end-app-meta">
             <strong class="end-app-name">Spirit Delivery</strong>
-            <span class="end-app-rating">★★★★★ 4.9 · Train your Brain</span>
+            <span class="end-app-rating">★★★★★ 4.9 · 100 Levels · 6 Biome</span>
           </div>
         </div>
 
         <button class="end-cta-btn" id="btnEndCta" onclick="onAppStoreClick()">
-          <span id="txtEndCta">KOSTENLOS LADEN</span>
+          <span id="txtEndCta">KOSTENLOS IM APP STORE SPIELEN</span>
         </button>
 
-        <button class="end-replay-btn" id="btnReplay" onclick="resetDemo()">
-          <span id="txtReplay">↺ Noch einmal versuchen</span>
+        <button class="end-replay-btn" id="btnReplay" onclick="restartFromLevel1()">
+          <span id="txtReplay">↺ Von Level 1 neu starten</span>
         </button>
       </div>
     </div>
@@ -602,14 +699,12 @@
 
   <!-- Playable Ad Game Controller Script -->
   <script>
-    // --- Configuration & App Store Target ---
-    const APP_STORE_URL = "https://apps.apple.com/app/spirit-delivery/id6738914690"; // Spirit Delivery App Store Link
+    const APP_STORE_URL = "https://apps.apple.com/app/spirit-delivery/id6738914690";
 
     // Language Detection
     const isEn = !navigator.language || !navigator.language.toLowerCase().startsWith('de');
     if (isEn) {
-      document.getElementById('txtInstallMini').textContent = "INSTALL";
-      document.getElementById('txtMission').innerHTML = "Deliver the lantern to the <span class=\"highlight\">Gold Shrine</span>!";
+      document.getElementById('txtInstallMini').textContent = "APP STORE";
       document.getElementById('txtHandHint').textContent = "Tap here";
       document.getElementById('queuePlaceholder').textContent = "Tap commands ...";
       document.getElementById('btnUndo').textContent = "⤾ Undo";
@@ -617,13 +712,13 @@
       document.getElementById('txtLeft').textContent = "Turn Left";
       document.getElementById('txtRight').textContent = "Turn Right";
       document.getElementById('txtRunPlan').textContent = "RUN PLAN";
-      document.getElementById('txtEndTitle').textContent = "PERFECT DELIVERY!";
-      document.getElementById('txtEndSubtitle').textContent = "Can you master all 100 shrine puzzles and free the spirits?";
-      document.getElementById('txtEndCta').textContent = "GET IT FREE ON APP STORE";
-      document.getElementById('txtReplay').textContent = "↺ Try again";
+      document.getElementById('txtEndTitle').textContent = "DEMO FULLY COMPLETED!";
+      document.getElementById('txtEndSubtitle').textContent = "You mastered all 3 trials! Can you solve all 100 shrine puzzles in the full game?";
+      document.getElementById('txtEndCta').textContent = "PLAY FREE ON APP STORE";
+      document.getElementById('txtReplay').textContent = "↺ Replay from Level 1";
     }
 
-    // --- Audio Synthesizer (Zero-asset Web Audio API) ---
+    // --- Audio Synthesizer (Web Audio API) ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
@@ -647,28 +742,80 @@
     function soundTap() { playTone(580, 'sine', 0.08, 0.12); }
     function soundStep() { playTone(320, 'triangle', 0.12, 0.15); }
     function soundTurn() { playTone(440, 'sine', 0.1, 0.12); }
-    function soundWin() {
-      [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+    function soundSwitch() {
+      playTone(880, 'sine', 0.2, 0.2);
+      setTimeout(() => playTone(1320, 'sine', 0.25, 0.2), 80);
+    }
+    function soundPortal() {
+      playTone(300, 'sawtooth', 0.15, 0.1);
+      setTimeout(() => playTone(600, 'sine', 0.35, 0.2), 90);
+    }
+    function soundLevelWin() {
+      [523.25, 659.25, 783.99].forEach((f, i) => {
+        setTimeout(() => playTone(f, 'triangle', 0.35, 0.2), i * 100);
+      });
+    }
+    function soundGrandWin() {
+      [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => {
         setTimeout(() => playTone(f, 'triangle', 0.45, 0.22), i * 110);
       });
     }
 
-    // --- Demo State ---
+    // --- 3 Demo Levels Definition ---
+    const DEMO_LEVELS = [
+      {
+        id: 1,
+        missionDe: "Bringe das Licht zum <span class=\"highlight\">Gold-Schrein</span>!",
+        missionEn: "Deliver the light to the <span class=\"highlight\">Gold Shrine</span>!",
+        start: { x: 0, y: 0, dir: 'E' },
+        shrine: { x: 3, y: 1 },
+        pathTiles: [[0,0], [1,0], [2,0], [3,0], [3,1]],
+        fences: [{ x: 1, y: 1 }, { x: 2, y: 1 }],
+        rocks: [{ x: 0, y: 2 }],
+        hintBtn: 'btnForward'
+      },
+      {
+        id: 2,
+        missionDe: "Öffne das <span class=\"highlight\">Neon-Tor</span> mit dem Schalter!",
+        missionEn: "Unlock the <span class=\"highlight\">Neon Gate</span> with the switch!",
+        start: { x: 0, y: 1, dir: 'N' },
+        shrine: { x: 1, y: 2 },
+        switch: { x: 0, y: 0, active: false },
+        gate: { x: 1, y: 1, closed: true },
+        pathTiles: [[0,1], [0,0], [1,0], [1,1], [1,2]],
+        fences: [{ x: 0, y: 2 }],
+        rocks: [{ x: 2, y: 0 }],
+        hintBtn: 'btnForward'
+      },
+      {
+        id: 3,
+        missionDe: "Nutze das <span class=\"highlight\">Kitsune-Portal</span> über die Schlucht!",
+        missionEn: "Step into the <span class=\"highlight\">Kitsune Portal</span> to cross!",
+        start: { x: 0, y: 0, dir: 'E' },
+        shrine: { x: 4, y: 2 },
+        portalA: { x: 2, y: 0 },
+        portalB: { x: 2, y: 2 },
+        pathTiles: [[0,0], [1,0], [2,0], [2,2], [3,2], [4,2]],
+        fences: [],
+        rocks: [{ x: 1, y: 2 }],
+        waterHoles: [[0,1],[1,1],[2,1],[3,1],[4,1]],
+        hintBtn: 'btnForward'
+      }
+    ];
+
+    let currentLevelIndex = 0;
     let queue = [];
     let isExecuting = false;
     let handHintActive = true;
+    let currentPos = { x: 0, y: 0, dir: 'E' };
 
-    // Grid definition: 5x5 Zen Garden
-    // Start at (0, 0) facing East (E)
-    // Shrine at (3, 1)
-    // Solution: Forward -> Forward -> Forward -> Turn Right -> Forward (F, F, F, R, F)
-    const START_POS = { x: 0, y: 0, dir: 'E' };
-    const SHRINE_POS = { x: 3, y: 1 };
+    // --- 3D Scene Variables ---
+    let scene, camera, renderer, komaMesh, shrineMesh, sakuraGroup;
+    let levelGroup = null;
+    let gateBarrierMesh = null;
+    let switchPadMesh = null;
+    let portalMeshes = [];
 
-    let currentPos = { ...START_POS };
-
-    // --- 3D Three.js Scene Setup ---
-    let scene, camera, renderer, komaMesh, shrineMesh, lightMesh, sakuraGroup;
     const tileSize = 1.0;
     const gridOriginX = -2 * tileSize;
     const gridOriginZ = -2 * tileSize;
@@ -680,6 +827,11 @@
       };
     }
 
+    function dirToAngle(dir) {
+      const map = { 'S': 0, 'E': Math.PI / 2, 'N': Math.PI, 'W': -Math.PI / 2 };
+      return map[dir] !== undefined ? map[dir] : 0;
+    }
+
     function init3D() {
       const container = document.getElementById('canvas-container');
       const w = container.clientWidth || window.innerWidth;
@@ -688,7 +840,7 @@
       scene = new THREE.Scene();
       scene.fog = new THREE.FogExp2(0x060b14, 0.065);
 
-      // Camera: Isometric Angle matching main game (-X, +Y, -Z)
+      // Camera: Isometric Angle (-8, 9.2, -8) looking toward center
       const aspect = w / h;
       const d = 3.6;
       camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, -20, 100);
@@ -702,7 +854,7 @@
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       container.appendChild(renderer.domElement);
 
-      // Lights: Ambient & Dynamic Shinto Studio Lighting
+      // Studio Lights
       const ambientLight = new THREE.AmbientLight(0x7dd3fc, 0.9);
       scene.add(ambientLight);
 
@@ -713,58 +865,64 @@
       dirLight.shadow.mapSize.height = 1024;
       scene.add(dirLight);
 
-      // Cyan Point Light at Start
-      const cyanLight = new THREE.PointLight(0x00f5ff, 2.5, 9);
-      cyanLight.position.set(-2, 1.8, -2);
-      scene.add(cyanLight);
-
-      // Golden Light at Shrine
-      const goldLight = new THREE.PointLight(0xffb703, 3.5, 10);
-      const sw = gridToWorld(SHRINE_POS.x, SHRINE_POS.y);
-      goldLight.position.set(sw.x, 2, sw.z);
-      scene.add(goldLight);
-
-      // Build Garden Ground Grid & Obstacles
-      buildGardenGrid();
-
-      // Build Torii Shrine at Target
-      buildShrine(sw.x, sw.z);
-
-      // Build KOMA Robot
-      buildKoma();
-
-      // Ambient Sakura Falling Petals
-      buildSakuraPetals();
-
-      // Responsive Resize
-      window.addEventListener('resize', onWindowResize);
-
-      // Position Hand Hint over Forward button
-      positionHandHint();
-
-      // Start Render Loop
-      animate();
-    }
-
-    function buildGardenGrid() {
-      // Water Pond Base
-      const pondGeo = new THREE.PlaneGeometry(16, 16);
-      const pondMat = new THREE.MeshStandardMaterial({
-        color: 0x051329,
-        roughness: 0.1,
-        metalness: 0.8
-      });
+      // Base Water Plane
+      const pondGeo = new THREE.PlaneGeometry(18, 18);
+      const pondMat = new THREE.MeshStandardMaterial({ color: 0x051329, roughness: 0.1, metalness: 0.8 });
       const pond = new THREE.Mesh(pondGeo, pondMat);
       pond.rotation.x = -Math.PI / 2;
       pond.position.y = -0.25;
       scene.add(pond);
 
-      // 5x5 Stone Tiles
+      // Build KOMA Robot
+      buildKoma();
+
+      // Ambient Falling Petals
+      buildSakuraPetals();
+
+      // Load First Level
+      loadLevel(0);
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    function loadLevel(index) {
+      currentLevelIndex = index;
+      const lvl = DEMO_LEVELS[index];
+
+      // Update Top HUD
+      document.getElementById('levelPillText').textContent = isEn ? `Level ${lvl.id} / 3` : `Level ${lvl.id} / 3`;
+      ['dot1', 'dot2', 'dot3'].forEach((id, i) => {
+        const dot = document.getElementById(id);
+        dot.className = 'level-dot';
+        if (i < index) dot.classList.add('done');
+        else if (i === index) dot.classList.add('active');
+      });
+
+      document.getElementById('txtMission').innerHTML = isEn ? lvl.missionEn : lvl.missionDe;
+
+      // Clear previous level elements
+      if (levelGroup) {
+        scene.remove(levelGroup);
+        levelGroup = null;
+      }
+      gateBarrierMesh = null;
+      switchPadMesh = null;
+      portalMeshes = [];
+
+      levelGroup = new THREE.Group();
+
+      // 1. Tiles Ground
       const tileGeo = new THREE.BoxGeometry(0.92, 0.22, 0.92);
       for (let x = 0; x < 5; x++) {
         for (let y = 0; y < 5; y++) {
-          const isPath = (x <= 3 && y === 0) || (x === 3 && y === 1);
-          const isShrine = (x === SHRINE_POS.x && y === SHRINE_POS.y);
+          // Check water hole (Level 3)
+          if (lvl.waterHoles && lvl.waterHoles.some(h => h[0] === x && h[1] === y)) {
+            continue;
+          }
+
+          const isPath = lvl.pathTiles.some(p => p[0] === x && p[1] === y);
+          const isShrine = (x === lvl.shrine.x && y === lvl.shrine.y);
 
           const tileMat = new THREE.MeshStandardMaterial({
             color: isShrine ? 0x1e3a4f : (isPath ? 0x1e293b : 0x0f172a),
@@ -775,47 +933,139 @@
           const p = gridToWorld(x, y);
           tile.position.set(p.x, 0, p.z);
           tile.receiveShadow = true;
-          scene.add(tile);
+          levelGroup.add(tile);
 
-          // Glowing Path Stepping Indicators
+          // Path marker dot
           if (isPath && !isShrine) {
-            const dotGeo = new THREE.CircleGeometry(0.09, 16);
-            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.5 });
+            const dotGeo = new THREE.CircleGeometry(0.09, 14);
+            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.45 });
             const dot = new THREE.Mesh(dotGeo, dotMat);
             dot.rotation.x = -Math.PI / 2;
             dot.position.set(p.x, 0.12, p.z);
-            scene.add(dot);
+            levelGroup.add(dot);
           }
         }
       }
 
-      // Add Bamboo Fence & Bonsai Obstacles
-      const fenceMat = new THREE.MeshStandardMaterial({ color: 0x06d6a0, roughness: 0.5 });
-      const fenceGeo = new THREE.BoxGeometry(0.85, 0.45, 0.08);
-      const fence1 = new THREE.Mesh(fenceGeo, fenceMat);
-      const fp1 = gridToWorld(1, 1);
-      fence1.position.set(fp1.x, 0.25, fp1.z);
-      scene.add(fence1);
+      // 2. Shrine at Target
+      const sw = gridToWorld(lvl.shrine.x, lvl.shrine.y);
+      buildShrine(sw.x, sw.z, levelGroup);
 
-      const fence2 = new THREE.Mesh(fenceGeo, fenceMat);
-      const fp2 = gridToWorld(2, 1);
-      fence2.position.set(fp2.x, 0.25, fp2.z);
-      scene.add(fence2);
+      // 3. Fences & Rocks
+      if (lvl.fences) {
+        const fenceGeo = new THREE.BoxGeometry(0.85, 0.45, 0.08);
+        const fenceMat = new THREE.MeshStandardMaterial({ color: 0x06d6a0, roughness: 0.5 });
+        lvl.fences.forEach(f => {
+          const m = new THREE.Mesh(fenceGeo, fenceMat);
+          const fp = gridToWorld(f.x, f.y);
+          m.position.set(fp.x, 0.25, fp.z);
+          levelGroup.add(m);
+        });
+      }
 
-      // Decorative Bonsai Rock
-      const rockGeo = new THREE.DodecahedronGeometry(0.38, 1);
-      const rockMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.8 });
-      const rock = new THREE.Mesh(rockGeo, rockMat);
-      const rp = gridToWorld(0, 2);
-      rock.position.set(rp.x, 0.24, rp.z);
-      scene.add(rock);
+      if (lvl.rocks) {
+        const rockGeo = new THREE.DodecahedronGeometry(0.38, 1);
+        const rockMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.8 });
+        lvl.rocks.forEach(r => {
+          const m = new THREE.Mesh(rockGeo, rockMat);
+          const rp = gridToWorld(r.x, r.y);
+          m.position.set(rp.x, 0.24, rp.z);
+          levelGroup.add(m);
+        });
+      }
+
+      // 4. Switch & Neon Gate (Level 2)
+      if (lvl.switch) {
+        lvl.switch.active = false;
+        const sp = gridToWorld(lvl.switch.x, lvl.switch.y);
+        const padGeo = new THREE.CylinderGeometry(0.28, 0.32, 0.08, 16);
+        const padMat = new THREE.MeshStandardMaterial({
+          color: 0x00f5ff,
+          emissive: 0x00f5ff,
+          emissiveIntensity: 0.8,
+          roughness: 0.3
+        });
+        switchPadMesh = new THREE.Mesh(padGeo, padMat);
+        switchPadMesh.position.set(sp.x, 0.14, sp.z);
+        levelGroup.add(switchPadMesh);
+      }
+
+      if (lvl.gate) {
+        lvl.gate.closed = true;
+        const gp = gridToWorld(lvl.gate.x, lvl.gate.y);
+        const gatePillars = new THREE.Group();
+        const pilGeo = new THREE.CylinderGeometry(0.06, 0.08, 1.2, 10);
+        const pilMat = new THREE.MeshStandardMaterial({ color: 0x1f0d2b, roughness: 0.4 });
+        const pL = new THREE.Mesh(pilGeo, pilMat); pL.position.set(-0.4, 0.6, 0);
+        const pR = new THREE.Mesh(pilGeo, pilMat); pR.position.set(0.4, 0.6, 0);
+        gatePillars.add(pL, pR);
+
+        // Glowing Laser Barrier
+        const barGeo = new THREE.BoxGeometry(0.78, 0.9, 0.04);
+        const barMat = new THREE.MeshBasicMaterial({
+          color: 0xdf6eff,
+          transparent: true,
+          opacity: 0.75,
+          side: THREE.DoubleSide
+        });
+        gateBarrierMesh = new THREE.Mesh(barGeo, barMat);
+        gateBarrierMesh.position.set(0, 0.55, 0);
+        gatePillars.add(gateBarrierMesh);
+
+        gatePillars.position.set(gp.x, 0, gp.z);
+        levelGroup.add(gatePillars);
+      }
+
+      // 5. Portals (Level 3)
+      if (lvl.portalA && lvl.portalB) {
+        [lvl.portalA, lvl.portalB].forEach(port => {
+          const pp = gridToWorld(port.x, port.y);
+          const pGroup = new THREE.Group();
+          const ringGeo = new THREE.TorusGeometry(0.28, 0.035, 12, 24);
+          const ringMat = new THREE.MeshStandardMaterial({
+            color: 0xa855f7,
+            emissive: 0xa855f7,
+            emissiveIntensity: 1.2
+          });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = Math.PI / 2;
+          pGroup.add(ring);
+
+          const coreGeo = new THREE.CircleGeometry(0.24, 16);
+          const coreMat = new THREE.MeshBasicMaterial({ color: 0x7e22ce, transparent: true, opacity: 0.8 });
+          const core = new THREE.Mesh(coreGeo, coreMat);
+          core.rotation.x = -Math.PI / 2;
+          pGroup.add(core);
+
+          pGroup.position.set(pp.x, 0.15, pp.z);
+          levelGroup.add(pGroup);
+          portalMeshes.push(pGroup);
+        });
+      }
+
+      scene.add(levelGroup);
+
+      // Reset KOMA state
+      currentPos = { ...lvl.start };
+      const kp = gridToWorld(currentPos.x, currentPos.y);
+      komaMesh.position.set(kp.x, 0.42, kp.z);
+      komaMesh.rotation.z = 0;
+      komaMesh.rotation.y = dirToAngle(currentPos.dir);
+
+      // Reset Queue
+      queue = [];
+      renderQueue();
+      isExecuting = false;
+      document.getElementById('btnRunPlan').disabled = false;
+
+      // Position Hand Hint
+      positionHandHint(lvl.hintBtn || 'btnForward');
     }
 
-    function buildShrine(x, z) {
+    function buildShrine(x, z, parentGroup) {
       shrineMesh = new THREE.Group();
       shrineMesh.position.set(x, 0, z);
 
-      // Torii Posts
       const postGeo = new THREE.CylinderGeometry(0.07, 0.08, 1.4, 12);
       const toriiMat = new THREE.MeshStandardMaterial({
         color: 0xff3366,
@@ -824,141 +1074,85 @@
         emissiveIntensity: 0.3
       });
 
-      const p1 = new THREE.Mesh(postGeo, toriiMat);
-      p1.position.set(-0.35, 0.7, 0);
-      const p2 = new THREE.Mesh(postGeo, toriiMat);
-      p2.position.set(0.35, 0.7, 0);
+      const p1 = new THREE.Mesh(postGeo, toriiMat); p1.position.set(-0.35, 0.7, 0);
+      const p2 = new THREE.Mesh(postGeo, toriiMat); p2.position.set(0.35, 0.7, 0);
       shrineMesh.add(p1, p2);
 
-      // Top Lintels
-      const topGeo = new THREE.BoxGeometry(1.1, 0.1, 0.16);
-      const topBeam = new THREE.Mesh(topGeo, toriiMat);
+      const topBeam = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.1, 0.16), toriiMat);
       topBeam.position.set(0, 1.35, 0);
-
-      const subGeo = new THREE.BoxGeometry(0.92, 0.07, 0.12);
-      const subBeam = new THREE.Mesh(subGeo, toriiMat);
+      const subBeam = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.07, 0.12), toriiMat);
       subBeam.position.set(0, 1.15, 0);
       shrineMesh.add(topBeam, subBeam);
 
-      // Golden Spirit Altar
-      const altarGeo = new THREE.CylinderGeometry(0.26, 0.32, 0.2, 16);
-      const altarMat = new THREE.MeshStandardMaterial({
+      // Altar
+      const altar = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.32, 0.2, 16), new THREE.MeshStandardMaterial({
         color: 0xffb703,
         metalness: 0.85,
         roughness: 0.18,
         emissive: 0xffb703,
         emissiveIntensity: 0.6
-      });
-      const altar = new THREE.Mesh(altarGeo, altarMat);
+      }));
       altar.position.set(0, 0.1, 0);
       shrineMesh.add(altar);
 
-      // Floating Sacred Relic Cube
-      const relicGeo = new THREE.BoxGeometry(0.28, 0.28, 0.28);
-      const relicMat = new THREE.MeshStandardMaterial({
+      // Floating Sacred Cube
+      const relic = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.28, 0.28), new THREE.MeshStandardMaterial({
         color: 0xffe066,
         emissive: 0xffb703,
         emissiveIntensity: 0.9,
         roughness: 0.2,
         metalness: 0.8
-      });
-      const relic = new THREE.Mesh(relicGeo, relicMat);
+      }));
       relic.position.set(0, 0.58, 0);
       relic.name = "floatingRelic";
       shrineMesh.add(relic);
 
-      scene.add(shrineMesh);
+      parentGroup.add(shrineMesh);
     }
-
-    let komaLightBeacon = null;
 
     function buildKoma() {
       komaMesh = new THREE.Group();
-      const p = gridToWorld(START_POS.x, START_POS.y);
-      komaMesh.position.set(p.x, 0.42, p.z);
 
-      // Authentic Materials from KOMA: Spirit Delivery (Shiro Usagi Skin)
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: 0xf5f8fc,
-        metalness: 0.15,
-        roughness: 0.22
-      });
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf5f8fc, metalness: 0.15, roughness: 0.22 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x0a1424, metalness: 0.7, roughness: 0.2 });
+      const visorMat = new THREE.MeshStandardMaterial({ color: 0x060e18, metalness: 0.85, roughness: 0.12 });
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
+      const glowMat = new THREE.MeshStandardMaterial({ color: 0x00f5ff, emissive: 0x00f5ff, emissiveIntensity: 1.0 });
+      const packMat = new THREE.MeshStandardMaterial({ color: 0xbd7c4c, roughness: 0.55, metalness: 0.1 });
+      const packStrapMat = new THREE.MeshStandardMaterial({ color: 0x00f5ff, emissive: 0x00f5ff, emissiveIntensity: 0.9 });
 
-      const darkMat = new THREE.MeshStandardMaterial({
-        color: 0x0a1424,
-        metalness: 0.7,
-        roughness: 0.2
-      });
-
-      const visorMat = new THREE.MeshStandardMaterial({
-        color: 0x060e18,
-        metalness: 0.85,
-        roughness: 0.12
-      });
-
-      const eyeMat = new THREE.MeshBasicMaterial({
-        color: 0x00f5ff
-      });
-
-      const glowMat = new THREE.MeshStandardMaterial({
-        color: 0x00f5ff,
-        emissive: 0x00f5ff,
-        emissiveIntensity: 1.0
-      });
-
-      const packMat = new THREE.MeshStandardMaterial({
-        color: 0xbd7c4c,
-        roughness: 0.55,
-        metalness: 0.1
-      });
-
-      const packStrapMat = new THREE.MeshStandardMaterial({
-        color: 0x00f5ff,
-        emissive: 0x00f5ff,
-        emissiveIntensity: 0.9
-      });
-
-      // 1. Main Round Head / Torso
+      // Head
       const headGeo = new THREE.SphereGeometry(0.32, 24, 24);
       headGeo.scale(1.0, 1.05, 0.95);
       const head = new THREE.Mesh(headGeo, bodyMat);
       head.position.y = 0.44;
-      head.castShadow = true;
-      head.receiveShadow = true;
       komaMesh.add(head);
 
-      // 2. Dark Visor Face Screen (Facing +Z)
+      // Dark Visor Face Screen (+Z)
       const visorGeo = new THREE.SphereGeometry(0.24, 20, 20);
       visorGeo.scale(0.92, 0.68, 0.55);
       const visor = new THREE.Mesh(visorGeo, visorMat);
       visor.position.set(0, 0.44, 0.21);
       komaMesh.add(visor);
 
-      // 3. Glowing Eyes (Cyan expressive capsule/sphere)
+      // Cyan Glowing Eyes
       const eyeGeo = new THREE.SphereGeometry(0.045, 12, 12);
       eyeGeo.scale(0.8, 1.3, 0.6);
-
       const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
       leftEye.position.set(-0.09, 0.45, 0.32);
       leftEye.rotation.z = 0.08;
-      komaMesh.add(leftEye);
-
       const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
       rightEye.position.set(0.09, 0.45, 0.32);
       rightEye.rotation.z = -0.08;
-      komaMesh.add(rightEye);
+      komaMesh.add(leftEye, rightEye);
 
-      // 4. Cyber Rabbit Ears / Antennas with Glowing Tips
+      // Rabbit Ears
       [-1, 1].forEach(side => {
         const earGroup = new THREE.Group();
-        const earGeo = new THREE.CylinderGeometry(0.035, 0.05, 0.26, 12);
-        const ear = new THREE.Mesh(earGeo, bodyMat);
+        const ear = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, 0.26, 12), bodyMat);
         ear.position.y = 0.13;
-        ear.castShadow = true;
         earGroup.add(ear);
-
-        const earTipGeo = new THREE.SphereGeometry(0.045, 12, 12);
-        const earTip = new THREE.Mesh(earTipGeo, glowMat);
+        const earTip = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 12), glowMat);
         earTip.position.y = 0.26;
         earGroup.add(earTip);
 
@@ -968,90 +1162,50 @@
         komaMesh.add(earGroup);
       });
 
-      // 5. Delivery Backpack with straps (On Back: -Z)
-      const packGeo = new THREE.BoxGeometry(0.26, 0.28, 0.2);
-      const pack = new THREE.Mesh(packGeo, packMat);
+      // Delivery Backpack on Back (-Z)
+      const pack = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.28, 0.2), packMat);
       pack.position.set(0, 0.42, -0.32);
-      pack.castShadow = true;
       komaMesh.add(pack);
 
-      const strapGeo = new THREE.BoxGeometry(0.27, 0.04, 0.21);
-      const strap = new THREE.Mesh(strapGeo, packStrapMat);
+      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.27, 0.04, 0.21), packStrapMat);
       strap.position.set(0, 0.42, -0.32);
       komaMesh.add(strap);
 
-      // 6. Thruster Base & Hover Glow Ring
-      const baseGeo = new THREE.CylinderGeometry(0.2, 0.14, 0.12, 16);
-      const base = new THREE.Mesh(baseGeo, darkMat);
+      // Thruster Base & Ring
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.14, 0.12, 16), darkMat);
       base.position.y = 0.14;
-      base.castShadow = true;
       komaMesh.add(base);
 
-      const thrustRingGeo = new THREE.RingGeometry(0.08, 0.18, 16);
-      const thrustRing = new THREE.Mesh(thrustRingGeo, glowMat);
+      const thrustRing = new THREE.Mesh(new THREE.RingGeometry(0.08, 0.18, 16), glowMat);
       thrustRing.rotation.x = Math.PI / 2;
       thrustRing.position.y = 0.07;
       komaMesh.add(thrustRing);
 
-      // 7. Dynamic Point Light on Floor beneath Koma
+      // Floor Light Pool
       const komaFloorLight = new THREE.PointLight(0x00f5ff, 1.4, 2.5);
       komaFloorLight.position.set(0, 0.2, 0);
       komaMesh.add(komaFloorLight);
 
-      // 8. Holographic Forward Direction Pointer (Chevron Arrow on floor in front of KOMA)
-      const beaconGroup = new THREE.Group();
+      // Forward Direction Chevron Arrow
       const arrowGeo = new THREE.ConeGeometry(0.09, 0.22, 3);
       arrowGeo.rotateX(Math.PI / 2);
-      const arrowMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.85 });
-      const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+      const arrow = new THREE.Mesh(arrowGeo, new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.85 }));
       arrow.position.set(0, 0.08, 0.52);
-      beaconGroup.add(arrow);
+      komaMesh.add(arrow);
 
-      komaMesh.add(beaconGroup);
-
-      // Apply Initial Rotation
-      updateKomaRotation(START_POS.dir);
       scene.add(komaMesh);
-    }
-
-    function dirToAngle(dir) {
-      // Facing South (+Z) = 0, East (+X) = Math.PI/2, North (-Z) = Math.PI, West (-X) = -Math.PI/2
-      const map = {
-        'S': 0,
-        'E': Math.PI / 2,
-        'N': Math.PI,
-        'W': -Math.PI / 2
-      };
-      return map[dir] !== undefined ? map[dir] : 0;
-    }
-
-    function updateKomaRotation(dir) {
-      if (!komaMesh) return;
-      komaMesh.rotation.y = dirToAngle(dir);
     }
 
     function buildSakuraPetals() {
       sakuraGroup = new THREE.Group();
       const petalGeo = new THREE.PlaneGeometry(0.08, 0.12);
-      const petalMat = new THREE.MeshBasicMaterial({
-        color: 0xffa5ba,
-        transparent: true,
-        opacity: 0.75,
-        side: THREE.DoubleSide
-      });
+      const petalMat = new THREE.MeshBasicMaterial({ color: 0xffa5ba, transparent: true, opacity: 0.75, side: THREE.DoubleSide });
 
       for (let i = 0; i < 40; i++) {
         const petal = new THREE.Mesh(petalGeo, petalMat);
-        petal.position.set(
-          (Math.random() - 0.5) * 8,
-          Math.random() * 4 + 1,
-          (Math.random() - 0.5) * 8
-        );
+        petal.position.set((Math.random() - 0.5) * 8, Math.random() * 4 + 1, (Math.random() - 0.5) * 8);
         petal.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-        petal.userData = {
-          speedY: 0.008 + Math.random() * 0.012,
-          rotSpeed: 0.02 + Math.random() * 0.03
-        };
+        petal.userData = { speedY: 0.008 + Math.random() * 0.012, rotSpeed: 0.02 + Math.random() * 0.03 };
         sakuraGroup.add(petal);
       }
       scene.add(sakuraGroup);
@@ -1072,16 +1226,18 @@
       positionHandHint();
     }
 
-    function positionHandHint() {
-      const btn = document.getElementById('btnForward');
+    function positionHandHint(btnId = 'btnForward') {
+      const btn = document.getElementById(btnId) || document.getElementById('btnForward');
       const hint = document.getElementById('handHint');
       if (!btn || !hint) return;
       const r = btn.getBoundingClientRect();
       hint.style.left = (r.left + r.width / 2) + 'px';
       hint.style.top = (r.top - 46) + 'px';
+      hint.classList.remove('hidden');
+      handHintActive = true;
     }
 
-    // --- Animation Loop ---
+    // --- Render Loop ---
     let clock = new THREE.Clock();
     function animate() {
       requestAnimationFrame(animate);
@@ -1090,7 +1246,7 @@
 
       // Gentle Koma Idle Hover
       if (komaMesh && !isExecuting) {
-        komaMesh.position.y = 0.35 + Math.sin(time * 3) * 0.035;
+        komaMesh.position.y = 0.42 + Math.sin(time * 3) * 0.035;
       }
 
       // Rotate Shrine Relic
@@ -1100,7 +1256,12 @@
         relic.rotation.x = Math.sin(time * 2) * 0.2;
       }
 
-      // Sakura petals floating down
+      // Rotate Portals
+      portalMeshes.forEach(p => {
+        p.rotation.y += 0.03;
+      });
+
+      // Falling Petals
       if (sakuraGroup) {
         sakuraGroup.children.forEach(p => {
           p.position.y -= p.userData.speedY;
@@ -1116,7 +1277,7 @@
       renderer.render(scene, camera);
     }
 
-    // --- Interactive Command Deck ---
+    // --- Controls ---
     function dismissHandHint() {
       if (handHintActive) {
         handHintActive = false;
@@ -1130,7 +1291,7 @@
       dismissHandHint();
       soundTap();
 
-      if (queue.length >= 7) return; // limit
+      if (queue.length >= 10) return;
       queue.push(cmd);
       renderQueue();
     }
@@ -1178,27 +1339,33 @@
       isExecuting = true;
       document.getElementById('btnRunPlan').disabled = true;
 
-      // Animate commands one by one
+      const lvl = DEMO_LEVELS[currentLevelIndex];
+
       for (let i = 0; i < queue.length; i++) {
         const cmd = queue[i];
-        await executeStep(cmd);
-        await new Promise(r => setTimeout(r, 160));
+        const success = await executeStep(cmd, lvl);
+        if (!success) {
+          // Blocked or fell into water
+          await new Promise(r => setTimeout(r, 400));
+          break;
+        }
+        await new Promise(r => setTimeout(r, 140));
       }
 
-      // Check win condition
-      if (currentPos.x === SHRINE_POS.x && currentPos.y === SHRINE_POS.y) {
-        onVictory();
+      // Check Level Win Condition
+      if (currentPos.x === lvl.shrine.x && currentPos.y === lvl.shrine.y) {
+        handleLevelComplete();
       } else {
-        // Failed / Did not reach shrine
+        // Failed -> Reset to level start
         setTimeout(() => {
-          resetKomaPosition();
+          resetKomaPosition(lvl);
           isExecuting = false;
           document.getElementById('btnRunPlan').disabled = false;
         }, 600);
       }
     }
 
-    async function executeStep(cmd) {
+    async function executeStep(cmd, lvl) {
       const dirMap = {
         'N': { fx: 0, fy: -1, left: 'W', right: 'E' },
         'S': { fx: 0, fy: 1, left: 'E', right: 'W' },
@@ -1210,22 +1377,58 @@
         currentPos.dir = dirMap[currentPos.dir].left;
         soundTurn();
         await animateTurn();
+        return true;
       } else if (cmd === 'R') {
         currentPos.dir = dirMap[currentPos.dir].right;
         soundTurn();
         await animateTurn();
+        return true;
       } else if (cmd === 'F') {
         const nextX = currentPos.x + dirMap[currentPos.dir].fx;
         const nextY = currentPos.y + dirMap[currentPos.dir].fy;
 
-        // Clamp to grid
+        // Check Water Hole
+        if (lvl.waterHoles && lvl.waterHoles.some(h => h[0] === nextX && h[1] === nextY)) {
+          return false;
+        }
+
+        // Check Closed Gate
+        if (lvl.gate && lvl.gate.closed && nextX === lvl.gate.x && nextY === lvl.gate.y) {
+          return false;
+        }
+
+        // Check Fences / Rocks
+        if (lvl.fences && lvl.fences.some(f => f.x === nextX && f.y === nextY)) return false;
+        if (lvl.rocks && lvl.rocks.some(r => r.x === nextX && r.y === nextY)) return false;
+
         if (nextX >= 0 && nextX < 5 && nextY >= 0 && nextY < 5) {
           currentPos.x = nextX;
           currentPos.y = nextY;
           soundStep();
           await animateMove();
+
+          // Check Switch Pad Trigger
+          if (lvl.switch && !lvl.switch.active && currentPos.x === lvl.switch.x && currentPos.y === lvl.switch.y) {
+            lvl.switch.active = true;
+            soundSwitch();
+            if (switchPadMesh) switchPadMesh.position.y = 0.08; // press down
+            if (lvl.gate && gateBarrierMesh) {
+              lvl.gate.closed = false;
+              gateBarrierMesh.visible = false; // open gate!
+            }
+          }
+
+          // Check Teleport Portal Trigger (Level 3)
+          if (lvl.portalA && currentPos.x === lvl.portalA.x && currentPos.y === lvl.portalA.y) {
+            soundPortal();
+            await animateTeleport(lvl.portalB.x, lvl.portalB.y);
+          }
+
+          return true;
         }
+        return false;
       }
+      return true;
     }
 
     function animateMove() {
@@ -1242,7 +1445,7 @@
 
           komaMesh.position.x = startX + (target.x - startX) * ease;
           komaMesh.position.z = startZ + (target.z - startZ) * ease;
-          komaMesh.position.y = 0.42 + Math.sin(t * Math.PI) * 0.18; // hop jump
+          komaMesh.position.y = 0.42 + Math.sin(t * Math.PI) * 0.18;
 
           if (t < 1) {
             requestAnimationFrame(step);
@@ -1274,7 +1477,7 @@
           const ease = 0.5 - Math.cos(t * Math.PI) / 2;
 
           komaMesh.rotation.y = startRot + diff * ease;
-          komaMesh.rotation.z = Math.sin(t * Math.PI) * 0.12 * Math.sign(diff); // banking lean
+          komaMesh.rotation.z = Math.sin(t * Math.PI) * 0.12 * Math.sign(diff);
 
           if (elapsed < duration) {
             requestAnimationFrame(step);
@@ -1288,38 +1491,94 @@
       });
     }
 
-    function resetKomaPosition() {
-      currentPos = { ...START_POS };
-      const p = gridToWorld(START_POS.x, START_POS.y);
+    function animateTeleport(targetX, targetY) {
+      return new Promise(resolve => {
+        let teleported = false;
+        const targetWorld = gridToWorld(targetX, targetY);
+        const startTime = performance.now();
+        const duration = 320;
+
+        function step(now) {
+          const t = Math.min(1, (now - startTime) / duration);
+
+          if (t < 0.5) {
+            // Disappear into vortex
+            const s = Math.max(0.01, 1 - t * 2);
+            komaMesh.scale.set(s, s, s);
+          } else {
+            if (!teleported) {
+              teleported = true;
+              currentPos.x = targetX;
+              currentPos.y = targetY;
+              komaMesh.position.x = targetWorld.x;
+              komaMesh.position.z = targetWorld.z;
+            }
+            // Emerge from portal B
+            const s = Math.min(1, (t - 0.5) * 2);
+            komaMesh.scale.set(s, s, s);
+          }
+
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            komaMesh.scale.set(1, 1, 1);
+            komaMesh.position.x = targetWorld.x;
+            komaMesh.position.z = targetWorld.z;
+            resolve();
+          }
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    function resetKomaPosition(lvl) {
+      currentPos = { ...lvl.start };
+      const p = gridToWorld(lvl.start.x, lvl.start.y);
       komaMesh.position.set(p.x, 0.42, p.z);
       komaMesh.rotation.z = 0;
-      updateKomaRotation(START_POS.dir);
+      komaMesh.rotation.y = dirToAngle(lvl.start.dir);
+
+      if (lvl.switch) {
+        lvl.switch.active = false;
+        if (switchPadMesh) switchPadMesh.position.y = 0.14;
+      }
+      if (lvl.gate) {
+        lvl.gate.closed = true;
+        if (gateBarrierMesh) gateBarrierMesh.visible = true;
+      }
     }
 
-    function onVictory() {
-      soundWin();
+    function handleLevelComplete() {
+      if (currentLevelIndex < DEMO_LEVELS.length - 1) {
+        // Next Level Transition
+        soundLevelWin();
+        const nextIdx = currentLevelIndex + 1;
+        const nextLvl = DEMO_LEVELS[nextIdx];
 
-      // Trigger Golden Particle Flash
-      const flash = new THREE.PointLight(0xffb703, 8, 12);
-      const sw = gridToWorld(SHRINE_POS.x, SHRINE_POS.y);
-      flash.position.set(sw.x, 1.5, sw.z);
-      scene.add(flash);
+        const toast = document.getElementById('levelToast');
+        document.getElementById('toastTitle').textContent = isEn ? `LEVEL ${currentLevelIndex + 1} CLEARED! ⭐⭐⭐` : `LEVEL ${currentLevelIndex + 1} GESCHAFFT! ⭐⭐⭐`;
+        document.getElementById('toastSub').textContent = isEn ? `Next: ${nextLvl.missionEn.replace(/<[^>]+>/g, '')}` : `Weiter zu: ${nextLvl.missionDe.replace(/<[^>]+>/g, '')}`;
 
-      setTimeout(() => {
-        document.getElementById('endCardOverlay').classList.add('active');
-      }, 700);
+        toast.classList.add('active');
+
+        setTimeout(() => {
+          toast.classList.remove('active');
+          loadLevel(nextIdx);
+        }, 1300);
+      } else {
+        // Grand Final Victory after Level 3
+        soundGrandWin();
+        setTimeout(() => {
+          document.getElementById('endCardOverlay').classList.add('active');
+        }, 700);
+      }
     }
 
-    function resetDemo() {
+    function restartFromLevel1() {
       document.getElementById('endCardOverlay').classList.remove('active');
-      queue = [];
-      renderQueue();
-      resetKomaPosition();
-      isExecuting = false;
-      document.getElementById('btnRunPlan').disabled = false;
+      loadLevel(0);
     }
 
-    // --- App Store Redirect Call (MRAID / Store Direct) ---
     function onAppStoreClick() {
       if (typeof mraid !== 'undefined' && mraid.open) {
         mraid.open(APP_STORE_URL);
@@ -1328,9 +1587,7 @@
       }
     }
 
-    // Init when loaded
     window.addEventListener('DOMContentLoaded', init3D);
   </script>
 </body>
 </html>
-
