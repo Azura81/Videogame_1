@@ -4587,7 +4587,8 @@ body.home-active .ui-overlay {
   margin-bottom: 3px;
 }
 
-.help-modal-title {
+.help-modal-title,
+.privacy-modal-title {
   font-size: 20px;
   font-weight: 800;
   color: #fff;

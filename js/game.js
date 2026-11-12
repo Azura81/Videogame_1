@@ -177,6 +177,11 @@ class GameEngine {
       btnHelp: document.getElementById("btnHelp"),
       modalHelp: document.getElementById("modalHelp"),
       btnCloseHelp: document.getElementById("btnCloseHelp"),
+      btnOpenPrivacy: document.getElementById("btnOpenPrivacy"),
+      btnHubOpenPrivacy: document.getElementById("btnHubOpenPrivacy"),
+      modalPrivacy: document.getElementById("modalPrivacy"),
+      btnClosePrivacy: document.getElementById("btnClosePrivacy"),
+      btnDismissPrivacy: document.getElementById("btnDismissPrivacy"),
       btnSkins: document.getElementById("btnSkins"),
       modalSkins: document.getElementById("modalSkins"),
       btnCloseSkins: document.getElementById("btnCloseSkins"),
@@ -970,6 +975,44 @@ class GameEngine {
     }
     if (this.dom.btnCloseHelp && this.dom.modalHelp) {
       this.dom.btnCloseHelp.addEventListener("click", () => this.dom.modalHelp.classList.remove("active"));
+    }
+
+    // Privacy & Imprint Modal
+    const openPrivacyModal = () => {
+      this.triggerHaptic(15);
+      if (this.dom.modalPrivacy) {
+        this.dom.modalPrivacy.classList.add("active");
+      }
+    };
+    const closePrivacyModal = () => {
+      this.triggerHaptic(10);
+      if (this.dom.modalPrivacy) {
+        this.dom.modalPrivacy.classList.remove("active");
+      }
+    };
+
+    if (this.dom.btnOpenPrivacy) {
+      this.dom.btnOpenPrivacy.addEventListener("click", (e) => {
+        e.preventDefault();
+        openPrivacyModal();
+      });
+    }
+    if (this.dom.btnHubOpenPrivacy) {
+      this.dom.btnHubOpenPrivacy.addEventListener("click", (e) => {
+        e.preventDefault();
+        openPrivacyModal();
+      });
+    }
+    if (this.dom.btnClosePrivacy) {
+      this.dom.btnClosePrivacy.addEventListener("click", closePrivacyModal);
+    }
+    if (this.dom.btnDismissPrivacy) {
+      this.dom.btnDismissPrivacy.addEventListener("click", closePrivacyModal);
+    }
+    if (this.dom.modalPrivacy) {
+      this.dom.modalPrivacy.addEventListener("click", (e) => {
+        if (e.target === this.dom.modalPrivacy) closePrivacyModal();
+      });
     }
 
     // Shrine Wardrobe (KOMA Skins) Modal

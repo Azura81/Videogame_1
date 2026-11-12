@@ -229,4 +229,44 @@ test.describe('KOMA Internationalization & Language Switcher (i18n)', () => {
     await page.click('#btnDismissHelp');
     await expect(page.locator('#modalHelp')).not.toHaveClass(/active/);
   });
+
+  test('Privacy & Imprint Modal opens from Help modal, displays operator details, and is bilingual', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 860 });
+    await page.goto('/');
+
+    // 1. Open Help modal and click Privacy & Imprint button
+    await page.click('#btnHelp');
+    await expect(page.locator('#modalHelp')).toHaveClass(/active/);
+    await expect(page.locator('#btnOpenPrivacy')).toBeVisible();
+    await page.click('#btnOpenPrivacy');
+
+    // 2. Verify Privacy modal is active with German content
+    await expect(page.locator('#modalPrivacy')).toHaveClass(/active/);
+    await expect(page.locator('#modalPrivacy .privacy-modal-title')).toHaveText('Datenschutz & Impressum');
+    await expect(page.locator('#modalPrivacy')).toContainText('Max Rietsch');
+    await expect(page.locator('#modalPrivacy')).toContainText('azura81.dev@gmail.com');
+    await expect(page.locator('#btnDismissPrivacy')).toHaveText('Schließen');
+
+    // 3. Dismiss Privacy modal
+    await page.click('#btnDismissPrivacy');
+    await expect(page.locator('#modalPrivacy')).not.toHaveClass(/active/);
+
+    // Close help modal
+    await page.click('#btnDismissHelp');
+    await expect(page.locator('#modalHelp')).not.toHaveClass(/active/);
+
+    // 4. Switch to English and test again
+    await page.evaluate(() => window.I18N?.setLanguage('en'));
+    await page.click('#btnHelp');
+    await expect(page.locator('#btnOpenPrivacy')).toHaveText('Privacy & Imprint');
+    await page.click('#btnOpenPrivacy');
+    await expect(page.locator('#modalPrivacy')).toHaveClass(/active/);
+    await expect(page.locator('#modalPrivacy .privacy-modal-title')).toHaveText('Privacy & Imprint');
+    await expect(page.locator('#modalPrivacy')).toContainText('Operator & Imprint');
+    await expect(page.locator('#btnDismissPrivacy')).toHaveText('Close');
+
+    // Close via close icon
+    await page.click('#btnClosePrivacy');
+    await expect(page.locator('#modalPrivacy')).not.toHaveClass(/active/);
+  });
 });
