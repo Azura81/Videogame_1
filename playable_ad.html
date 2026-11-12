@@ -695,14 +695,14 @@
       const h = container.clientHeight || window.innerHeight;
 
       scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x060b14, 0.075);
+      scene.fog = new THREE.FogExp2(0x060b14, 0.065);
 
-      // Camera: Isometric Angle
+      // Camera: Isometric Angle matching main game (-X, +Y, -Z)
       const aspect = w / h;
-      const d = 3.8;
-      camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, -10, 100);
-      camera.position.set(7, 8, 7);
-      camera.lookAt(0, 0, 0);
+      const d = 3.6;
+      camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, -20, 100);
+      camera.position.set(-8, 9.2, -8);
+      camera.lookAt(0, 0.2, 0);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(w, h);
@@ -711,29 +711,29 @@
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       container.appendChild(renderer.domElement);
 
-      // Lights
-      const ambientLight = new THREE.AmbientLight(0x7dd3fc, 0.85);
+      // Lights: Ambient & Dynamic Shinto Studio Lighting
+      const ambientLight = new THREE.AmbientLight(0x7dd3fc, 0.9);
       scene.add(ambientLight);
 
-      const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-      dirLight.position.set(6, 12, 4);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
+      dirLight.position.set(-4, 14, -6);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 1024;
       dirLight.shadow.mapSize.height = 1024;
       scene.add(dirLight);
 
       // Cyan Point Light at Start
-      const cyanLight = new THREE.PointLight(0x00f5ff, 2, 8);
-      cyanLight.position.set(-2, 1.5, -2);
+      const cyanLight = new THREE.PointLight(0x00f5ff, 2.5, 9);
+      cyanLight.position.set(-2, 1.8, -2);
       scene.add(cyanLight);
 
       // Golden Light at Shrine
-      const goldLight = new THREE.PointLight(0xffb703, 3, 10);
+      const goldLight = new THREE.PointLight(0xffb703, 3.5, 10);
       const sw = gridToWorld(SHRINE_POS.x, SHRINE_POS.y);
       goldLight.position.set(sw.x, 2, sw.z);
       scene.add(goldLight);
 
-      // Build Garden Ground Grid
+      // Build Garden Ground Grid & Obstacles
       buildGardenGrid();
 
       // Build Torii Shrine at Target
@@ -776,7 +776,7 @@
           const isShrine = (x === SHRINE_POS.x && y === SHRINE_POS.y);
 
           const tileMat = new THREE.MeshStandardMaterial({
-            color: isShrine ? 0x1a2e3b : (isPath ? 0x1e293b : 0x0f172a),
+            color: isShrine ? 0x1e3a4f : (isPath ? 0x1e293b : 0x0f172a),
             roughness: 0.4,
             metalness: 0.2
           });
@@ -786,10 +786,10 @@
           tile.receiveShadow = true;
           scene.add(tile);
 
-          // Path Glow Indicator
+          // Glowing Path Stepping Indicators
           if (isPath && !isShrine) {
-            const dotGeo = new THREE.CircleGeometry(0.08, 12);
-            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.45 });
+            const dotGeo = new THREE.CircleGeometry(0.09, 16);
+            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.5 });
             const dot = new THREE.Mesh(dotGeo, dotMat);
             dot.rotation.x = -Math.PI / 2;
             dot.position.set(p.x, 0.12, p.z);
@@ -798,12 +798,25 @@
         }
       }
 
-      // Add a couple Decorative Bonsai / Rocks
-      const rockGeo = new THREE.DodecahedronGeometry(0.35, 1);
+      // Add Bamboo Fence & Bonsai Obstacles
+      const fenceMat = new THREE.MeshStandardMaterial({ color: 0x06d6a0, roughness: 0.5 });
+      const fenceGeo = new THREE.BoxGeometry(0.85, 0.45, 0.08);
+      const fence1 = new THREE.Mesh(fenceGeo, fenceMat);
+      const fp1 = gridToWorld(1, 1);
+      fence1.position.set(fp1.x, 0.25, fp1.z);
+      scene.add(fence1);
+
+      const fence2 = new THREE.Mesh(fenceGeo, fenceMat);
+      const fp2 = gridToWorld(2, 1);
+      fence2.position.set(fp2.x, 0.25, fp2.z);
+      scene.add(fence2);
+
+      // Decorative Bonsai Rock
+      const rockGeo = new THREE.DodecahedronGeometry(0.38, 1);
       const rockMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.8 });
       const rock = new THREE.Mesh(rockGeo, rockMat);
-      const rp = gridToWorld(1, 3);
-      rock.position.set(rp.x, 0.2, rp.z);
+      const rp = gridToWorld(0, 2);
+      rock.position.set(rp.x, 0.24, rp.z);
       scene.add(rock);
     }
 
@@ -817,7 +830,7 @@
         color: 0xff3366,
         roughness: 0.3,
         emissive: 0xff0044,
-        emissiveIntensity: 0.25
+        emissiveIntensity: 0.3
       });
 
       const p1 = new THREE.Mesh(postGeo, toriiMat);
@@ -827,104 +840,203 @@
       shrineMesh.add(p1, p2);
 
       // Top Lintels
-      const topGeo = new THREE.BoxGeometry(1.05, 0.1, 0.16);
+      const topGeo = new THREE.BoxGeometry(1.1, 0.1, 0.16);
       const topBeam = new THREE.Mesh(topGeo, toriiMat);
       topBeam.position.set(0, 1.35, 0);
 
-      const subGeo = new THREE.BoxGeometry(0.9, 0.07, 0.12);
+      const subGeo = new THREE.BoxGeometry(0.92, 0.07, 0.12);
       const subBeam = new THREE.Mesh(subGeo, toriiMat);
       subBeam.position.set(0, 1.15, 0);
       shrineMesh.add(topBeam, subBeam);
 
       // Golden Spirit Altar
-      const altarGeo = new THREE.CylinderGeometry(0.24, 0.3, 0.2, 16);
+      const altarGeo = new THREE.CylinderGeometry(0.26, 0.32, 0.2, 16);
       const altarMat = new THREE.MeshStandardMaterial({
         color: 0xffb703,
-        metalness: 0.8,
-        roughness: 0.2,
+        metalness: 0.85,
+        roughness: 0.18,
         emissive: 0xffb703,
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.6
       });
       const altar = new THREE.Mesh(altarGeo, altarMat);
       altar.position.set(0, 0.1, 0);
       shrineMesh.add(altar);
 
-      // Floating Sacred Relic Sphere
-      const relicGeo = new THREE.OctahedronGeometry(0.18, 2);
+      // Floating Sacred Relic Cube
+      const relicGeo = new THREE.BoxGeometry(0.28, 0.28, 0.28);
       const relicMat = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
+        color: 0xffe066,
         emissive: 0xffb703,
-        emissiveIntensity: 1.0,
-        wireframe: true
+        emissiveIntensity: 0.9,
+        roughness: 0.2,
+        metalness: 0.8
       });
       const relic = new THREE.Mesh(relicGeo, relicMat);
-      relic.position.set(0, 0.55, 0);
+      relic.position.set(0, 0.58, 0);
       relic.name = "floatingRelic";
       shrineMesh.add(relic);
 
       scene.add(shrineMesh);
     }
 
+    let komaLightBeacon = null;
+
     function buildKoma() {
       komaMesh = new THREE.Group();
       const p = gridToWorld(START_POS.x, START_POS.y);
-      komaMesh.position.set(p.x, 0.35, p.z);
+      komaMesh.position.set(p.x, 0.42, p.z);
 
-      // Head / Body
-      const bodyGeo = new THREE.SphereGeometry(0.32, 24, 20);
+      // Authentic Materials from KOMA: Spirit Delivery (Shiro Usagi Skin)
       const bodyMat = new THREE.MeshStandardMaterial({
-        color: 0xf1f5f9,
-        roughness: 0.2,
-        metalness: 0.5
+        color: 0xf5f8fc,
+        metalness: 0.15,
+        roughness: 0.22
       });
-      const body = new THREE.Mesh(bodyGeo, bodyMat);
-      komaMesh.add(body);
 
-      // Face Visor Screen
-      const visorGeo = new THREE.SphereGeometry(0.25, 20, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+      const darkMat = new THREE.MeshStandardMaterial({
+        color: 0x0a1424,
+        metalness: 0.7,
+        roughness: 0.2
+      });
+
       const visorMat = new THREE.MeshStandardMaterial({
-        color: 0x050d1a,
-        roughness: 0.1,
-        metalness: 0.9
+        color: 0x060e18,
+        metalness: 0.85,
+        roughness: 0.12
       });
-      const visor = new THREE.Mesh(visorGeo, visorMat);
-      visor.rotation.x = Math.PI / 2;
-      visor.position.set(0, 0.05, 0.1);
-      komaMesh.add(visor);
 
-      // Cyan Glowing Eyes
-      const eyeGeo = new THREE.SphereGeometry(0.04, 12, 12);
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
-      const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
-      leftEye.position.set(-0.09, 0.06, 0.28);
-      const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
-      rightEye.position.set(0.09, 0.06, 0.28);
-      komaMesh.add(leftEye, rightEye);
+      const eyeMat = new THREE.MeshBasicMaterial({
+        color: 0x00f5ff
+      });
 
-      // Golden Fox Ears
-      const earGeo = new THREE.ConeGeometry(0.09, 0.22, 12);
-      const earMat = new THREE.MeshStandardMaterial({ color: 0xffb703, metalness: 0.6 });
-      const leftEar = new THREE.Mesh(earGeo, earMat);
-      leftEar.position.set(-0.16, 0.35, -0.05);
-      leftEar.rotation.z = 0.25;
-      const rightEar = new THREE.Mesh(earGeo, earMat);
-      rightEar.position.set(0.16, 0.35, -0.05);
-      rightEar.rotation.z = -0.25;
-      komaMesh.add(leftEar, rightEar);
-
-      // Floating Lantern Package on back
-      const packGeo = new THREE.BoxGeometry(0.2, 0.24, 0.16);
-      const packMat = new THREE.MeshStandardMaterial({
+      const glowMat = new THREE.MeshStandardMaterial({
         color: 0x00f5ff,
         emissive: 0x00f5ff,
-        emissiveIntensity: 0.6
+        emissiveIntensity: 1.0
       });
+
+      const packMat = new THREE.MeshStandardMaterial({
+        color: 0xbd7c4c,
+        roughness: 0.55,
+        metalness: 0.1
+      });
+
+      const packStrapMat = new THREE.MeshStandardMaterial({
+        color: 0x00f5ff,
+        emissive: 0x00f5ff,
+        emissiveIntensity: 0.9
+      });
+
+      // 1. Main Round Head / Torso
+      const headGeo = new THREE.SphereGeometry(0.32, 24, 24);
+      headGeo.scale(1.0, 1.05, 0.95);
+      const head = new THREE.Mesh(headGeo, bodyMat);
+      head.position.y = 0.44;
+      head.castShadow = true;
+      head.receiveShadow = true;
+      komaMesh.add(head);
+
+      // 2. Dark Visor Face Screen (Facing +Z)
+      const visorGeo = new THREE.SphereGeometry(0.24, 20, 20);
+      visorGeo.scale(0.92, 0.68, 0.55);
+      const visor = new THREE.Mesh(visorGeo, visorMat);
+      visor.position.set(0, 0.44, 0.21);
+      komaMesh.add(visor);
+
+      // 3. Glowing Eyes (Cyan expressive capsule/sphere)
+      const eyeGeo = new THREE.SphereGeometry(0.045, 12, 12);
+      eyeGeo.scale(0.8, 1.3, 0.6);
+
+      const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+      leftEye.position.set(-0.09, 0.45, 0.32);
+      leftEye.rotation.z = 0.08;
+      komaMesh.add(leftEye);
+
+      const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+      rightEye.position.set(0.09, 0.45, 0.32);
+      rightEye.rotation.z = -0.08;
+      komaMesh.add(rightEye);
+
+      // 4. Cyber Rabbit Ears / Antennas with Glowing Tips
+      [-1, 1].forEach(side => {
+        const earGroup = new THREE.Group();
+        const earGeo = new THREE.CylinderGeometry(0.035, 0.05, 0.26, 12);
+        const ear = new THREE.Mesh(earGeo, bodyMat);
+        ear.position.y = 0.13;
+        ear.castShadow = true;
+        earGroup.add(ear);
+
+        const earTipGeo = new THREE.SphereGeometry(0.045, 12, 12);
+        const earTip = new THREE.Mesh(earTipGeo, glowMat);
+        earTip.position.y = 0.26;
+        earGroup.add(earTip);
+
+        earGroup.position.set(side * 0.14, 0.72, 0);
+        earGroup.rotation.z = -side * 0.25;
+        earGroup.rotation.x = -0.15;
+        komaMesh.add(earGroup);
+      });
+
+      // 5. Delivery Backpack with straps (On Back: -Z)
+      const packGeo = new THREE.BoxGeometry(0.26, 0.28, 0.2);
       const pack = new THREE.Mesh(packGeo, packMat);
-      pack.position.set(0, 0.05, -0.28);
+      pack.position.set(0, 0.42, -0.32);
+      pack.castShadow = true;
       komaMesh.add(pack);
 
+      const strapGeo = new THREE.BoxGeometry(0.27, 0.04, 0.21);
+      const strap = new THREE.Mesh(strapGeo, packStrapMat);
+      strap.position.set(0, 0.42, -0.32);
+      komaMesh.add(strap);
+
+      // 6. Thruster Base & Hover Glow Ring
+      const baseGeo = new THREE.CylinderGeometry(0.2, 0.14, 0.12, 16);
+      const base = new THREE.Mesh(baseGeo, darkMat);
+      base.position.y = 0.14;
+      base.castShadow = true;
+      komaMesh.add(base);
+
+      const thrustRingGeo = new THREE.RingGeometry(0.08, 0.18, 16);
+      const thrustRing = new THREE.Mesh(thrustRingGeo, glowMat);
+      thrustRing.rotation.x = Math.PI / 2;
+      thrustRing.position.y = 0.07;
+      komaMesh.add(thrustRing);
+
+      // 7. Dynamic Point Light on Floor beneath Koma
+      const komaFloorLight = new THREE.PointLight(0x00f5ff, 1.4, 2.5);
+      komaFloorLight.position.set(0, 0.2, 0);
+      komaMesh.add(komaFloorLight);
+
+      // 8. Holographic Forward Direction Pointer (Chevron Arrow on floor in front of KOMA)
+      const beaconGroup = new THREE.Group();
+      const arrowGeo = new THREE.ConeGeometry(0.09, 0.22, 3);
+      arrowGeo.rotateX(Math.PI / 2);
+      const arrowMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.85 });
+      const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+      arrow.position.set(0, 0.08, 0.52);
+      beaconGroup.add(arrow);
+
+      komaMesh.add(beaconGroup);
+
+      // Apply Initial Rotation
       updateKomaRotation(START_POS.dir);
       scene.add(komaMesh);
+    }
+
+    function dirToAngle(dir) {
+      // Facing South (+Z) = 0, East (+X) = Math.PI/2, North (-Z) = Math.PI, West (-X) = -Math.PI/2
+      const map = {
+        'S': 0,
+        'E': Math.PI / 2,
+        'N': Math.PI,
+        'W': -Math.PI / 2
+      };
+      return map[dir] !== undefined ? map[dir] : 0;
+    }
+
+    function updateKomaRotation(dir) {
+      if (!komaMesh) return;
+      komaMesh.rotation.y = dirToAngle(dir);
     }
 
     function buildSakuraPetals() {
@@ -954,18 +1066,12 @@
       scene.add(sakuraGroup);
     }
 
-    function updateKomaRotation(dir) {
-      if (!komaMesh) return;
-      const angles = { 'N': Math.PI, 'S': 0, 'E': -Math.PI / 2, 'W': Math.PI / 2 };
-      komaMesh.rotation.y = angles[dir] || 0;
-    }
-
     function onWindowResize() {
       const container = document.getElementById('canvas-container');
       const w = container.clientWidth || window.innerWidth;
       const h = container.clientHeight || window.innerHeight;
       const aspect = w / h;
-      const d = 3.8;
+      const d = 3.6;
       camera.left = -d * aspect;
       camera.right = d * aspect;
       camera.top = d;
@@ -1145,14 +1251,14 @@
 
           komaMesh.position.x = startX + (target.x - startX) * ease;
           komaMesh.position.z = startZ + (target.z - startZ) * ease;
-          komaMesh.position.y = 0.35 + Math.sin(t * Math.PI) * 0.18; // hop jump
+          komaMesh.position.y = 0.42 + Math.sin(t * Math.PI) * 0.18; // hop jump
 
           if (t < 1) {
             requestAnimationFrame(step);
           } else {
             komaMesh.position.x = target.x;
             komaMesh.position.z = target.z;
-            komaMesh.position.y = 0.35;
+            komaMesh.position.y = 0.42;
             resolve();
           }
         }
@@ -1162,15 +1268,40 @@
 
     function animateTurn() {
       return new Promise(resolve => {
-        updateKomaRotation(currentPos.dir);
-        resolve();
+        const target = dirToAngle(currentPos.dir);
+        const startRot = komaMesh.rotation.y;
+        let diff = (target - (startRot % (Math.PI * 2))) % (Math.PI * 2);
+        if (diff < -Math.PI) diff += Math.PI * 2;
+        if (diff > Math.PI) diff -= Math.PI * 2;
+
+        const startTime = performance.now();
+        const duration = 220;
+
+        function step(now) {
+          const elapsed = Math.min(duration, now - startTime);
+          const t = elapsed / duration;
+          const ease = 0.5 - Math.cos(t * Math.PI) / 2;
+
+          komaMesh.rotation.y = startRot + diff * ease;
+          komaMesh.rotation.z = Math.sin(t * Math.PI) * 0.12 * Math.sign(diff); // banking lean
+
+          if (elapsed < duration) {
+            requestAnimationFrame(step);
+          } else {
+            komaMesh.rotation.y = target;
+            komaMesh.rotation.z = 0;
+            resolve();
+          }
+        }
+        requestAnimationFrame(step);
       });
     }
 
     function resetKomaPosition() {
       currentPos = { ...START_POS };
       const p = gridToWorld(START_POS.x, START_POS.y);
-      komaMesh.position.set(p.x, 0.35, p.z);
+      komaMesh.position.set(p.x, 0.42, p.z);
+      komaMesh.rotation.z = 0;
       updateKomaRotation(START_POS.dir);
     }
 
