@@ -49,3 +49,4 @@ const sizeMb = (stats.size / (1024 * 1024)).toFixed(2);
 console.log(`✅ Success: Generated ${OUTPUT_PATH}`);
 console.log(`📦 File size: ${sizeKb} KB (${sizeMb} MB)`);
 console.log('🚀 Ready to upload to Google Ads, AppLovin, Unity Ads, Meta or test in any browser!');
+
