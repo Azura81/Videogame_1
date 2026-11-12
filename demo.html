@@ -884,7 +884,7 @@
       komaMesh.add(visor);
 
       // Cyan Glowing Eyes
-      const eyeGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.035, 0.06, 4, 8) : new THREE.CylinderGeometry(0.035, 0.035, 0.06);
+      const eyeGeo = new THREE.SphereGeometry(0.04, 12, 12);
       const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
       const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
       leftEye.position.set(-0.09, 0.06, 0.28);
@@ -1202,3 +1202,4 @@
   </script>
 </body>
 </html>
+
