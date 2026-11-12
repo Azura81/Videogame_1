@@ -263,7 +263,6 @@ class GameEngine {
       homeTowerBadge: document.getElementById("homeTowerBadge"),
       homeDailyBadge: document.getElementById("homeDailyBadge"),
       homeTrophiesBadge: document.getElementById("homeTrophiesBadge"),
-      btnJumpFujiDrawer: document.getElementById("btnJumpFujiDrawer"),
       drawerChapterTabs: document.getElementById("drawerChapterTabs"),
       btnMobileHapticToggle: document.getElementById("btnMobileHapticToggle"),
       btnDailyTrial: document.getElementById("btnDailyTrial"),
@@ -935,23 +934,6 @@ class GameEngine {
       this.dom.btnCloseMechanicIntro.addEventListener("click", () => {
         this.triggerHaptic(12);
         this.closeMechanicIntro();
-      });
-    }
-
-    // Drawer Fuji Quick-Jump Banner
-    if (this.dom.btnJumpFujiDrawer) {
-      this.dom.btnJumpFujiDrawer.addEventListener("click", () => {
-        if (!this.isLevelUnlocked(50)) {
-          Sound.playBump();
-          this.triggerHaptic([35, 30, 40]);
-          this.setFeedback("Kapitel 6 ist noch gesperrt! Schließe zuerst Kapitel 5 (Level 50) ab.", "bad");
-          return;
-        }
-        this.triggerHaptic(25);
-        if (this.dom.levelDrawer) this.dom.levelDrawer.classList.remove("open");
-        this.hideHomeScreen();
-        this.loadLevel(50); // Level 51
-        this.setFeedback("Kapitel 6: Der Heilige Berg Fuji geladen!", "good");
       });
     }
 

@@ -4255,8 +4255,10 @@ body.home-active .ui-overlay {
 .home-mode-menu {
   position: absolute;
   bottom: calc(100% + 8px);
-  right: 0;
+  left: 0;
+  right: auto;
   min-width: 240px;
+  max-width: min(300px, calc(100vw - 28px));
   background: rgba(15, 23, 42, 0.98);
   border: 1.5px solid rgba(0, 245, 255, 0.4);
   border-radius: 18px;

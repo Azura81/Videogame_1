@@ -48,9 +48,9 @@ test('Verify Mount Fuji visibility, winter aesthetics, and chapter navigation', 
   await page.locator('#btnLevelSelect').click();
   await expect(page.locator('#levelDrawer')).toHaveClass(/open/);
 
-  // Check chapter tabs in drawer
+  // Check chapter tabs in drawer (Alle + 10 chapters)
   const drawerTabs = page.locator('#drawerChapterTabs .drawer-tab');
-  await expect(drawerTabs).toHaveCount(7);
+  await expect(drawerTabs).toHaveCount(11);
 
   // Click Kap. 6 tab in drawer
   await page.locator('#drawerChapterTabs [data-chapter="6"]').click();

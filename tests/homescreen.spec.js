@@ -75,4 +75,41 @@ test.describe('KOMA Main Home Screen & Showroom System', () => {
     await btnHome.click();
     await expect(homeScreen).toHaveClass(/active/);
   });
+
+  test('Mode selector dropdown popover is fully visible and not cut off on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/?showHome=1');
+    await page.waitForSelector('#btnHomeModeDropdown');
+
+    await page.locator('#btnHomeModeDropdown').click();
+    const menu = page.locator('#homeModeMenu');
+    await expect(menu).toBeVisible();
+
+    const box = await menu.boundingBox();
+    console.log('Mobile 390x844 Mode Menu:', box);
+
+    // Verify it is not cut off on left, right, top or bottom
+    expect(box.x).toBeGreaterThanOrEqual(4);
+    expect(box.x + box.width).toBeLessThanOrEqual(390 - 4);
+    expect(box.y).toBeGreaterThanOrEqual(4);
+    expect(box.y + box.height).toBeLessThanOrEqual(844 - 4);
+  });
+
+  test('Mode selector dropdown popover is fully visible on large mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 430, height: 932 });
+    await page.goto('/?showHome=1');
+    await page.waitForSelector('#btnHomeModeDropdown');
+
+    await page.locator('#btnHomeModeDropdown').click();
+    const menu = page.locator('#homeModeMenu');
+    await expect(menu).toBeVisible();
+
+    const box = await menu.boundingBox();
+    console.log('Mobile 430x932 Mode Menu:', box);
+
+    expect(box.x).toBeGreaterThanOrEqual(4);
+    expect(box.x + box.width).toBeLessThanOrEqual(430 - 4);
+    expect(box.y).toBeGreaterThanOrEqual(4);
+    expect(box.y + box.height).toBeLessThanOrEqual(932 - 4);
+  });
 });
