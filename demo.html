@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Spirit Delivery — Playable Demo</title>
+  
+  <!-- MRAID Standard Compatibility for Mobile Ad Networks -->
+  <script>
+    // Polyfill MRAID if in standard browser
+    if (typeof mraid === 'undefined') {
+      window.mraid = {
+        getState: function() { return 'ready'; },
+        isViewable: function() { return true; },
+        open: function(url) { window.open(url, '_blank'); },
+        addEventListener: function() {},
+        removeEventListener: function() {}
+      };
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #060b14;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #fff;
+    }
+
+    /* Fullscreen Game Viewport */
+    #ad-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #0c1a2e 0%, #050a12 100%);
+    }
+
+    /* 3D Canvas Container */
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Top Bar HUD */
+    .ad-top-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: calc(max(12px, env(safe-area-inset-top, 0px)) + 8px) 16px 10px 16px;
+      pointer-events: none;
+    }
+
+    .ad-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 20, 36, 0.85);
+      border: 1.5px solid rgba(0, 245, 255, 0.45);
+      border-radius: 999px;
+      padding: 6px 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 245, 255, 0.2);
+    }
+
+    .ad-brand-icon {
+      width: 20px;
+      height: 20px;
+      color: #00f5ff;
+    }
+
+    .ad-brand-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .ad-cta-mini {
+      pointer-events: auto;
+      background: linear-gradient(135deg, #00f5ff 0%, #059669 100%);
+      color: #041019;
+      font-size: 12px;
+      font-weight: 800;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 245, 255, 0.4);
+      transition: transform 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .ad-cta-mini:active {
+      transform: scale(0.95);
+    }
+
+    /* Floating Mission Banner */
+    .mission-pill {
+      position: absolute;
+      top: calc(max(12px, env(safe-area-inset-top, 0px)) + 58px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(14, 25, 45, 0.92);
+      border: 1px solid rgba(0, 245, 255, 0.35);
+      border-radius: 18px;
+      padding: 6px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .mission-pill span.highlight {
+      color: #00f5ff;
+    }
+
+    /* Bottom Control Deck */
+    .ad-bottom-deck {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 16px calc(max(14px, env(safe-area-inset-bottom, 0px)) + 10px) 16px;
+      background: linear-gradient(180deg, rgba(6, 12, 22, 0) 0%, rgba(6, 12, 22, 0.92) 28%, rgba(4, 8, 16, 0.98) 100%);
+      border-top: 1px solid rgba(0, 245, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Command Queue Row */
+    .queue-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px dashed rgba(0, 245, 255, 0.35);
+      border-radius: 14px;
+      padding: 8px 12px;
+      min-height: 48px;
+    }
+
+    .queue-chips-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-grow: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .queue-chips-container::-webkit-scrollbar { display: none; }
+
+    .queue-placeholder {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+      font-style: italic;
+    }
+
+    .cmd-chip {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.22) 0%, rgba(0, 180, 216, 0.15) 100%);
+      border: 1px solid rgba(0, 245, 255, 0.6);
+      color: #00f5ff;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      animation: chipPop 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes chipPop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .queue-btn-undo {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Command Buttons Grid */
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .cmd-btn {
+      background: linear-gradient(145deg, rgba(20, 32, 54, 0.95) 0%, rgba(12, 20, 36, 0.98) 100%);
+      border: 1.5px solid rgba(0, 245, 255, 0.35);
+      border-radius: 14px;
+      padding: 10px 6px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      transition: all 0.15s ease;
+    }
+
+    .cmd-btn:active {
+      transform: scale(0.94);
+      border-color: #00f5ff;
+      background: rgba(0, 245, 255, 0.15);
+    }
+
+    .cmd-btn svg {
+      width: 22px;
+      height: 22px;
+      color: #00f5ff;
+    }
+
+    .cmd-btn span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Big Run Plan CTA */
+    .run-btn {
+      background: linear-gradient(135deg, #00f5ff 0%, #10b981 100%);
+      border: none;
+      border-radius: 16px;
+      padding: 14px;
+      color: #04141e;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 245, 255, 0.45);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .run-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(0, 245, 255, 0.6);
+    }
+
+    .run-btn:active {
+      transform: scale(0.97);
+    }
+
+    .run-btn.pulse {
+      animation: runPulse 1.8s infinite alternate;
+    }
+
+    @keyframes runPulse {
+      0% { box-shadow: 0 8px 24px rgba(0, 245, 255, 0.4); }
+      100% { box-shadow: 0 12px 36px rgba(16, 185, 129, 0.8), 0 0 20px rgba(0, 245, 255, 0.6); }
+    }
+
+    /* Hand Guide Hint */
+    .hand-hint {
+      position: absolute;
+      z-index: 50;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hand-hint.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .hand-icon {
+      font-size: 32px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+      animation: tapBounce 1.2s infinite ease-in-out;
+    }
+
+    .hand-text {
+      background: rgba(0, 245, 255, 0.95);
+      color: #05101a;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    @keyframes tapBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.1); }
+    }
+
+    /* End Card Modal (Victory Overlay) */
+    .end-card-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      background: rgba(4, 9, 18, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .end-card-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .end-card-box {
+      width: 100%;
+      max-width: 360px;
+      background: linear-gradient(180deg, rgba(16, 28, 48, 0.98) 0%, rgba(8, 14, 26, 0.99) 100%);
+      border: 1.5px solid rgba(0, 245, 255, 0.45);
+      border-radius: 28px;
+      padding: 24px 20px 22px 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 245, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: cardAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes cardAppear {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .end-stars-row {
+      display: flex;
+      gap: 8px;
+      font-size: 32px;
+      color: #ffb703;
+      filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.6));
+    }
+
+    .end-title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .end-subtitle {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .end-app-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(14, 23, 40, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 10px 14px;
+      width: 100%;
+    }
+
+    .end-app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #0d1a30;
+      border: 1.5px solid rgba(0, 245, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .end-app-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .end-app-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .end-app-rating {
+      font-size: 11.5px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .end-cta-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #00f5ff 0%, #10b981 100%);
+      color: #03111b;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(0, 245, 255, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+      transition: transform 0.15s ease;
+      text-transform: uppercase;
+      animation: ctaGlow 2s infinite alternate;
+    }
+
+    .end-cta-btn:active {
+      transform: scale(0.96);
+    }
+
+    @keyframes ctaGlow {
+      0% { box-shadow: 0 10px 28px rgba(0, 245, 255, 0.5); }
+      100% { box-shadow: 0 14px 38px rgba(16, 185, 129, 0.8), 0 0 24px rgba(0, 245, 255, 0.7); }
+    }
+
+    .end-replay-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="ad-container">
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Top Bar -->
+    <div class="ad-top-bar">
+      <div class="ad-brand">
+        <svg class="ad-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/>
+          <line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/>
+          <line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/>
+          <line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/>
+          <line x1="4.5" y1="12" x2="19.5" y2="12" stroke-width="1.6"/>
+          <rect x="10.5" y="8.5" width="3" height="3.5" rx="0.5" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="ad-brand-title">Spirit Delivery</span>
+      </div>
+
+      <button class="ad-cta-mini" id="btnAdCtaMini" onclick="onAppStoreClick()">
+        <span id="txtInstallMini">INSTALLIEREN</span>
+      </button>
+    </div>
+
+    <!-- Mission Objective Pill -->
+    <div class="mission-pill" id="missionPill">
+      <span id="txtMission">Bringe das Licht zum <span class="highlight">Gold-Schrein</span>!</span>
+    </div>
+
+    <!-- Hand Pointer Hint -->
+    <div class="hand-hint" id="handHint">
+      <span class="hand-icon">👆</span>
+      <span class="hand-text" id="txtHandHint">Hier tippen</span>
+    </div>
+
+    <!-- Bottom Controls Deck -->
+    <div class="ad-bottom-deck">
+      <!-- Command Queue -->
+      <div class="queue-row">
+        <div class="queue-chips-container" id="queueContainer">
+          <span class="queue-placeholder" id="queuePlaceholder">Befehle antippen ...</span>
+        </div>
+        <button class="queue-btn-undo" id="btnUndo" onclick="onUndoClick()">⤾ Zurück</button>
+      </div>
+
+      <!-- Controls Grid -->
+      <div class="buttons-grid">
+        <button class="cmd-btn" id="btnForward" onclick="addCommand('F')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+          <span id="txtForward">Vorwärts</span>
+        </button>
+
+        <button class="cmd-btn" id="btnTurnLeft" onclick="addCommand('L')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 14 4 9 9 4"></polyline>
+            <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+          </svg>
+          <span id="txtLeft">Links</span>
+        </button>
+
+        <button class="cmd-btn" id="btnTurnRight" onclick="addCommand('R')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 14 20 9 15 4"></polyline>
+            <path d="M4 20v-7a4 4 0 0 1 4-4h12"></path>
+          </svg>
+          <span id="txtRight">Rechts</span>
+        </button>
+      </div>
+
+      <!-- Big Run Plan Button -->
+      <button class="run-btn pulse" id="btnRunPlan" onclick="onRunPlanClick()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <polygon points="6,3 20,12 6,21" fill="currentColor"/>
+        </svg>
+        <span id="txtRunPlan">PLAN STARTEN</span>
+      </button>
+    </div>
+
+    <!-- Victory End Card Overlay -->
+    <div class="end-card-overlay" id="endCardOverlay">
+      <div class="end-card-box">
+        <div class="end-stars-row">⭐ ⭐ ⭐</div>
+        <h2 class="end-title" id="txtEndTitle">LIEFERUNG ERFOLGREICH!</h2>
+        <p class="end-subtitle" id="txtEndSubtitle">Kannst du alle 100 Schrein-Rätsel lösen und den Geist befreien?</p>
+
+        <div class="end-app-preview">
+          <div class="end-app-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 5c6-1.8 14-1.8 20 0" stroke-width="2.6"/>
+              <line x1="4" y1="8.5" x2="20" y2="8.5" stroke-width="1.8"/>
+              <line x1="7.2" y1="8.5" x2="6.2" y2="21" stroke-width="2.2"/>
+              <line x1="16.8" y1="8.5" x2="17.8" y2="21" stroke-width="2.2"/>
+            </svg>
+          </div>
+          <div class="end-app-meta">
+            <strong class="end-app-name">Spirit Delivery</strong>
+            <span class="end-app-rating">★★★★★ 4.9 · Train your Brain</span>
+          </div>
+        </div>
+
+        <button class="end-cta-btn" id="btnEndCta" onclick="onAppStoreClick()">
+          <span id="txtEndCta">KOSTENLOS LADEN</span>
+        </button>
+
+        <button class="end-replay-btn" id="btnReplay" onclick="resetDemo()">
+          <span id="txtReplay">↺ Noch einmal versuchen</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Local or Inlined Three.js -->
+  <script src="js/three.min.js"></script>
+
+  <!-- Playable Ad Game Controller Script -->
+  <script>
+    // --- Configuration & App Store Target ---
+    const APP_STORE_URL = "https://apps.apple.com/app/spirit-delivery/id6738914690"; // Spirit Delivery App Store Link
+
+    // Language Detection
+    const isEn = !navigator.language || !navigator.language.toLowerCase().startsWith('de');
+    if (isEn) {
+      document.getElementById('txtInstallMini').textContent = "INSTALL";
+      document.getElementById('txtMission').innerHTML = "Deliver the lantern to the <span class=\"highlight\">Gold Shrine</span>!";
+      document.getElementById('txtHandHint').textContent = "Tap here";
+      document.getElementById('queuePlaceholder').textContent = "Tap commands ...";
+      document.getElementById('btnUndo').textContent = "⤾ Undo";
+      document.getElementById('txtForward').textContent = "Forward";
+      document.getElementById('txtLeft').textContent = "Turn Left";
+      document.getElementById('txtRight').textContent = "Turn Right";
+      document.getElementById('txtRunPlan').textContent = "RUN PLAN";
+      document.getElementById('txtEndTitle').textContent = "PERFECT DELIVERY!";
+      document.getElementById('txtEndSubtitle').textContent = "Can you master all 100 shrine puzzles and free the spirits?";
+      document.getElementById('txtEndCta').textContent = "GET IT FREE ON APP STORE";
+      document.getElementById('txtReplay').textContent = "↺ Try again";
+    }
+
+    // --- Audio Synthesizer (Zero-asset Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playTone(freq, type, duration, gainLevel = 0.15) {
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function soundTap() { playTone(580, 'sine', 0.08, 0.12); }
+    function soundStep() { playTone(320, 'triangle', 0.12, 0.15); }
+    function soundTurn() { playTone(440, 'sine', 0.1, 0.12); }
+    function soundWin() {
+      [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+        setTimeout(() => playTone(f, 'triangle', 0.45, 0.22), i * 110);
+      });
+    }
+
+    // --- Demo State ---
+    let queue = [];
+    let isExecuting = false;
+    let handHintActive = true;
+
+    // Grid definition: 5x5 Zen Garden
+    // Start at (0, 0) facing East (E)
+    // Shrine at (3, 1)
+    // Solution: Forward -> Forward -> Forward -> Turn Right -> Forward (F, F, F, R, F)
+    const START_POS = { x: 0, y: 0, dir: 'E' };
+    const SHRINE_POS = { x: 3, y: 1 };
+
+    let currentPos = { ...START_POS };
+
+    // --- 3D Three.js Scene Setup ---
+    let scene, camera, renderer, komaMesh, shrineMesh, lightMesh, sakuraGroup;
+    const tileSize = 1.0;
+    const gridOriginX = -2 * tileSize;
+    const gridOriginZ = -2 * tileSize;
+
+    function gridToWorld(gx, gy) {
+      return {
+        x: gridOriginX + gx * tileSize,
+        z: gridOriginZ + gy * tileSize
+      };
+    }
+
+    function init3D() {
+      const container = document.getElementById('canvas-container');
+      const w = container.clientWidth || window.innerWidth;
+      const h = container.clientHeight || window.innerHeight;
+
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x060b14, 0.075);
+
+      // Camera: Isometric Angle
+      const aspect = w / h;
+      const d = 3.8;
+      camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, -10, 100);
+      camera.position.set(7, 8, 7);
+      camera.lookAt(0, 0, 0);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0x7dd3fc, 0.85);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+      dirLight.position.set(6, 12, 4);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      // Cyan Point Light at Start
+      const cyanLight = new THREE.PointLight(0x00f5ff, 2, 8);
+      cyanLight.position.set(-2, 1.5, -2);
+      scene.add(cyanLight);
+
+      // Golden Light at Shrine
+      const goldLight = new THREE.PointLight(0xffb703, 3, 10);
+      const sw = gridToWorld(SHRINE_POS.x, SHRINE_POS.y);
+      goldLight.position.set(sw.x, 2, sw.z);
+      scene.add(goldLight);
+
+      // Build Garden Ground Grid
+      buildGardenGrid();
+
+      // Build Torii Shrine at Target
+      buildShrine(sw.x, sw.z);
+
+      // Build KOMA Robot
+      buildKoma();
+
+      // Ambient Sakura Falling Petals
+      buildSakuraPetals();
+
+      // Responsive Resize
+      window.addEventListener('resize', onWindowResize);
+
+      // Position Hand Hint over Forward button
+      positionHandHint();
+
+      // Start Render Loop
+      animate();
+    }
+
+    function buildGardenGrid() {
+      // Water Pond Base
+      const pondGeo = new THREE.PlaneGeometry(16, 16);
+      const pondMat = new THREE.MeshStandardMaterial({
+        color: 0x051329,
+        roughness: 0.1,
+        metalness: 0.8
+      });
+      const pond = new THREE.Mesh(pondGeo, pondMat);
+      pond.rotation.x = -Math.PI / 2;
+      pond.position.y = -0.25;
+      scene.add(pond);
+
+      // 5x5 Stone Tiles
+      const tileGeo = new THREE.BoxGeometry(0.92, 0.22, 0.92);
+      for (let x = 0; x < 5; x++) {
+        for (let y = 0; y < 5; y++) {
+          const isPath = (x <= 3 && y === 0) || (x === 3 && y === 1);
+          const isShrine = (x === SHRINE_POS.x && y === SHRINE_POS.y);
+
+          const tileMat = new THREE.MeshStandardMaterial({
+            color: isShrine ? 0x1a2e3b : (isPath ? 0x1e293b : 0x0f172a),
+            roughness: 0.4,
+            metalness: 0.2
+          });
+          const tile = new THREE.Mesh(tileGeo, tileMat);
+          const p = gridToWorld(x, y);
+          tile.position.set(p.x, 0, p.z);
+          tile.receiveShadow = true;
+          scene.add(tile);
+
+          // Path Glow Indicator
+          if (isPath && !isShrine) {
+            const dotGeo = new THREE.CircleGeometry(0.08, 12);
+            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, transparent: true, opacity: 0.45 });
+            const dot = new THREE.Mesh(dotGeo, dotMat);
+            dot.rotation.x = -Math.PI / 2;
+            dot.position.set(p.x, 0.12, p.z);
+            scene.add(dot);
+          }
+        }
+      }
+
+      // Add a couple Decorative Bonsai / Rocks
+      const rockGeo = new THREE.DodecahedronGeometry(0.35, 1);
+      const rockMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.8 });
+      const rock = new THREE.Mesh(rockGeo, rockMat);
+      const rp = gridToWorld(1, 3);
+      rock.position.set(rp.x, 0.2, rp.z);
+      scene.add(rock);
+    }
+
+    function buildShrine(x, z) {
+      shrineMesh = new THREE.Group();
+      shrineMesh.position.set(x, 0, z);
+
+      // Torii Posts
+      const postGeo = new THREE.CylinderGeometry(0.07, 0.08, 1.4, 12);
+      const toriiMat = new THREE.MeshStandardMaterial({
+        color: 0xff3366,
+        roughness: 0.3,
+        emissive: 0xff0044,
+        emissiveIntensity: 0.25
+      });
+
+      const p1 = new THREE.Mesh(postGeo, toriiMat);
+      p1.position.set(-0.35, 0.7, 0);
+      const p2 = new THREE.Mesh(postGeo, toriiMat);
+      p2.position.set(0.35, 0.7, 0);
+      shrineMesh.add(p1, p2);
+
+      // Top Lintels
+      const topGeo = new THREE.BoxGeometry(1.05, 0.1, 0.16);
+      const topBeam = new THREE.Mesh(topGeo, toriiMat);
+      topBeam.position.set(0, 1.35, 0);
+
+      const subGeo = new THREE.BoxGeometry(0.9, 0.07, 0.12);
+      const subBeam = new THREE.Mesh(subGeo, toriiMat);
+      subBeam.position.set(0, 1.15, 0);
+      shrineMesh.add(topBeam, subBeam);
+
+      // Golden Spirit Altar
+      const altarGeo = new THREE.CylinderGeometry(0.24, 0.3, 0.2, 16);
+      const altarMat = new THREE.MeshStandardMaterial({
+        color: 0xffb703,
+        metalness: 0.8,
+        roughness: 0.2,
+        emissive: 0xffb703,
+        emissiveIntensity: 0.5
+      });
+      const altar = new THREE.Mesh(altarGeo, altarMat);
+      altar.position.set(0, 0.1, 0);
+      shrineMesh.add(altar);
+
+      // Floating Sacred Relic Sphere
+      const relicGeo = new THREE.OctahedronGeometry(0.18, 2);
+      const relicMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0xffb703,
+        emissiveIntensity: 1.0,
+        wireframe: true
+      });
+      const relic = new THREE.Mesh(relicGeo, relicMat);
+      relic.position.set(0, 0.55, 0);
+      relic.name = "floatingRelic";
+      shrineMesh.add(relic);
+
+      scene.add(shrineMesh);
+    }
+
+    function buildKoma() {
+      komaMesh = new THREE.Group();
+      const p = gridToWorld(START_POS.x, START_POS.y);
+      komaMesh.position.set(p.x, 0.35, p.z);
+
+      // Head / Body
+      const bodyGeo = new THREE.SphereGeometry(0.32, 24, 20);
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0xf1f5f9,
+        roughness: 0.2,
+        metalness: 0.5
+      });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      komaMesh.add(body);
+
+      // Face Visor Screen
+      const visorGeo = new THREE.SphereGeometry(0.25, 20, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+      const visorMat = new THREE.MeshStandardMaterial({
+        color: 0x050d1a,
+        roughness: 0.1,
+        metalness: 0.9
+      });
+      const visor = new THREE.Mesh(visorGeo, visorMat);
+      visor.rotation.x = Math.PI / 2;
+      visor.position.set(0, 0.05, 0.1);
+      komaMesh.add(visor);
+
+      // Cyan Glowing Eyes
+      const eyeGeo = new THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.035, 0.06, 4, 8) : new THREE.CylinderGeometry(0.035, 0.035, 0.06);
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
+      const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+      leftEye.position.set(-0.09, 0.06, 0.28);
+      const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+      rightEye.position.set(0.09, 0.06, 0.28);
+      komaMesh.add(leftEye, rightEye);
+
+      // Golden Fox Ears
+      const earGeo = new THREE.ConeGeometry(0.09, 0.22, 12);
+      const earMat = new THREE.MeshStandardMaterial({ color: 0xffb703, metalness: 0.6 });
+      const leftEar = new THREE.Mesh(earGeo, earMat);
+      leftEar.position.set(-0.16, 0.35, -0.05);
+      leftEar.rotation.z = 0.25;
+      const rightEar = new THREE.Mesh(earGeo, earMat);
+      rightEar.position.set(0.16, 0.35, -0.05);
+      rightEar.rotation.z = -0.25;
+      komaMesh.add(leftEar, rightEar);
+
+      // Floating Lantern Package on back
+      const packGeo = new THREE.BoxGeometry(0.2, 0.24, 0.16);
+      const packMat = new THREE.MeshStandardMaterial({
+        color: 0x00f5ff,
+        emissive: 0x00f5ff,
+        emissiveIntensity: 0.6
+      });
+      const pack = new THREE.Mesh(packGeo, packMat);
+      pack.position.set(0, 0.05, -0.28);
+      komaMesh.add(pack);
+
+      updateKomaRotation(START_POS.dir);
+      scene.add(komaMesh);
+    }
+
+    function buildSakuraPetals() {
+      sakuraGroup = new THREE.Group();
+      const petalGeo = new THREE.PlaneGeometry(0.08, 0.12);
+      const petalMat = new THREE.MeshBasicMaterial({
+        color: 0xffa5ba,
+        transparent: true,
+        opacity: 0.75,
+        side: THREE.DoubleSide
+      });
+
+      for (let i = 0; i < 40; i++) {
+        const petal = new THREE.Mesh(petalGeo, petalMat);
+        petal.position.set(
+          (Math.random() - 0.5) * 8,
+          Math.random() * 4 + 1,
+          (Math.random() - 0.5) * 8
+        );
+        petal.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+        petal.userData = {
+          speedY: 0.008 + Math.random() * 0.012,
+          rotSpeed: 0.02 + Math.random() * 0.03
+        };
+        sakuraGroup.add(petal);
+      }
+      scene.add(sakuraGroup);
+    }
+
+    function updateKomaRotation(dir) {
+      if (!komaMesh) return;
+      const angles = { 'N': Math.PI, 'S': 0, 'E': -Math.PI / 2, 'W': Math.PI / 2 };
+      komaMesh.rotation.y = angles[dir] || 0;
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvas-container');
+      const w = container.clientWidth || window.innerWidth;
+      const h = container.clientHeight || window.innerHeight;
+      const aspect = w / h;
+      const d = 3.8;
+      camera.left = -d * aspect;
+      camera.right = d * aspect;
+      camera.top = d;
+      camera.bottom = -d;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+      positionHandHint();
+    }
+
+    function positionHandHint() {
+      const btn = document.getElementById('btnForward');
+      const hint = document.getElementById('handHint');
+      if (!btn || !hint) return;
+      const r = btn.getBoundingClientRect();
+      hint.style.left = (r.left + r.width / 2) + 'px';
+      hint.style.top = (r.top - 46) + 'px';
+    }
+
+    // --- Animation Loop ---
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      const time = clock.getElapsedTime();
+
+      // Gentle Koma Idle Hover
+      if (komaMesh && !isExecuting) {
+        komaMesh.position.y = 0.35 + Math.sin(time * 3) * 0.035;
+      }
+
+      // Rotate Shrine Relic
+      const relic = shrineMesh ? shrineMesh.getObjectByName("floatingRelic") : null;
+      if (relic) {
+        relic.rotation.y += 0.02;
+        relic.rotation.x = Math.sin(time * 2) * 0.2;
+      }
+
+      // Sakura petals floating down
+      if (sakuraGroup) {
+        sakuraGroup.children.forEach(p => {
+          p.position.y -= p.userData.speedY;
+          p.rotation.x += p.userData.rotSpeed;
+          p.rotation.y += p.userData.rotSpeed;
+          if (p.position.y < -0.2) {
+            p.position.y = 4.5;
+            p.position.x = (Math.random() - 0.5) * 8;
+          }
+        });
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // --- Interactive Command Deck ---
+    function dismissHandHint() {
+      if (handHintActive) {
+        handHintActive = false;
+        const hint = document.getElementById('handHint');
+        if (hint) hint.classList.add('hidden');
+      }
+    }
+
+    function addCommand(cmd) {
+      if (isExecuting) return;
+      dismissHandHint();
+      soundTap();
+
+      if (queue.length >= 7) return; // limit
+      queue.push(cmd);
+      renderQueue();
+    }
+
+    function onUndoClick() {
+      if (isExecuting) return;
+      dismissHandHint();
+      if (queue.length > 0) {
+        soundTap();
+        queue.pop();
+        renderQueue();
+      }
+    }
+
+    function renderQueue() {
+      const container = document.getElementById('queueContainer');
+      container.innerHTML = '';
+
+      if (queue.length === 0) {
+        const ph = document.createElement('span');
+        ph.className = 'queue-placeholder';
+        ph.textContent = isEn ? 'Tap commands ...' : 'Befehle antippen ...';
+        container.appendChild(ph);
+        return;
+      }
+
+      queue.forEach((cmd, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'cmd-chip';
+        const labels = {
+          'F': isEn ? '↑ Fwd' : '↑ Vor',
+          'L': isEn ? '↶ Left' : '↶ Links',
+          'R': isEn ? '↷ Right' : '↷ Rechts'
+        };
+        chip.textContent = `${i + 1}. ${labels[cmd] || cmd}`;
+        container.appendChild(chip);
+      });
+      container.scrollLeft = container.scrollWidth;
+    }
+
+    // --- Execution of Plan ---
+    async function onRunPlanClick() {
+      if (isExecuting || queue.length === 0) return;
+      dismissHandHint();
+      isExecuting = true;
+      document.getElementById('btnRunPlan').disabled = true;
+
+      // Animate commands one by one
+      for (let i = 0; i < queue.length; i++) {
+        const cmd = queue[i];
+        await executeStep(cmd);
+        await new Promise(r => setTimeout(r, 160));
+      }
+
+      // Check win condition
+      if (currentPos.x === SHRINE_POS.x && currentPos.y === SHRINE_POS.y) {
+        onVictory();
+      } else {
+        // Failed / Did not reach shrine
+        setTimeout(() => {
+          resetKomaPosition();
+          isExecuting = false;
+          document.getElementById('btnRunPlan').disabled = false;
+        }, 600);
+      }
+    }
+
+    async function executeStep(cmd) {
+      const dirMap = {
+        'N': { fx: 0, fy: -1, left: 'W', right: 'E' },
+        'S': { fx: 0, fy: 1, left: 'E', right: 'W' },
+        'E': { fx: 1, fy: 0, left: 'N', right: 'S' },
+        'W': { fx: -1, fy: 0, left: 'S', right: 'N' }
+      };
+
+      if (cmd === 'L') {
+        currentPos.dir = dirMap[currentPos.dir].left;
+        soundTurn();
+        await animateTurn();
+      } else if (cmd === 'R') {
+        currentPos.dir = dirMap[currentPos.dir].right;
+        soundTurn();
+        await animateTurn();
+      } else if (cmd === 'F') {
+        const nextX = currentPos.x + dirMap[currentPos.dir].fx;
+        const nextY = currentPos.y + dirMap[currentPos.dir].fy;
+
+        // Clamp to grid
+        if (nextX >= 0 && nextX < 5 && nextY >= 0 && nextY < 5) {
+          currentPos.x = nextX;
+          currentPos.y = nextY;
+          soundStep();
+          await animateMove();
+        }
+      }
+    }
+
+    function animateMove() {
+      return new Promise(resolve => {
+        const target = gridToWorld(currentPos.x, currentPos.y);
+        const startX = komaMesh.position.x;
+        const startZ = komaMesh.position.z;
+        const startTime = performance.now();
+        const duration = 240;
+
+        function step(now) {
+          const t = Math.min(1, (now - startTime) / duration);
+          const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+          komaMesh.position.x = startX + (target.x - startX) * ease;
+          komaMesh.position.z = startZ + (target.z - startZ) * ease;
+          komaMesh.position.y = 0.35 + Math.sin(t * Math.PI) * 0.18; // hop jump
+
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            komaMesh.position.x = target.x;
+            komaMesh.position.z = target.z;
+            komaMesh.position.y = 0.35;
+            resolve();
+          }
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    function animateTurn() {
+      return new Promise(resolve => {
+        updateKomaRotation(currentPos.dir);
+        resolve();
+      });
+    }
+
+    function resetKomaPosition() {
+      currentPos = { ...START_POS };
+      const p = gridToWorld(START_POS.x, START_POS.y);
+      komaMesh.position.set(p.x, 0.35, p.z);
+      updateKomaRotation(START_POS.dir);
+    }
+
+    function onVictory() {
+      soundWin();
+
+      // Trigger Golden Particle Flash
+      const flash = new THREE.PointLight(0xffb703, 8, 12);
+      const sw = gridToWorld(SHRINE_POS.x, SHRINE_POS.y);
+      flash.position.set(sw.x, 1.5, sw.z);
+      scene.add(flash);
+
+      setTimeout(() => {
+        document.getElementById('endCardOverlay').classList.add('active');
+      }, 700);
+    }
+
+    function resetDemo() {
+      document.getElementById('endCardOverlay').classList.remove('active');
+      queue = [];
+      renderQueue();
+      resetKomaPosition();
+      isExecuting = false;
+      document.getElementById('btnRunPlan').disabled = false;
+    }
+
+    // --- App Store Redirect Call (MRAID / Store Direct) ---
+    function onAppStoreClick() {
+      if (typeof mraid !== 'undefined' && mraid.open) {
+        mraid.open(APP_STORE_URL);
+      } else {
+        window.open(APP_STORE_URL, '_blank');
+      }
+    }
+
+    // Init when loaded
+    window.addEventListener('DOMContentLoaded', init3D);
+  </script>
+</body>
+</html>
