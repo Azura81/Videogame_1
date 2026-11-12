@@ -448,6 +448,54 @@ test.describe('Spirit Delivery - Game Tests', () => {
     await page.locator('#btnReset').click();
     await expect(page.locator('#queueCount')).toHaveText('1 / 8');
   });
+
+  test('Mobile Hub: Positioned comfortably below top notch and above bottom ad banner', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    // Simulate banner ad active during game (level > 5)
+    await page.evaluate(() => {
+      document.body.classList.remove('home-active');
+      document.body.classList.add('has-banner-ad');
+    });
+
+    // Open Mobile Hub via Menu button
+    await page.click('#btnMobileHub');
+    const mobileHub = page.locator('#modalMobileHub');
+    await expect(mobileHub).toHaveClass(/active/);
+    await page.waitForTimeout(350); // wait for 280ms open animation
+
+    const cardBox = await page.locator('.mobile-hub-card').boundingBox();
+    expect(cardBox).not.toBeNull();
+    // Top must be comfortably below iPhone notch/dynamic island (at least 20px)
+    expect(cardBox.y).toBeGreaterThanOrEqual(20);
+    // Bottom must stay above 50px ad banner at bottom of 844px screen (844 - 50 = 794)
+    expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(794);
+
+    // Header buttons (close button, tabs) must be clickable and fully visible
+    const closeBtn = page.locator('#btnCloseMobileHub');
+    await expect(closeBtn).toBeVisible();
+    const closeBox = await closeBtn.boundingBox();
+    expect(closeBox.y).toBeGreaterThanOrEqual(20);
+
+    const tabSkins = page.locator('#tabBtnSkins');
+    const tabLevels = page.locator('#tabBtnLevels');
+    const tabTrophies = page.locator('#tabBtnTrophies');
+    const tabSettings = page.locator('#tabBtnSettings');
+    await expect(tabSkins).toBeVisible();
+    await expect(tabLevels).toBeVisible();
+    await expect(tabTrophies).toBeVisible();
+    await expect(tabSettings).toBeVisible();
+
+    // Clicking tabs works seamlessly
+    await tabLevels.click();
+    await expect(page.locator('#hubPanelLevels')).toBeVisible();
+
+    await tabSettings.click();
+    await expect(page.locator('#hubPanelSettings')).toBeVisible();
+
+    // Close mobile hub
+    await closeBtn.click();
+    await expect(mobileHub).not.toHaveClass(/active/);
+  });
 });
 
 
