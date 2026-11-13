@@ -236,9 +236,9 @@ test.describe('Spirit Delivery - Game Tests', () => {
     const modalTrophies = page.locator('#modalTrophies');
     await expect(modalTrophies).toHaveClass(/active/);
     
-    // Verify 7 trophy cards are displayed (including Turm-Bezwinger)
+    // Verify 8 trophy cards are displayed (including Turm-Bezwinger & Legende der 100 Schreine)
     const trophyCards = page.locator('.trophy-card');
-    await expect(trophyCards).toHaveCount(7);
+    await expect(trophyCards).toHaveCount(8);
     await expect(trophyCards.nth(0)).toContainText('Kamera-Mönch');
     await expect(trophyCards.nth(2)).toContainText('Herr des Windes');
     await expect(trophyCards.nth(3)).toContainText('Fuji-Besteiger');
@@ -315,9 +315,9 @@ test.describe('Spirit Delivery - Game Tests', () => {
     const modalSkins = page.locator('#modalSkins');
     await expect(modalSkins).toHaveClass(/active/);
 
-    // 3. Verify all 9 Japanese Kami skins (including Ryūjin, Pagoda, Midori Kami & Momiji) are rendered
+    // 3. Verify all 10 Japanese Kami skins (including Ryūjin, Pagoda, Midori Kami, Momiji & Rainbow) are rendered
     const skinCards = modalSkins.locator('.skin-card');
-    await expect(skinCards).toHaveCount(9);
+    await expect(skinCards).toHaveCount(10);
 
     // 4. Verify initial skin is Shiro Usagi (equipped)
     const initialEquipped = await page.evaluate(() => window.gameInstance.equippedSkin);
@@ -417,7 +417,7 @@ test.describe('Spirit Delivery - Game Tests', () => {
     const skinsPanel = page.locator('#hubPanelSkins');
     await expect(skinsPanel).toBeVisible();
     const mobileSkins = page.locator('.mobile-skin-card');
-    await expect(mobileSkins).toHaveCount(9);
+    await expect(mobileSkins).toHaveCount(10);
 
     // 7. Switch to 50 Levels Tab
     const tabLevels = page.locator('#tabBtnLevels');
