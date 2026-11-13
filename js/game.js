@@ -91,6 +91,24 @@ const ACHIEVEMENTS = [
       }
       return 0;
     }
+  },
+  {
+    id: "hundred_shrines",
+    name: "Legende der 100 Schreine",
+    jpName: "百境神話",
+    icon: "🌈",
+    iconKey: "rainbow",
+    desc: "Schließe alle 100 Level im Abenteuermodus erfolgreich ab.",
+    goal: 100,
+    getProgress: (game) => {
+      if (!game || !game.completedLevels) return 0;
+      let count = 0;
+      const total = (typeof LEVELS !== "undefined" && LEVELS.length) ? LEVELS.length : 100;
+      for (let i = 0; i < total; i++) {
+        if (game.completedLevels.has(i)) count++;
+      }
+      return count;
+    }
   }
 ];
 
@@ -1499,6 +1517,19 @@ class GameEngine {
         return false;
       }
     }
+    if (skin.specialUnlock === "all_100_levels") {
+      try {
+        const total = (typeof LEVELS !== "undefined" && LEVELS.length) ? LEVELS.length : 100;
+        if (!this.completedLevels) return false;
+        let count = 0;
+        for (let i = 0; i < total; i++) {
+          if (this.completedLevels.has(i)) count++;
+        }
+        return count >= total;
+      } catch (e) {
+        return false;
+      }
+    }
     return this.getTotalStars() >= skin.starsRequired;
   }
 
@@ -2078,7 +2109,12 @@ class GameEngine {
         if (typeof Sound !== "undefined" && typeof Sound.playSkinEquip === "function") {
           Sound.playSkinEquip();
         }
-        this.setFeedback(`Heiliges Siegel erlangt: ${ach.name} (${ach.jpName})!`, "good");
+        if (ach.id === "hundred_shrines") {
+          const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+          this.setFeedback(isEn ? "Sacred Seal: Legend of 100 Shrines! Rainbow Skin unlocked!" : "Heiliges Siegel: Legende der 100 Schreine! Regenbogen-Skin freigeschaltet!", "good");
+        } else {
+          this.setFeedback(`Heiliges Siegel erlangt: ${ach.name} (${ach.jpName})!`, "good");
+        }
       });
     }
   }
@@ -2221,6 +2257,25 @@ class GameEngine {
         actionBtn = `
           <div class="mobile-skin-progress">
             <span class="mobile-skin-prog-txt">${towerTxt}</span>
+          </div>
+        `;
+      } else if (origSkin.specialUnlock === "all_100_levels") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(11) : "";
+        const rainbowSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.rainbow(13) : "🌈";
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const totalLvls = (typeof LEVELS !== "undefined" && LEVELS.length) ? LEVELS.length : 100;
+        let doneCount = 0;
+        if (this.completedLevels) {
+          for (let i = 0; i < totalLvls; i++) {
+            if (this.completedLevels.has(i)) doneCount++;
+          }
+        }
+        const badgeTxt = isEn ? "100 Levels" : "100 Level";
+        const lockTxt = isEn ? `${rainbowSvg} Complete all 100 Levels (${doneCount}/${totalLvls})` : `${rainbowSvg} Alle 100 Level abschließen (${doneCount}/${totalLvls})`;
+        statusBadge = `<span class="mobile-skin-badge locked">${lockSvg} ${badgeTxt}</span>`;
+        actionBtn = `
+          <div class="mobile-skin-progress">
+            <span class="mobile-skin-prog-txt">${lockTxt}</span>
           </div>
         `;
       } else {
@@ -2376,6 +2431,25 @@ class GameEngine {
         actionButton = `
           <div class="skin-progress-container">
             <span class="skin-progress-text">${towerText}</span>
+          </div>
+        `;
+      } else if (origSkin.specialUnlock === "all_100_levels") {
+        const lockSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.lock(12) : "";
+        const rainbowSvg = typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.rainbow(13) : "🌈";
+        const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
+        const totalLvls = (typeof LEVELS !== "undefined" && LEVELS.length) ? LEVELS.length : 100;
+        let doneCount = 0;
+        if (this.completedLevels) {
+          for (let i = 0; i < totalLvls; i++) {
+            if (this.completedLevels.has(i)) doneCount++;
+          }
+        }
+        const badgeTitle = isEn ? "100 Levels" : "100 Level";
+        const lockText = isEn ? `${rainbowSvg} Complete all 100 Adventure Levels (${doneCount}/${totalLvls})` : `${rainbowSvg} Schließe alle 100 Abenteuer-Level ab (${doneCount}/${totalLvls})`;
+        statusBadge = `<span class="skin-badge locked">${lockSvg} ${badgeTitle}</span>`;
+        actionButton = `
+          <div class="skin-progress-container">
+            <span class="skin-progress-text">${lockText}</span>
           </div>
         `;
       } else {
@@ -4730,6 +4804,22 @@ class GameEngine {
           }
         }
 
+        // Special: Rainbow Skin on completing all 100 levels
+        const totalLvlCount = (typeof LEVELS !== "undefined" && LEVELS.length) ? LEVELS.length : 100;
+        let completedCount = 0;
+        if (this.completedLevels) {
+          for (let i = 0; i < totalLvlCount; i++) {
+            if (this.completedLevels.has(i)) completedCount++;
+          }
+        }
+        if (completedCount >= totalLvlCount && window.KOMA_SKINS && window.KOMA_SKINS.rainbow && !this.unlockedSkinNotices.has("rainbow")) {
+          newlyUnlockedSkin = window.KOMA_SKINS.rainbow;
+          this.unlockedSkinNotices.add("rainbow");
+          try {
+            localStorage.setItem("koma_skin_notices", JSON.stringify(Array.from(this.unlockedSkinNotices)));
+          } catch (e) {}
+        }
+
         if (this.dom.modalWinSkinNotice) {
           if (isRyujin) {
             const ryujinSkin = (typeof window !== "undefined" && window.KOMA_SKINS && window.KOMA_SKINS.ryujin);
@@ -4758,6 +4848,31 @@ class GameEngine {
                   this.openSkinsModal();
                 });
               }
+            }
+          } else if (newlyUnlockedSkin && newlyUnlockedSkin.id === "rainbow") {
+            const rainbowKicker = isEn ? "LEGENDARY RAINBOW SKIN UNLOCKED!" : "LEGENDÄRER REGENBOGEN-SKIN FREIGESCHALTET!";
+            const rainbowSub = isEn ? "Prismatic Chassis · Spectrum Orbit Crown · Rainbow Stardust" : "Prisma-Chassis · Spektral-Krone · Sternenstaub";
+            const equipBtnTxt = typeof I18N !== "undefined" ? I18N.t("wardrobe_equip_btn") : "Ausrüsten";
+            const transRainbow = typeof I18N !== "undefined" ? I18N.getSkin("rainbow", newlyUnlockedSkin) : newlyUnlockedSkin;
+            this.dom.modalWinSkinNotice.innerHTML = `
+              <div class="win-skin-banner boss-skin-banner" style="background: linear-gradient(135deg, rgba(255,0,128,0.25), rgba(0,240,255,0.25), rgba(255,215,0,0.25)); border: 1.5px solid rgba(255,255,255,0.6); box-shadow: 0 0 16px rgba(255,100,255,0.4);">
+                <span class="win-skin-icon">${typeof KOMA_ICONS !== "undefined" ? KOMA_ICONS.getSkinIcon("rainbow", 32, "#ff3df9") : "🌈"}</span>
+                <div class="win-skin-info">
+                  <span class="win-skin-kicker" style="background: linear-gradient(90deg, #ff0055, #ff7700, #ffd700, #00f5ff, #aa00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">${rainbowKicker}</span>
+                  <strong class="win-skin-name">${transRainbow.name} (${transRainbow.jpName})</strong>
+                  <div style="font-size:0.75rem;opacity:0.85;margin-top:2px;">${rainbowSub}</div>
+                </div>
+                <button class="win-skin-btn" id="btnWinOpenSkins" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; font-weight: bold;">${equipBtnTxt}</button>
+              </div>
+            `;
+            this.dom.modalWinSkinNotice.style.display = "block";
+            const btnNotice = document.getElementById("btnWinOpenSkins");
+            if (btnNotice) {
+              btnNotice.addEventListener("click", () => {
+                if (this.dom.modalWin) this.dom.modalWin.classList.remove("active");
+                this.equipSkin("rainbow");
+                this.openSkinsModal();
+              });
             }
           } else if (newlyUnlockedSkin) {
             const newKicker = isEn ? "New Kami Skin unlocked!" : "Neuer Kami-Skin freigeschaltet!";

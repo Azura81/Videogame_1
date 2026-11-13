@@ -590,6 +590,59 @@ const KOMA_ICONS = {
     </svg>
   `,
 
+  // 10. Niji Kami (Rainbow Messenger) - Prismatic Crown & Iridescent Visor
+  skinNijiRainbow: (size = 24, color = "#ff3df9") => `
+    <svg class="svg-icon skin-svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <defs>
+        <linearGradient id="nijiHaloGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ff0055"/>
+          <stop offset="25%" stop-color="#ff7700"/>
+          <stop offset="50%" stop-color="#10b981"/>
+          <stop offset="75%" stop-color="#00f5ff"/>
+          <stop offset="100%" stop-color="#aa00ff"/>
+        </linearGradient>
+      </defs>
+      <!-- Floating Sacred Spectrum Halo Arc -->
+      <ellipse cx="12" cy="3.5" rx="7" ry="2" stroke="url(#nijiHaloGrad)" stroke-width="1.8" fill="url(#nijiHaloGrad)" fill-opacity="0.18"/>
+      <!-- 5 Spectral Jewel Dots -->
+      <circle cx="5" cy="3.5" r="0.9" fill="#ff0055"/>
+      <circle cx="8.5" cy="2" r="0.9" fill="#ff7700"/>
+      <circle cx="12" cy="1.5" r="1.1" fill="#ffd700"/>
+      <circle cx="15.5" cy="2" r="0.9" fill="#00f5ff"/>
+      <circle cx="19" cy="3.5" r="0.9" fill="#aa00ff"/>
+      <!-- Dual Rabbit Ears -->
+      <path d="M7.5 10.5V5.5a1.8 1.8 0 0 1 3.5 0v5" stroke="url(#nijiHaloGrad)" stroke-width="1.5"/>
+      <path d="M13 10.5V5.5a1.8 1.8 0 0 1 3.5 0v5" stroke="url(#nijiHaloGrad)" stroke-width="1.5"/>
+      <!-- Chassis Body in Pearlescent White & Violet -->
+      <rect x="4" y="10.5" width="16" height="11" rx="5.5" fill="#f8fafc" stroke="url(#nijiHaloGrad)" stroke-width="1.6"/>
+      <!-- Dark Prismatic Visor Screen -->
+      <rect x="6.5" y="13.5" width="11" height="4.5" rx="2.2" fill="#120824"/>
+      <!-- Multi-Hue Eyes -->
+      <circle cx="9.5" cy="15.8" r="1.1" fill="#00f5ff"/>
+      <circle cx="14.5" cy="15.8" r="1.1" fill="#ff007f"/>
+    </svg>
+  `,
+
+  // 11. Rainbow Icon (For Achievement & UI)
+  rainbow: (size = 20, color = "currentColor") => `
+    <svg class="svg-icon svg-rainbow" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <defs>
+        <linearGradient id="rainbowIconGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ff0055"/>
+          <stop offset="25%" stop-color="#ff7700"/>
+          <stop offset="50%" stop-color="#10b981"/>
+          <stop offset="75%" stop-color="#00f5ff"/>
+          <stop offset="100%" stop-color="#aa00ff"/>
+        </linearGradient>
+      </defs>
+      <path d="M3 18a9 9 0 0 1 18 0" stroke="url(#rainbowIconGrad)" stroke-width="2.5"/>
+      <path d="M6.5 18a5.5 5.5 0 0 1 11 0" stroke="url(#rainbowIconGrad)" stroke-width="2" stroke-opacity="0.85"/>
+      <path d="M10 18a2 2 0 0 1 4 0" stroke="url(#rainbowIconGrad)" stroke-width="1.8" stroke-opacity="0.7"/>
+      <circle cx="3" cy="18" r="1.2" fill="#ff0055"/>
+      <circle cx="21" cy="18" r="1.2" fill="#aa00ff"/>
+    </svg>
+  `,
+
   // Helper to fetch skin SVG by id
   getSkinIcon: (skinId, size = 24, color = "currentColor") => {
     switch (skinId) {
@@ -602,6 +655,7 @@ const KOMA_ICONS = {
       case "ryujin": return KOMA_ICONS.skinRyujinDragon(size, color);
       case "pagoda": return KOMA_ICONS.skinMidoriKami(size, color);
       case "momiji": return KOMA_ICONS.skinMomiji(size, color);
+      case "rainbow": return KOMA_ICONS.skinNijiRainbow(size, color);
       default: return KOMA_ICONS.skinShiroUsagi(size, color);
     }
   },

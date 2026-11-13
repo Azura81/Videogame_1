@@ -223,6 +223,32 @@ const KOMA_SKINS = {
     },
     dustType: "autumn",
     accessories: ["singleEar", "autumnLeaf"]
+  },
+  // 10. Niji Kami (Rainbow Messenger) - Legendary Unlock for Conquering All 100 Levels
+  rainbow: {
+    id: "rainbow",
+    name: "Niji Kami",
+    jpName: "虹神",
+    subtitle: "Regenbogen-Bote · Herrscher des Lichts",
+    desc: "Das legendäre Prisma-Gewand für die Vollendung aller 100 Schreine. Ein schimmerndes Perlglanz-Chassis mit pulsierender Regenbogen-Aura, schwebender Spektral-Krone und vielfarbigem Sternenstaub.",
+    starsRequired: 0,
+    specialUnlock: "all_100_levels",
+    icon: "🌈",
+    accentColor: "#ff3df9",
+    tag: "100 Level",
+    materials: {
+      body: { color: 0xffffff, metalness: 0.65, roughness: 0.15 },
+      visor: { color: 0x0c0618, metalness: 0.95, roughness: 0.05 },
+      base: { color: 0x1f1035, metalness: 0.75, roughness: 0.2 },
+      eye: { color: 0x00f5ff },
+      glow: { color: 0xff3df9, emissive: 0xff3df9, emissiveIntensity: 1.4 },
+      pack: { color: 0x25143a, metalness: 0.5, roughness: 0.35 },
+      packStrap: { color: 0xff007f, emissive: 0xff007f, emissiveIntensity: 1.2 },
+      light: 0xff3df9,
+      dustColor: 0xff3df9
+    },
+    dustType: "rainbow",
+    accessories: ["dualEars", "kamiHalo", "rainbowPrism"]
   }
 };
 

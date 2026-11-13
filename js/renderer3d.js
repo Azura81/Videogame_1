@@ -2733,6 +2733,31 @@ class GardenRenderer {
 
       this.komaEarMeshes.push({ mesh: leafGroup, baseRotZ: 0.28, baseRotX: -0.22, type: "leaf", side: 1 });
     }
+
+    // (j) Prismatic Orbit Crown (Niji Kami Rainbow)
+    if (accessories.includes("rainbowPrism")) {
+      const prismGroup = new THREE.Group();
+      const spectrumColors = [0xff0055, 0xff7700, 0xffdd00, 0x10b981, 0x00f5ff, 0x6366f1, 0xd946ef];
+      this.komaSpectrumGems = [];
+      for (let s = 0; s < 7; s++) {
+        const angle = (s / 7) * Math.PI * 2;
+        const gemGeo = new THREE.OctahedronGeometry(0.042, 0);
+        const gemMat = new THREE.MeshStandardMaterial({
+          color: spectrumColors[s],
+          emissive: spectrumColors[s],
+          emissiveIntensity: 1.3,
+          metalness: 0.85,
+          roughness: 0.1
+        });
+        const gem = new THREE.Mesh(gemGeo, gemMat);
+        gem.position.set(Math.cos(angle) * 0.32, 0, Math.sin(angle) * 0.32);
+        prismGroup.add(gem);
+        this.komaSpectrumGems.push(gem);
+      }
+      prismGroup.position.set(0, 0.90, -0.02);
+      this.komaGroup.add(prismGroup);
+      this.komaPrismGroup = prismGroup;
+    }
     
     // 5. Delivery Backpack / Spirit Parcel
     const packGeo = new THREE.BoxGeometry(0.26, 0.28, 0.2);
@@ -2765,6 +2790,15 @@ class GardenRenderer {
     this.komaLight = new THREE.PointLight(lightColor, 1.2, 2.2);
     this.komaLight.position.set(0, 0.2, 0);
     this.komaGroup.add(this.komaLight);
+
+    if (skinId === "rainbow") {
+      this.komaRainbowGlow = glowMat;
+      this.komaRainbowStrap = packStrapMat;
+    } else {
+      this.komaRainbowGlow = null;
+      this.komaRainbowStrap = null;
+      this.komaPrismGroup = null;
+    }
     
     // Procedural Shinto Contact Shadow beneath KOMA
     if (!this.komaShadow) {
@@ -4670,6 +4704,39 @@ class GardenRenderer {
           }
         });
       }
+    } else if (dustType === "rainbow") {
+      // 5 sparkling prismatic rainbow star motes
+      const spectrumColors = [0xff0055, 0xff7700, 0xffdd00, 0x10b981, 0x00f5ff, 0xaa00ff];
+      for (let i = 0; i < 5; i++) {
+        const starGeo = new THREE.OctahedronGeometry(0.035, 0);
+        const col = spectrumColors[i % spectrumColors.length];
+        const pMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.95 });
+        const pStar = new THREE.Mesh(starGeo, pMat);
+        pStar.position.set(worldX + (Math.random() - 0.5) * 0.35, 0.48, worldZ + (Math.random() - 0.5) * 0.35);
+        this.effectsGroup.add(pStar);
+
+        const vx = (Math.random() - 0.5) * 0.03;
+        const vy = 0.03 + Math.random() * 0.03;
+        const vz = (Math.random() - 0.5) * 0.03;
+        const rotSpeed = (Math.random() - 0.5) * 0.2;
+
+        this.dynamicEffects.push({
+          mesh: pStar,
+          disposeGeo: true,
+          disposeMat: true,
+          startTime: performance.now(),
+          duration: 520,
+          update: (p) => {
+            pStar.position.x += vx;
+            pStar.position.y += vy;
+            pStar.position.z += vz;
+            pStar.rotation.x += rotSpeed;
+            pStar.rotation.y += rotSpeed;
+            pStar.scale.setScalar(Math.max(0, 1 - p * 0.8));
+            pStar.material.opacity = 0.95 * (1 - p);
+          }
+        });
+      }
     }
   }
 
@@ -5182,6 +5249,25 @@ class GardenRenderer {
     // Kami Skin Halo Rotation
     if (this.komaHalo) {
       this.komaHalo.rotation.y += delta * 1.5;
+    }
+
+    // Rainbow Prismatic Orbit Rotation & Dynamic Hue Cycling
+    if (this.komaPrismGroup) {
+      this.komaPrismGroup.rotation.y -= delta * 2.2;
+    }
+    if (this.currentSkinId === "rainbow" && this.komaRainbowGlow) {
+      const hue = (time * 0.28) % 1;
+      const col1 = new THREE.Color().setHSL(hue, 1.0, 0.58);
+      const col2 = new THREE.Color().setHSL((hue + 0.35) % 1, 1.0, 0.58);
+      this.komaRainbowGlow.color.copy(col1);
+      this.komaRainbowGlow.emissive.copy(col1);
+      if (this.komaRainbowStrap) {
+        this.komaRainbowStrap.color.copy(col2);
+        this.komaRainbowStrap.emissive.copy(col2);
+      }
+      if (this.komaLight) {
+        this.komaLight.color.copy(col1);
+      }
     }
     
     // 2. KOMA Rotation Interpolation

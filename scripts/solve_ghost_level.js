@@ -239,3 +239,4 @@ function solveGhostLevel(lvl, maxDepth = 40) {
 }
 
 module.exports = { solveGhostLevel };
+

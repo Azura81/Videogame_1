@@ -863,6 +863,10 @@
     "tower_conqueror": {
         "name": "Tower Conqueror",
         "desc": "Conquer all 100 floors in the Tower of 100 Trials."
+    },
+    "hundred_shrines": {
+        "name": "Legend of 100 Shrines",
+        "desc": "Complete all 100 levels in adventure mode."
     }
 };
 
@@ -911,6 +915,11 @@
         "subtitle": "Autumn Herald · Spirit of the Momiji Forest",
         "desc": "Consecrated in the golden autumn foliage of Arashiyama. Warm amber & terracotta coat, glowing golden visor eyes, and a floating maple leaf atop its head.",
         "tag": "185 Stars"
+    },
+    "rainbow": {
+        "subtitle": "Rainbow Messenger · Sovereign of Light",
+        "desc": "The legendary prismatic attire awarded for completing all 100 shrines. A shimmering pearlescent chassis with a pulsing rainbow aura, floating prism halo, and multi-colored stardust.",
+        "tag": "100 Levels"
     }
 };
 
