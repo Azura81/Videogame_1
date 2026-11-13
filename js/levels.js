@@ -13718,18 +13718,6 @@ const LEVELS = [
       {
         "path": [
           [
-            2,
-            3
-          ],
-          [
-            1,
-            3
-          ],
-          [
-            0,
-            3
-          ],
-          [
             1,
             3
           ],
@@ -13739,6 +13727,18 @@ const LEVELS = [
           ],
           [
             3,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
             3
           ]
         ]
@@ -13780,6 +13780,7 @@ const LEVELS = [
       "F",
       "L",
       "F",
+      "A",
       "F",
       "F",
       "F",
@@ -13796,7 +13797,7 @@ const LEVELS = [
     "t": "Geister-Patrouille",
     "d": "Die Geister folgen einer festen Kreisbahn durch den Ahornwald. Beobachte ihre Route vor deinem Start.",
     "theme": "autumn",
-    "limit": 19,
+    "limit": 20,
     "obstacles": {
       "0,4": "tree",
       "0,5": "house",
@@ -14063,23 +14064,7 @@ const LEVELS = [
       ],
       [
         1,
-        5
-      ],
-      [
-        2,
-        0
-      ],
-      [
-        3,
         3
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        3,
-        7
       ],
       [
         4,
@@ -14103,15 +14088,15 @@ const LEVELS = [
       ],
       [
         4,
+        6
+      ],
+      [
+        4,
         7
       ],
       [
         6,
-        1
-      ],
-      [
-        7,
-        1
+        0
       ]
     ],
     "gates": [
@@ -14138,20 +14123,20 @@ const LEVELS = [
       {
         "path": [
           [
-            1,
-            6
+            3,
+            2
           ],
           [
-            0,
-            6
+            3,
+            1
           ],
           [
-            1,
-            6
+            3,
+            0
           ],
           [
-            2,
-            6
+            3,
+            1
           ]
         ]
       },
@@ -14159,19 +14144,19 @@ const LEVELS = [
         "path": [
           [
             6,
-            2
-          ],
-          [
-            7,
-            2
+            4
           ],
           [
             6,
-            2
+            5
           ],
           [
-            5,
-            2
+            6,
+            6
+          ],
+          [
+            6,
+            5
           ]
         ]
       }
@@ -14181,20 +14166,33 @@ const LEVELS = [
       "F",
       "F",
       "L",
+      "A",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "R",
+      "A",
+      "F",
       "F",
       "F",
       "R",
       "F",
       "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
       "L",
       "F",
       "F",
       "F",
       "F",
       "L",
-      "F",
-      "F",
-      "F",
       "F"
     ],
     "n": "Das verfluchte Bambus-Tor",
@@ -14202,22 +14200,18 @@ const LEVELS = [
     "t": "Schalter & Geister",
     "d": "Aktiviere den Schalter am Schrein und passiere das geöffnete Tor, bevor der Geist zurückkehrt.",
     "theme": "autumn",
-    "limit": 21,
+    "limit": 34,
     "obstacles": {
       "1,1": "wall_v",
-      "1,5": "pine",
-      "2,0": "wall_h",
-      "3,3": "pine",
-      "3,4": "pine",
-      "3,7": "wall_v",
+      "1,3": "pine",
       "4,0": "wall_h",
       "4,2": "pine",
-      "4,3": "pine",
-      "4,4": "pine",
-      "4,5": "tree",
-      "4,7": "wall_h",
-      "6,1": "pine",
-      "7,1": "pine"
+      "4,3": "tree",
+      "4,4": "house",
+      "4,5": "wall_v",
+      "4,6": "wall_v",
+      "4,7": "pine",
+      "6,0": "pine"
     },
     "grass": [
       [
@@ -15920,22 +15914,30 @@ const LEVELS = [
     "w": 8,
     "h": 8,
     "s": [
-      1,
       0,
-      "S"
+      3,
+      "E"
     ],
     "g": [
-      4,
+      6,
       7
     ],
     "walls": [
       [
         0,
-        2
+        0
       ],
       [
         0,
-        7
+        5
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        5
       ],
       [
         3,
@@ -15947,6 +15949,10 @@ const LEVELS = [
       ],
       [
         3,
+        2
+      ],
+      [
+        3,
         3
       ],
       [
@@ -15955,6 +15961,10 @@ const LEVELS = [
       ],
       [
         3,
+        5
+      ],
+      [
+        3,
         6
       ],
       [
@@ -15967,55 +15977,44 @@ const LEVELS = [
       ],
       [
         4,
-        5
-      ],
-      [
-        6,
-        6
-      ],
-      [
-        7,
-        0
-      ],
-      [
-        7,
         4
       ],
       [
-        7,
-        7
-      ]
-    ],
-    "water": [
+        5,
+        4
+      ],
       [
-        3,
-        2
-      ]
-    ],
-    "blocks": [
+        6,
+        4
+      ],
       [
-        2,
-        2
-      ]
-    ],
-    "fragile": [
+        6,
+        1
+      ],
       [
-        3,
-        5
+        4,
+        6
       ]
     ],
+    "water": [],
+    "blocks": [],
+    "fragile": [],
     "orbs": [
       [
-        5,
-        7
+        6,
+        2
       ]
     ],
     "ghosts": [
       {
         "path": [
           [
-            5,
-            4
+            6,
+            2
+          ],
+          [
+            6,
+            3
           ],
           [
             5,
@@ -16024,10 +16023,6 @@ const LEVELS = [
           [
             5,
             2
-          ],
-          [
-            5,
-            3
           ]
         ]
       },
@@ -16035,201 +16030,11 @@ const LEVELS = [
         "path": [
           [
             5,
-            2
+            6
           ],
           [
             5,
-            3
-          ],
-          [
-            5,
-            4
-          ],
-          [
-            5,
-            3
-          ],
-          [
-            5,
-            2
-          ],
-          [
-            5,
-            1
-          ],
-          [
-            5,
-            0
-          ],
-          [
-            5,
-            1
-          ]
-        ]
-      }
-    ],
-    "solution": [
-      "F",
-      "F",
-      "L",
-      "F",
-      "F",
-      "F",
-      "F",
-      "F",
-      "R",
-      "F",
-      "F",
-      "F",
-      "R",
-      "F",
-      "L",
-      "F",
-      "F",
-      "R",
-      "F"
-    ],
-    "n": "Kitsune-Nebelpforte",
-    "c": "Kapitel 08 · Nebelschrein der Yōkai",
-    "t": "Portal-Flucht",
-    "d": "Betritt das leuchtende Portal im dichten Nebel, um den Patrouillen-Geistern zu entwischen.",
-    "theme": "autumn",
-    "limit": 21,
-    "obstacles": {
-      "0,2": "wall_h",
-      "0,7": "pine",
-      "3,0": "wall_v",
-      "3,1": "wall_v",
-      "3,3": "fence_v",
-      "3,4": "pine",
-      "3,6": "tree",
-      "3,7": "house",
-      "4,0": "wall_h",
-      "4,5": "pine",
-      "6,6": "house",
-      "7,0": "fence_h",
-      "7,4": "tree",
-      "7,7": "wall_v"
-    },
-    "grass": [
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        1
-      ],
-      [
-        4,
-        4
-      ],
-      [
-        5,
-        1
-      ]
-    ]
-  },
-  {
-    "w": 8,
-    "h": 8,
-    "s": [
-      2,
-      3,
-      "S"
-    ],
-    "g": [
-      7,
-      7
-    ],
-    "walls": [
-      [
-        0,
-        5
-      ],
-      [
-        1,
-        0
-      ],
-      [
-        1,
-        5
-      ],
-      [
-        3,
-        0
-      ],
-      [
-        3,
-        3
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        3,
-        6
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        0
-      ],
-      [
-        6,
-        1
-      ],
-      [
-        6,
-        7
-      ]
-    ],
-    "water": [
-      [
-        3,
-        2
-      ]
-    ],
-    "blocks": [
-      [
-        4,
-        2
-      ]
-    ],
-    "fragile": [
-      [
-        3,
-        1
-      ]
-    ],
-    "orbs": [
-      [
-        5,
-        2
-      ]
-    ],
-    "ghosts": [
-      {
-        "path": [
-          [
-            6,
             5
-          ],
-          [
-            6,
-            4
           ],
           [
             6,
@@ -16240,45 +16045,237 @@ const LEVELS = [
             6
           ]
         ]
-      },
+      }
+    ],
+    "solution": [
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "L",
+      "A",
+      "F",
+      "L",
+      "F",
+      "F",
+      "R",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "n": "Kitsune-Nebelpforte",
+    "c": "Kapitel 08 · Nebelschrein der Yōkai",
+    "t": "Portal-Flucht",
+    "d": "Betritt das leuchtende Portal im dichten Nebel, um den Patrouillen-Geistern zu entwischen.",
+    "theme": "autumn",
+    "limit": 22,
+    "obstacles": {
+      "0,0": "tree",
+      "0,5": "pine",
+      "1,0": "wall_h",
+      "1,5": "wall_h",
+      "3,0": "wall_v",
+      "3,1": "wall_v",
+      "3,2": "wall_v",
+      "3,3": "fence_v",
+      "3,4": "house",
+      "3,5": "wall_v",
+      "3,6": "tree",
+      "3,7": "pine",
+      "4,0": "pine",
+      "4,4": "wall_h",
+      "5,4": "fence_h",
+      "6,4": "wall_h",
+      "6,1": "pine",
+      "4,6": "tree"
+    },
+    "grass": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "portals": [
+      [
+        1,
+        1
+      ],
+      [
+        5,
+        1
+      ]
+    ]
+  },
+  {
+    "w": 8,
+    "h": 8,
+    "s": [
+      1,
+      4,
+      "N"
+    ],
+    "g": [
+      7,
+      7
+    ],
+    "walls": [
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "water": [
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ]
+    ],
+    "blocks": [
+      [
+        2,
+        2
+      ]
+    ],
+    "fragile": [],
+    "orbs": [
+      [
+        5,
+        2
+      ]
+    ],
+    "ghosts": [
       {
         "path": [
           [
             5,
+            2
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      {
+        "path": [
+          [
+            6,
+            6
+          ],
+          [
+            6,
             5
           ],
           [
-            5,
+            6,
             4
           ],
           [
-            5,
-            3
-          ],
-          [
-            5,
-            4
+            6,
+            5
           ]
         ]
       }
     ],
     "solution": [
+      "F",
+      "F",
+      "L",
       "L",
       "L",
       "F",
       "F",
+      "F",
+      "L",
+      "F",
       "R",
       "F",
-      "F",
-      "F",
       "R",
+      "A",
+      "F",
       "F",
       "F",
       "L",
       "F",
       "F",
       "R",
-      "F",
       "F",
       "F",
       "F"
@@ -16288,7 +16285,7 @@ const LEVELS = [
     "t": "Wasser-Überquerung",
     "d": "Kombiniere Felsenbrücke und präzises Timing, um den Kanal sicher zu passieren.",
     "theme": "autumn",
-    "limit": 21,
+    "limit": 26,
     "obstacles": {
       "0,5": "tree",
       "1,0": "wall_v",
@@ -16299,10 +16296,10 @@ const LEVELS = [
       "3,5": "house",
       "3,6": "wall_v",
       "3,7": "wall_v",
-      "5,6": "wall_v",
+      "5,5": "pine",
       "6,0": "pine",
       "6,1": "pine",
-      "6,7": "fence_v"
+      "6,3": "fence_v"
     },
     "grass": [
       [
@@ -16327,22 +16324,42 @@ const LEVELS = [
     "w": 8,
     "h": 8,
     "s": [
-      0,
       1,
-      "E"
+      1,
+      "S"
     ],
     "g": [
-      7,
+      6,
       7
     ],
     "walls": [
       [
         0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
         4
       ],
       [
-        1,
-        4
+        0,
+        5
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
       ],
       [
         2,
@@ -16350,35 +16367,47 @@ const LEVELS = [
       ],
       [
         2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
         5
       ],
       [
         3,
-        2
+        6
+      ],
+      [
+        3,
+        7
       ],
       [
         4,
         0
       ],
       [
-        4,
-        4
-      ],
-      [
         5,
         4
-      ],
-      [
-        5,
-        5
-      ],
-      [
-        5,
-        6
-      ],
-      [
-        6,
-        3
       ],
       [
         6,
@@ -16387,106 +16416,126 @@ const LEVELS = [
       [
         7,
         4
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        4,
+        6
       ]
     ],
     "water": [
       [
-        3,
-        4
-      ]
-    ],
-    "blocks": [
+        0,
+        2
+      ],
       [
-        3,
-        5
+        0,
+        3
       ]
     ],
+    "blocks": [],
     "fragile": [
       [
-        2,
-        4
+        1,
+        2
+      ],
+      [
+        1,
+        3
       ]
     ],
     "portals": [
       [
         1,
-        3
+        6
       ],
       [
-        1,
-        5
+        5,
+        1
       ]
     ],
     "orbs": [
       [
+        1,
+        5
+      ],
+      [
         7,
-        6
+        2
       ]
     ],
     "ghosts": [
       {
         "path": [
           [
-            1,
-            7
+            5,
+            2
           ],
           [
-            2,
-            7
+            5,
+            3
           ],
           [
-            3,
-            7
+            6,
+            3
           ],
           [
-            2,
-            7
+            6,
+            2
           ]
         ]
       },
       {
         "path": [
           [
-            1,
-            2
+            6,
+            6
           ],
           [
-            1,
-            1
+            5,
+            6
           ],
           [
-            1,
-            0
+            5,
+            5
           ],
           [
-            1,
-            1
+            6,
+            5
           ]
         ]
       }
     ],
     "solution": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "L",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "F",
+      "F",
+      "F",
+      "L",
+      "A",
+      "F",
+      "F",
       "R",
       "F",
-      "F",
-      "L",
-      "F",
-      "R",
-      "F",
-      "L",
-      "F",
-      "F",
-      "F",
-      "R",
-      "F",
-      "L",
-      "F",
-      "F",
-      "F",
-      "L",
-      "F",
-      "L",
-      "L",
       "F"
     ],
     "n": "Brüchige Brücken",
@@ -16494,21 +16543,31 @@ const LEVELS = [
     "t": "Zwei Geister & Trittsteine",
     "d": "Betritt die brüchigen Steine erst, wenn der Geist auf der Gegenseite weggeschwebt ist.",
     "theme": "autumn",
-    "limit": 24,
+    "limit": 29,
     "obstacles": {
-      "0,4": "house",
-      "1,4": "wall_v",
-      "2,3": "house",
-      "2,5": "wall_h",
-      "3,2": "tree",
+      "0,0": "house",
+      "0,1": "wall_v",
+      "0,4": "pine",
+      "0,5": "tree",
+      "2,0": "wall_v",
+      "2,1": "wall_v",
+      "2,2": "wall_v",
+      "2,3": "fence_v",
+      "2,4": "wall_v",
+      "2,5": "wall_v",
+      "2,6": "wall_v",
+      "2,7": "wall_v",
+      "3,0": "wall_h",
+      "3,4": "pine",
+      "3,5": "tree",
+      "3,6": "wall_v",
+      "3,7": "wall_v",
       "4,0": "pine",
-      "4,4": "wall_h",
-      "5,4": "fence_h",
-      "5,5": "fence_v",
-      "5,6": "pine",
-      "6,3": "wall_h",
+      "5,4": "wall_h",
       "6,4": "fence_h",
-      "7,4": "fence_h"
+      "7,4": "wall_h",
+      "6,1": "tree",
+      "4,6": "pine"
     },
     "grass": [
       [
