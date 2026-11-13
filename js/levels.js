@@ -17731,7 +17731,7 @@ const LEVELS = [
     "n": "Tal des Blutmonds",
     "c": "Kapitel 09 · Blutmond-Ahorntal",
     "t": "Bergwinde & Geister",
-    "d": "Kräftige Fūjin-Windböen fegen durch die Schlucht und tragen KOMA direkt an Geistern vorbei!",
+    "d": "Kräftige Fūjin-Windböen fegen durch die Schlucht und tragen den Boten direkt an Geistern vorbei!",
     "theme": "autumn",
     "limit": 21,
     "obstacles": {
@@ -22087,7 +22087,7 @@ const LEVELS = [
     "n": "Das Ewige Heiligtum der 100 Geister",
     "c": "Kapitel 10 · Heiligtum der 100 Prüfungen",
     "t": "Das Große Finale",
-    "d": "Das legendäre Finale von KOMA: Meistere die ultimative Schrein-Prüfung und werde zur Legende!",
+    "d": "Das legendäre Schrein-Finale: Meistere die ultimative Prüfung und werde zur Legende!",
     "theme": "autumn",
     "limit": 32,
     "isFinaleLevel": true,

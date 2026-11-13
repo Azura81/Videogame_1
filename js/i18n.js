@@ -1276,7 +1276,7 @@
     },
     "Tal des Blutmonds": {
         "name": "Valley of the Blood Moon",
-        "desc": "Powerful Fūjin wind gusts sweep the ravine, carrying KOMA directly past patrolling spirits!"
+        "desc": "Powerful Fūjin wind gusts sweep the ravine, carrying the messenger directly past patrolling spirits!"
     },
     "Fūjin-Böen im Ahornwald": {
         "name": "Fūjin Gusts in the Maple Forest",
@@ -1352,7 +1352,7 @@
     },
     "Das Ewige Heiligtum der 100 Geister": {
         "name": "The Eternal Sanctuary of 100 Spirits",
-        "desc": "The legendary finale of KOMA: Master the ultimate shrine trial and become a legend!"
+        "desc": "The legendary shrine finale: Master the ultimate trial and become a legend!"
     }
 };
 
@@ -1488,6 +1488,7 @@
       const EXACT_MATCHES = {
         "Plane deine Befehlsfolge und drücke auf „Plan abspielen“.": "Plan your command sequence and press “Run Plan”.",
         "Los geht's! Der Shinto-Bote führt deinen Plan aus …": "Off we go! The Shinto messenger executes your plan …",
+        "Los geht's! Der Roboter führt deinen Plan aus …": "Off we go! The robot executes your plan …",
         "Los geht's! KOMA führt deinen Plan aus …": "Off we go! The robot executes your plan …",
         "Füge zuerst mindestens einen Befehl hinzu.": "Add at least one command first.",
         "Dein Plan ist voll! Entferne einen Befehl für neue Schritte.": "Your plan is full! Remove a command for new steps.",
@@ -1498,10 +1499,14 @@
         "Hier gibt es keinen Schalter zum Aktivieren.": "There is no switch to activate here.",
         "Der heilige Felsblock ist blockiert und lässt sich nicht weiterschieben!": "The sacred stone block is blocked and cannot be pushed further!",
         "Platsch! Der Felsblock versinkt im Wasser und bildet eine neue Trittstein-Brücke!": "Splash! The stone block sinks into the water and creates a new bridge!",
+        "Rumpel! Der Roboter schiebt den heiligen Steinblock vor sich her.": "Rumble! The robot pushes the sacred stone block.",
         "Rumpel! KOMA schiebt den heiligen Steinblock vor sich her.": "Rumble! The robot pushes the sacred stone block.",
         "Knacks! Der morsche Trittstein bekommt Risse und versinkt gleich!": "Crack! The weathered stepping stone cracks and will sink soon!",
+        "Kitsune-Portal betreten! Der Roboter beamt sich ans Ziel-Portal.": "Kitsune Portal entered! The robot teleports to the destination portal.",
         "Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.": "Kitsune Portal entered! The robot teleports to the destination portal.",
+        "Eine Windböe erfasst den Roboter, aber ein Hindernis stoppt den Windstoß!": "A wind gust catches the robot, but an obstacle halts the gust!",
         "Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!": "A wind gust catches the robot, but an obstacle halts the gust!",
+        "Eine kräftige Bergwindböe trägt den Roboter mit sich!": "A powerful mountain wind gust carries the robot forward!",
         "Eine kräftige Bergwindböe trägt KOMA mit sich!": "A powerful mountain wind gust carries the robot forward!",
         "1. Heiliges Schrein-Relikt geborgen!": "1st Sacred Shrine Relic recovered!",
         "2. Heiliges Schrein-Relikt geborgen!": "2nd Sacred Shrine Relic recovered!",
@@ -1511,8 +1516,11 @@
         "Alle 3 Siegel gebrochen! Das Gipfel-Torii erstrahlt!": "All 3 seals broken! The summit Torii shines!",
         "Der schwere Basaltblock versiegelt den Schrein! Das Gebrüll prallt wirkungslos ab.": "The heavy basalt block seals the shrine! The roar deflects harmlessly.",
         "Der massive Basaltblock bricht die Druckwelle des Schreinwächters!": "The massive basalt block breaks the guardian's shockwave!",
+        "Der Basaltblock fängt den Frost-Odem ab! Der Roboter bleibt unversehrt!": "The basalt block catches the frost breath! The robot remains unharmed!",
         "Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!": "The basalt block catches the frost breath! The robot remains unharmed!",
+        "Eingefroren! Der Frost-Odem von Ryūjin hat den Roboter erfasst. Weiche den markierten Zonen aus!": "Frozen! Ryūjin's frost breath engulfed the robot. Dodge the marked zones!",
         "Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!": "Frozen! Ryūjin's frost breath engulfed the robot. Dodge the marked zones!",
+        "Ryūjins Frost-Odem schlägt über den Krater ein! Der Roboter entkommt knapp.": "Ryūjin's frost breath strikes the crater! The robot narrowly escapes.",
         "Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.": "Ryūjin's frost breath strikes the crater! The robot narrowly escapes.",
         "In der täglichen Schreinprüfung sind Kameraschwenker verboten!": "Camera rotations are disabled in the Daily Shrine Trial!",
         "Tägliche Schreinprüfung geladen! Kameraschwenker sind deaktiviert (0 Credits). Plane deine Befehle vorab.": "Daily Shrine Trial loaded! Camera rotations are disabled (0 credits). Plan your commands in advance.",
@@ -1525,8 +1533,11 @@
         "Alle 60 Lieferungen geschafft!": "All 60 deliveries completed!",
         "Lieferung erfolgreich!": "Delivery successful!",
         "Basaltblock blockiert den Schrein!": "Basalt block blocks the shrine!",
+        "Lieferung abgebrochen. Der Roboter ist wieder am Start – passe deinen Plan an.": "Delivery aborted. The robot is back at the start – adjust your plan.",
         "Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.": "Delivery aborted. The robot is back at the start – adjust your plan.",
+        "Der Roboter ist wieder am Start. Du kannst deinen Plan anpassen.": "The robot is back at the start. You can adjust your plan.",
         "KOMA ist wieder am Start. Du kannst deinen Plan anpassen.": "The robot is back at the start. You can adjust your plan.",
+        "Der Roboter hält inne und wartet einen Takt ab ...": "The robot pauses and waits one beat ...",
         "Plan gelöscht. Beginne mit einer neuen Befehlsfolge.": "Plan cleared. Start with a new command sequence.",
         "Das Schrein-Torii bleibt versiegelt! Schiebe den Basaltblock vor seinen Schrein (3, 2), um den Komainu einzusperren!": "The shrine Torii remains sealed! Push the basalt block in front of its shrine (3, 2) to cage the Komainu!"
       };
@@ -1578,8 +1589,8 @@
         return `✦ ${enCol.charAt(0).toUpperCase() + enCol.slice(1)} switch activated! The corresponding gate opens.`;
       });
 
-      // Plopp! ... KOMA bleibt stehen – passe deinen Plan an.
-      out = out.replace(/Plopp! ([^ ]+) KOMA bleibt stehen – passe deinen Plan an\./g, "Clack! The path is blocked. The robot stops – adjust your plan.");
+      // Plopp! ... Roboter bleibt stehen – passe deinen Plan an.
+      out = out.replace(/Plopp! ([^ ]+) (?:KOMA|Der Roboter) bleibt stehen – passe deinen Plan an\./g, "Clack! The path is blocked. The robot stops – adjust your plan.");
       out = out.replace(/Plopp! (.*) – passe deinen Plan an\./g, "Clack! $1 – adjust your plan.");
 
       // Geisterlicht eingesammelt! (X / Y)

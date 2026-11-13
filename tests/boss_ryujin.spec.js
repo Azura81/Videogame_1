@@ -178,7 +178,7 @@ test.describe('Boss Fight: Ryūjin · Himmelsdrache des Fuji (Level 60)', () => 
     expect(freezeState.isFail).toBe(true);
     expect(freezeState.isPlaying).toBe(false);
     expect(freezeState.hasIceCube).toBe(true);
-    expect(freezeState.badgeText).toContain('KOMA eingefroren');
+    expect(freezeState.badgeText).toContain('eingefroren');
     expect(freezeState.feedback).toContain('Eingefroren');
   });
 

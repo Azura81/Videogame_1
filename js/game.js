@@ -1700,16 +1700,16 @@ class GameEngine {
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
             <div><strong>One beat per command:</strong> Every command (forward, turn, action) moves each ghost one tile along its glowing route.</div></div>
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
-            <div><strong>Don't get caught:</strong> If KOMA ends on a ghost's tile or walks straight through it, the delivery fails.</div></div>
+            <div><strong>Don't get caught:</strong> If the robot ends on a ghost's tile or walks straight through it, the delivery fails.</div></div>
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
-            <div><strong>Wait for the moment:</strong> Action on an empty tile makes KOMA wait one beat – perfect for timing!</div></div>
+            <div><strong>Wait for the moment:</strong> Action on an empty tile makes the robot wait one beat – perfect for timing!</div></div>
         ` : `
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
             <div><strong>Ein Takt pro Befehl:</strong> Jeder Befehl (Vorwärts, Drehen, Aktion) bewegt jeden Geist ein Feld weiter entlang seiner leuchtenden Spur.</div></div>
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
-            <div><strong>Nicht erwischen lassen:</strong> Landet KOMA auf dem Feld eines Geistes oder läuft frontal durch ihn hindurch, scheitert die Lieferung.</div></div>
+            <div><strong>Nicht erwischen lassen:</strong> Landet der Roboter auf dem Feld eines Geistes oder läuft frontal durch ihn hindurch, scheitert die Lieferung.</div></div>
           <div class="mechanic-rule-row"><span class="mechanic-rule-dot"></span>
-            <div><strong>Auf den Moment warten:</strong> Aktion auf einem leeren Feld lässt KOMA einen Takt warten – perfekt fürs Timing!</div></div>
+            <div><strong>Auf den Moment warten:</strong> Aktion auf einem leeren Feld lässt den Roboter einen Takt warten – perfekt fürs Timing!</div></div>
         `;
       }
     }
@@ -3146,7 +3146,7 @@ class GameEngine {
 
         if (this.renderer && typeof this.renderer.animateKomainuRoar === "function") {
           this.renderer.animateKomainuRoar(target.tiles, isBlocked, isKomaHit, blockPos, () => {
-            if (!isKomaHit) {
+            if (!isKomaHit && this.isPlaying) {
               if (isBlocked) {
                 this.setFeedback("Der massive Basaltblock bricht die Druckwelle des Schreinwächters!", "good");
               } else {
@@ -3228,7 +3228,7 @@ class GameEngine {
           this.dom.bossPhaseBadge.textContent = "Frost-Odem abgewehrt!";
         } else if (isKomaHit) {
           this.dom.bossPhaseBadge.className = "boss-phase-badge bad";
-          this.dom.bossPhaseBadge.textContent = "KOMA eingefroren!";
+          this.dom.bossPhaseBadge.textContent = "Roboter eingefroren!";
         } else {
           this.dom.bossPhaseBadge.className = "boss-phase-badge firing";
           this.dom.bossPhaseBadge.textContent = "Frost-Odem feuert!";
@@ -3242,7 +3242,7 @@ class GameEngine {
           }
 
           if (isBlocked) {
-            this.setFeedback("Der Basaltblock fängt den Frost-Odem ab! KOMA bleibt unversehrt!", "good");
+            this.setFeedback("Der Basaltblock fängt den Frost-Odem ab! Der Roboter bleibt unversehrt!", "good");
           } else if (isKomaHit) {
             this.state.isFail = true;
             this.isPlaying = false;
@@ -3250,12 +3250,12 @@ class GameEngine {
             if (typeof document !== "undefined") {
               document.body.classList.remove("is-executing");
             }
-            this.setFeedback("Eingefroren! Der Frost-Odem von Ryūjin hat KOMA erfasst. Weiche den markierten Zonen aus!", "bad");
+            this.setFeedback("Eingefroren! Der Frost-Odem von Ryūjin hat den Roboter erfasst. Weiche den markierten Zonen aus!", "bad");
             this.triggerHaptic([60, 80, 100]);
             this.renderQueue();
             return;
           } else {
-            this.setFeedback("Ryūjins Frost-Odem schlägt über den Krater ein! KOMA entkommt knapp.", "normal");
+            this.setFeedback("Ryūjins Frost-Odem schlägt über den Krater ein! Der Roboter entkommt knapp.", "normal");
           }
 
           if (typeof onComplete === "function") {
@@ -3546,7 +3546,7 @@ class GameEngine {
 
   abortExecution() {
     this.reset(false);
-    this.setFeedback("Lieferung abgebrochen. KOMA ist wieder am Start – passe deinen Plan an.", "normal");
+    this.setFeedback("Lieferung abgebrochen. Der Roboter ist wieder am Start – passe deinen Plan an.", "normal");
   }
 
   reset(clearQueue = false) {
@@ -3573,7 +3573,7 @@ class GameEngine {
     this.setFeedback(
       clearQueue
         ? "Plan gelöscht. Beginne mit einer neuen Befehlsfolge."
-        : "KOMA ist wieder am Start. Du kannst deinen Plan anpassen.",
+        : "Der Roboter ist wieder am Start. Du kannst deinen Plan anpassen.",
       "normal"
     );
     Sound.playClick();
@@ -3812,7 +3812,7 @@ class GameEngine {
       if (typeof document !== "undefined") {
         document.body.classList.add("is-executing");
       }
-      this.setFeedback("Los geht's! KOMA führt deinen Plan aus …", "normal");
+      this.setFeedback("Los geht's! Der Roboter führt deinen Plan aus …", "normal");
       this.renderQueue();
       this.playbackTimer = setTimeout(() => this.executeNextStep(), this.getStepDelay(100));
       return;
@@ -3825,7 +3825,7 @@ class GameEngine {
     if (typeof document !== "undefined") {
       document.body.classList.add("is-executing");
     }
-    this.setFeedback("Los geht's! KOMA führt deinen Plan aus …", "normal");
+    this.setFeedback("Los geht's! Der Roboter führt deinen Plan aus …", "normal");
     this.renderQueue();
 
     this.playbackTimer = setTimeout(() => this.executeNextStep(), this.getStepDelay(350));
@@ -3912,7 +3912,7 @@ class GameEngine {
             return;
           }
         }
-        this.setFeedback("Plan beendet. KOMA hat das Ziel noch nicht erreicht – passe deinen Plan an.", "bad");
+        this.setFeedback("Plan beendet. Das Ziel wurde noch nicht erreicht – passe deinen Plan an.", "bad");
         Sound.playBump();
       }
       return;
@@ -3984,7 +3984,7 @@ class GameEngine {
         this.setFeedback(`✦ ${colorName}-Schalter aktiviert! Das zugehörige Tor öffnet sich.`, "good");
       } else if (lvl.ghosts && lvl.ghosts.length > 0) {
         Sound.playTurn();
-        this.setFeedback("KOMA hält inne und wartet einen Takt ab ...", "normal");
+        this.setFeedback("Der Roboter hält inne und wartet einen Takt ab ...", "normal");
       } else {
         Sound.playBump();
         this.setFeedback("Hier gibt es keinen Schalter zum Aktivieren.", "normal");
@@ -4090,8 +4090,8 @@ class GameEngine {
         let reason = "Da ist ein Hindernis.";
         if (isBlockedGate) reason = "Das Tor ist noch verschlossen!";
         else if (isCollapsedTile) reason = "Der Trittstein ist bereits im Wasser versunken!";
-        else if (isWaterHazard) reason = "Das Wasser ist zu tief! KOMA kann ohne Trittstein nicht hinüber.";
-        this.setFeedback(`Plopp! ${reason} KOMA bleibt stehen – passe deinen Plan an.`, "bad");
+        else if (isWaterHazard) reason = "Das Wasser ist zu tief! Der Roboter kann ohne Trittstein nicht hinüber.";
+        this.setFeedback(`Plopp! ${reason} Der Roboter bleibt stehen – passe deinen Plan an.`, "bad");
         this.renderQueue();
         return;
       }
@@ -4112,7 +4112,7 @@ class GameEngine {
         } else {
           this.state.blocks[blockIdx] = [pushTargetX, pushTargetY];
           Sound.playStoneSlide();
-          this.setFeedback("Rumpel! KOMA schiebt den heiligen Steinblock vor sich her.", "normal");
+          this.setFeedback("Rumpel! Der Roboter schiebt den heiligen Steinblock vor sich her.", "normal");
         }
         if (this.renderer && typeof this.renderer.animateBlockPush === "function") {
           this.renderer.animateBlockPush(nx, ny, pushTargetX, pushTargetY, isPushIntoWater, null, this.getStepDelay(220));
@@ -4189,7 +4189,7 @@ class GameEngine {
             Sound.playPortal();
             this.triggerHaptic([20, 35, 20, 35, 40]);
             this.renderer.animateTeleport(destPortal[0], destPortal[1]);
-            this.setFeedback("Kitsune-Portal betreten! KOMA beamt sich ans Ziel-Portal.", "normal");
+            this.setFeedback("Kitsune-Portal betreten! Der Roboter beamt sich ans Ziel-Portal.", "normal");
             this.playbackTimer = setTimeout(() => this.handleWindPush(lvl, () => this.handlePostMoveChecks(lvl)), this.getStepDelay(180));
             return;
           }
@@ -4227,16 +4227,16 @@ class GameEngine {
     const isBlockedGate = gateMatch && !this.state.openGates.has(gateMatch[2] || "magenta") && !(allGates.length === 1 && this.state.openGates.size > 0);
 
     if (isOOB || isWall || isBlockedGate) {
-      // Wind blocked by barrier: KOMA is pushed against the obstacle and stays on current wind tile
+      // Wind blocked by barrier: robot is pushed against the obstacle and stays on current wind tile
       Sound.playWind();
       this.renderer.animateBump();
       this.triggerHaptic([40, 25, 40]);
-      this.setFeedback("Eine Windböe erfasst KOMA, aber ein Hindernis stoppt den Windstoß!", "normal");
+      this.setFeedback("Eine Windböe erfasst den Roboter, aber ein Hindernis stoppt den Windstoß!", "normal");
       if (typeof onComplete === "function") onComplete();
       return;
     }
 
-    // Wind pushes KOMA forward!
+    // Wind pushes robot forward!
     this.state.x = wx;
     this.state.y = wy;
     this.stats.windGusts = (this.stats.windGusts || 0) + 1;
@@ -4244,7 +4244,7 @@ class GameEngine {
     this.checkAchievements();
     Sound.playWind();
     this.triggerHaptic([25, 30, 40]);
-    this.setFeedback("Eine kräftige Bergwindböe trägt KOMA mit sich!", "good");
+    this.setFeedback("Eine kräftige Bergwindböe trägt den Roboter mit sich!", "good");
 
     const slideDur = this.getStepDelay(260);
     const slideFn = typeof this.renderer.animateWindSlide === "function"
@@ -4362,8 +4362,8 @@ class GameEngine {
     const isEn = typeof I18N !== "undefined" && I18N.getLanguage() === "en";
     this.setFeedback(
       isEn
-        ? "Caught by a shrine ghost! Watch its glowing patrol route and time your moves – Action (A) on an empty tile lets KOMA wait one beat."
-        : "Vom Schrein-Geist erfasst! Beobachte seine leuchtende Patrouillen-Spur und plane dein Timing – Aktion (A) auf einem leeren Feld lässt KOMA einen Takt warten.",
+        ? "Caught by a shrine ghost! Watch its glowing patrol route and time your moves – Action (A) on an empty tile lets the robot wait one beat."
+        : "Vom Schrein-Geist erfasst! Beobachte seine leuchtende Patrouillen-Spur und plane dein Timing – Aktion (A) auf einem leeren Feld lässt den Roboter einen Takt warten.",
       "bad"
     );
     this.renderQueue();
@@ -4633,7 +4633,7 @@ class GameEngine {
           } else if (isKomainu) {
             this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_komainu", { steps: this.currentStep }) : `Du hast den steinernen Schreinwächter eingesperrt, beide Relikte geborgen und das Bambus-Tor in ${this.currentStep} Schritten erreicht!`;
           } else {
-            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_normal", { steps: this.currentStep }) : `KOMA hat das Paket in ${this.currentStep} Befehl${
+            this.dom.modalWinText.textContent = typeof I18N !== "undefined" ? I18N.t("win_desc_normal", { steps: this.currentStep }) : `Das Paket wurde in ${this.currentStep} Befehl${
               this.currentStep === 1 ? "" : "en"
             } sicher abgeliefert.`;
           }
@@ -4839,7 +4839,7 @@ class GameEngine {
         this.deferredInstallPrompt.prompt();
         const choice = await this.deferredInstallPrompt.userChoice;
         if (choice && choice.outcome === "accepted") {
-          this.showNetworkToast("KOMA wird installiert...", false);
+          this.showNetworkToast("Spiel wird installiert...", false);
         }
         this.deferredInstallPrompt = null;
         this.dom.btnInstallPwa.classList.add("hidden");
@@ -4851,7 +4851,7 @@ class GameEngine {
       if (this.dom.btnInstallPwa) {
         this.dom.btnInstallPwa.classList.add("hidden");
       }
-      this.showNetworkToast("KOMA erfolgreich als App installiert!", false);
+      this.showNetworkToast("Spiel erfolgreich als App installiert!", false);
     });
 
     // 3. Network Online / Offline Detection
